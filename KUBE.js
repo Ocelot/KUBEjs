@@ -17,16 +17,58 @@
 	KUBE.LoadSingletonFactory('Loader',KUBELoader);
 	
 	/* Prototype onto native */
-	if(KUBEPrototype){
-		Boolean.prototype.KUBE = function(){ return KUBE.Extend().Obj(this); };
-		Number.prototype.KUBE = function(){ return KUBE.Extend().Obj(this); };
-		String.prototype.KUBE = function(){ return KUBE.Extend().Obj(this); };
-		Function.prototype.KUBE = function(){ return KUBE.Extend().Obj(this); };
-		Array.prototype.KUBE = function(){ return KUBE.Extend().Obj(this); };
-		Date.prototype.KUBE = function(){ return KUBE.Extend().Obj(this); };
-		RegExp.prototype.KUBE = function(){ return KUBE.Extend().Obj(this); };
-		Object.prototype.KUBE = function(){ return KUBE.Extend().Obj(this); };
-	}
+    /* Note: define property WILL break in IE8, however because we can set enumerable to false, it shouldn't break jQuery.  6 of one, half dozen of another. */
+	//if(KUBEPrototype){
+        Object.defineProperty(Boolean.prototype,"KUBE",{
+            "enumerable": false,
+            "configurable": true,
+            "writable": true,
+            "value": function(){ return KUBE.Extend().Obj(this); }
+        });
+        Object.defineProperty(Number.prototype,"KUBE",{
+            "enumerable": false,
+            "configurable": true,
+            "writable": true,
+            "value": function(){ return KUBE.Extend().Obj(this); }
+        });
+        Object.defineProperty(String.prototype,"KUBE",{
+            "enumerable": false,
+            "configurable": true,
+            "writable": true,
+            "value": function(){ return KUBE.Extend().Obj(this); }
+        });
+        Object.defineProperty(Function.prototype,"KUBE",{
+            "enumerable": false,
+            "configurable": true,
+            "writable": true,
+            "value": function(){ return KUBE.Extend().Obj(this); }
+        });
+        Object.defineProperty(Array.prototype,"KUBE",{
+            "enumerable": false,
+            "configurable": true,
+            "writable": true,
+            "value": function(){ return KUBE.Extend().Obj(this); }
+        });
+        Object.defineProperty(Date.prototype,"KUBE",{
+            "enumerable": false,
+            "configurable": true,
+            "writable": true,
+            "value": function(){ return KUBE.Extend().Obj(this); }
+        });
+        Object.defineProperty(RegExp.prototype,"KUBE",{
+            "enumerable": false,
+            "configurable": true,
+            "writable": true,
+            "value": function(){ return KUBE.Extend().Obj(this); }
+        });
+        Object.defineProperty(Object.prototype,"KUBE",{
+            "enumerable": false,
+            "configurable": true,
+            "writable": true,
+            "value": function(){ return KUBE.Extend().Obj(this); }
+        });
+
+	//}
 	
 	if(KUBE.Is(config.preLoad) === 'array'){
 		for(var i=0;i<config.preLoad.length;i++){
