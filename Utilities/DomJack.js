@@ -1641,6 +1641,11 @@
 		}
 
 		function isDisplayed(){
+            //WARNING: IF AN ERROR OCCURS HERE... THE ANSWER IS NOT CHECKING TO SEE IF NODE EXISTS.
+            //THIS USUALLY INDICATES THAT A DELETION HAS OCCURED BEFORE THE ANIMATION FINISHED WHICH WILL HAVE A CHAIN REACTION OF PROBLEMS.
+            if(!_DomJackAPI.GetNode()){
+                throw new Error("An animation was triggered asynchronously, while DOM nodes were also being deleted. The deletion and cleanup occured before the end of the Animation event, at which point the animation cannot resolve because the DOM Node does not exist. Either the deletion shouldn't occur, or the animation shouldn't occur to resolve this");
+            }
 			return (window.getComputedStyle(_DomJackAPI.GetNode()).display === 'none' ? false : true);
 		}
 	}

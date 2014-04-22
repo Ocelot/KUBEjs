@@ -527,7 +527,9 @@
 
 		//Private methods
 		function handleAjaxError(_e){
+            console.log('handleAjaxError called in UI:',_e.message);
 			alert(_e.message);
+            //debugger;
 		}
 		
 		function handleInstructions(_response){
