@@ -21,50 +21,50 @@
 	//if(KUBEPrototype){
         Object.defineProperty(Boolean.prototype,"KUBE",{
             "enumerable": false,
-            "configurable": true,
-            "writable": true,
+            "configurable": false,
+            "writable": false,
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
         Object.defineProperty(Number.prototype,"KUBE",{
             "enumerable": false,
-            "configurable": true,
-            "writable": true,
+            "configurable": false,
+            "writable": false,
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
         Object.defineProperty(String.prototype,"KUBE",{
             "enumerable": false,
-            "configurable": true,
-            "writable": true,
+            "configurable": false,
+            "writable": false,
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
         Object.defineProperty(Function.prototype,"KUBE",{
             "enumerable": false,
-            "configurable": true,
-            "writable": true,
+            "configurable": false,
+            "writable": false,
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
         Object.defineProperty(Array.prototype,"KUBE",{
             "enumerable": false,
-            "configurable": true,
-            "writable": true,
+            "configurable": false,
+            "writable": false,
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
         Object.defineProperty(Date.prototype,"KUBE",{
             "enumerable": false,
-            "configurable": true,
-            "writable": true,
+            "configurable": false,
+            "writable": false,
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
         Object.defineProperty(RegExp.prototype,"KUBE",{
             "enumerable": false,
-            "configurable": true,
-            "writable": true,
+            "configurable": false,
+            "writable": false,
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
         Object.defineProperty(Object.prototype,"KUBE",{
             "enumerable": false,
-            "configurable": true,
-            "writable": true,
+            "configurable": false,
+            "writable": false,
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
 

@@ -34,7 +34,7 @@
 		slice = [undefined,0];
 		for(i=0;i<cleanupCache.length;i++){
 			id = cleanupCache[i];
-			if(jackCache[id] && !jackCache[id].GetNode().KUBE.save){
+			if(jackCache[id] && !jackCache[id].GetNode().KUBEDJ.save){
 				deleteDJ(id);
 				if(slice[0] === undefined){
 					slice[0] = i;
@@ -68,7 +68,7 @@
 	function memDebug(_output){
 		var detached = {};
 		jackCache.KUBE().each(function(_id,_dj){
-			if(KUBE.Is(_dj) === 'object' && _dj.GetNode().KUBE.save && _dj.IsDetached()){
+			if(KUBE.Is(_dj) === 'object' && _dj.GetNode().KUBEDJ.save && _dj.IsDetached()){
 				if(_output){
 					console.log(_id,_dj.GetRoot().GetInner());
 				}
@@ -261,14 +261,14 @@
 				
 		function initCache(_obj){
 			if(KUBE.Is(_obj) === 'object'){
-				if(KUBE.Is(_obj.KUBE) === 'object' && _obj.KUBE.id){
-					$DomJackAPI = jackCache[_obj.KUBE.id] || null;
+				if(KUBE.Is(_obj.KUBEDJ) === 'object' && _obj.KUBEDJ.id){
+					$DomJackAPI = jackCache[_obj.KUBEDJ.id] || null;
 				}
 				else{
 					Node = _obj;
-					Node.KUBE = {};
-					Node.KUBE.id = id = ++KUBENodeId;
-					Node.KUBE.save = true;
+					Node.KUBEDJ = {};
+					Node.KUBEDJ.id = id = ++KUBENodeId;
+					Node.KUBEDJ.save = true;
 					
 					nodeType = (Node.nodeName || Node.tagName).toLowerCase();
 					$DomJackAPI = rawAPI.KUBE().copy().KUBE().create(DomJack.prototype);
@@ -864,8 +864,8 @@
 			if(KUBE.Is(Node) === 'object' && KUBE.Is(Node.children) === 'object' && Node.children.length){
 				for(i=0;i<Node.children.length;i++){
 					ChildNode = Node.children[i];
-					if(KUBE.Is(ChildNode.KUBE) === 'object'){
-						ChildNode.KUBE.save = false;
+					if(KUBE.Is(ChildNode.KUBEDJ) === 'object'){
+						ChildNode.KUBEDJ.save = false;
 					}
 					cleanChildren(Node.children[i]);
 				}
@@ -953,7 +953,7 @@
 		function Delete(){
 			Detach(true);
 			cleanChildren(Node);
-			Node.KUBE.save = false;
+			Node.KUBEDJ.save = false;
 			handleClean();
 			//cleanCache();
 		}
