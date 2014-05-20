@@ -1023,6 +1023,7 @@ KUBE.AutoLoad({
     'TextKing':'Utilities/TextKing.js',
     'Upload': 'Utilities/Upload.js',
 	'UI':'Utilities/UI.js',
+	'Velocity':'Utilities/Velocity.js',
 	'WinDocJack': 'Utilities/WinDocJack.js',
 	'ArrayKUBE':'ExtendLibraries/Array.js',
 	'DateKUBE':'ExtendLibraries/Date.js',
