@@ -3219,6 +3219,7 @@
         var $API,OptionStore,PropertyStore,V;
 
         initVelocity();
+        initKUBEAnimationExtends();
         $API = {
             "Duration":Duration,
             "Easing":Easing,
@@ -3235,6 +3236,8 @@
             "Slide":Slide,
             "SlideIn":SlideIn,
             "SlideOut":SlideOut,
+            "SlideRight": SlideIn,
+            "SlideLeft": SlideOut,
             "Fade":Fade,
             "FadeIn":FadeIn,
             "FadeOut":FadeOut,
@@ -3350,15 +3353,15 @@
         }
 
         function Slide(){
-
         }
 
-        function SlideIn(){
 
+        function SlideIn(){
+            Velocity.animate([_DomJack.GetNode()],"slideRight",OptionStore);
         }
 
         function SlideOut(){
-
+            Velocity.animate([_DomJack.GetNode()],"slideLeft",OptionStore);
         }
 
         function Fade(){
@@ -3366,11 +3369,11 @@
         }
 
         function FadeIn(){
-
+            Velocity.animate([_DomJack.GetNode()],"fadeIn",OptionStore);
         }
 
         function FadeOut(){
-
+            Velocity.animate([_DomJack.GetNode()],"fadeOut",OptionStore);
         }
 
         //CSS supported properties
@@ -3398,6 +3401,128 @@
             PropertyStore.opacity = _opacity;
             return $API;
         }
+
+        function initKUBEAnimationExtends(){
+            //K SO THIS DOES STUFF WRONG. IT SLIDES, BUT I DO NEED TO DO WHAT WE DO IN KUBE ANIMATION STUFF.
+            [ "Left", "Right" ].KUBE().each(function(direction,i) {
+            /* Generate the slide sequences dynamically in order to minimize code redundancy. */
+            velocity.Sequences["slide" + direction] = function (element, options) {
+                var opts = {}.KUBE().merge(options),
+                    originalValues = {
+                        width: null,
+                        marginLeft: null,
+                        marginRight: null,
+                        paddingLeft: null,
+                        paddingRight: null,
+                        overflow: null,
+                        overflowX: null,
+                        overflowY: null
+                    },
+                /* The slide functions make use of the begin and complete callbacks, so the the user's custom callbacks are stored upfront for triggering once slideDown/Up's own callback logic is complete. */
+                    begin = opts.begin,
+                    complete = opts.complete,
+                    isWidthAuto = false;
+
+                /* Unless the user is trying to override the display option, show the element before slideDown begins and hide the element after slideUp completes. */
+                if (direction === "Right") {
+                    /* All elements subjected to sliding down are set to the "block" display value (-- )as opposed to an element-appropriate block/inline distinction) because inline elements cannot actually have their dimensions modified. */
+                    opts.display = opts.display || "block";
+                } else {
+                    opts.display = opts.display || "none";
+                }
+
+                /* Begin callback. */
+                opts.begin = function () {
+                    /* Check for height: "auto" so we can revert back to it when the sliding animation is complete. */
+                    function checkWidthAuto() {
+                        element.style.display = "block";
+                        originalValues.width = velocity.CSS.getPropertyValue(element, "width");
+
+                        /* We determine if height was originally set to "auto" by checking if the computed "auto" value is identical to the original value. */
+                        element.style.width = "auto";
+                        if (velocity.CSS.getPropertyValue(element, "width") === originalValues.width) {
+                            isWidthAuto = true;
+                        }
+
+                        /* Revert to the computed value before sliding begins to prevent vertical popping due to scrollbars. */
+                        /* Note: Webkit has a glitch where height must be explicitly assigned the "px" unit to take effect when height is currently set to "auto". */
+                        velocity.CSS.setPropertyValue(element, "width", originalValues.width + "px");
+                    }
+
+                    if (direction === "Right") {
+                        originalValues.overflow = [ velocity.CSS.getPropertyValue(element, "overflow"), 0 ];
+                        originalValues.overflowX = [ velocity.CSS.getPropertyValue(element, "overflowX"), 0 ];
+                        originalValues.overflowY = [ velocity.CSS.getPropertyValue(element, "overflowY"), 0 ];
+
+                        /* Ensure the element is visible, and temporarily remove vertical scrollbars since animating them is visually unappealing. */
+                        element.style.overflow = "hidden";
+                        element.style.overflowY = "visible";
+                        element.style.overflowX = "hidden";
+
+                        /* With the scrollars no longer affecting sizing, determine whether the element is currently set to height: "auto". */
+                        checkWidthAuto();
+
+                        /* Cache the elements' original vertical dimensional values so that we can animate back to them from starting values of 0. */
+                        for (var property in originalValues) {
+                            /* Overflow values have already been cached, do not overwrite them with "hidden" (which they were just set to). */
+                            if (/^overflow/.test(property)) {
+                                continue;
+                            }
+
+                            /* Use forcefeeding to animate slideDown properties from 0. */
+                            originalValues[property] = [ velocity.CSS.getPropertyValue(element, property), 0 ];
+                        }
+
+                        /* Hide the element inside this begin callback, otherwise it'll momentarily flash itself before the actual animation tick begins. */
+                        element.style.display = "none";
+                    } else {
+                        checkWidthAuto();
+
+                        for (var property in originalValues) {
+                            /* Use forcefeeding to animate slideUp properties toward 0. */
+                            originalValues[property] = [ 0, velocity.CSS.getPropertyValue(element, property) ];
+                        }
+
+                        /* As with slideDown, slideUp hides the element's scrollbars while animating since scrollbar height tweening looks unappealing. */
+                        element.style.overflow = "hidden";
+                        element.style.overflowY = "visible";
+                        element.style.overflowX = "hidden";
+                    }
+
+                    /* If the user passed in a begin callback, fire it now. */
+                    if (begin) {
+                        begin.call(element, element);
+                    }
+                }
+
+                /* Complete callback. */
+                opts.complete = function (element) {
+                    var propertyValuePosition = (direction === "Right") ? 0 : 1;
+
+                    if (isWidthAuto === true) {
+                        /* If the element's height was originally set to auto, overwrite the computed value with "auto". */
+                        originalValues.width[propertyValuePosition] = "auto";
+                    } else {
+                        /* Note: Webkit has a glitch where height must be explicitly assigned the "px" unit to take effect after an element's height has been set to "auto". */
+                        originalValues.width[propertyValuePosition] += "px";
+                    }
+
+                    /* Reset the element to its original values once its slide animation is complete. (For slideDown, overflow values are reset. For slideUp, all values are reset (since they were animated to 0).) */
+                    for (var property in originalValues) {
+                        element.style[property] = originalValues[property][propertyValuePosition];
+                    }
+
+                    /* If the user passed in a complete callback, fire it now. */
+                    if (complete) {
+                        complete.call(element, element);
+                    }
+                };
+
+                /* Animation triggering. */
+                velocity.animate(element, originalValues, opts);
+            };
+        });}
+
 
     }
     //window.velocity = undefined;
