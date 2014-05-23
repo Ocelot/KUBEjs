@@ -3404,6 +3404,15 @@
 
         function initKUBEAnimationExtends(){
             //K SO THIS DOES STUFF WRONG. IT SLIDES, BUT I DO NEED TO DO WHAT WE DO IN KUBE ANIMATION STUFF.
+            velocity.Sequences['slideInFromLeft'] = function(element, options){};
+            velocity.Sequences['slideOutToLeft'] = function(element, options){};
+            velocity.Sequences['slideInFromRight'] = function(element,options){};
+            velocity.Sequences['slideOutToRight'] = function(element,options){};
+            velocity.Sequences['slideInFromTop'] = function(element, options){};
+            velocity.Sequences['slideOutToTop'] = function(element, options){};
+            velocity.Sequences['slideInFromBottom'] = function(element,options){};
+            velocity.Sequences['slideOutToBottom'] = function(element,options){};
+
             [ "Left", "Right" ].KUBE().each(function(direction,i) {
             /* Generate the slide sequences dynamically in order to minimize code redundancy. */
             velocity.Sequences["slide" + direction] = function (element, options) {
