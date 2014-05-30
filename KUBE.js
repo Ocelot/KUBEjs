@@ -1,9 +1,12 @@
 (function(window,KUBEPrototype){
 	"use strict";
-	var KUBE,AutoLoader,config = {};
+	
+	var KUBE,AutoLoader,config = { };
 	
 	if(typeof window.KUBE === 'object' && typeof window.KUBE.config === 'object'){
 		config = window.KUBE.config;
+	} else {
+		config.autoLoadPath = GetAutoLoadPath();
 	}
 	
 	/* Create KUBE */
@@ -183,11 +186,26 @@
 				$KUBEAPI.EmitState(_class);
 			}			
 		}
+
+		function GetAutoLoadPath() {
+		if(typeof(document.currentScript) === 'undefined') {
+			var _scripts = document.getElementsByTagName('script');
+			return ParseAutoLoadPath(_scripts[_scripts.length - 1].src);
+		} else {
+			return  ParseAutoLoadPath(document.currentScript.getAttribute('src'));
+		}
+		console.log('successfully set auto load path');
+	}
+
+	function ParseAutoLoadPath(_src) {
+		var _paths = _src.split('/');
+		return _paths.splice(0,_paths.length-1).join('/');
+	}
 		
 		function AutoLoad(_map,_overwrite){
 			AutoLoader.Map(_map,config.autoLoadPath,_overwrite);
 		}
-		
+
 		function SetAsLoaded(_codeName){
 			AutoLoader.SetAsLoaded(_codeName);
 		}
@@ -209,7 +227,7 @@
 			return config;
 		}
 	}
-	
+
 	/* KUBE Events */
 	function KUBEEvents(obj){
 		var eventCache = {},
