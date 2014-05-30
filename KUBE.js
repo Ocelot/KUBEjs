@@ -2,12 +2,52 @@
 	"use strict";
 	
 	var KUBE,AutoLoader,config = { };
-	
-	if(typeof window.KUBE === 'object' && typeof window.KUBE.config === 'object'){
-		config = window.KUBE.config;
-	} else {
-		config.autoLoadPath = GetAutoLoadPath();
-	}
+
+    //Moved safely to a short circuit because now a safe default exists
+    config = window.KUBE.config || initDefaultConfig();
+
+    /**
+     * As an addendum KUBEjs is an ugly file with a ton of complex stuff going on which makes it ugly to work on.
+     * Regardless I try to not have grouped logic just floating around in a non specific scope. Previously I was accepting
+     * the global setting (window.KUBE.config). Now that we have internal logic to define a default config, I'll group that
+     * into its own space with the assumption that it will probably be added to and extended later. This just assists in
+     * future proofing for future developers/
+     */
+
+    //not a public method (externally accessible from the scope, so lower cased the function names)
+    function initDefaultConfig(){
+        var config = {
+            "autoLoadPath":getAutoLoadPath()
+        };
+        return config;
+
+        function getAutoLoadPath() {
+            //Variable declarations at the top. This lets you know quickly all of the local variables.
+            //Also is less error prone as if they're accessed without being set javascript won't throw a fit
+            var scripts,src;
+
+            //Don't need the typeof check (only when checking undefined), it's a pointless optimization but technically it's faster
+            if(document.currentScript === undefined){
+                scripts = document.getElementsByTagName('script');
+                src = _scripts[_scripts.length - 1].src;
+            }
+            else{
+                src = document.currentScript.getAttribute('src');
+            }
+
+            //Right now there's a ton of console.logs in KUBEjs but they have all been for debugging.
+            //We'll be removing, or switching to passing them to a Debug/Console class sooner than later
+            //console.log('successfully set auto load path');
+
+            //I encourage a single return point in methods
+            return parseAutoLoadPath(src);
+        }
+
+        function parseAutoLoadPath(_src) {
+            var _paths = _src.split('/');
+            return _paths.splice(0,_paths.length-1).join('/');
+        }
+    }
 	
 	/* Create KUBE */
 	KUBE = E();
@@ -186,21 +226,6 @@
 				$KUBEAPI.EmitState(_class);
 			}			
 		}
-
-		function GetAutoLoadPath() {
-		if(typeof(document.currentScript) === 'undefined') {
-			var _scripts = document.getElementsByTagName('script');
-			return ParseAutoLoadPath(_scripts[_scripts.length - 1].src);
-		} else {
-			return  ParseAutoLoadPath(document.currentScript.getAttribute('src'));
-		}
-		console.log('successfully set auto load path');
-	}
-
-	function ParseAutoLoadPath(_src) {
-		var _paths = _src.split('/');
-		return _paths.splice(0,_paths.length-1).join('/');
-	}
 		
 		function AutoLoad(_map,_overwrite){
 			AutoLoader.Map(_map,config.autoLoadPath,_overwrite);
