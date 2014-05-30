@@ -32,7 +32,7 @@
         }
 
         function srcFromCurrentScript(){
-            return (typeof(document.currentScript) !== 'undefined') ? document.currentScript.getAttribute('src') : false;
+            return (document.currentScript !== undefined) ? document.currentScript.getAttribute('src') : false;
         }
 
         function srcFallback(){
