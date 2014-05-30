@@ -4,7 +4,7 @@
 	var KUBE,AutoLoader,config = { };
 
     //Moved safely to a short circuit because now a safe default exists
-    config = window.KUBE.config || initDefaultConfig();
+    config = (typeof window.KUBE === 'object' && typeof window.KUBE.config === 'object') ? window.KUBE.config : initDefaultConfig();
 
     /**
      * As an addendum KUBEjs is an ugly file with a ton of complex stuff going on which makes it ugly to work on.
@@ -17,7 +17,7 @@
     //Because I went retarded, I removed the comments
     function initDefaultConfig(){
         var config = {
-            "autoLoadPath":getAutoLoadPath()
+            "autoLoadPath" : getAutoLoadPath()
         };
         return config;
 
@@ -28,11 +28,11 @@
 
         function parseAutoLoadPath(_src) {
             var paths = _src.split('/');
-            return paths.splice(0,paths.length-1).join('/');
+            return paths.splice(0,paths.length-1).join('/') + '/';
         }
 
         function srcFromCurrentScript(){
-            return (document.currentScript !== undefined ? document.currentScript.getAttribute('src') : false);
+            return (typeof(document.currentScript) !== 'undefined') ? document.currentScript.getAttribute('src') : false;
         }
 
         function srcFallback(){
