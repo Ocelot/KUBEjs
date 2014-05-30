@@ -27,8 +27,8 @@
         }
 
         function parseAutoLoadPath(_src) {
-            var _paths = _src.split('/');
-            return _paths.splice(0,_paths.length-1).join('/');
+            var paths = _src.split('/');
+            return paths.splice(0,paths.length-1).join('/');
         }
 
         function srcFromCurrentScript(){
@@ -38,7 +38,7 @@
         function srcFallback(){
             var scripts;
             scripts = document.getElementsByTagName('script');
-            return _scripts[_scripts.length - 1].src;
+            return scripts[scripts.length - 1].src;
         }
     }
 	
