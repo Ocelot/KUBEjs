@@ -129,6 +129,7 @@
 		function searchStylesheet(_styleSheet,_type,_matchData,_checkPrefix){
 			var i,rules,$return = false;
 			rules = (KUBE.Is(_styleSheet.cssRules) !== 'undefined' ? _styleSheet.cssRules : _styleSheet.rules);
+            console.log(rules);
 			for(i=0; i<rules.length;i++){
 				$return = checkRule(rules[i],_type,_type,_matchData) || checkRule(rules[i],classPrefix(prefix)+_type,_type,_matchData);
 				if($return){
@@ -164,13 +165,23 @@
 		function validateCSSStyleRule(_type,_matchData,_rule){
 			var $return = false;
 			if(_type === 'CSSStyleRule'){
-				if(_rule.selectorText === _matchData || _rule.selectorText === _matchData.toUpperCase() || _rule.selectorText === _matchData.toLowerCase()){
+				if(_rule.selectorText === _matchData || _rule.selectorText === _matchData.toUpperCase() || _rule.selectorText === _matchData.toLowerCase() || validatePseudoSelector(_rule.selectorText,_matchData)){
 					$return = true;
 				}
 			}
 			return $return;
 		}
-		
+
+        function validatePseudoSelector(_rule, _matchData){
+            //This is probably horribly slow.  I think I can make it better by not caring how many :.
+            return (
+                    (/[A-z][:]{1,2}[A-z]/.test(_rule) && /[A-z][:]{1,2}[A-z]/.test(_matchData)) ||
+                    (/[A-z][:]{1,2}[A-z]/.test(_rule) && /[A-z][:]{1,2}[A-z]/.test(_matchData))
+                    ? true
+                    : false);
+        }
+
+
 		function validateCSSKeyframesRule(_type,_matchData,_rule){
 			return (_type === 'CSSKeyframesRule' && _rule.name === _matchData ? true : false);
 		}
