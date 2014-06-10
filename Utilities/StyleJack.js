@@ -129,7 +129,6 @@
 		function searchStylesheet(_styleSheet,_type,_matchData,_checkPrefix){
 			var i,rules,$return = false;
 			rules = (KUBE.Is(_styleSheet.cssRules) !== 'undefined' ? _styleSheet.cssRules : _styleSheet.rules);
-            console.log(rules);
 			for(i=0; i<rules.length;i++){
 				$return = checkRule(rules[i],_type,_type,_matchData) || checkRule(rules[i],classPrefix(prefix)+_type,_type,_matchData);
 				if($return){

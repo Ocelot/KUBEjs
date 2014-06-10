@@ -191,7 +191,7 @@
 		function Interrupt(){
 			return Finish(true);
 		}
-		
+
 		function Finish(_interrupt){
 			var top,left,width,height,opacity,transform,progress;
 			clearTimeout(timer);
