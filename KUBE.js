@@ -1,10 +1,46 @@
 (function(window,KUBEPrototype){
 	"use strict";
-	var KUBE,AutoLoader,config = {};
 	
-	if(typeof window.KUBE === 'object' && typeof window.KUBE.config === 'object'){
-		config = window.KUBE.config;
-	}
+	var KUBE,AutoLoader,config = { };
+
+    //Moved safely to a short circuit because now a safe default exists
+    config = (typeof window.KUBE === 'object' && typeof window.KUBE.config === 'object') ? window.KUBE.config : initDefaultConfig();
+
+    /**
+     * As an addendum KUBEjs is an ugly file with a ton of complex stuff going on which makes it ugly to work on.
+     * Regardless I try to not have grouped logic just floating around in a non specific scope. Previously I was accepting
+     * the global setting (window.KUBE.config). Now that we have internal logic to define a default config, I'll group that
+     * into its own space with the assumption that it will probably be added to and extended later. This just assists in
+     * future proofing for future developers/
+     */
+
+    //Because I went retarded, I removed the comments
+    function initDefaultConfig(){
+        var config = {
+            "autoLoadPath" : getAutoLoadPath()
+        };
+        return config;
+
+        function getAutoLoadPath() {
+            var src = srcFromCurrentScript() || srcFallback();
+            return parseAutoLoadPath(src);
+        }
+
+        function parseAutoLoadPath(_src) {
+            var paths = _src.split('/');
+            return paths.splice(0,paths.length-1).join('/') + '/';
+        }
+
+        function srcFromCurrentScript(){
+            return (document.currentScript !== undefined) ? document.currentScript.getAttribute('src') : false;
+        }
+
+        function srcFallback(){
+            var scripts;
+            scripts = document.getElementsByTagName('script');
+            return scripts[scripts.length - 1].src;
+        }
+    }
 	
 	/* Create KUBE */
 	KUBE = E();
@@ -187,7 +223,7 @@
 		function AutoLoad(_map,_overwrite){
 			AutoLoader.Map(_map,config.autoLoadPath,_overwrite);
 		}
-		
+
 		function SetAsLoaded(_codeName){
 			AutoLoader.SetAsLoaded(_codeName);
 		}
@@ -209,7 +245,7 @@
 			return config;
 		}
 	}
-	
+
 	/* KUBE Events */
 	function KUBEEvents(obj){
 		var eventCache = {},
