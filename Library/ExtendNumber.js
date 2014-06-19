@@ -8,13 +8,13 @@
 	
 	/* Load functions */
 	var ExtendAPI;
-	KUBE.SetAsLoaded('NumberKUBE');
+	KUBE.SetAsLoaded('ExtendNumber');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('number','debug',Debugger);
 
-		KUBE.EmitState('NumberKUBE');
-		console.log('NumberKUBE Extend Loaded');
+		KUBE.EmitState('ExtendNumber');
+		console.log('ExtendNumber Loaded');
 	}
 	
 	/* Declare functions */

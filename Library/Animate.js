@@ -1,3 +1,5 @@
+//THIS SHOULD BE DEPRECATED IN FAVOR OF VELOCITY. DO NOT USE
+/*
 (function(KUBE){
 	"use strict";
 	KUBE.LoadSingleton('Animate',Animate,['DomJack','StyleJack','AnimateTo','FeatureDetect','ObjectKUBE']);
@@ -336,3 +338,4 @@
 		}
 	}
 }(KUBE));
+*/

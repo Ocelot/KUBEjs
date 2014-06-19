@@ -2,8 +2,8 @@
 	"use strict";
 
 	/* Load class */
-	KUBE.LoadFactory('LinearGradient', LinearGradient,['Color','FeatureDetect','Convert','ObjectKUBE']);
-	KUBE.LoadFactory('RadialGradient', RadialGradient,['Color', 'FeatureDetect','Convert','ObjectKUBE']);
+	KUBE.LoadFactory('LinearGradient', LinearGradient,['Color','FeatureDetect','Convert','ExtendObject']);
+	KUBE.LoadFactory('RadialGradient', RadialGradient,['Color', 'FeatureDetect','Convert','ExtendObject']);
 
 	KUBE.EmitState('Gradient');
 

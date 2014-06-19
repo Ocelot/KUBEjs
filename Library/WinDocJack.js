@@ -1,6 +1,6 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadSingleton('WinDocJack',WinDocJack,['FunctionKUBE','ObjectKUBE']);
+	KUBE.LoadSingleton('WinDocJack',WinDocJack,['ExtendFunction','ExtendObject']);
 	
 	WinDocJack.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function WinDocJack(){

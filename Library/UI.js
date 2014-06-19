@@ -1,7 +1,7 @@
 (function(KUBE){
 	"use strict";
 	var UIAutoLoader = KUBE.Loader();	
-	KUBE.LoadSingleton('UI',UI,['Ajax','DomJack','StyleJack','ObjectKUBE','ArrayKUBE','DateKUBE']);
+	KUBE.LoadSingleton('UI',UI,['Ajax','DomJack','StyleJack','ExtendObject','ExtendArray','ExtendDate']);
 	
 	UI.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function UI(){

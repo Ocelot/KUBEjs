@@ -3,7 +3,7 @@
     var measureChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890-=!@#$%^&*()_+{}[]:";\'<>,.?|\\/~`';
     var fallBackCharcode = 87; //capital W
 
-    KUBE.LoadSingletonFactory('TextKing', TextKing,['ObjectKUBE','DomJack','Convert']);
+    KUBE.LoadSingletonFactory('TextKing', TextKing,['ExtendObject','DomJack','Convert']);
     TextKing.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
     //Argument passed in should be an Array.  Font first, then size
     function TextKing(fontArg){

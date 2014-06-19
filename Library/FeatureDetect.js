@@ -6,7 +6,7 @@
 	"use strict";
 	
 	/* Load class */
-	KUBE.LoadSingleton('FeatureDetect', FeatureDetect,['ObjectKUBE']);
+	KUBE.LoadSingleton('FeatureDetect', FeatureDetect,['ExtendObject']);
 	
 	/* Declaration */
 	FeatureDetect.prototype.toString = function(){ return '[object '+this.constructor.name+']' };

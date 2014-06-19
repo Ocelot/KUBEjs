@@ -1,3 +1,5 @@
+//THIS SHOULD BE DEPRECATED IN FAVOR OF VELOCITY DO NOT USE
+/*
 (function(KUBE){
 	"use strict";
 	KUBE.LoadFactory('AnimateTo',AnimateTo,['Animate','ObjectKUBE']);
@@ -75,3 +77,4 @@
 		}
 	}
 }(KUBE));
+    */

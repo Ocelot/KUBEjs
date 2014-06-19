@@ -1,6 +1,6 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadSingleton('Console',Console,['ArrayKUBE','ObjectKUBE']);
+	KUBE.LoadSingleton('Console',Console,['ExtendArray','ExtendObject']);
 	
 	Console.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Console(){

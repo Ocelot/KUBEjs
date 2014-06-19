@@ -1,7 +1,7 @@
 (function(KUBE){
 	
 	//This is totally v3
-	KUBE.LoadFactory('StyleJack',StyleJack,['DomJack','FeatureDetect','Color','Convert','StringKUBE','ObjectKUBE']);
+	KUBE.LoadFactory('StyleJack',StyleJack,['DomJack','FeatureDetect','Color','Convert','ExtendString','ExtendObject']);
 	
 	//If we are Superman, StyleJack is Lex Luthor AND KRYPTONITE
 	var prefix,Convert;

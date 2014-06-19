@@ -7,7 +7,7 @@
 
 	/* Load functions */
 	var ExtendAPI;
-	KUBE.SetAsLoaded('ObjectKUBE');
+	KUBE.SetAsLoaded('ExtendObject');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('object','merge',Merge);
@@ -19,8 +19,8 @@
 		ExtendAPI.Load('object','each',Each);
 		ExtendAPI.Load('object','duckType',DuckType);
 		ExtendAPI.Load('object','isEmpty',IsEmpty);
-		KUBE.EmitState('ObjectKUBE');
-		console.log('ObjectKUBE Extend Loaded');
+		KUBE.EmitState('ExtendObject');
+		console.log('ExtendObject Loaded');
 	}
 	
 	/* Declare functions */

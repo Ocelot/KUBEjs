@@ -7,12 +7,12 @@
 	
 	/* Load functions */
 	var ExtendAPI;
-	KUBE.SetAsLoaded('FunctionKUBE');
+	KUBE.SetAsLoaded('ExtendFunction');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('function','promise',Promise);
-		KUBE.EmitState('FunctionKUBE');
-		console.log('FunctionKUBE Extend Loaded');
+		KUBE.EmitState('ExtendFunction');
+		console.log('ExtendFunction Loaded');
 	}
 	
 	/* Declare functions */	

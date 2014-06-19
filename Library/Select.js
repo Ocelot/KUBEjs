@@ -1900,7 +1900,7 @@
 		return Sizzle;
 	}());
 	
-	KUBE.LoadFactory('Select', Select, ['DomJack','ObjectKUBE']);
+	KUBE.LoadFactory('Select', Select, ['DomJack','ExtendObject']);
 	
 	Select.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Select(){

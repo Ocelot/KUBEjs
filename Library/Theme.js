@@ -3,7 +3,7 @@
  */
 
 (function(KUBE){
-    KUBE.LoadSingletonFactory('Theme', Theme,['DomJack','StyleJack','Hash','ObjectKUBE']);
+    KUBE.LoadSingletonFactory('Theme', Theme,['DomJack','StyleJack','Hash','ExtendObject']);
     Theme.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function Theme(){

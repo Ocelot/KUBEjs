@@ -4,7 +4,7 @@
  */
 (function(KUBE){
 	"use strict";
-	KUBE.LoadSingleton('Color', Color,['FeatureDetect','RegExpKUBE','ObjectKUBE']);
+	KUBE.LoadSingleton('Color', Color,['FeatureDetect','ExtendRegExp','ExtendObject']);
 	
 	Color.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Color(){

@@ -3,7 +3,7 @@
  * Type: KUBESingletonFactoryClass
  */
 (function(KUBE){
-	KUBE.LoadSingletonFactory('Ajax', Ajax,['JSON','ObjectKUBE']);
+	KUBE.LoadSingletonFactory('Ajax', Ajax,['JSON','ExtendObject']);
 	
 	/* Currently this is an ugly piece of code and required refactoring and cleanup */
 	Ajax.prototype.toString = function(){ return '[object '+this.constructor.name+']' };

@@ -1,6 +1,6 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFactory('QuickFlow',QuickFlow,['DomJack','StyleJack','ObjectKUBE','ArrayKUBE']);
+	KUBE.LoadFactory('QuickFlow',QuickFlow,['DomJack','StyleJack','ExtendObject','ExtendArray']);
 	
 	QuickFlow.prototype.toString = function(){ return '[object '+this.constructor.name+']'; };
 	function QuickFlow(viewHeight,itemHeight,ItemMap,mapArray,Target){

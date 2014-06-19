@@ -3,7 +3,7 @@
  */
 
 (function(KUBE){
-    KUBE.LoadSingleton('Hash', Hash,['ObjectKUBE','ArrayKUBE']);
+    KUBE.LoadSingleton('Hash', Hash,['ExtendObject','ExtendArray']);
     Hash.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function Hash(){

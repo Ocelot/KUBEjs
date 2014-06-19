@@ -7,12 +7,12 @@
 	
 	// Load functions here 
 	var ExtendAPI;
-	KUBE.SetAsLoaded('DateKUBE');
+	KUBE.SetAsLoaded('ExtendDate');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('date','format',Format);
-		KUBE.EmitState('DateKUBE');
-		console.log('DateKUBE Extend Loaded');
+		KUBE.EmitState('ExtendDate');
+		console.log('ExtendDate Loaded');
 	}
 	
 	// Declare functions here

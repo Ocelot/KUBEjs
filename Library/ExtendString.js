@@ -8,7 +8,7 @@
 	
 	/* Load functions */
 	var ExtendAPI;
-	KUBE.SetAsLoaded('StringKUBE');
+	KUBE.SetAsLoaded('ExtendString');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('string','trim',Trim);
@@ -17,8 +17,8 @@
 		ExtendAPI.Load('string','ucFirst',UpperCaseFirst);
         ExtendAPI.Load('string','stripNonNumeric',StripNonNumeric);
 		
-		KUBE.EmitState('StringKUBE');
-		console.log('StringKUBE Extend Loaded');
+		KUBE.EmitState('ExtendString');
+		console.log('ExtendString Loaded');
 	}
 	
 	/* Declare functions */

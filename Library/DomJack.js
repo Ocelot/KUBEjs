@@ -6,8 +6,9 @@
 
 (function(KUBE){
 	"use strict";
-	
-	KUBE.LoadFactory('DomJack', DomJack,['WinDocJack','StyleJack','FeatureDetect','Animate','Convert','ArrayKUBE','ObjectKUBE','RegExpKUBE']);
+
+    //Remove Animate from this, will be removing animations from it entirely as they don't belong here
+	KUBE.LoadFactory('DomJack', DomJack,['WinDocJack','StyleJack','FeatureDetect','Convert','ExtendArray','ExtendObject','ExtendRegExp']);
 	
 	//These are global cache variables
 	var KUBENodeId,jackCache,cleanPointer,wordToKeyCodeMap,scheduleClean,cleanupCache;
