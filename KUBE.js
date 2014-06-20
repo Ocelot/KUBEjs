@@ -48,7 +48,8 @@
 	window.KUBE = KUBE;
 	
 	/* Load in Patience */
-	AutoLoader = new KUBELoader(KUBE);	
+	AutoLoader = new KUBELoader(KUBE);
+    AutoLoader.SetAutoPath('/Library');
 	KUBE.LoadFactory('Patience', Patience);
 	KUBE.LoadSingletonFactory('Loader',KUBELoader);
 	
@@ -797,23 +798,33 @@
 	}
 	
 	function KUBELoader(_EventObj){
-		var callQ,map,$API,EventEmitter,loadedCode,maps;
+		var callQ,map,$API,EventEmitter,loadedCode,maps,autoPath;
 		
 		callQ = [];
 		map = {};
 		maps = [];
 		loadedCode = {};
+
 		$API = {
 			'Map':Map,
 			'Uses':Uses,
 			'SetEmitter':SetEmitter,
-			'SetAsLoaded':SetAsLoaded
+			'SetAsLoaded':SetAsLoaded,
+            'SetAutoPath':SetAutoPath
 		};
 		if(_EventObj){
 			SetEmitter(_EventObj);
 		}
 		return $API;
-		
+
+        //In the event that a request is made to a name that is not mapped, it will try to autoload from this path
+        function SetAutoPath(_autoPath){
+            if(KUBE.Is(_autoPath) === 'string'){
+                autoPath = _autoPath;
+            }
+            return $API;
+        }
+
 		//Set up our EventEmitter. Without this, Loader won't work
 		function SetEmitter(_EventObj){
 			if(KUBE.Is(_EventObj) === 'object' && KUBE.Is(_EventObj.Once) === 'function'){
@@ -856,7 +867,7 @@
 		//Returns a promise, also will shortcut a second argument directly into the promise
 		function Uses(_dependancies,_callback,_useName){
 			validateEmitter();
-			return (KUBE.Is(_dependancies) === 'array' ? getPromise(_dependancies,_callback,_useName) : false);
+			return (validateDependancies(_dependancies) ? getPromise(_dependancies,_callback,_useName) : false);
 		}
 		
 		function SetAsLoaded(_codeName){
@@ -864,6 +875,22 @@
 				loadedCode[_codeName] = true;
 			}
 		}
+
+        function validateDependancies(_dependancies){
+            var className,$return = false;
+            if(KUBE.Is(_dependancies) === 'array'){
+                $return = true;
+                if(autoPath){
+                    for(i=0;i<_dependancies.length[i];i++){
+                        className = _dependancies[i];
+                        if(!map[className]){
+                            map[className] = {'state':0,'src':autoPath+"/"+className+".js"};
+                        }
+                    }
+                }
+            }
+            return $return;
+        }
 		
 		//The following is a bit hacky. Refactor
 		function checkDependancyChain(_className,_dependancies){
@@ -1027,6 +1054,9 @@
 			if(!loadedCode[_class] && map[_class].src){
 				fetchScript(map[_class].src);				
 			}
+            else if(!loadedCode[_class]){
+
+            }
 		}
 		
 		function fetchScript(_src){
@@ -1038,34 +1068,34 @@
 }(window,true));
 
 /* Edit this for autoloads */
-KUBE.AutoLoad({
-	'Ajax': 'Utilities/Ajax.js',
-	'Animate': 'Utilities/Animate.js',
-	'AnimateTo': 'Utilities/AnimateTo.js',
-	'Bezier': 'Utilities/Bezier.js',
-	'Color': 'Utilities/Color.js',
-	'Console': 'Utilities/Console.js',
-	'Convert': 'Utilities/Convert.js',
-	'DomJack': 'Utilities/DomJack.js',
-	'FeatureDetect': 'Utilities/FeatureDetect.js',
-	'FontAwesome': 'Utilities/FontAwesome.js',
-    'Gradient': 'Utilities/Gradient.js',
-	'Handlebars': 'Utilities/Handlebars.js',
-	'JSON': 'Utilities/JSON.js',
-	'QuickFlow':'Utilities/QuickFlow.js',
-	'Select': 'Utilities/Select.js',
-	'StyleJack': 'Utilities/StyleJack.js',
-	'Scroll':'Utilities/Scroll.js',
-    'TextKing':'Utilities/TextKing.js',
-    'Upload': 'Utilities/Upload.js',
-	'UI':'Utilities/UI.js',
-	'Velocity':'Utilities/Velocity.js',
-	'WinDocJack': 'Utilities/WinDocJack.js',
-	'ArrayKUBE':'ExtendLibraries/Array.js',
-	'DateKUBE':'ExtendLibraries/Date.js',
-	'FunctionKUBE':'ExtendLibraries/Function.js',
-    'ObjectKUBE':'ExtendLibraries/Object.js',
-	'RegExpKUBE':'ExtendLibraries/RegExp.js',
-	'StringKUBE':'ExtendLibraries/String.js'
-
-});
+//KUBE.AutoLoad({
+//	'Ajax': 'Utilities/Ajax.js',
+//	'Animate': 'Utilities/Animate.js',
+//	'AnimateTo': 'Utilities/AnimateTo.js',
+//	'Bezier': 'Utilities/Bezier.js',
+//	'Color': 'Utilities/Color.js',
+//	'Console': 'Utilities/Console.js',
+//	'Convert': 'Utilities/Convert.js',
+//	'DomJack': 'Utilities/DomJack.js',
+//	'FeatureDetect': 'Utilities/FeatureDetect.js',
+//	'FontAwesome': 'Utilities/FontAwesome.js',
+//    'Gradient': 'Utilities/Gradient.js',
+//	'Handlebars': 'Utilities/Handlebars.js',
+//	'JSON': 'Utilities/JSON.js',
+//	'QuickFlow':'Utilities/QuickFlow.js',
+//	'Select': 'Utilities/Select.js',
+//	'StyleJack': 'Utilities/StyleJack.js',
+//	'Scroll':'Utilities/Scroll.js',
+//    'TextKing':'Utilities/TextKing.js',
+//    'Upload': 'Utilities/Upload.js',
+//	'UI':'Utilities/UI.js',
+//	'Velocity':'Utilities/Velocity.js',
+//	'WinDocJack': 'Utilities/WinDocJack.js',
+//	'ArrayKUBE':'ExtendLibraries/Array.js',
+//	'DateKUBE':'ExtendLibraries/Date.js',
+//	'FunctionKUBE':'ExtendLibraries/Function.js',
+//    'ObjectKUBE':'ExtendLibraries/Object.js',
+//	'RegExpKUBE':'ExtendLibraries/RegExp.js',
+//	'StringKUBE':'ExtendLibraries/String.js'
+//
+//});
