@@ -49,7 +49,7 @@
 	
 	/* Load in Patience */
 	AutoLoader = new KUBELoader(KUBE);
-    AutoLoader.SetAutoPath('/Library');
+    AutoLoader.SetAutoPath(config.autoLoadPath+'/Library');
 	KUBE.LoadFactory('Patience', Patience);
 	KUBE.LoadSingletonFactory('Loader',KUBELoader);
 	
@@ -881,7 +881,7 @@
             if(KUBE.Is(_dependancies) === 'array'){
                 $return = true;
                 if(autoPath){
-                    for(i=0;i<_dependancies.length[i];i++){
+                    for(i=0;i<_dependancies.length;i++){
                         className = _dependancies[i];
                         if(!map[className]){
                             map[className] = {'state':0,'src':autoPath+"/"+className+".js"};
@@ -1067,35 +1067,5 @@
 	}
 }(window,true));
 
-/* Edit this for autoloads */
-//KUBE.AutoLoad({
-//	'Ajax': 'Utilities/Ajax.js',
-//	'Animate': 'Utilities/Animate.js',
-//	'AnimateTo': 'Utilities/AnimateTo.js',
-//	'Bezier': 'Utilities/Bezier.js',
-//	'Color': 'Utilities/Color.js',
-//	'Console': 'Utilities/Console.js',
-//	'Convert': 'Utilities/Convert.js',
-//	'DomJack': 'Utilities/DomJack.js',
-//	'FeatureDetect': 'Utilities/FeatureDetect.js',
-//	'FontAwesome': 'Utilities/FontAwesome.js',
-//    'Gradient': 'Utilities/Gradient.js',
-//	'Handlebars': 'Utilities/Handlebars.js',
-//	'JSON': 'Utilities/JSON.js',
-//	'QuickFlow':'Utilities/QuickFlow.js',
-//	'Select': 'Utilities/Select.js',
-//	'StyleJack': 'Utilities/StyleJack.js',
-//	'Scroll':'Utilities/Scroll.js',
-//    'TextKing':'Utilities/TextKing.js',
-//    'Upload': 'Utilities/Upload.js',
-//	'UI':'Utilities/UI.js',
-//	'Velocity':'Utilities/Velocity.js',
-//	'WinDocJack': 'Utilities/WinDocJack.js',
-//	'ArrayKUBE':'ExtendLibraries/Array.js',
-//	'DateKUBE':'ExtendLibraries/Date.js',
-//	'FunctionKUBE':'ExtendLibraries/Function.js',
-//    'ObjectKUBE':'ExtendLibraries/Object.js',
-//	'RegExpKUBE':'ExtendLibraries/RegExp.js',
-//	'StringKUBE':'ExtendLibraries/String.js'
-//
-//});
+//KUBEjs utilities will autoload out of the Library subdirectory.
+//External classes will need to use KUBE.AutoLoad({ClassName:FilePath})
