@@ -180,15 +180,12 @@
 			'MapData':MapData,
 			
 			//Animation
-			'Fade':Fade,						//Animation that utilizes transitions and transforms
-			'Slide':Slide,						//Animation that utilizes transitions and transforms
-			'IsAnimating':IsAnimating,			//Checks with Animate() manager to see if this DomJack is aniamting
-			'ResetAnimationState':ResetAnimationState //Important for reinitializing the proper state after bringing detached nodes back into the DOM,etc
+            //THESE METHODS ARE DEPRECATED. IF YOU WANT ANIMATIONS, USE VELOCITY.
+            //THESE METHODS DO NOTHING EXCEPT TRIGGER ERRORS. USE AT OWN RISK (OR DON'T USE AT ALL PLS)
+			'Fade':Fade,						//ERRORS SAYING THAT DJ ANIMATIONS ARE GONE
+			'Slide':Slide						//ERRORS SAYING THAT DJ ANIMATIONS ARE GONE
 			
-			//Animation
-			//'Fade':FX().Fade,					//Utility: Shortcut functionality for triggering Fade animation
-			//'Disappear':FX().Disappear,			//Utility: Shortcute functionality for creating a disappearing effect
-						
+
 			//**Not sure
 			//'Each':Each,
 			//'CheckCache':CheckCache,
@@ -1357,300 +1354,19 @@
 		
 		//Animations
 		function Fade(_ms,_callback){
-			initDJAnimation();
-			return animationAPI.Fade(_ms,_callback);
+            console.error('Fade was called! DomJack Fade is deprecated for Velocity animations.');
+			//initDJAnimation();
+			//return animationAPI.Fade(_ms,_callback);
 		}
 		
 		function Slide(_direction,_ms,_callback){
-			initDJAnimation();
-			return animationAPI.Slide(_direction,_ms,_callback);
+            console.error('Slide was called! DomJack Slide is deprecated for Velocity animations.');
+			//initDJAnimation();
+			//return animationAPI.Slide(_direction,_ms,_callback);
 		}
-		
-		function ResetAnimationState(){
-			initDJAnimation();
-			return animationAPI.Reset();
-		}
-		
-		function IsAnimating(){
-			return KUBE.Animate().IsAnimating($DomJackAPI);
-		}
-		
-		function initDJAnimation(){
-			if(!animationAPI){
-				animationAPI = DJAnimation($DomJackAPI);
-			}
-		}
-		
+
 	}
-	
-	//DomJack Node Animations
-	function DJAnimation(_DomJackAPI){
-		var animateOpacity,animateSlide,origOpacity,origSlide,lastFade,lastSlide,SlideContainer,$animationAPI;
-		init();
-		$animationAPI = {
-			'Fade':Fade,
-			'Slide':Slide,
-			'Reset':Reset
-		};
-		return $animationAPI;
-		
-		function Reset(){
-			init();
-			return $animationAPI;
-		}
-		
-		function Fade(_ms,_callback){
-			interruptFade(_ms,_callback) || triggerFade(_ms,_callback);
-		}
-		
-		function interruptFade(_ms,_callback){
-			var $return = false;
-			if(KUBE.Animate().IsAnimating(_DomJackAPI)){
-				$return = true;
-				_DomJackAPI.Clear('animateInterrupt');
-				_DomJackAPI.Once('animateInterrupt',function(_progress){
-					Fade(((_ms/100)*_progress)/3,_callback);
-				});
-				KUBE.Animate().Interrupt(_DomJackAPI);
-			}
-			return $return;
-		}
-		
-		function triggerFade(_ms,_callback){
-			var currentOpacity,S;
-			S = _DomJackAPI.Style();
-			currentOpacity = S.Opacity();
-			initFadeEvents(_callback);
-			if(lastFade === 'out'){
-				if(!isDisplayed()){
-					//It is not displayed, set opacity to 0, set it to display block
-					S.Opacity(0).Display('block');
-				}
-				lastFade = 'in';
-				animateOpacity.Opacity(origOpacity).Time(_ms).AnimateDomJack(_DomJackAPI);
-			}
-			else{
-				lastFade = 'out';
-				animateOpacity.Opacity(0).Time(_ms).AnimateDomJack(_DomJackAPI);
-			}
-		}
-		
-		function initFadeEvents(_callback){
-			_DomJackAPI.Once('animateEnd',function(){
-				this.Clear('animateInterrupt');
-				handleOpacityZeroState();
-				if(KUBE.Is(_callback) === 'function'){
-					_callback();
-				}
-			});
-		}
 
-		function handleOpacityZeroState(){
-			//Trigger this when relevant
-			var currentOpacity = _DomJackAPI.Style().Opacity()
-			if(currentOpacity === 0){
-				_DomJackAPI.Style().Display('none').Opacity(origOpacity);
-			}
-		}		
-		
-		//Sliding here
-		function Slide(_direction,_ms,_callback){
-			initSlideContainer();
-			interruptSlide(_direction,_ms,_callback) || triggerSlide(_direction,_ms,_callback);
-		}
-		
-		function initSlideContainer(){
-			if(!SlideContainer){
-				SlideContainer = KUBE.DomJack('div');
-				_DomJackAPI.Once('cleanup',function(){
-					SlideContainer.Delete();
-					SlideContainer = undefined;
-				});
-			}
-		}
-		
-		function interruptSlide(_direction,_ms,_callback){
-			var $return = false;
-			if(KUBE.Animate().IsAnimating(_DomJackAPI)){
-				$return = true;
-				_DomJackAPI.Clear('animateEnd');
-				_DomJackAPI.Clear('animateInterrupt');
-				_DomJackAPI.Once('animateInterrupt',function(_progress){
-					Slide(_direction,((_ms/100)*_progress)/3,_callback);
-				});
-				KUBE.Animate().Interrupt(_DomJackAPI);
-			}
-			return $return;
-		}
-		
-		function injectContainer(){
-			var compStyle,draw,S = _DomJackAPI.Style();
-			if(SlideContainer.IsDetached()){
-				//This is when I want to store the original values (as this is what I will replace them with when I reattach the Node)
-				compStyle = window.getComputedStyle(_DomJackAPI.GetNode());
-				origSlide = {
-					'width': S.Width() || KUBE.Convert(compStyle.width,'px','number'),
-					'height': S.Height() || KUBE.Convert(compStyle.height,'px','number'),
-					'top': S.Top() || KUBE.Convert(compStyle.top,'px','number'),
-					'right': S.Right() || KUBE.Convert(compStyle.right,'px','number'),
-					'bottom': S.Bottom() || KUBE.Convert(compStyle.bottom,'px','number'),
-					'left': S.Left() || KUBE.Convert(compStyle.left,'px','number'),
-					'position': S.Position() || compStyle.position
-				};
-				
-				if(KUBE.Is(origSlide.width) !== 'number'){
-					draw = draw || _DomJackAPI.GetDrawDimensions(_DomJackAPI.GetParent());
-					origSlide.width = draw.width;
-				}
-				
-				if(KUBE.Is(origSlide.height) !== 'number'){
-					draw = draw || _DomJackAPI.GetDrawDimensions(_DomJackAPI.GetParent());
-					origSlide.height = draw.height;					
-				}
-//				
-//				if(KUBE.Is(origSlide.top) !== 'number'){
-//					draw = draw || _DomJackAPI.GetDrawDimensions(_DomJackAPI.GetParent());
-//					origSlide.top = draw.top;					
-//				}
-//				
-//				if(KUBE.Is(origSlide.right) !== 'number'){
-//					draw = draw || _DomJackAPI.GetDrawDimensions(_DomJackAPI.GetParent());
-//					origSlide.right = draw.right;					
-//				}
-//				
-//				if(KUBE.Is(origSlide.bottom) !== 'number'){
-//					draw = draw || _DomJackAPI.GetDrawDimensions(_DomJackAPI.GetParent());
-//					origSlide.bottom = draw.bottom;					
-//				}
-//
-//				if(KUBE.Is(origSlide.left) !== 'number'){
-//					draw = draw || _DomJackAPI.GetDrawDimensions(_DomJackAPI.GetParent());
-//					origSlide.left = draw.left;					
-//				}
-								
-				SlideContainer.
-					Style().
-					Top(origSlide.top).
-					Right(origSlide.right).
-					Bottom(origSlide.bottom).
-					Left(origSlide.left).
-					Width(origSlide.width).
-					Height(origSlide.height).
-					Position(origSlide.position).
-					Overflow('hidden');
-
-				_DomJackAPI.GetParent().Insert(SlideContainer,_DomJackAPI);
-				SlideContainer.Append(_DomJackAPI);
-				S.Top(0).Left(0).Position('relative');
-			}
-		}
-		
-		function replaceNode(){
-			var S = _DomJackAPI.Style();
-			if(!SlideContainer.IsDetached()){
-				SlideContainer.GetParent().Insert(_DomJackAPI,SlideContainer);
-				SlideContainer.Detach();
-				S.Top(origSlide.top).
-					Left(origSlide.left).
-					Position(origSlide.position);
-			}
-		}
-		
-		function slideOut(_direction){
-			var S,$return = false;
-			S = _DomJackAPI.Style();
-			if(lastSlide === 'in'){
-				$return = true;
-				lastSlide = 'out';
-				switch(_direction){
-					case 'left': animateSlide.Left(-origSlide.width); break;
-					case 'right': animateSlide.Left(origSlide.width); break;
-					case 'up': animateSlide.Top(-origSlide.height); break;
-					case 'down': animateSlide.Top(origSlide.height); break;
-				}
-			}
-			return $return;
-		}
-		
-		function slideIn(_direction){
-			var S;
-			S = _DomJackAPI.Style();
-			lastSlide = 'in';
-			switch(_direction){
-				case 'left': case 'right': animateSlide.Left(0); break;
-				case 'up': case 'down': animateSlide.Top(0); break;
-			}
-		}
-		
-		function initDisplayState(_direction){
-			var S = _DomJackAPI.Style();
-			if(!isDisplayed()){
-				switch(_direction){
-					case 'left': S.Left(-origSlide.width); break;
-					case 'right': S.Left(origSlide.width); break;
-					case 'up': S.Top(-origSlide.height); break;
-					case 'down': S.Top(origSlide.height); break;
-				}
-				S.Display('block');
-			}
-		}
-		
-		function initSlideEvents(_callback){
-			_DomJackAPI.Once('animateEnd',function(){
-				this.Clear('animateInterrupt');
-				if(lastSlide === 'out'){
-					this.Style().Display('none');
-				}
-				replaceNode();
-				if(KUBE.Is(_callback) === 'function'){
-					_callback();
-				}
-			});
-		}
-		
-		var cancel = undefined;
-		function triggerSlide(_direction,_ms,_callback){
-			if(cancel){
-				clearTimeout(cancel);
-			}
-			injectContainer();
-			cancel = setTimeout(function(){
-				initDisplayState(_direction);
-				initSlideEvents(_callback);
-				slideOut(_direction,_ms) || slideIn(_direction,_ms);
-				animateSlide.Time(_ms).AnimateDomJack(_DomJackAPI);
-				cancel = undefined;
-			},50);
-		}
-		
-		
-		//Private
-		function init(){
-			var S = _DomJackAPI.Style();
-			origOpacity = S.Opacity();
-			
-			animateOpacity = KUBE.AnimateTo();
-			animateSlide = KUBE.AnimateTo();
-			if(!isDisplayed()){
-				lastFade = 'out';
-				lastSlide = 'out';
-			}
-			else{
-				lastFade = 'in';
-				lastSlide = 'in';
-			}
-		}
-
-		function isDisplayed(){
-            //WARNING: IF AN ERROR OCCURS HERE... THE ANSWER IS NOT CHECKING TO SEE IF NODE EXISTS.
-            //THIS USUALLY INDICATES THAT A DELETION HAS OCCURED BEFORE THE ANIMATION FINISHED WHICH WILL HAVE A CHAIN REACTION OF PROBLEMS.
-            if(!_DomJackAPI.GetNode()){
-                throw new Error("An animation was triggered asynchronously, while DOM nodes were also being deleted. The deletion and cleanup occured before the end of the Animation event, at which point the animation cannot resolve because the DOM Node does not exist. Either the deletion shouldn't occur, or the animation shouldn't occur to resolve this");
-            }
-			return (window.getComputedStyle(_DomJackAPI.GetNode()).display === 'none' ? false : true);
-		}
-	}
-	
 	//Below is an abstraction for the mutation of our primary DJ API
 	function BindCustomAPI(_DomJackAPI,_nodeType,_rawAPI){
 		var typeAPI = {};
