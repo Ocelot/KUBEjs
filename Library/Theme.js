@@ -3,11 +3,14 @@
  */
 
 (function(KUBE){
-    KUBE.LoadSingletonFactory('Theme', Theme,['DomJack','StyleJack','Hash','ExtendObject']);
+    KUBE.LoadSingleton('Theme', Theme,['Appearance','DomJack','StyleJack','Hash','ExtendObject','Color']);
     Theme.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function Theme(){
-        var $ThemeAPI;
+        var $ThemeAPI,themes,currentTheme,SJ;
+        SJ = KUBE.StyleJack;
+        themes = {};
+        currentTheme = 'KUBEDefault';
 
         $ThemeAPI = {
             'LoadFromCSS':LoadFromCSS,
@@ -15,7 +18,9 @@
             'New':New,
             'Fonts':Fonts(),
             'Background':Background(),
-            'Border':Border()
+            'Border':Border(),
+            'ChangeTheme':ChangeTheme,
+            'GetAppearanceList':GetAppearanceList
         }.KUBE().create(Theme.prototype);
 
         return $ThemeAPI;
@@ -28,87 +33,119 @@
 
         }
 
+        function GetAppearanceList(){
+
+        }
+
+        function ChangeTheme(_newTheme){
+            if(_newTheme !== currentTheme){
+                currentTheme = _newTheme;
+                //Do something to change the classes
+            }
+        }
+
         function New(){
-            var $Appearance = Appearance($ThemeAPI);
+            var $Appearance = KUBE.Appearance($ThemeAPI);
             return $Appearance;
         }
 
         function Fonts(){
             return {
-                'AddColor':AddColor
+                'AddColor':AddColor,
+                'AddSize':AddSize
             };
 
-            function AddColor(_name,_ColorObj,_quickSetArray){}
-        }
+            function AddColor(_name,_color,_quickSetArray){
+                if(validateColor(_color) && KUBE.Is(_name) === 'string'){
+                    themes[currentTheme].properties.fonts[_name] = {'type':'color','value':_color };
+                }
+            }
 
-        function Background(){
-            return {
-                'AddColor':AddColor
-            };
-
-            function AddColor(_name,_ColorObj,_quickSetArray){}
-        }
-
-        function Border(){
-            return {
-                'AddColor':AddColor
-            };
-
-            function AddColor(_name,_ColorObj,_quickSetArray){}
-        }
-    }
-
-    Appearance.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
-    function Appearance(_Theme){
-        var $AppearanceAPI;
-        $AppearanceAPI = {
-            'QuickSet':QuickSet,
-            'Font':Font(),
-            'Background':Background(),
-            'Border':Border()
-        }.KUBE().create(Appearance.prototype);
-        validateInit();
-        return $AppearanceAPI;
-
-        //Public API
-        function QuickSet(_name){
-
-        }
-
-        function Font(){
-            return {
-                'Use':Use
-            };
-            function Use(_name,_state){
-
+            function AddSize(_name,_pxSize,_quickSetArray){
+                if(KUBE.Is(_pxSize) === 'number' && KUBE.Is(_name) === 'string'){
+                    themes[currentTheme].properties.fonts[_name] = {'type':'width','value':_pxSize };
+                }
             }
         }
 
         function Background(){
             return {
-                'Use':Use
+                'AddColor':AddColor
             };
-            function Use(_name,_state){
 
+            function AddColor(_name,_color,_quickSetArray){
+                if(validateColor(_color) && KUBE.Is(_name) === 'string'){
+                    themes[currentTheme].properties.background[_name] = {'type':'color','value':_color };
+                }
             }
         }
 
         function Border(){
             return {
-                'Use':Use
+                'AddColor':AddColor,
+                'AddWidth':AddWidth
             };
-            function Use(_name,_state){
 
+            function AddColor(_name,_color,_quickSetArray){
+                if(validateColor(_color) && KUBE.Is(_name) === 'string'){
+                    themes[currentTheme].properties.border[_name] = {'type':'color','value':_color };
+                }
+            }
+
+            function AddWidth(_name,_pxSize,_quickSetArray){
+                if(KUBE.Is(_pxSize) === 'number' && KUBE.Is(_name) === 'string'){
+                    themes[currentTheme].properties.border[_name] = {'type':'width','value':_pxSize };
+                }
+            }
+        }
+
+        function SetPaddingUnitSize(_unitPx){
+            if(KUBE.Is(_unitPx) === 'number'){
+                themes[currentTheme].paddingUnitSize = _unitPx;
+            }
+        }
+
+        function SetMarginUnitSize(_unitPx){
+            if(KUBE.Is(_unitPx) === 'number'){
+                themes[currentTheme].marginUnitSize = _unitPx;
+            }
+        }
+
+        function SetPositionUnitSize(_unitPx){
+            if(KUBE.Is(_unitPx) === 'number'){
+                themes[currentTheme].positionUnitSize = _unitPx;
             }
         }
 
         //Private
-        function validateInit(){
-            if(KUBE.Is(_Theme,true) !== 'Theme'){
-                console.log(_Theme);
-                throw new Error('Invalid initialization variable passed to Appearance. Must be a Theme object');
+        function initTheme(_themeName){
+            if(themes[_themeName] === undefined){
+                themes[_themeName] = {};
+                themes[_themeName].quickSets = {};
+                themes[_themeName].paddingUnitSize = 1;
+                themes[_themeName].marginUnitSize = 1;
+                themes[_themeName].positionUnitSize = 1;
+                themes[_themeName].properties = {
+                    'border':{},
+                    'background':{},
+                    'font':{}
+                };
             }
         }
-    }
 
+        function initQuickSet(_quickSetName){
+            if(themes[currentTheme].quickSets[_quickSetName] === undefined){
+                themes[currentTheme].quickSets[_quickSetName] = {
+                    'background':{},
+                    'border':{},
+                    'font':{}
+                };
+            }
+        }
+
+        function validateColor(_color){
+            var Color = KUBE.Color();
+            return Color.IsValidColor(_color);
+        }
+    }
 })(KUBE);
