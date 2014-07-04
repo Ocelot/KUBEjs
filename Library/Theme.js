@@ -3,79 +3,106 @@
  */
 
 (function(KUBE){
-    KUBE.LoadSingleton('Theme', Theme,['Appearance','DomJack','StyleJack','Hash','ExtendObject','Color']);
+    "use strict";
+    KUBE.LoadFactory('Theme', Theme,['DomJack','StyleJack','Hash','ExtendObject','Color']);
     Theme.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
-    function Theme(){
-        var $ThemeAPI,themes,currentTheme,SJ;
+    function Theme(_name){
+        var $ThemeAPI,theme,quickSets,SJ;
+        quickSets = {};
         SJ = KUBE.StyleJack;
-        themes = {};
-        currentTheme = 'KUBEDefault';
 
         $ThemeAPI = {
-            'LoadFromCSS':LoadFromCSS,
-            'GetClass':GetClass,
-            'New':New,
-            'Fonts':Fonts(),
+            'Font':Font(),
             'Background':Background(),
             'Border':Border(),
-            'ChangeTheme':ChangeTheme,
-            'GetAppearanceList':GetAppearanceList
+            'GetAppearanceList':GetAppearanceList,
+            'GetName':GetName,
+            'AddQuickSet':AddQuickSet
         }.KUBE().create(Theme.prototype);
-
+        initTheme();
         return $ThemeAPI;
 
-        function LoadFromCSS(_cssString){
-            //Not sure about this
-        }
-
-        function GetClass(_Appearance){
-
+        function GetName(){
+            return _name;
         }
 
         function GetAppearanceList(){
-
+            return theme.properties;
         }
 
-        function ChangeTheme(_newTheme){
-            if(_newTheme !== currentTheme){
-                currentTheme = _newTheme;
-                //Do something to change the classes
+        function GetQuickSet(_name){
+            var $return = {};
+            if(KUBE.Is(_name) === 'string' && quickSets[_name]){
+                $return = quickSets[_name].GetUsing();
             }
+            return $return;
         }
 
-        function New(){
-            var $Appearance = KUBE.Appearance($ThemeAPI);
-            return $Appearance;
-        }
-
-        function Fonts(){
+        function Font(){
             return {
                 'AddColor':AddColor,
-                'AddSize':AddSize
+                'AddSize':AddSize,
+                'SetStyle':SetStyle
             };
 
-            function AddColor(_name,_color,_quickSetArray){
+            function AddColor(_name,_color){
                 if(validateColor(_color) && KUBE.Is(_name) === 'string'){
-                    themes[currentTheme].properties.fonts[_name] = {'type':'color','value':_color };
+                    theme.properties.font[_name] = {'type':'color','value':_color };
                 }
             }
 
-            function AddSize(_name,_pxSize,_quickSetArray){
+            function AddSize(_name,_pxSize){
                 if(KUBE.Is(_pxSize) === 'number' && KUBE.Is(_name) === 'string'){
-                    themes[currentTheme].properties.fonts[_name] = {'type':'width','value':_pxSize };
+                    theme.properties.font[_name] = {'type':'size','value':_pxSize };
+                }
+            }
+
+            function SetStyle(_name,_StyleJack){
+                var definition;
+                if(KUBE.Is(_StyleJack,true) === 'StyleJack'){
+                    definition = theme.properties.font[_name];
+                    if(definition){
+                        switch(definition.type){
+                            case 'color':
+                                _StyleJack.Color(definition.color);
+                                break;
+
+                            case 'size':
+                                //_StyleJack.Font().Size(definition.color);
+                                break;
+
+                            case 'family':
+                                break;
+                        }
+                    }
                 }
             }
         }
 
         function Background(){
             return {
-                'AddColor':AddColor
+                'AddColor':AddColor,
+                'SetStyle':SetStyle
             };
 
-            function AddColor(_name,_color,_quickSetArray){
+            function AddColor(_name,_color){
                 if(validateColor(_color) && KUBE.Is(_name) === 'string'){
-                    themes[currentTheme].properties.background[_name] = {'type':'color','value':_color };
+                    theme.properties.background[_name] = {'type':'color','value':_color };
+                }
+            }
+
+            function SetStyle(_name,_StyleJack){
+                var definition;
+                if(KUBE.Is(_StyleJack,true) === 'StyleJack'){
+                    definition = theme.properties.background[_name];
+                    if(definition){
+                        switch(definition.type){
+                            case 'color':
+                                _StyleJack.Background().Color(definition.color);
+                                break;
+                        }
+                    }
                 }
             }
         }
@@ -86,61 +113,51 @@
                 'AddWidth':AddWidth
             };
 
-            function AddColor(_name,_color,_quickSetArray){
+            function AddColor(_name,_color){
                 if(validateColor(_color) && KUBE.Is(_name) === 'string'){
-                    themes[currentTheme].properties.border[_name] = {'type':'color','value':_color };
+                    theme.properties.border[_name] = {'type':'color','value':_color };
                 }
             }
 
-            function AddWidth(_name,_pxSize,_quickSetArray){
+            function AddWidth(_name,_pxSize){
                 if(KUBE.Is(_pxSize) === 'number' && KUBE.Is(_name) === 'string'){
-                    themes[currentTheme].properties.border[_name] = {'type':'width','value':_pxSize };
+                    theme.properties.border[_name] = {'type':'width','value':_pxSize };
+                }
+            }
+
+            function SetStyle(_name,_StyleJack){
+                var definition;
+                if(KUBE.Is(_StyleJack,true) === 'StyleJack'){
+                    definition = theme.properties.border[_name];
+                    if(definition){
+                        switch(definition.type){
+                            case 'color':
+                                //Not sure about this
+                                _StyleJack.Border().Width(1);
+                                _StyleJack.Border().Style('solid');
+                                _StyleJack.Border().Color(definition.color);
+                                break;
+                        }
+                    }
                 }
             }
         }
 
-        function SetPaddingUnitSize(_unitPx){
-            if(KUBE.Is(_unitPx) === 'number'){
-                themes[currentTheme].paddingUnitSize = _unitPx;
-            }
-        }
-
-        function SetMarginUnitSize(_unitPx){
-            if(KUBE.Is(_unitPx) === 'number'){
-                themes[currentTheme].marginUnitSize = _unitPx;
-            }
-        }
-
-        function SetPositionUnitSize(_unitPx){
-            if(KUBE.Is(_unitPx) === 'number'){
-                themes[currentTheme].positionUnitSize = _unitPx;
+        function AddQuickSet(_name,_Appearance){
+            if(KUBE.Is(_Appearance,true) === 'Appearance' && KUBE.Is(_name) === 'string'){
+                quickSets[_name] = _Appearance;
             }
         }
 
         //Private
-        function initTheme(_themeName){
-            if(themes[_themeName] === undefined){
-                themes[_themeName] = {};
-                themes[_themeName].quickSets = {};
-                themes[_themeName].paddingUnitSize = 1;
-                themes[_themeName].marginUnitSize = 1;
-                themes[_themeName].positionUnitSize = 1;
-                themes[_themeName].properties = {
-                    'border':{},
-                    'background':{},
-                    'font':{}
-                };
-            }
-        }
-
-        function initQuickSet(_quickSetName){
-            if(themes[currentTheme].quickSets[_quickSetName] === undefined){
-                themes[currentTheme].quickSets[_quickSetName] = {
-                    'background':{},
-                    'border':{},
-                    'font':{}
-                };
-            }
+        function initTheme(){
+            theme = {};
+            theme.unitSize = 3;
+            theme.properties = {
+                'border':{},
+                'background':{},
+                'font':{}
+            };
         }
 
         function validateColor(_color){

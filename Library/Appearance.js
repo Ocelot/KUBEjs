@@ -3,6 +3,7 @@
  */
 
 (function(KUBE){
+    "use strict";
     KUBE.LoadFactory('Appearance', Appearance,['Theme','ExtendObject']);
     Appearance.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
     function Appearance(_Theme){
@@ -13,7 +14,8 @@
             'QuickSet':QuickSet,
             'Font':Font(),
             'Background':Background(),
-            'Border':Border()
+            'Border':Border(),
+            'GetUsing':GetUsing
         }.KUBE().create(Appearance.prototype);
 
         //Initialize our object
@@ -25,9 +27,14 @@
 
         //Public API
         function QuickSet(_name){
-
+            using = _Theme.GetQuickSet(_name);
         }
 
+        function GetUsing(){
+            return using;
+        }
+
+        //Font methods
         function Font(){
             return {
                 'Use':Use,
@@ -38,10 +45,10 @@
             function Use(_name,_state){
                 _state = validateState(_state) || 'visible';
                 if(Check(_name)){
-                    using.background[_state] = _name;
+                    using.font[_state] = _name;
                 }
                 else if(_name === undefined){
-                    using.background[_state] = undefined;
+                    using.font[_state] = undefined;
                 }
             }
 
@@ -54,6 +61,7 @@
             }
         }
 
+        //Background methods
         function Background(){
             return {
                 'Use':Use,
@@ -80,6 +88,7 @@
             }
         }
 
+        //Border methods
         function Border(){
             return {
                 'Use':Use,
@@ -170,7 +179,6 @@
             }
             return $return;
         }
-
     }
 
 })(KUBE);
