@@ -16,6 +16,8 @@
             'Font':Font(),
             'Background':Background(),
             'Border':Border(),
+            'SetUnitSize':SetUnitSize,
+            'GetUnitSize':GetUnitSize,
             'GetAppearanceList':GetAppearanceList,
             'GetName':GetName,
             'AddQuickSet':AddQuickSet,
@@ -44,39 +46,83 @@
             return {
                 'AddColor':AddColor,
                 'AddSize':AddSize,
+                'AddFamily':AddFamily,
+                'AddStyle':AddStyle,
                 'SetStyle':SetStyle
             };
 
             function AddColor(_name,_color){
                 if(validateColor(_color) && KUBE.Is(_name) === 'string'){
-                    theme.properties.font[_name] = {'type':'color','value':_color };
+                    initSet(_name);
+                    theme.properties.font[_name].color = _color;
                 }
             }
 
-            function AddSize(_name,_pxSize){
-                if(KUBE.Is(_pxSize) === 'number' && KUBE.Is(_name) === 'string'){
-                    theme.properties.font[_name] = {'type':'size','value':_pxSize };
+            function AddSize(_name,_size){
+                if(KUBE.Is(_size) === 'number' && KUBE.Is(_name) === 'string'){
+                    initSet(_name);
+                    theme.properties.font[_name].size = _size;
+                }
+            }
+
+            function AddFamily(_name,_family){
+                if(KUBE.Is(_family) === 'string' && KUBE.Is(_name) === 'string'){
+                    initSet(_name);
+                    theme.properties.font[_name].family = _family;
+                }
+            }
+
+            function AddStyle(_name,_style){
+                if(KUBE.Is(_style) === 'string' && KUBE.Is(_name) === 'string'){
+                    initSet(_name);
+                    theme.properties.font[_name].style = _style;
+                }
+            }
+
+            function AddWeight(_name,_weight){
+                if(KUBE.Is(_name) === 'string'){
+                    initSet(_name);
+                    theme.properties.font[_name].weight = _weight;
                 }
             }
 
             function SetStyle(_name,_StyleJack){
-                var definition;
-                if(KUBE.Is(_StyleJack,true) === 'StyleJack'){
-                    definition = theme.properties.font[_name];
-                    if(definition){
-                        switch(definition.type){
-                            case 'color':
-                                _StyleJack.Color(definition.value);
-                                break;
+                var definition = theme.properties.font[_name];
 
-                            case 'size':
-                                //_StyleJack.Font().Size(definition.color);
-                                break;
+                if(KUBE.Is(_StyleJack,true) === 'StyleJack' && KUBE.Is(definition) === 'object'){
+                    definition.KUBE().each(function(_key,_val){
+                        applyStyle(_StyleJack,_key,_val);
+                    });
+                }
+            }
 
-                            case 'family':
-                                break;
-                        }
-                    }
+            function applyStyle(_SJ,_type,_value){
+                switch(_type){
+                    case 'color':
+                        _SJ.Color(_value);
+                        break;
+
+                    case 'size':
+                        _SJ.Font().Size(calcSize(_value));
+                        break;
+
+                    case 'family':
+                        _SJ.Font().Family(_value);
+                        break;
+
+                    case 'Weight':
+                        _SJ.Font().Weight(_value);
+                        break;
+
+                    case 'Style':
+                        _SJ.Font().Style(_value);
+                        break;
+                }
+            }
+
+            function initSet(_name){
+                if(!theme.properties.font[_name]){
+                    theme.properties.font[_name] = {};
                 }
             }
         }
@@ -150,6 +196,16 @@
             }
         }
 
+        function SetUnitSize(_unitSize){
+            if(KUBE.Is(_unitSize) === 'number'){
+                theme.unitSize = _unitSize;
+            }
+        }
+
+        function GetUnitSize(){
+            return theme.unitSize;
+        }
+
         //Private
         function initTheme(){
             theme = {};
@@ -164,6 +220,11 @@
         function validateColor(_color){
             var Color = KUBE.Color();
             return Color.IsValidColor(_color);
+        }
+
+        function calcSize(_size,_round){
+            _round = (KUBE.Is(_round) === 'boolean' ? _round : true);
+            return (_round ? Math.round(_size*theme.unitSize) : _size*theme.unitSize);
         }
     }
 })(KUBE);
