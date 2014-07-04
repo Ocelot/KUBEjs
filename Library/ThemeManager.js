@@ -52,7 +52,7 @@
             var using,$return;
             if(KUBE.Is(_Appearance,true) === 'Appearance'){
                 using = _Appearance.GetUsing();
-                $return = 's'+Hash.DeepHash(using);
+                $return = '.s'+Hash.DeepHash(using);
                 initializeClass($return,_Appearance);
             }
             return $return;
@@ -70,15 +70,15 @@
         function initializeClass(_className,_Appearance){
             var Visible,Active,Hover,Select,using;
             Visible = SJ(_className);
-            Active = SJ(_className+":active");
-            Hover = SJ(_className+":hover");
-            Select = SJ(_className+":select");
+            //Active = SJ(_className+"::active");
+            //Hover = SJ(_className+"::hover");
+            //Select = SJ(_className+"::select");
             using = _Appearance.GetUsing();
 
             setStyle(Visible,using.font.visible,using.border.visible,using.background.visible);
-            setStyle(Active,using.font.active,using.border.active,using.background.active);
-            setStyle(Select,using.font.select,using.border.select,using.background.select);
-            setStyle(Hover,using.font.hover,using.border.hover,using.background.hover);
+            //setStyle(Active,using.font.active,using.border.active,using.background.active);
+            //setStyle(Select,using.font.select,using.border.select,using.background.select);
+            //setStyle(Hover,using.font.hover,using.border.hover,using.background.hover);
         }
 
         function setStyle(_StyleJack,_font,_border,_background){

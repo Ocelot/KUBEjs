@@ -18,7 +18,8 @@
             'Border':Border(),
             'GetAppearanceList':GetAppearanceList,
             'GetName':GetName,
-            'AddQuickSet':AddQuickSet
+            'AddQuickSet':AddQuickSet,
+            'GetQuickSet':GetQuickSet
         }.KUBE().create(Theme.prototype);
         initTheme();
         return $ThemeAPI;
@@ -65,7 +66,7 @@
                     if(definition){
                         switch(definition.type){
                             case 'color':
-                                _StyleJack.Color(definition.color);
+                                _StyleJack.Color(definition.value);
                                 break;
 
                             case 'size':
@@ -99,7 +100,7 @@
                     if(definition){
                         switch(definition.type){
                             case 'color':
-                                _StyleJack.Background().Color(definition.color);
+                                _StyleJack.Background().Color(definition.value);
                                 break;
                         }
                     }
@@ -135,7 +136,7 @@
                                 //Not sure about this
                                 _StyleJack.Border().Width(1);
                                 _StyleJack.Border().Style('solid');
-                                _StyleJack.Border().Color(definition.color);
+                                _StyleJack.Border().Color(definition.value);
                                 break;
                         }
                     }
