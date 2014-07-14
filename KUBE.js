@@ -6,7 +6,7 @@
     //Moved safely to a short circuit because now a safe default exists
     config = (typeof window.KUBE === 'object' && typeof window.KUBE.config === 'object') ? window.KUBE.config : initDefaultConfig();
 
-    /**
+    /*
      * As an addendum KUBEjs is an ugly file with a ton of complex stuff going on which makes it ugly to work on.
      * Regardless I try to not have grouped logic just floating around in a non specific scope. Previously I was accepting
      * the global setting (window.KUBE.config). Now that we have internal logic to define a default config, I'll group that
