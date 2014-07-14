@@ -409,7 +409,7 @@
 		function GetChildren(){
 			var i,$return = [];
 			if(Node.children.length){
-				for(var i=0;i<Node.children.length;i++){
+				for(i=0;i<Node.children.length;i++){
 					$return.push(KUBE.DomJack(Node.children[i]));
 				}
 			}
@@ -1629,7 +1629,7 @@
 	}
 	
 	function Select(_DJ,_value){
-		var $return;
+		var $return = false;
 		_DJ.GetChildren().KUBE().each(function(_Child){
 			if(_Child.GetType() === 'option'){
 				if(_Child.Value() === _value){
