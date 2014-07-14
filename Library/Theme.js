@@ -70,7 +70,7 @@
             function AddFamily(_name,_family){
                 if(KUBE.Is(_family) === 'string' && KUBE.Is(_name) === 'string'){
                     initSet(_name);
-                    theme.properties.font[_name].family = _family;
+                    theme.properties.font[_name].family.push(_family);
                 }
             }
 
@@ -99,7 +99,7 @@
             }
 
             function applyStyle(_SJ,_type,_value){
-                switch(_type){
+                switch(_type.toLowerCase()){
                     case 'color':
                         _SJ.Color(_value);
                         break;
@@ -112,11 +112,11 @@
                         _SJ.Font().Family(_value);
                         break;
 
-                    case 'Weight':
+                    case 'weight':
                         _SJ.Font().Weight(_value);
                         break;
 
-                    case 'Style':
+                    case 'style':
                         _SJ.Font().Style(_value);
                         break;
                 }
@@ -125,6 +125,7 @@
             function initSet(_name){
                 if(!theme.properties.font[_name]){
                     theme.properties.font[_name] = {};
+                    theme.properties.font[_name].family = [];
                 }
             }
         }
@@ -169,6 +170,7 @@
 
         //Border
         function Border(){
+            //TODO: BorderStyle (Inset/etc)
             return {
                 'AddColor':AddColor,
                 'AddWidth':AddWidth,
