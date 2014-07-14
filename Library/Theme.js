@@ -213,13 +213,24 @@
             }
 
             function applyStyle(_SJ,_type,_value){
+                //DDNotes -- I dunno about this weird loop to style properties. Seems legit to me but I'm crazy.
                 switch(_type){
                     case 'color':
-                        //Obviously this isn't right, just for the short term
-                        _SJ.Border().Width(1);
-                        _SJ.Border().Style('solid');
-                        _SJ.Border().Color(_value);
+                        ['Top','Bottom','Left','Right'].KUBE().Each(function(v,k){
+                            _SJ.Border()[v].Color(_value);
+                        });
                         break;
+                    case 'width':
+                        ['Top','Bottom','Left','Right'].KUBE().Each(function(v,k){
+                            _SJ.Border()[v].Width(_value);
+                        });
+                        break;
+                    case 'style':
+                        ['Top','Bottom','Left','Right'].KUBE().Each(function(v,k){
+                            _SJ.Border()[v].Style(_value);
+                        });
+                        break;
+
                 }
             }
 
