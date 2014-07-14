@@ -15,6 +15,7 @@
             'Font':Font(),
             'Background':Background(),
             'Border':Border(),
+            'Padding':Padding(),
             'GetUsing':GetUsing
         }.KUBE().create(Appearance.prototype);
 
@@ -115,6 +116,32 @@
             }
         }
 
+        function Padding(){
+            return {
+                'Use':Use,
+                'List':List,
+                'Check':Check
+            };
+
+            function Use(_name,_state){
+                _state = validateState(_state) || 'visible';
+                if(Check(_name)){
+                    using.padding[_state] = _name;
+                }
+                else if(_name === undefined){
+                    using.padding[_state] = undefined;
+                }
+            }
+
+            function List(){
+                return appearanceList.padding;
+            }
+
+            function Check(_name){
+                return (appearanceList.padding[_name] ? true : false);
+            }
+        }
+
         //Private
         function initializeDefaultVars(){
             using = {
@@ -135,13 +162,20 @@
                     'visible':undefined,
                     'hover':undefined,
                     'active':undefined
+                },
+                'padding':{
+                    'selected':undefined,
+                    'visible':undefined,
+                    'hover':undefined,
+                    'active':undefined
                 }
             };
 
             appearanceList = {
                 'font':{},
                 'border':{},
-                'background':{}
+                'background':{},
+                'padding':{}
             };
         }
 
@@ -164,6 +198,10 @@
 
                     if(KUBE.Is(tempList.border) === 'object'){
                         appearanceList.border = tempList.border;
+                    }
+
+                    if(KUBE.Is(tempList.padding) === 'object'){
+                        appearanceList.padding = tempList.padding;
                     }
                 }
             }
