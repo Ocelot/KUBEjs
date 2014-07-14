@@ -16,6 +16,7 @@
             'Font':Font(),
             'Background':Background(),
             'Border':Border(),
+            'Padding':Padding(),
             'SetUnitSize':SetUnitSize,
             'GetUnitSize':GetUnitSize,
             'GetAppearanceList':GetAppearanceList,
@@ -42,6 +43,7 @@
             return $return;
         }
 
+        //Font
         function Font(){
             return {
                 'AddColor':AddColor,
@@ -127,6 +129,7 @@
             }
         }
 
+        //Background
         function Background(){
             return {
                 'AddColor':AddColor,
@@ -135,57 +138,155 @@
 
             function AddColor(_name,_color){
                 if(validateColor(_color) && KUBE.Is(_name) === 'string'){
-                    theme.properties.background[_name] = {'type':'color','value':_color };
+                    initSet(_name);
+                    theme.properties.background[_name].color = _color;
                 }
             }
 
             function SetStyle(_name,_StyleJack){
-                var definition;
-                if(KUBE.Is(_StyleJack,true) === 'StyleJack'){
-                    definition = theme.properties.background[_name];
-                    if(definition){
-                        switch(definition.type){
-                            case 'color':
-                                _StyleJack.Background().Color(definition.value);
-                                break;
-                        }
-                    }
+                var definition = theme.properties.background[_name];
+                if(KUBE.Is(_StyleJack,true) === 'StyleJack' && KUBE.Is(definition) === 'object'){
+                    definition.KUBE().each(function(_key,_val){
+                        applyStyle(_StyleJack,_key,_val);
+                    });
+                }
+            }
+
+            function applyStyle(_SJ,_type,_value){
+                switch(_type){
+                    case 'color':
+                        _SJ.Background().Color(_value);
+                        break;
+                }
+            }
+
+            function initSet(_name){
+                if(!theme.properties.background[_name]){
+                    theme.properties.background[_name] = {};
                 }
             }
         }
 
+        //Border
         function Border(){
             return {
                 'AddColor':AddColor,
-                'AddWidth':AddWidth
+                'AddWidth':AddWidth,
+                'AddRadius':AddRadius,
+                'SetStyle':SetStyle
             };
 
             function AddColor(_name,_color){
                 if(validateColor(_color) && KUBE.Is(_name) === 'string'){
-                    theme.properties.border[_name] = {'type':'color','value':_color };
+                    initSet(_name);
+                    theme.properties.border[_name].color = _color;
                 }
             }
 
             function AddWidth(_name,_pxSize){
                 if(KUBE.Is(_pxSize) === 'number' && KUBE.Is(_name) === 'string'){
-                    theme.properties.border[_name] = {'type':'width','value':_pxSize };
+                    initSet(_name);
+                    theme.properties.border[_name].width = _pxSize;
+                }
+            }
+
+            function AddRadius(_name,_c1,_c2,_c3,_c4){
+                if(KUBE.Is(_name) === 'string'){
+                    initSet(_name);
+                    _c1 = (KUBE.Is(_c1) === 'number' ? _c1 : 0);
+                    _c2 = (KUBE.Is(_c2) === 'number' ? _c2 : 0);
+                    _c3 = (KUBE.Is(_c3) === 'number' ? _c3 : 0);
+                    _c4 = (KUBE.Is(_c4) === 'number' ? _c4 : 0);
+                    theme.properties.border[_name].radius = [_c1,_c2,_c3,_c4];
                 }
             }
 
             function SetStyle(_name,_StyleJack){
-                var definition;
-                if(KUBE.Is(_StyleJack,true) === 'StyleJack'){
-                    definition = theme.properties.border[_name];
-                    if(definition){
-                        switch(definition.type){
-                            case 'color':
-                                //Not sure about this
-                                _StyleJack.Border().Width(1);
-                                _StyleJack.Border().Style('solid');
-                                _StyleJack.Border().Color(definition.value);
-                                break;
-                        }
-                    }
+                var definition = theme.properties.border[_name];
+                if(KUBE.Is(_StyleJack,true) === 'StyleJack' && KUBE.Is(definition) === 'object'){
+                    definition.KUBE().each(function(_key,_val){
+                        applyStyle(_StyleJack,_key,_val);
+                    });
+                }
+            }
+
+            function applyStyle(_SJ,_type,_value){
+                switch(_type){
+                    case 'color':
+                        //Obviously this isn't right, just for the short term
+                        _SJ.Border().Width(1);
+                        _SJ.Border().Style('solid');
+                        _SJ.Border().Color(_value);
+                        break;
+                }
+            }
+
+            function initSet(_name){
+                if(!theme.properties.border[_name]){
+                    theme.properties.border[_name] = {};
+                }
+            }
+        }
+
+        //Padding
+        function Padding(){
+            return {
+                'AddTop':AddTop,
+                'AddRight':AddRight,
+                'AddBottom':AddBottom,
+                'AddLeft':AddLeft,
+                'AddAll':AddAll,
+                'SetStyle':SetStyle
+            };
+
+            function AddTop(_name,_value){
+                if(KUBE.Is(_name) === 'string' && KUBE.Is(_value) === 'number'){
+                    initSet(_name);
+                    theme.properties.padding[_name].top = calcSize(_value);
+                }
+            }
+
+            function AddRight(_name,_value){
+                if(KUBE.Is(_name) === 'string' && KUBE.Is(_value) === 'number'){
+                    initSet(_name);
+                    theme.properties.padding[_name].right = calcSize(_value);
+                }
+            }
+
+            function AddBottom(_name,_value){
+                if(KUBE.Is(_name) === 'string' && KUBE.Is(_value) === 'number'){
+                    initSet(_name);
+                    theme.properties.padding[_name].bottom = calcSize(_value);
+                }
+            }
+
+            function AddLeft(_name,_value){
+                if(KUBE.Is(_name) === 'string' && KUBE.Is(_value) === 'number'){
+                    initSet(_name);
+                    theme.properties.padding[_name].left = calcSize(_value);
+                }
+            }
+
+            function AddAll(_name,_value){
+                if(KUBE.Is(_name) === 'string' && KUBE.Is(_value) === 'number'){
+                    initSet(_name);
+                    theme.properties.padding[_name].top = calcSize(_value);
+                    theme.properties.padding[_name].right = calcSize(_value);
+                    theme.properties.padding[_name].bottom = calcSize(_value);
+                    theme.properties.padding[_name].left = calcSize(_value);
+                }
+            }
+
+            function SetStyle(_name,_StyleJack){
+                var definition = theme.properties.padding[_name];
+                if(KUBE.Is(_StyleJack,true) === 'StyleJack' && KUBE.Is(definition) === 'object'){
+                    _StyleJack.Padding(theme.properties.padding[_name]);
+                }
+            }
+
+            function initSet(_name){
+                if(!theme.properties.padding[_name]){
+                    theme.properties.padding[_name] = {'top':0,'right':0,'bottom':0,'left':0};
                 }
             }
         }
@@ -196,6 +297,7 @@
             }
         }
 
+        //Unit size is used to calculate all theme measurements except for border width (because that seems crazy)
         function SetUnitSize(_unitSize){
             if(KUBE.Is(_unitSize) === 'number'){
                 theme.unitSize = _unitSize;
