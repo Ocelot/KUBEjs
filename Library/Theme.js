@@ -175,6 +175,7 @@
                 'AddColor':AddColor,
                 'AddWidth':AddWidth,
                 'AddRadius':AddRadius,
+                'AddBorderStyle':AddBorderStyle,
                 'SetStyle':SetStyle
             };
 
@@ -195,7 +196,7 @@
             function AddBorderStyle(_name,_bStyle){
                 if(validateBStyle(_bStyle) && KUBE.Is(_name) === 'string'){
                     initSet(_name);
-                    theme.properties.border[_name].color = _color;
+                    theme.properties.border[_name].style = "" + _bStyle;
                 }
             }
 
@@ -224,30 +225,23 @@
                 //DDNotes -- I dunno about this weird loop to style properties. Seems legit to me but I'm crazy.
                 switch(_type){
                     case 'color':
-                        ['Top','Bottom','Left','Right'].KUBE().each(function(v,k){
-                            var temp = _SJ.Border()[v]();
-                                temp.color = _value;
-                                _SJ.Border()[v](temp);
-                        });
+                        _SJ.Border({"color": _value});
                         break;
                     case 'width':
-                        ['Top','Bottom','Left','Right'].KUBE().each(function(v,k){
-                            var temp = _SJ.Border()[v]();
-                            temp.width = _value;
-                            _SJ.Border()[v](temp);
-                        });
+                        _SJ.Border({"width": _value});
                         break;
                     case 'style':
-                        ['Top','Bottom','Left','Right'].KUBE().each(function(v,k){
-                            var temp = _SJ.Border()[v]();
-                            temp.style = _value;
-                            _SJ.Border()[v](temp);
-                        });
+                        _SJ.Border({"style": _value})
                         break;
                     case 'radius':
                         _SJ.Border().Radius(_value);
                         break;
                 }
+            }
+
+            function validateBStyle(_style){
+                var validOptions = ['none','hidden','dotted','dashed','solid','double','groove','ridge','inset','outset','initial','inherit'];
+                return (validOptions.indexOf("" + _style.toLowerCase()) > -1);
             }
 
             function initSet(_name){
