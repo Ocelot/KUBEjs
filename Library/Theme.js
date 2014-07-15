@@ -192,6 +192,14 @@
                 }
             }
 
+            function AddBorderStyle(_name,_bStyle){
+                if(validateBStyle(_bStyle) && KUBE.Is(_name) === 'string'){
+                    initSet(_name);
+                    theme.properties.border[_name].color = _color;
+                }
+            }
+
+
             function AddRadius(_name,_c1,_c2,_c3,_c4){
                 if(KUBE.Is(_name) === 'string'){
                     initSet(_name);
@@ -216,21 +224,29 @@
                 //DDNotes -- I dunno about this weird loop to style properties. Seems legit to me but I'm crazy.
                 switch(_type){
                     case 'color':
-                        ['Top','Bottom','Left','Right'].KUBE().Each(function(v,k){
-                            _SJ.Border()[v].Color(_value);
+                        ['Top','Bottom','Left','Right'].KUBE().each(function(v,k){
+                            var temp = _SJ.Border()[v]();
+                                temp.color = _value;
+                                _SJ.Border()[v](temp);
                         });
                         break;
                     case 'width':
-                        ['Top','Bottom','Left','Right'].KUBE().Each(function(v,k){
-                            _SJ.Border()[v].Width(_value);
+                        ['Top','Bottom','Left','Right'].KUBE().each(function(v,k){
+                            var temp = _SJ.Border()[v]();
+                            temp.width = _value;
+                            _SJ.Border()[v](temp);
                         });
                         break;
                     case 'style':
-                        ['Top','Bottom','Left','Right'].KUBE().Each(function(v,k){
-                            _SJ.Border()[v].Style(_value);
+                        ['Top','Bottom','Left','Right'].KUBE().each(function(v,k){
+                            var temp = _SJ.Border()[v]();
+                            temp.style = _value;
+                            _SJ.Border()[v](temp);
                         });
                         break;
-
+                    case 'radius':
+                        _SJ.Border().Radius(_value);
+                        break;
                 }
             }
 
