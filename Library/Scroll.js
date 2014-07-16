@@ -1,6 +1,6 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFactory("Scroll",Scroll,['DomJack','Bezier','ExtendObject','MathKUBE']); //TODO: MathKUBE wut?
+	KUBE.LoadFactory("Scroll",Scroll,['DomJack','Bezier','ExtendObject']); //TODO: MathKUBE wut?
 	
 	Scroll.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Scroll(_DomJack){
