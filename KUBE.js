@@ -104,12 +104,13 @@
             "writable": false,
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
-//        Object.defineProperty(Console.prototype,"KUBE",{
-//            "enumerable": false,
-//            "configurable": false,
-//            "writable": false,
-//            "value": function(){ return KUBE.Extend().Obj(this); }
-//        });
+
+        Object.defineProperty(console,"KUBE",{
+            "enumerable": false,
+            "configurable": false,
+            "writable": false,
+            "value": function(){ return KUBE.Extend().Obj(console,true); }
+        });
 
 	//}
 	
@@ -765,12 +766,12 @@
 			}
 		}
 		
-		function Obj(_ref){
+		function Obj(_ref,_useTrueType){
 			var f,prop,$return,is;
-			
+			_useTrueType = !!(_useTrueType);
 			$return = {};
-			is = KUBE.Is(_ref);
-			
+			is = KUBE.Is(_ref,_useTrueType);
+
 			for(prop in extendCache[is]){
 				if(extendCache[is].hasOwnProperty(prop) && prop !== 'KUBE'){
 					f = extendCache[is][prop];

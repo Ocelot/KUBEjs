@@ -1,7 +1,7 @@
 (function(KUBE){
 	
 	//This is totally v3
-	KUBE.LoadFactory('StyleJack',StyleJack,['DomJack','FeatureDetect','Color','Convert','ExtendString','ExtendObject']);
+	KUBE.LoadFactory('StyleJack',StyleJack,['DomJack','FeatureDetect','Color','Convert','ExtendString','ExtendObject','ExtendConsole']);
 	
 	//If we are Superman, StyleJack is Lex Luthor AND KRYPTONITE
 	var prefix,Convert;
@@ -70,6 +70,10 @@
 						$return = new CSSKeyframesRuleHandler(rule);
 					}
 					break;
+                case "@font-face":
+                    createStylesheetIfNoneExists();
+                    $return = new CSSFontFaceRuleHandler();
+                    break;
 			}
 			return $return;
 		}
@@ -108,14 +112,12 @@
 		function searchForRule(_type,_matchData,_checkPrefix){
 			return searchGlobalStylesheets(_type,_matchData,_checkPrefix) || initRule(_type,_matchData);
 		}
+
 		
 		function searchGlobalStylesheets(_type,_matchData,_checkPrefix){
 			var i,$return = false;
 
-            if(document.styleSheets.length == 0){
-                createStylesheetIfNoneExists();
-            }
-            else{
+            if(!createStylesheetIfNoneExists()){
                 for(i=0;i<document.styleSheets.length;i++){
                     $return = searchStylesheet(document.styleSheets[i],_type,_matchData,_checkPrefix);
                     if($return){
@@ -139,9 +141,12 @@
 		}
 
         function createStylesheetIfNoneExists(){
+            var $return = false
             if(document.styleSheets.length == 0){
+                $return = true;
                 document.head.appendChild(document.createElement('style'));
             }
+            return $return;
         }
 
 
@@ -184,7 +189,7 @@
 		function validateCSSKeyframesRule(_type,_matchData,_rule){
 			return (_type === 'CSSKeyframesRule' && _rule.name === _matchData ? true : false);
 		}
-		
+
 		function initRule(_type,_initData){
 			var styleSheet = (!document.styleSheets.length ? initStylesheet() : document.styleSheets[0]);
 			return initCSSStyleRule(styleSheet,_type,_initData) || initCSSKeyframesRule(styleSheet,_type,_initData) || false;
@@ -194,9 +199,10 @@
 			var $return = false;
 			if(_type === 'CSSStyleRule'){
 				try{
-					//This has a fairly high rate of psychosis 
-					(_styleSheet.insertRule ? _styleSheet.insertRule(_initData+'{}',0) : _styleSheet.addRule(_initData,'{}'));
-					$return = searchForRule(_type,_initData);
+					//This has a fairly high rate of psychosis
+					(_styleSheet.insertRule ? _styleSheet.insertRule(_initData+'{}',0) : _styleSheet.addRule(_initData,'{}',0));
+                    $return = _styleSheet.cssRules[0]; //Lets try this.
+					//$return = searchForRule(_type,_initData);
 				}
 				catch(E){
 					console.log('failz');
@@ -205,7 +211,8 @@
 			}
 			return $return;
 		}
-		
+
+
 		function initCSSKeyframesRule(_styleSheet,_type,_initData,_prefix){
 			var keyframeInit,$return = false;
 			if(_type === 'CSSKeyframesRule'){
@@ -322,8 +329,138 @@
 			return (_val === undefined ? false : true);
 		}
 	}
-	
-	
+
+    /*************************************
+     * Our FontFace Handler
+     *************************************/
+	function CSSFontFaceRuleHandler(_styleObj){
+        var $API, _styleObj, Events, fontProperties = {"fontFamily":'',"src": '',"fontStretch": '',"fontStyle":'',"unicodeRange":'',"fontWeight": ''};
+
+        Events = KUBE.Events();
+
+        $API = {
+            'On': Events.On,
+            'Once': Events.Once,
+            'Emit': Events.Emit,
+            'RemoveListener': Events.RemoveListener,
+            'ClearEvent': Events.Clear,
+            'Family': Family,
+            'Src': Src,
+            'Stretch': Stretch,
+            'Style': Style,
+            'UnicodeRange': UnicodeRange,
+            'Weight': Weight
+
+        };
+
+        return $API;
+
+
+        function Family(_family){
+            fontProperties.fontFamily = _family;
+            initFontRuleIfNeeded();
+            return $API;
+        }
+
+        function Src(_src){
+            fontProperties.src = normalizeSrc(_src);
+            initFontRuleIfNeeded();
+            return $API;
+        }
+
+        function Stretch(_stretch){
+            if(validateStretch(_stretch)){
+                fontProperties.fontStretch = _stretch;
+                initFontRuleIfNeeded();
+            }
+            else{
+                console.log('Fail: Font Stretch was not valid value for font-face');
+            }
+            return $API;
+        }
+
+        function Style(_style){
+            if(validateStyle(_style)){
+                fontProperties.fontStyle = _style;
+                initFontRuleIfNeeded();
+            }
+            else{
+                console.log('Fail: Font Style was not valid value for font-face');
+            }
+            return $API;
+        }
+
+        function UnicodeRange(_unicodeRange){
+            console.KUBE().todo('Validate Font Face Unicode Range');
+            fontProperties.unicodeRange = _unicodeRange;
+            initFontRuleIfNeeded();
+            return $API;
+        }
+
+        function Weight(_weight){
+            if(validateWeight(_weight)){
+                fontProperties.fontWeight = _weight;
+                initFontRuleIfNeeded();
+            }
+            else{
+                console.log('Fail: Font Weight was not valid value for font-face');
+            }
+            return $API;
+        }
+
+        function normalizeSrc(_src){
+            $return = _src;
+            //Check if it starts with url, if it doesn't, wrap it
+            if(_src.KUBE().trim().substr(0,4).toLowerCase() !== "url("){
+                $return = "url('" + _src + "')";
+            }
+            return $return;
+        }
+
+        function validateWeight(_weight){
+            var validOptions = ["normal","bold","100","200","300","400","500","600","700","800","900"];
+            return (validOptions.indexOf((""+_weight).toLowerCase()) > -1); //String cast is intentional
+        }
+
+        function validateStyle(_style){
+            var validOptions = ["normal","italic","oblique"];
+            return (validOptions.indexOf((""+_style).toLowerCase()) > -1);
+        }
+
+        function validateStretch(_stretch){
+            var validOptions = ["normal","condensed","ultra-condensed","extra-condensed","semi-condensed","expanded","ultra-expanded","extra-expanded","semi-expanded"];
+            return (validOptions.indexOf((""+_stretch).toLowerCase()) > -1);
+        }
+
+        function initFontRuleIfNeeded(){
+            var styleSheet = document.styleSheets[0];
+            if(!_styleObj && fontProperties.fontFamily && fontProperties.src){
+                try{
+                    (styleSheet.insertRule ? styleSheet.insertRule('@font-face { }',0) : styleSheet.addRule('@font-face','{ }',0));
+                    //TODO: Validate to ensure that this is a CSSFontFaceRule
+                    _styleObj = styleSheet.cssRules[0];
+                }
+                catch(E){
+                    throw E;
+                }
+            }
+            if(_styleObj){
+                for(prop in fontProperties){
+                    if(!fontProperties.hasOwnProperty(prop)){continue;}
+                    applyProperty(prop,fontProperties[prop]);
+
+                }
+            }
+
+            function applyProperty(propertyName,value){
+                _styleObj.style[propertyName] = value;
+            }
+        }
+
+
+
+    }
+
 	
 	/*************************************
 	 * Our CSSStyleRule Object Handler
