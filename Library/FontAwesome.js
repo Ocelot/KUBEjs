@@ -13,7 +13,7 @@
 		 *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
 		 */
 		var CDNString = "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css";
-		var localPath = "Utilities/FontAwesome";
+		var localPath = "Library/FontAwesome";
 		var fontFaceString = "@font-face { \n\
 			font-family: 'FontAwesome'; \n\
 			src: url('%s/fontawesome-webfont.eot?v=4.0.3'); \n\

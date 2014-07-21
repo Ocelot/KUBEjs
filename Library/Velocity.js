@@ -3233,11 +3233,6 @@
             "Stop":Stop,
             "Reverse":Reverse,
             "Animate":Animate,
-            "Slide":Slide,
-            "SlideIn":SlideIn,
-            "SlideOut":SlideOut,
-            "SlideRight": SlideIn,
-            "SlideLeft": SlideOut,
             "SlideOutLeft": SlideOutLeft,
             "SlideInLeft": SlideInLeft,
             "SlideOutRight": SlideOutRight,
@@ -3246,7 +3241,6 @@
             "SlideInTop": SlideInTop,
             "SlideOutBottom": SlideOutBottom,
             "SlideInBottom": SlideInBottom,
-            "Fade":Fade,
             "FadeIn":FadeIn,
             "FadeOut":FadeOut,
             "Top":Top,
@@ -3484,8 +3478,7 @@
                         styleCalc = [],
                         begin = options.begin,
                         complete = options.complete,
-                        //_DomJackAPI = _DJ(element),
-                        _DomJackAPI = _DomJack,
+                        _DomJackAPI = KUBE.DomJack(element),
                         S = _DomJackAPI.Style(),
                         SlideContainer;
 
@@ -3499,6 +3492,7 @@
                         function initSlideContainer(){
                             if(!SlideContainer){
                                 SlideContainer = KUBE.DomJack('div');
+                                SlideContainer.SetAttribute('KUBEIDENT',"SLIDECONTROLLER");
                                 _DomJackAPI.Once('cleanupSlide',function(){
                                     SlideContainer.Delete();
                                     SlideContainer = undefined;
@@ -3507,6 +3501,7 @@
                         }
 
                         function injectContainer(){
+                            var draw;
                             if(SlideContainer.IsDetached()){
                                 if(KUBE.Is(origSlide.width) !== 'number'){
                                     draw = draw || _DomJackAPI.GetDrawDimensions(_DomJackAPI.GetParent());
@@ -3581,8 +3576,7 @@
                         styleCalc = [],
                         begin = options.begin,
                         complete = options.complete,
-                        //_DomJackAPI = _DJ(element),
-                        _DomJackAPI = _DomJack,
+                        _DomJackAPI = KUBE.DomJack(element),
                         S = _DomJackAPI.Style(),
                         SlideContainer;
 
@@ -3597,6 +3591,7 @@
                         function initSlideContainer(){
                             if(!SlideContainer){
                                 SlideContainer = KUBE.DomJack('div');
+                                SlideContainer.SetAttribute('KUBEIDENT',"SLIDECONTROLLER");
                                 _DomJackAPI.Once('cleanupSlide',function(){
                                     SlideContainer.Delete();
                                     SlideContainer = undefined;
@@ -3606,6 +3601,7 @@
 
 
                         function injectContainer(){
+                            var draw;
                             if(SlideContainer.IsDetached()){
                                 if(KUBE.Is(origSlide.width) !== 'number'){
                                     draw = draw || _DomJackAPI.GetDrawDimensions(_DomJackAPI.GetParent());
@@ -3665,14 +3661,13 @@
 
                     function slideOut(_direction){
                         switch(_direction){
-                            case 'left': destinationProps.left = -origSlide.width; break;
-                            case 'right': destinationProps.left = origSlide.width; break;
-                            case 'up':case "top": destinationProps.top = -origSlide.height; break;
-                            case 'down':case "bottom": destinationProps.top = origSlide.height; break;
+                            case 'left': destinationProps.left = -1 * KUBE.Convert(compStyle.width,'px','number'); break;
+                            case 'right': destinationProps.left = KUBE.Convert(compStyle.width,'px','number'); break;
+                            case 'up':case "top": destinationProps.top = -1 * KUBE.Convert(compStyle.height,'px','number'); break;
+                            case 'down':case "bottom": destinationProps.top = KUBE.Convert(compStyle.height,'px','number'); break;
                         }
 
                     }
-
                     velocity.animate(element,destinationProps,opts);
 
                 };

@@ -160,25 +160,30 @@
 		//Process Instruction Logic
 		function UpdateChildren(_views,_behavior){
 			UpdateResolver.Wait(function(){
-				var viewResolver = this;
-				if(KUBE.Is(_views) === 'array' && KUBE.Is($ViewAPI.Add) === 'function'){
-					_behavior = _behavior || 'loose';
-					if(_behavior === 'strict'){
-						syncChildren(_views);
-					}
-					processUpdate(_views,_behavior,viewResolver);
-				}
-				else if(KUBE.Is(_views) === 'array' && KUBE.Is($ViewAPI.Add) !== 'function' && _views.length){
-					throw new Error('Children views cannot be added to View that does not support Add method: '+$ViewAPI.Type());
-					viewResolver.resolve();
-				}
-                else if(KUBE.Is(_views) !== 'array'){
-                    throw new Error('Views must be an array!  Passed in a '+KUBE.Is(_views));
-                    viewResolver.resolve();
+                if($ViewAPI !== undefined){
+                    var viewResolver = this;
+                    if(KUBE.Is(_views) === 'array' && KUBE.Is($ViewAPI.Add) === 'function'){
+                        _behavior = _behavior || 'loose';
+                        if(_behavior === 'strict'){
+                            syncChildren(_views);
+                        }
+                        processUpdate(_views,_behavior,viewResolver);
+                    }
+                    else if(KUBE.Is(_views) === 'array' && KUBE.Is($ViewAPI.Add) !== 'function' && _views.length){
+                        throw new Error('Children views cannot be added to View that does not support Add method: '+$ViewAPI.Type());
+                        viewResolver.resolve();
+                    }
+                    else if(KUBE.Is(_views) !== 'array'){
+                        throw new Error('Views must be an array!  Passed in a '+KUBE.Is(_views));
+                        viewResolver.resolve();
+                    }
+                    else{
+                        viewResolver.resolve();
+                    }
                 }
-				else{
-					viewResolver.resolve();
-				}
+                else{
+                    throw new Error('It is likely that a view was added to a parent, and then refused (wrong type?). At this point in the resolution chain the $ViewAPI has already been destroyed.');
+                }
 			});
 						
 			return $ViewAPI;
