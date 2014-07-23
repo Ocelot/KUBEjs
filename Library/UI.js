@@ -577,7 +577,6 @@
 				FoundView = CoreView.Find(_instructions.find);
 				if(FoundView){
 					if(KUBE.Is(_instructions.data) !== 'null'){
-						debugger;
 						FoundView.Update(_instructions.data);
 					}
 
