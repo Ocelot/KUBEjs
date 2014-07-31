@@ -40,12 +40,12 @@
             endXY = calcXY(_endSide,_endPosition);
             cp1 = calcCP1(startXY,endXY);
             cp2 = calcCP2(startXY,endXY);
-            //debugger;
             rawApi = NewArrow.GetNode().getContext("2d");
             rawApi.beginPath();
             rawApi.moveTo(startXY[0],startXY[1]);
             //rawApi.lineTo(endXY[0],endXY[1]);
             rawApi.bezierCurveTo(cp1[0],cp1[1],cp2[0],cp2[1],endXY[0],endXY[1]);
+            rawApi.lineWidth = 2;
             rawApi.stroke();
         }
 
@@ -58,7 +58,10 @@
         }
 
         function Clear(){
-
+            arrows.KUBE().each(function(_Arrow){
+                _Arrow.Delete();
+            });
+            arrows = [];
         }
 
         //Private

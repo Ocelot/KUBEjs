@@ -53,7 +53,7 @@
 		//View Creation
 		function CreateRoot(_name,_createId,_data){
 			if(!instances[_name]){
-				instances[_name] = initView(undefined,'Root',_createId,_data);
+				instances[_name] = initView(undefined,'Root','Root',_createId,_data);
 				instances[_name].Once('delete',function(){
 					delete instances[_name];
 				});
@@ -61,22 +61,22 @@
 			return instances[_name];
 		}
 		
-		function Create(_Parent,_type,_createId,_data,_children){
-			var $return = (KUBE.Is(loadedViews[_type]) === 'function' ? initView(_Parent,_type,_createId,_data,_children) : undefined);
+		function Create(_Parent,_name,_type,_createId,_data,_children){
+			var $return = (KUBE.Is(loadedViews[_name]) === 'function' ? initView(_Parent,_name,_type,_createId,_data,_children) : undefined);
 			if(!$return){
 				throw new Error('UI Could not create new view. Has not been loaded');
 			}
 			return $return;
 		}
 		
-		function initView(_Parent,_type,_createId,_data,_children){
-			return new loadedViews[_type](UIView(_Parent,_type,_createId),_createId,_data,_children);
+		function initView(_Parent,_viewName,_viewType,_createId,_data,_children){
+			return new loadedViews[_viewName](UIView(_Parent,_viewName,_viewType,_createId),_createId,_data,_children);
 		}		
 	}
 	
 	//This is the coreView that gets passed into each view
 	UIView.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
-	function UIView(_Parent,_type,_id){
+	function UIView(_Parent,_viewName,_viewType,_id){
 		var Children,$ViewAPI,UpdateResolver;
 		Children = [];
 		UpdateResolver = KUBE.Patience();
@@ -88,7 +88,8 @@
 			'Delay':Delay,
 			'Parent':Parent,
 			'Root':Root,
-			'Type':Type,
+            'Type':Type,
+			'Name':Name,
 			'Id':Id,
 			'DeepRead':DeepRead
 		}.KUBE().create(UIView.prototype);
@@ -98,7 +99,7 @@
 			Children.KUBE().each(function(_C){
 				_C.Delete();
 			});
-			_Parent = _type = _id = Children = $ViewAPI = UpdateResolver = undefined;
+			_Parent = _viewName = _id = Children = $ViewAPI = UpdateResolver = undefined;
 		});
 		return $ViewAPI;
 		
@@ -129,11 +130,16 @@
 			if($return && _comparisonObject.type && _comparisonObject.type !== Type()){
 				$return = false; //Does our type match
 			}
+
+            if($return && _comparisonObject.name && _comparisonObject.name !== Name()){
+                $return = false; //Does our viewName (class) match
+            }
+
 			return $return;
 		}
 		
 		function checkRoot(_cObj){
-			return (_cObj.type === 'root' ? findRoot($ViewAPI) : false);
+			return (_cObj.name === 'root' ? findRoot($ViewAPI) : false);
 		}
 		
 		function isSelf(_cObj){
@@ -170,7 +176,7 @@
                         processUpdate(_views,_behavior,viewResolver);
                     }
                     else if(KUBE.Is(_views) === 'array' && KUBE.Is($ViewAPI.Add) !== 'function' && _views.length){
-                        throw new Error('Children views cannot be added to View that does not support Add method: '+$ViewAPI.Type());
+                        throw new Error('Children views cannot be added to View that does not support Add method: '+$ViewAPI.Name());
                         viewResolver.resolve();
                     }
                     else if(KUBE.Is(_views) !== 'array'){
@@ -201,22 +207,22 @@
 		
 		function processUpdate(_views,_behavior,viewResolver){
 			//Create/Update only
-			var createArray,vCount,typeIncrement,deleteArray,skipVar;
+			var createArray,vCount,viewNameIncrement,deleteArray,skipVar;
 			createArray = [];
 			deleteArray = [];
-			typeIncrement = {};
+			viewNameIncrement = {};
 			
 			for(vCount = 0;vCount<_views.length;vCount++){
-				if(!typeIncrement[_views[vCount].type]){
-					typeIncrement[_views[vCount].type] = 0;
+				if(!viewNameIncrement[_views[vCount].name]){
+					viewNameIncrement[_views[vCount].name] = 0;
 				}
 				
-				skipVar = childMatchUpdate(_views[vCount],_behavior,typeIncrement[_views[vCount].type]);
+				skipVar = childMatchUpdate(_views[vCount],_behavior,viewNameIncrement[_views[vCount].name]);
 				if(skipVar === false){
 					createArray.push(_views[vCount]);
 				}
 				else{
-					typeIncrement[_views[vCount].type] = skipVar;
+					viewNameIncrement[_views[vCount].name] = skipVar;
 				}
 			}
 			
@@ -244,12 +250,12 @@
 				}
 				catch(E){
 					if(E.message === 'UI Could not create new view. Has not been loaded' && choke < 50){
-						KUBE.UI().Uses([newChild.type],function(){
+						KUBE.UI().Uses([newChild.name],function(){
 							yieldChildren(i,_views,timeoutObj,resolver,++choke);
 						});
 					}
 					else{
-						throw E;
+                        throw new Error(E.message+" :"+newChild.name);
 						(resolver.last() ? resolver.resolve(timeoutObj) : resolver.next());
 					}
 				}
@@ -336,7 +342,7 @@
 			//Init vars
 			_skip = _skip || 0;
 			skipCheck = 0;
-			cObj = {'type':_view.type,'id':_view.id};			
+			cObj = {'name':_view.name,'id':_view.id,'type':_view.type};
 			$return = false;
 			
 			for(cCount=0;cCount<Children.length;cCount++){
@@ -364,7 +370,7 @@
 		function createNewChildView(viewObject){
 			//_Parent,_type,_createId,_data
 			var numChildren = (KUBE.Is(viewObject.views) === 'array' && viewObject.views.length ? viewObject.views.length : 0);
-			return KUBE.UI().Create($ViewAPI,viewObject.type,viewObject.id,viewObject.data,numChildren);
+			return KUBE.UI().Create($ViewAPI,viewObject.name,viewObject.type,viewObject.id,viewObject.data,numChildren);
 		}
 		
 		function updateChildView(_ChildView,_data,_views,_behavior){
@@ -376,8 +382,12 @@
 				
 		//Core information
 		function Type(){
-			return String(_type); //).toLowerCase();
+			return String(_viewType); //).toLowerCase();
 		}
+
+        function Name(){
+            return String(_viewName);
+        }
 		
 		function Id(){
 			return _id;
@@ -386,6 +396,7 @@
 		function DeepRead(){
 			return {
 				'type':Type(),
+                'name':Name(),
 				'id':Id(),
 				'data':$ViewAPI.Read(),
 				'views':readChildren()
@@ -405,9 +416,8 @@
 	
 	//This is the RootView
 	function RootView(CoreView,id,data){
-		var View,SJ,DJ,SendHandler,responseCall,sharedStyles,width,height;
-		sharedStyles = {};
-		
+		var View,SJ,DJ,SendHandler,responseCall,width,height;
+
 		SJ = KUBE.StyleJack;
 		DJ = KUBE.DomJack;
 		
@@ -419,9 +429,6 @@
 			'Add':Add,
 			'Send':Send,
 			'SetSendHandler':SetSendHandler,
-			'AddSharedStyle':AddSharedStyle,
-			'GetSharedStyles':GetSharedStyles,
-			'IsSharedStyle':IsSharedStyle,
 			'Width':Width,
 			'Height':Height,
 			'Resize':Resize
@@ -478,29 +485,6 @@
 				throw new Error('Set send handler failed. Not an KUBE Ajax Object?');
 			}
 			return CoreView;
-		}
-		
-		function AddSharedStyle(_className){
-			switch(KUBE.Is(_className)){
-				case 'array':
-					_className.KUBE().each(function(_className){
-						AddSharedStyle(_className);
-					});
-					break;
-					
-				case 'string':
-					sharedStyles[_className] = _className;
-					break;
-			}
-			return CoreView;
-		}
-		
-		function GetSharedStyles(){
-			return sharedStyles.KUBE().copy();
-		}
-		
-		function IsSharedStyle(_className){
-			return (sharedStyles[_className] ? true : false);
 		}
 		
 		function Width(){
