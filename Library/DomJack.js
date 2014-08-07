@@ -1406,7 +1406,7 @@
 				typeAPI.KUBE().merge({
 					'Label':function(_label){ return Label(_DomJackAPI,_label); },
 					'AddOptions':function(_options){ return AddOptions(_DomJackAPI,_options); },
-					'AddOption':function(_label,_value){ return AddOption(_DomJackAPI,_label,_value); },
+					'AddOption':function(_label,_value){ return AddOption(_DomJackAPI,_label,_value); }
 				});
 				break;
 				
@@ -1428,7 +1428,7 @@
 			case 'datalist':
 				typeAPI.KUBE().merge({
 					'AddOption':function(_value){ return AddDatalistOption(_DomJackAPI,_value); },
-					'AddOptions':function(_options){ return AddDatalistOptions(_DomJackAPI,_options); },					
+					'AddOptions':function(_options){ return AddDatalistOptions(_DomJackAPI,_options); }
 				});
 				break;
 				
