@@ -284,7 +284,6 @@
 			if(KUBE.Is($ViewAPI.AddFinish) === 'function'){
 				$ViewAPI.AddFinish();
 			}
-            Root().DeleteQ();
 		}
 		
 		function createChildren(_createArray,viewResolver){
@@ -468,6 +467,9 @@
                 });
                 deleteQ = [];
             }
+            else{
+                deleteQ.push(_UIView);
+            }
         }
 		
 		function Add(_NewView){
@@ -576,7 +578,7 @@
 						FoundView.Update(_instructions.data);
 					}
 
-					if(KUBE.Is(_instructions.views) === 'array'){
+					if(FoundView.Parent() !== undefined && KUBE.Is(_instructions.views) === 'array' && _instructions.views.length > 0){
 						FoundView.UpdateChildren(_instructions.views,_instructions.behavior);
 					}
 				}
