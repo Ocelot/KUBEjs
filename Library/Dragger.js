@@ -22,7 +22,8 @@
             'SetDrop':SetDrop,
             'SetDragOver':SetDragOver,
             'SetDragStart':SetDragStart,
-            'SetDragEnd':SetDragEnd
+            'SetDragEnd':SetDragEnd,
+            'Reset':Reset
         }.KUBE().create(Dragger.prototype);
         return $API;
 
@@ -55,10 +56,16 @@
             if(KUBE.Is(_DomJack,true) === 'DomJack'){
                 targets.push({
                     'DJ':_DomJack,
-                    'data':_targetData
+                    'data':_targetData,
+                    'drop':function(){
+                        dropWrapper(this);
+                    },
+                    'dragOver':function(){
+                        return dragOverWrapper(this);
+                    }
                 });
-                _DomJack.On('drop',dropWrapper);
-                _DomJack.On('dragOver',dragOverWrapper);
+//                _DomJack.On('drop',dropWrapper);
+//                _DomJack.On('dragOver',dragOverWrapper);
             }
         }
 
@@ -114,10 +121,21 @@
             handles = [];
         }
 
+        function Reset(){
+            ClearTargets;
+            ClearHandles;
+            drop = undefined;
+            dragOver = undefined;
+            dragStart = undefined;
+            dragEnd = undefined;
+        }
+
         //Private
         function dragStartWrapper(){
             console.log('dragStartWrapper fired');
             Dragging = this;
+            //Activate the targets
+            activateTargets();
             if(dragStart){
                 dragStart(Dragging);
             }
@@ -129,19 +147,21 @@
                 dragEnd(Dragging);
             }
             Dragging = undefined;
+            //Deactivate the targets
+            deactivateTargets();
         }
 
-        function dropWrapper(){
+        function dropWrapper(_DJ){
             console.log('dropWrapper fired');
             if(drop){
-                drop(Dragging,this,getDropData(Dragging),getTargetData(this));
+                drop(Dragging,this,getDropData(Dragging),getTargetData(_DJ));
             }
         }
 
-        function dragOverWrapper(){
+        function dragOverWrapper(_DJ){
             console.log('dragOverWrapper fired');
             if(dragOver){
-                dragOver(Dragging,this,getDropData(Dragging),getTargetData(this));
+                dragOver(Dragging,this,getDropData(Dragging),getTargetData(_DJ));
             }
             return false;
         }
@@ -167,6 +187,21 @@
                }
             });
             return $return;
+        }
+
+        function activateTargets(){
+            //debugger;
+            targets.KUBE().each(function(_Target){
+                _Target.DJ.On('drop',_Target.drop);
+                _Target.DJ.On('dragOver',_Target.dragOver);
+            });
+        }
+
+        function deactivateTargets(){
+            targets.KUBE().each(function(_Target){
+                _Target.DJ.RemoveListener('drop',_Target.drop);
+                _Target.DJ.RemoveListener('dragOver',_Target.dragOver);
+            });
         }
     }
 })(KUBE);

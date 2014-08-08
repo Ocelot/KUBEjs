@@ -284,6 +284,7 @@
 			if(KUBE.Is($ViewAPI.AddFinish) === 'function'){
 				$ViewAPI.AddFinish();
 			}
+            Root().DeleteQ();
 		}
 		
 		function createChildren(_createArray,viewResolver){
@@ -416,8 +417,9 @@
 	
 	//This is the RootView
 	function RootView(CoreView,id,data){
-		var View,SJ,DJ,SendHandler,responseCall,width,height;
+		var View,SJ,DJ,SendHandler,responseCall,width,height,deleteQ;
 
+        deleteQ = [];
 		SJ = KUBE.StyleJack;
 		DJ = KUBE.DomJack;
 		
@@ -431,7 +433,8 @@
 			'SetSendHandler':SetSendHandler,
 			'Width':Width,
 			'Height':Height,
-			'Resize':Resize
+			'Resize':Resize,
+            'DeleteQ':DeleteQ
 		});		
 		create();
 		return CoreView;
@@ -457,6 +460,15 @@
 			}
 			return $return; 
 		}
+
+        function DeleteQ(_UIView){
+            if(!_UIView){
+                deleteQ.KUBE().each(function(_CV){
+                    _CV.Delete();
+                });
+                deleteQ = [];
+            }
+        }
 		
 		function Add(_NewView){
 			var $return = false;

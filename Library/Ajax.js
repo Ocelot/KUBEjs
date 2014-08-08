@@ -86,6 +86,7 @@
 			if(_interrupt === true){
 				interrupt = true;
 				if(currentRequest){
+                    debugger;
 					currentRequest.cancel();
 				}
 				$return.Once('clearedQ', function(){

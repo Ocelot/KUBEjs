@@ -675,9 +675,9 @@
 			cleanListeners(_event);
 		}
 		
-		function RemoveListener(_event){
+		function RemoveListener(_event,_callback){
 			_event = translateEvent(_event);
-			Events.RemoveListener(_event);
+			Events.RemoveListener(_event,_callback);
 			if(domListeners[_event]){
 				domListeners[_event] = false;
 			}
