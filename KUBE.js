@@ -266,6 +266,7 @@
 			obj.Emit = Emit;
 			obj.Clear = Clear;
 			obj.RemoveListener = RemoveListener;
+            obj.ListenerCount = ListenerCount;
 			obj.EmitState = EmitState;
 			obj.OnState = OnState;
 			obj.ClearState = ClearState;
@@ -418,6 +419,11 @@
 				}
 			}
 		}
+
+        function ListenerCount(_event){
+            _event = initEventSpace(_event);
+            return eventCache[_event].length;
+        }
 		
 
 		/* Private */

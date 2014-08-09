@@ -8,7 +8,7 @@
     Dragger.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function Dragger(){
-        var $API,handles,targets,drop,dragOver,dragStart,dragEnd,Dragging;
+        var $API,handles,targets,drop,dragOver,dragStart,dragEnd,Dragging,LastHandle;
         handles = [];
         targets = [];
 
@@ -132,36 +132,30 @@
 
         //Private
         function dragStartWrapper(){
-            console.log('dragStartWrapper fired');
-            Dragging = this;
             //Activate the targets
-            activateTargets();
+            activateTargets(this);
             if(dragStart){
-                dragStart(Dragging);
+                dragStart(LastHandle);
             }
         }
 
         function dragEndWrapper(){
-            console.log('dragEndWrapper fired');
             if(dragEnd){
-                dragEnd(Dragging);
+                dragEnd(LastHandle);
             }
-            Dragging = undefined;
-            //Deactivate the targets
             deactivateTargets();
         }
 
         function dropWrapper(_DJ){
-            console.log('dropWrapper fired');
             if(drop){
-                drop(Dragging,this,getDropData(Dragging),getTargetData(_DJ));
+                dragEndWrapper();
+                drop(LastHandle,_DJ,getDropData(LastHandle),getTargetData(_DJ));
             }
         }
 
         function dragOverWrapper(_DJ){
-            console.log('dragOverWrapper fired');
             if(dragOver){
-                dragOver(Dragging,this,getDropData(Dragging),getTargetData(_DJ));
+                dragOver(LastHandle,_DJ,getDropData(LastHandle),getTargetData(_DJ));
             }
             return false;
         }
@@ -189,19 +183,25 @@
             return $return;
         }
 
-        function activateTargets(){
-            //debugger;
-            targets.KUBE().each(function(_Target){
-                _Target.DJ.On('drop',_Target.drop);
-                _Target.DJ.On('dragOver',_Target.dragOver);
-            });
+        function activateTargets(_Drag){
+            if(!Dragging){
+                Dragging = _Drag;
+                LastHandle = _Drag;
+                targets.KUBE().each(function(_Target){
+                    _Target.DJ.On('drop',_Target.drop);
+                    _Target.DJ.On('dragOver',_Target.dragOver);
+                });
+            }
         }
 
         function deactivateTargets(){
-            targets.KUBE().each(function(_Target){
-                _Target.DJ.RemoveListener('drop',_Target.drop);
-                _Target.DJ.RemoveListener('dragOver',_Target.dragOver);
-            });
+            if(Dragging){
+                targets.KUBE().each(function(_Target){
+                    _Target.DJ.RemoveListener('drop',_Target.drop);
+                    _Target.DJ.RemoveListener('dragOver',_Target.dragOver);
+                });
+                Dragging = undefined;
+            }
         }
     }
 })(KUBE);

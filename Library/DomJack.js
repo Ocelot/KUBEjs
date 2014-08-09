@@ -320,6 +320,7 @@
 		
 		function parseAttributesIntoObject(){
 			var $return;
+            //TODO: this is probably broken, and should do what findAttribute does (check for NamedNodeMap)
 			if(KUBE.Is(Node['attributes']) === 'object'){
 				$return = {};
 				Node.attributes.KUBE().each(function(_keyIndex,_attr){
@@ -333,12 +334,16 @@
 		
 		function findAttribute(_key){
 			var $return;
-			Node['attributes'].KUBE().each(function(_val,_index){
-				if(_val.name.toLowerCase() === _key.toLowerCase()){
-					$return = _val.value || _val.nodeValue || _val.textContent;
-					this.break();
-				}
-			});
+            if(KUBE.Is(Node['attributes'],true) === 'NamedNodeMap'){
+                var length = Node['attributes'].length;
+                for(var i=0;i<length;i++){
+                    var tempAttr = Node['attributes'][i];
+                    if(tempAttr.name.toLowerCase() === _key.toLowerCase()){
+                        $return = tempAttr.value || tempAttr.nodeValue || tempAttr.textContent;
+                        break;
+                    }
+                }
+            }
 			return $return;
 		}
 		
@@ -678,7 +683,7 @@
 		function RemoveListener(_event,_callback){
 			_event = translateEvent(_event);
 			Events.RemoveListener(_event,_callback);
-			if(domListeners[_event]){
+			if(domListeners[_event] && !Events.ListenerCount(_event)){
 				domListeners[_event] = false;
 			}
 		}
@@ -1655,12 +1660,17 @@
 	function Src(_DJ,_src){
 		var DomNode;
 		DomNode = _DJ.GetNode();
-		if(DomNode.src !== undefined){
-			DomNode.src = _src;
-		}
-		else{
-			_DJ.SetAttribute('src',_src);
-		}
+        if(_src === undefined){
+            _DJ = _DJ.GetAttribute('src');
+        }
+        else{
+            if(DomNode.src !== undefined){
+                DomNode.src = _src;
+            }
+            else{
+                _DJ.SetAttribute('src',_src);
+            }
+        }
 		return _DJ;
 	}
 	

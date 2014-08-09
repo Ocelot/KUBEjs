@@ -75,6 +75,11 @@
 			_DomJack.On('dragover',handleDragOver);
             _DomJack.On('dragleave',handleDragLeave);
 			_DomJack.On('drop',handleDrop);
+            _DomJack.On('delete',function(){
+                Ajax.Clear();
+                Ajax = undefined;
+                _DomJack.Clear();
+            });
 		}
 
         function handleDragEnter(e){

@@ -2,6 +2,8 @@
  * Name: Ajax
  * Type: KUBESingletonFactoryClass
  */
+
+//TODO: CHANGE THIS TO A FACTORY. SINGLETONS CAUSE PROBLEMS. REMEMBER UPLOAD EVENTS
 (function(KUBE){
 	KUBE.LoadSingletonFactory('Ajax', Ajax,['JSON','ExtendObject']);
 	
@@ -86,7 +88,6 @@
 			if(_interrupt === true){
 				interrupt = true;
 				if(currentRequest){
-                    debugger;
 					currentRequest.cancel();
 				}
 				$return.Once('clearedQ', function(){
@@ -151,7 +152,10 @@
 			var requestData,response,XHR;
 			var timer = {};
 			var $api = {
-				'cancel':cancel
+				'cancel':cancel,
+                'data':_data,
+                'responseEvent':_responseEvent,
+                'settings':_settings
 			};
 			
 			processing = true;
@@ -169,12 +173,15 @@
 							//In theory our request has responded, but as we've found this doesn't work entirely how expected
 							try{
 								response = XHR.responseText;
-								try{
-									response = KUBE.JSON().parse(response);
-								}
-								catch(e){
-									throw new Error(response);
-								}
+                                if(response){
+                                    try{
+                                        response = KUBE.JSON().parse(response);
+                                    }
+                                    catch(e){
+                                        console.log('AJAX ERROR: ',response);
+                                        throw new Error('AJAX JSON Parse Failed. Possibly Not JSON?');
+                                    }
+                                }
 								completeRequest(response,_responseEvent);
 							}
 							catch(e){
