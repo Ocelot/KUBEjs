@@ -1,7 +1,7 @@
 (function(KUBE){
 	
 	//This is totally v3
-	KUBE.LoadFactory('StyleJack',StyleJack,['DomJack','FeatureDetect','Color','Convert','ExtendString','ExtendObject','ExtendConsole']);
+	KUBE.LoadFactory('StyleJack',StyleJack,['DomJack','FeatureDetect','Color','Convert','ExtendString','ExtendObject','ExtendConsole','ExtendRegExp']);
 	
 	//If we are Superman, StyleJack is Lex Luthor AND KRYPTONITE
 	var prefix,Convert;
@@ -177,12 +177,36 @@
 		}
 
         function validatePseudoSelector(_rule, _matchData){
-            //This is probably horribly slow.  I think I can make it better by not caring how many :.
-            return (
-                    (/[A-z][:]{1,2}[A-z]/.test(_rule) && /[A-z][:]{1,2}[A-z]/.test(_matchData)) ||
-                    (/[A-z][:]{1,2}[A-z]/.test(_rule) && /[A-z][:]{1,2}[A-z]/.test(_matchData))
-                    ? true
-                    : false);
+            var $return = false;
+            if(/:/.test(_rule) && /:/.test(_matchData)){
+                //We have rules with colons
+                var split1 = _rule.split(":");
+                var split2 = _matchData.split(":");
+                var cleanArray1 = [];
+                var cleanArray2 = [];
+                for(var i=0;i<split1.length;i++){
+                    if(split1[i]){
+                        cleanArray1.push(split1[i].toLowerCase());
+                    }
+                }
+
+                for(var i=0;i<split2.length;i++){
+                    if(split2[i]){
+                        cleanArray2.push(split2[i].toLowerCase());
+                    }
+                }
+
+                if(cleanArray1.length && cleanArray1.length === cleanArray2.length){
+                    $return = true;
+                    for(var i=0;i<cleanArray1.length;i++){
+                        if(cleanArray1[i] != cleanArray2[i]){
+                            $return = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            return $return;
         }
 
 
