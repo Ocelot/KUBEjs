@@ -69,6 +69,9 @@
                         return false;
                     }
                 });
+                _DomJack.On('cleanup',function(){
+                    RemoveTarget(this);
+                });
             }
         }
 
@@ -101,6 +104,9 @@
                 _DomJack.SetAttribute('draggable',true);
                 _DomJack.On('dragStart',dragStartWrapper);
                 _DomJack.On('dragEnd',dragEndWrapper);
+                _DomJack.On('cleanup',function(){
+                    RemoveHandle(this);
+                });
             }
         }
 

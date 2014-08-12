@@ -578,7 +578,10 @@
 						FoundView.Update(_instructions.data);
 					}
 
-					if(FoundView.Parent() !== undefined && KUBE.Is(_instructions.views) === 'array' && _instructions.views.length > 0){
+					if(
+                        FoundView.Parent() !== undefined && KUBE.Is(_instructions.views) === 'array' && _instructions.views.length > 0 ||
+                        FoundView.Parent() !== undefined && KUBE.Is(_instructions.views) === 'array' && _instructions.behavior === 'strict'
+                    ){
 						FoundView.UpdateChildren(_instructions.views,_instructions.behavior);
 					}
 				}
