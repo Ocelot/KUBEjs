@@ -52,20 +52,23 @@
             }
         }
 
-        function AddTarget(_DomJack,_targetData){
+        function AddTarget(_dropFunction,_DomJack,_targetData){
             if(KUBE.Is(_DomJack,true) === 'DomJack'){
                 targets.push({
                     'DJ':_DomJack,
                     'data':_targetData,
                     'drop':function(){
-                        dropWrapper(this);
+                        if(KUBE.Is(_dropFunction) === 'function'){
+                            dragEndWrapper();
+                            _dropFunction(LastHandle,_DomJack,getDropData(LastHandle),_targetData);
+                        }
                     },
                     'dragOver':function(){
-                        return dragOverWrapper(this);
+                        //Not sure about this yet. Should I make it individual per target?
+                        //return dragOverWrapper(this);
+                        return false;
                     }
                 });
-//                _DomJack.On('drop',dropWrapper);
-//                _DomJack.On('dragOver',dragOverWrapper);
             }
         }
 

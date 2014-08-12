@@ -218,14 +218,14 @@
 			function load(){
 				var staticInstances = {};
 				$KUBEAPI[_class] = function(instance){
-					if(!staticInstances[String(instance).toLowerCase()]){
+					if(instance && !staticInstances[String(instance).toLowerCase()]){
 						staticInstances[String(instance).toLowerCase()] = Events(_classFunction.call(_classFunction,instance));
 					}
-					return staticInstances[String(instance).toLowerCase()];
+					return (instance ? staticInstances[String(instance).toLowerCase()] : Events(_classFunction.call(_classFunction)));
 				};			
 				console.log('successfully loaded '+_class);
 				$KUBEAPI.EmitState(_class);
-			}			
+			}
 		}
 		
 		function AutoLoad(_map,_overwrite){
