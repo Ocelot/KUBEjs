@@ -1,6 +1,6 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadSingleton("FontAwesome",FontAwesome,['ExtendObject','ExtendRegExp']);
+	KUBE.LoadSingleton("FontAwesome",FontAwesome,['ExtendObject','ExtendRegExp','DomJack']);
 
 	FontAwesome.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
