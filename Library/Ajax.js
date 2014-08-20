@@ -16,6 +16,7 @@
 		var ajaxQ = [];
 		var settings = {
 			'requestHandler':'',
+            'parseFailHandler': '',
 			'freezeDelay':2500,
 			'timeout':10000,
 			'method':'post',
@@ -33,6 +34,7 @@
 		function SettingsAPI(){
 			var $return = {
 				'RequestHandler':RequestHandler,
+                'ParseFailHandler': ParseFailHandler,
 				'FreezeDelay':FreezeDelay,
 				'Method':Method,
 				'Timeout':Timeout
@@ -45,6 +47,13 @@
 				}
 				return settings.requestHandler;
 			};
+
+            function ParseFailHandler(_function){
+                if(KUBE.Is(_function) === "function"){
+                    settings.parseFailHandler = _function;
+                }
+                return settings.parseFailHandler;
+            }
 			
 			function Timeout(_ms){
 				if(KUBE.Is(_ms) == 'number'){
@@ -179,7 +188,12 @@
                                     }
                                     catch(e){
                                         console.log('AJAX ERROR: ',response);
-                                        throw new Error('AJAX JSON Parse Failed. Possibly Not JSON?');
+                                        if(settings.parseFailHandler){
+                                            settings.parseFailHandler(response);
+                                        }
+                                        else{
+                                            throw new Error('AJAX JSON Parse Failed. Possibly Not JSON?');
+                                        }
                                     }
                                 }
 								completeRequest(response,_responseEvent);
