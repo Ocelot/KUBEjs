@@ -112,6 +112,13 @@
             "value": function(){ return KUBE.Extend().Obj(console,true); }
         });
 
+        Object.defineProperty(Math,"KUBE",{
+            "enumerable": false,
+            "configurable": false,
+            "writable": false,
+            "value": function(){ return KUBE.Extend().Obj(Math,true); }
+        });
+
 	//}
 	
 	if(KUBE.Is(config.preLoad) === 'array'){
