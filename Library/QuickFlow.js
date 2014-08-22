@@ -4,11 +4,11 @@
 	
 	QuickFlow.prototype.toString = function(){ return '[object '+this.constructor.name+']'; };
 	function QuickFlow(viewHeight,itemHeight,ItemMap,mapArray,Target){
-		var $API,DJ,SJ,TallBlock,ItemCache,positionCache,totalItems,pauseScroll,currentCount;
+		var $API,DJ,SJ,TallBlock,ItemCache,positionCache,totalItems,pauseScroll,currentCount, currentScrollState = false;
 		
 		DJ = KUBE.DomJack;
 		SJ = KUBE.StyleJack;
-		
+
 		initQuickFlow();
 		$API = {
 			'SetHeight':SetHeight,
@@ -77,14 +77,17 @@
 				
 				//Ensure we have the right type of values in everything
 				Target = (KUBE.Is(Target,true) === 'DomJack' ? Target : DJ('div'));
-				Target.Style().Overflow('auto');
+				Target.Style().Overflow(['hidden','auto']);
 				
 				TallBlock = Target.Append('div').AddClass('.QuickFlowTallBox');
-				TallBlock.Style().Width('100%').Position('relative').Height(mapArray.length*itemHeight);	
+				TallBlock.Style().Width('100%').Position('relative').Height(mapArray.length*itemHeight);
 				
 				Target.On('scroll',handleScroll);
+                Target.Ready(function(){
+                    calcScrollBar();
+                });
 				populateStart();
-				
+
 				Target.Once('cleanup',cleanup);
 			}
 			else{
@@ -97,7 +100,6 @@
 			totalItems = Math.ceil(viewHeight/itemHeight)+5;
 			storePositions();
 			var i,TempItem;
-			
 			for(i=0;i<totalItems;i++){
 				if(KUBE.Is(mapArray[i]) === 'object'){
 					TempItem = ItemMap.Copy(true);
@@ -107,13 +109,14 @@
 					TallBlock.Append(TempItem);
 				}
 			}
+
 		}
 		
 		function storePositions(){
 			positionCache = []; //Scoped reset
 			
 			var i,posObj,qfIndex;
-			
+
 			qfIndex = 0;
 			for(i=0;i<mapArray.length;i++){
 				posObj = {
@@ -162,8 +165,27 @@
 					ItemRef.MapData(mapArray[_posObj.itemIndex]);
 				}
 			});
+            calcScrollBar();
 			pauseScroll = false;
 		}
+
+        function calcScrollBar(){
+            var scroll = KUBE.DomJack(document.body).GetScrollBarDimensions();
+            var event = {};
+            var previousScrollState = currentScrollState;
+            var scrollHeight = Target.GetNode().scrollHeight
+            if(scrollHeight > viewHeight || scrollHeight == 0){
+                currentScrollState = true;
+                event = {'state': true, 'scrollSize': scroll};
+            }
+            else{
+                currentScrollState = false;
+                event = {'state': false, 'scrollSize': scroll};
+            }
+            if(currentScrollState !== previousScrollState){
+                Target.Emit('scrollBarChange',event);
+            }
+        }
 		
 		function getVisibleRange(){
 			var startSlice,endSlice;
