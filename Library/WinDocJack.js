@@ -17,6 +17,7 @@
 			'IsReady':IsReady,
 			'Ready':Ready,
 			'Resize':Resize,
+            'PopState':PopState,
 			'On':On,
 			'Once':Once,
 			'Emit':Emit,
@@ -109,6 +110,11 @@
 			Events.On('resize', _callback);
 		}
 
+        function PopState(_callback){
+            initPopState();
+            Events.On('popstate',_callback);
+        }
+
 		//Think I might deprecate this
 		function IsReady(){
 			return ready;
@@ -194,7 +200,20 @@
 				}
 			}
 		}
-		
+
+        function initPopState(){
+            var f;
+            if(!domListeners.resize){
+                f = function(e){ domTrigger('popstate', e); };
+                if(window.addEventListener){
+                    window.addEventListener('popstate', f, true);
+                }
+                else{
+                    window.attachEvent('onpopstate', f);
+                }
+            }
+        }
+
 		function initDomListener(_event){
 			var f;
 			_event = translateEvent(_event);

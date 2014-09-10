@@ -244,6 +244,14 @@
 		}
 		
 		function Uses(_dependancies,_callback){
+            //This could possibly be broken maybe.
+            if(KUBE.Is(_dependancies) === "string"){
+                var argsArray = Array.prototype.slice.call(arguments,0);
+                if(KUBE.Is(argsArray[argsArray.length - 1]) === "function"){
+                    _callback = argsArray.pop();
+                }
+                _dependancies = argsArray;
+            }
 			return AutoLoader.Uses(_dependancies,_callback);
 		}
 		

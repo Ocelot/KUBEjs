@@ -50,7 +50,7 @@
 		if(this.length && KUBE.Is(_f) === 'function'){
 			eachBreak = false;
 			for(i=0;i<this.length;i++){
-				eVal = _f.call({'break':_break},this[i],i);
+				eVal = _f.call({'break':_break},this[i],i,this);
 				if(!_useOriginal){
 					if(_preserveIndex){
 						$return[i] = eVal;

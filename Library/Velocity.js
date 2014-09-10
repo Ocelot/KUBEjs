@@ -3233,6 +3233,8 @@
             "Stop":Stop,
             "Reverse":Reverse,
             "Animate":Animate,
+            "SlideUp": SlideUp,
+            "SlideDown": SlideDown,
             "SlideOutLeft": SlideOutLeft,
             "SlideInLeft": SlideInLeft,
             "SlideOutRight": SlideOutRight,
@@ -3358,12 +3360,14 @@
         }
 
 
-        function SlideIn(){
-            Velocity.animate([_DomJack.GetNode()],"slideInFromLeft",OptionStore);
+
+        //These are height animations, not KUBE slide animations
+        function SlideUp(){
+            Velocity.animate([_DomJack.GetNode()],"slideUp",OptionStore);
         }
 
-        function SlideOut(){
-            Velocity.animate([_DomJack.GetNode()],"slideOutToLeft",OptionStore);
+        function SlideDown(){
+            Velocity.animate([_DomJack.GetNode()],"slideDown",OptionStore);
         }
 
         function SlideOutLeft(){

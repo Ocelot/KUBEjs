@@ -1906,6 +1906,8 @@
 	function Select(){
 		var DJs = DJSizzle(Sizzle.apply(undefined,arguments));
 		DJs.Each = Each;
+        DJs.AddClass = AddClass;
+        DJs.RemoveClass = RemoveClass;
 		return DJs;
 		
 		function DJSizzle(_array){
@@ -1929,5 +1931,19 @@
 				}
 			}
 		}
+
+        function AddClass($class){
+            Each(function(v,k){
+                this.AddClass($class);
+            })
+        }
+
+        function RemoveClass($class){
+            Each(function(v,k){
+                console.log(v);
+                this.RemoveClass($class);
+            })
+        }
+
 	}
 }(KUBE));
