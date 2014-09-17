@@ -105,7 +105,6 @@
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
 
-
         Object.defineProperty(Math,"KUBE",{
             "enumerable": false,
             "configurable": false,
