@@ -1940,7 +1940,6 @@
 
         function RemoveClass($class){
             Each(function(v,k){
-                console.log(v);
                 this.RemoveClass($class);
             })
         }

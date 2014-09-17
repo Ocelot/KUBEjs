@@ -105,12 +105,6 @@
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
 
-        Object.defineProperty(console,"KUBE",{
-            "enumerable": false,
-            "configurable": false,
-            "writable": false,
-            "value": function(){ return KUBE.Extend().Obj(console,true); }
-        });
 
         Object.defineProperty(Math,"KUBE",{
             "enumerable": false,
