@@ -1102,7 +1102,7 @@
                 if(_val){
                     //This is possibly retarded, although possibly awesome.
                     _val = (_val.substr(0,1) !== "." ? "." + _val : _val);
-                    $return[_strVal] = KUBE.StyleJack(_val);
+                    $return[strVal] = KUBE.StyleJack(_val);
                 }
 			});
 			return $return;
