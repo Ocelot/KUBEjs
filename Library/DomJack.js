@@ -1097,11 +1097,12 @@
 		function createClassObj(_classes){
 			var $return = {};
 			_classes.KUBE().each(function(_val){
+                var strVal = _val;
                 //Added if statement to be slightly more resiliant against trailing spaces and other weird formatting.
                 if(_val){
                     //This is possibly retarded, although possibly awesome.
                     _val = (_val.substr(0,1) !== "." ? "." + _val : _val);
-                    $return[_val] = KUBE.StyleJack(_val);
+                    $return[_strVal] = KUBE.StyleJack(_val);
                 }
 			});
 			return $return;
