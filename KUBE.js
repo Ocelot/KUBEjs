@@ -80,6 +80,18 @@
             "writable": false,
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
+        //THIS IS TO FIX IE9 WITH constructor.name.. I MIGHT KILL THIS
+        if (Function.prototype.name === undefined && Object.defineProperty !== undefined) {
+            Object.defineProperty(Function.prototype, 'name', {
+                get: function() {
+                    var funcNameRegex = /function\s+([^\s(]+)\s*\(/;
+                    var results = (funcNameRegex).exec((this).toString());
+                    return (results && results.length > 1) ? results[1] : "";
+                },
+                set: function(value) {}
+            });
+        }
+
         Object.defineProperty(Array.prototype,"KUBE",{
             "enumerable": false,
             "configurable": false,
@@ -104,6 +116,8 @@
             "writable": false,
             "value": function(){ return KUBE.Extend().Obj(this); }
         });
+
+
 
         Object.defineProperty(Math,"KUBE",{
             "enumerable": false,
@@ -1041,6 +1055,7 @@
 				for(i=0;i<calls.length;i++){
 					if(calls[i] !== true){
 						call = calls[i].f;
+						calls[i] = true;
 						calls[i] = true;
 						call.apply(undefined,_args);
 					}
