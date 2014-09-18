@@ -512,7 +512,7 @@
 		function Resize(){
 			//Finish this. Animated gif, or animated css?
 			var blackOut,resizePause;
-			DJ().Resize(function(){
+			DJ().Window().On('resize',function(){
 				if(resizePause){
 					clearTimeout(resizePause);
 				}
