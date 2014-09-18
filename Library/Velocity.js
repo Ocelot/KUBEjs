@@ -4148,7 +4148,7 @@
                         }
                     }
 
-                    velocity.animate(element,destinationProps,opts);
+                    Velocity.animate(element,destinationProps,opts);
 
                 };
 
@@ -4252,7 +4252,7 @@
                         }
 
                     }
-                    velocity.animate(element,destinationProps,opts);
+                    Velocity.animate(element,destinationProps,opts);
 
                 };
             });

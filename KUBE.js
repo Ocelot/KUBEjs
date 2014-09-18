@@ -52,6 +52,8 @@
     AutoLoader.SetAutoPath(config.autoLoadPath+'/Library');
 	KUBE.LoadFactory('Patience', Patience);
 	KUBE.LoadSingletonFactory('Loader',KUBELoader);
+
+
 	
 	/* Prototype onto native */
     /* Note: define property WILL break in IE8, however because we can set enumerable to false, it shouldn't break jQuery.  6 of one, half dozen of another. */
@@ -181,12 +183,12 @@
 			}
 
 			function load(){
-				$KUBEAPI[_fName] = _f; 
+				$KUBEAPI[_fName] = _f;
 				console.log('successfully loaded '+_fName);
 				$KUBEAPI.EmitState(_fName);
 			}
 		}
-		
+
 		function LoadFactory(_class,_classFunction,_needs){
 			if(Is(_classFunction) === 'function'){
 				AutoLoader.SetAsLoaded(_class);
@@ -205,7 +207,7 @@
 				$KUBEAPI.EmitState(_class);
 			}
 		}
-		
+
 		function LoadSingleton(_class,_classFunction,_needs){
 			if(Is(_classFunction) === 'function'){
 				AutoLoader.SetAsLoaded(_class);
@@ -222,7 +224,7 @@
 				$KUBEAPI.EmitState(_class);
 			}
 		}
-		
+
 		function LoadSingletonFactory(_class,_classFunction,_needs){
 			if(KUBE.Is(_classFunction) === 'function'){
 				AutoLoader.SetAsLoaded(_class);
@@ -236,12 +238,12 @@
 						staticInstances[String(instance).toLowerCase()] = Events(_classFunction.call(_classFunction,instance));
 					}
 					return (instance ? staticInstances[String(instance).toLowerCase()] : Events(_classFunction.call(_classFunction)));
-				};			
+				};
 				console.log('successfully loaded '+_class);
 				$KUBEAPI.EmitState(_class);
 			}
 		}
-		
+
 		function AutoLoad(_map,_overwrite){
 			AutoLoader.Map(_map,config.autoLoadPath,_overwrite);
 		}
@@ -249,7 +251,7 @@
 		function SetAsLoaded(_codeName){
 			AutoLoader.SetAsLoaded(_codeName);
 		}
-		
+
 		function Uses(_dependancies,_callback){
             //This could possibly be broken maybe.
             if(KUBE.Is(_dependancies) === "string"){
@@ -261,16 +263,16 @@
             }
 			return AutoLoader.Uses(_dependancies,_callback);
 		}
-		
+
 		function Extend(){
 			return KUBEExtend();
 		}
-		
+
 		function Events(_initObj){
 			var type = Is(_initObj);
 			return (type === 'object' ? KUBEEvents(_initObj) : (type === 'undefined' ? KUBEEvents({}) : _initObj));
 		}
-		
+
 		function Config(){
 			return config;
 		}
@@ -280,7 +282,7 @@
 	function KUBEEvents(obj){
 		var eventCache = {},
 			stateCache = {};
-	
+
 		if(KUBE.Is(obj) === 'object' && obj.initEvents !== false && obj.KUBEAuto !== false && !obj.On && !obj.Once && !obj.Emit && !obj.Clear && !obj.RemoveListener && !obj.EmitState && !obj.OnState && !obj.ClearState){
 			delete obj.initEvents;
 			obj.On = On;
@@ -299,11 +301,11 @@
 		/* Public */
 		function On(_event, _callback,_context){
 			var bind,i;
-			
+
 			bind = true;
 			_event = initEventSpace(_event);
 			_context = _context || obj;
-			
+
 			for(i=0;i<eventCache[_event].length;i++){
 				if(eventCache[_event][i] === _callback){
 					bind = false;
@@ -315,14 +317,14 @@
 				Emit('newListener', _callback);
 			}
 		}
-		
+
 		function Once(_event,_callback,_context){
 			var bind,i,$return;
-			
+
 			bind = true;
 			_event = initEventSpace(_event);
 			_context = _context || obj;
-			
+
 			for(i=0;i<eventCache[_event].length;i++){
 				if(eventCache[_event][i] === _callback){
 					bind = false;
@@ -335,17 +337,17 @@
 			}
 			return $return;
 		}
-		
+
 		function Emit(_event){
 			var i,length,args,eventCopy,$return;
-			
+
 			_event = initEventSpace(_event);
 			args = new Array(arguments.length-1);
-			
+
 			for (i = 1; i < arguments.length; i++){
 				args[i-1] = arguments[i];
 			}
-			
+
 			if(eventCache[_event]){
 				eventCopy = copyArray(eventCache[_event]);
 				length = eventCopy.length;
@@ -359,7 +361,7 @@
 			}
 			return $return;
 		}
-		
+
 		function EmitState(_state){
 			var fireArray,i;
 			//console.log('EmitState called: '+_state);
@@ -380,7 +382,7 @@
 				stateCache[_state].f = [];
 			}
 		}
-		
+
 		function OnState(_state,_f){
 			if(KUBE.Is(_f) === 'function'){
 				_state = initStateSpace(_state);
@@ -397,12 +399,12 @@
 				}
 			}
 		}
-		
+
 		function CheckState(_state){
 			_state = initStateSpace(_state);
 			return stateCache[_state].state;
 		}
-		
+
 		function ClearState(_state){
 			if(_state){
 				_state = initStateSpace(_state);
@@ -413,12 +415,12 @@
 				stateCache = [];
 			}
 		}
-		
+
 //		function CheckState(_state){
 //			initStateSpace(_state);
 //			return stateCache[_state].state;
 //		}
-		
+
 		function Clear(_event){
 			if(_event){
 				_event = initEventSpace(_event);
@@ -430,7 +432,7 @@
 				eventCache = {};
 			}
 		}
-		
+
 		function RemoveListener(_event,_callback){
 			var i;
 			_event = initEventSpace(_event);
@@ -446,7 +448,7 @@
             _event = initEventSpace(_event);
             return eventCache[_event].length;
         }
-		
+
 
 		/* Private */
 		function initEventSpace(_event){
@@ -456,7 +458,7 @@
 			}
 			return _event;
 		}
-		
+
 		function initStateSpace(_state){
 			_state = String(_state).toLowerCase();
 			if(stateCache[_state] === undefined){
@@ -464,7 +466,7 @@
 			}
 			return _state;
 		}
-		
+
 		function copyArray(origArray){
 			var i,copyArray = [];
 			if(KUBE.Is(origArray) === 'array'){
@@ -475,11 +477,11 @@
 			return copyArray;
 		}
 	}
-		
+
 	/* Patience Control Flow */
 	function Patience(){
 		var running,syncQ,resolveQ,argQ,$patienceAPI,pendingArgs;
-		
+
 		running = false;
 		syncQ = [],resolveQ = [],argQ = [];
 		$patienceAPI = {
@@ -489,12 +491,12 @@
 			'Clear':Clear,
 			'Debug':Debug
 		};
-		
+
 		if(arguments.length){
 			Wait.apply(this,arguments);
 		}
 		return $patienceAPI;
-		
+
 		function Clear(){
 			syncQ = [], resolveQ = [], argQ = [];
 			running = false;
@@ -506,10 +508,10 @@
 
 		function Wait(){
 			var i,i2,valid,fQ,aQ;
-			
+
 			valid = false;
 			fQ = [], aQ = [];
-			
+
 			//Ugly, refactor this
 			if(arguments.length){
 				for(i=0;i<arguments.length;i++){
@@ -524,7 +526,7 @@
 								valid = true;
 								fQ.push(arguments[i][i2]);
 								aQ.push(undefined);
-							}							
+							}
 						}
 					}
 				}
@@ -537,19 +539,19 @@
 			runQ();
 			return $patienceAPI;
 		}
-		
+
 		function WaitInject(_f,_index){
 			var valid,fQ,aQ;
-			
+
 			valid = false;
 			fQ = [], aQ = [];
-			
+
 			if(KUBE.Is(_f) === 'function'){
 				valid = true;
 				fQ.push(_f);
 				aQ.push(undefined);
 			}
-			
+
 			if(valid){
 				syncQ.splice(_index,0,fQ);
 				argQ.splice(_index,0,aQ);
