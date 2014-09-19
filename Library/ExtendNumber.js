@@ -14,7 +14,7 @@
 		ExtendAPI.Load('number','debug',Debugger);
 
 		KUBE.EmitState('ExtendNumber');
-		console.log('ExtendNumber Loaded');
+		KUBE.console.log('ExtendNumber Loaded');
 	}
 	
 	/* Declare functions */

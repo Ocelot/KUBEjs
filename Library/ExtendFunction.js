@@ -12,7 +12,7 @@
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('function','promise',Promise);
 		KUBE.EmitState('ExtendFunction');
-		console.log('ExtendFunction Loaded');
+		KUBE.console.log('ExtendFunction Loaded');
 	}
 	
 	/* Declare functions */	

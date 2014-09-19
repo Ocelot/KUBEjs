@@ -229,7 +229,7 @@
 					//$return = searchForRule(_type,_initData);
 				}
 				catch(E){
-					console.log('failz');
+					KUBE.console.log('failz');
 					throw E;
 				}
 			}
@@ -246,7 +246,7 @@
 					$return = searchForRule(_type,_initData,_prefix);
 				}
 				catch(E){
-					console.log('failz');
+					KUBE.console.log('failz');
 					if(!_prefix){
 						$return = initCSSKeyframesRule(_styleSheet,_type,_initData,prefix);
 					}
@@ -258,7 +258,7 @@
 		
 		function initStylesheet(){
 			//This is triggered when styleSheets length is 0
-			console.log('initStylesheet called');
+			KUBE.console.log('initStylesheet called');
 		}
 	}
 
@@ -398,7 +398,7 @@
                 initFontRuleIfNeeded();
             }
             else{
-                console.log('Fail: Font Stretch was not valid value for font-face');
+                KUBE.console.log('Fail: Font Stretch was not valid value for font-face');
             }
             return $API;
         }
@@ -409,7 +409,7 @@
                 initFontRuleIfNeeded();
             }
             else{
-                console.log('Fail: Font Style was not valid value for font-face');
+                KUBE.console.log('Fail: Font Style was not valid value for font-face');
             }
             return $API;
         }
@@ -427,7 +427,7 @@
                 initFontRuleIfNeeded();
             }
             else{
-                console.log('Fail: Font Weight was not valid value for font-face');
+                KUBE.console.log('Fail: Font Weight was not valid value for font-face');
             }
             return $API;
         }
@@ -803,7 +803,7 @@
 					_f.apply(undefined,args);
 				};
 			}
-            console.log($API);
+            KUBE.console.log($API);
 		}
 		
 		function validatePlugin(_name,_f){
@@ -2887,7 +2887,7 @@
 					//I think I failed but am not sure...
                     //I changed this from a debugger because it was annoying.
                     // If you changed something to the same value, it failed.  This seems better.  -- Dustin
-//					console.log('Set potentially failed.', {
+//					KUBE.console.log('Set potentially failed.', {
 //                            'Property': _property,
 //                            'Before': current,
 //                            'After': _styleObj.style[_property],

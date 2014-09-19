@@ -20,7 +20,7 @@
 		ExtendAPI.Load('object','duckType',DuckType);
 		ExtendAPI.Load('object','isEmpty',IsEmpty);
 		KUBE.EmitState('ExtendObject');
-		console.log('ExtendObject Loaded');
+		KUBE.console.log('ExtendObject Loaded');
 	}
 	
 	/* Declare functions */

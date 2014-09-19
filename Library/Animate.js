@@ -226,7 +226,7 @@
 			}			
 			
 			progress = Progress();
-			console.log(progress);
+			KUBE.console.log(progress);
 			
 			_resolve(progressData);
 			_callback();
@@ -243,7 +243,7 @@
 		
 		function timeout(){
 			timer = setTimeout(function(){
-				console.log('failed animation finish. Animation timeout fired.');
+				KUBE.console.log('failed animation finish. Animation timeout fired.');
 				Interrupt();
 			},(_target.time+5000));
 		}

@@ -182,7 +182,7 @@
         function validateInit(){
             var tempList;
             if(KUBE.Is(_Theme,true) !== 'Theme'){
-                console.log(_Theme);
+                KUBE.console.log(_Theme);
                 throw new Error('Invalid initialization variable passed to Appearance. Must be a Theme object');
             }
             else{

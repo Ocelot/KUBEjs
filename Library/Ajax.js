@@ -108,7 +108,7 @@
 			else{
 				addRequestToQ(_json, _responseEvent, copySettings(settings));
 				if(!processing && ajaxQ.length){
-					console.log('trigger start from send method...');
+					KUBE.console.log('trigger start from send method...');
 					startQ();
 				}
 			}
@@ -116,7 +116,7 @@
 		
 		function Cancel(){
 			if(processing && currentRequest){
-				console.log('cancel has been requested...');
+				KUBE.console.log('cancel has been requested...');
 				currentRequest.cancel();
 				ajaxQ = [];
 				processing = false;
@@ -126,7 +126,7 @@
 		/* Private Methods */
 		function addRequestToQ(_json, _responseEvent, _settings){
 			var add = true;
-			console.log('addRequest called: adding...');
+			KUBE.console.log('addRequest called: adding...');
 			for(var i=0,length=ajaxQ.length;i<length;i++){
 				if(ajaxQ.json == _json && ajaxQ.settings == _settings && ajaxQ.responseEvent === _responseEvent){
 					add = false;
@@ -134,7 +134,7 @@
 				}
 			}
 			if(add){
-				console.log(_json);
+				KUBE.console.log(_json);
 				ajaxQ[ajaxQ.length] = {'json':_json, 'responseEvent':_responseEvent, 'settings':_settings};
 			}
 		};
@@ -187,7 +187,7 @@
                                         response = KUBE.JSON().parse(response);
                                     }
                                     catch(e){
-                                        console.log('AJAX ERROR: ',response);
+                                        KUBE.console.log('AJAX ERROR: ',response);
                                         if(settings.parseFailHandler){
                                             settings.parseFailHandler(response);
                                         }
@@ -210,13 +210,13 @@
 			}
 			else{
 				//We're in function land
-				console.log('pre function call...',_data);
+				KUBE.console.log('pre function call...',_data);
 				startRequestTimer();
 				response = _settings.requestHandler.call(undefined,_data);
 				if(KUBE.Is(response) == 'object' && response.On && response.HandleRequest){
-					console.log('event object found, waiting for ready...');
+					KUBE.console.log('event object found, waiting for ready...');
 					response.On('ready', function(responseData){
-						console.log('ready fired');
+						KUBE.console.log('ready fired');
 						completeRequest(responseData,_responseEvent);
 					});
 					response.HandleRequest(_data);

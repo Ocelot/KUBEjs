@@ -5,7 +5,6 @@
 
     //Moved safely to a short circuit because now a safe default exists
     config = (typeof window.KUBE === 'object' && typeof window.KUBE.config === 'object') ? window.KUBE.config : initDefaultConfig();
-    window.console = window.console || initFakeConsole();
 
     /*
      * As an addendum KUBEjs is an ugly file with a ton of complex stuff going on which makes it ugly to work on.
@@ -57,7 +56,9 @@
 	KUBE = E();
 	KUBEEvents(KUBE);
 	window.KUBE = KUBE;
-	
+    //Random experiment.
+	KUBE.console = window.console || initFakeConsole();
+
 	/* Load in Patience */
 	AutoLoader = new KUBELoader(KUBE);
     AutoLoader.SetAutoPath(config.autoLoadPath+'/Library');
@@ -195,7 +196,7 @@
 
 			function load(){
 				$KUBEAPI[_fName] = _f;
-				console.log('successfully loaded '+_fName);
+				KUBE.console.log('successfully loaded '+_fName);
 				$KUBEAPI.EmitState(_fName);
 			}
 		}
@@ -214,7 +215,7 @@
 					};
 					return Events(new F());
 				};
-				console.log('successfully loaded '+_class);
+				KUBE.console.log('successfully loaded '+_class);
 				$KUBEAPI.EmitState(_class);
 			}
 		}
@@ -231,7 +232,7 @@
 				$KUBEAPI[_class] = function(){
 					return (KUBE.Is($static) === 'function' ? $static.apply($static, Array.prototype.slice.call(arguments)) : $static);
 				};
-				console.log('successfully loaded '+_class);
+				KUBE.console.log('successfully loaded '+_class);
 				$KUBEAPI.EmitState(_class);
 			}
 		}
@@ -250,7 +251,7 @@
 					}
 					return (instance ? staticInstances[String(instance).toLowerCase()] : Events(_classFunction.call(_classFunction)));
 				};
-				console.log('successfully loaded '+_class);
+				KUBE.console.log('successfully loaded '+_class);
 				$KUBEAPI.EmitState(_class);
 			}
 		}
@@ -375,7 +376,7 @@
 
 		function EmitState(_state){
 			var fireArray,i;
-			//console.log('EmitState called: '+_state);
+			//KUBE.console.log('EmitState called: '+_state);
 			_state = initStateSpace(_state);
 			if(!stateCache[_state].state){
 				stateCache[_state].state = true;
@@ -514,7 +515,7 @@
 		}
 
 		function Debug(){
-			console.log(syncQ);
+			KUBE.console.log(syncQ);
 		}
 
 		function Wait(){
@@ -568,7 +569,7 @@
 				argQ.splice(_index,0,aQ);
 				resolveQ.splice(_index,0,false);
 			}
-			console.log('inject',_index);
+			KUBE.console.log('inject',_index);
 			runQ();
 			return $patienceAPI;
 		}

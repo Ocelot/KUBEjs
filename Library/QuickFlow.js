@@ -223,7 +223,7 @@
 			 *	
 			 *	Does it have responsibility for detaching references, or deleting some of this stuff if the QFNode gets deleted?
 			 */
-			console.log('QF cleanup called');
+			KUBE.console.log('QF cleanup called');
 			$API = DJ = SJ = Target = TallBlock = ItemCache = positionCache = totalItems = pauseScroll = undefined;
 		}
 	

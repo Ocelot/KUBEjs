@@ -8,7 +8,7 @@
         ExtendAPI = KUBE.Extend();
         ExtendAPI.Load('Math','scaleAspectRatio',ScaleAspectRatio);
         KUBE.EmitState('ExtendMath');
-        console.log('ExtendMath Loaded');
+        KUBE.console.log('ExtendMath Loaded');
     }
 
     /* Declare functions */

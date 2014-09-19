@@ -20,7 +20,7 @@
         ExtendAPI.Load('string','b64Decode',B64Decode);
 
 		KUBE.EmitState('ExtendString');
-		console.log('ExtendString Loaded');
+		KUBE.console.log('ExtendString Loaded');
 	}
 	
 	/* Declare functions */

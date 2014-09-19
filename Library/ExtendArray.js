@@ -17,7 +17,7 @@
 		ExtendAPI.Load('array','rand',Rand);
 		ExtendAPI.Load('array','args',Args);
 		KUBE.EmitState('ExtendArray');
-		console.log('ExtendArray Loaded');
+		KUBE.console.log('ExtendArray Loaded');
 	}
 	
 	/* Declare functions here */

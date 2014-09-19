@@ -14,7 +14,7 @@
 		ExtendAPI.Load('regExp','matchAndReplace',MatchAndReplace);
 		ExtendAPI.Load('regExp','replaceCallback',ReplaceCallback);
 		KUBE.EmitState('ExtendRegExp');
-		console.log('ExtendRegExp Loaded');
+		KUBE.console.log('ExtendRegExp Loaded');
 	}
 	
 	/* Declare functions */

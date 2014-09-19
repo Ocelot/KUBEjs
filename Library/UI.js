@@ -38,7 +38,7 @@
 		function loadView(_viewName, _viewClass){
 			loadedViews[_viewName] = _viewClass;
 			$uiAPI.EmitState(_viewName);
-			console.log('UI Loaded: '+_viewName);
+			KUBE.console.log('UI Loaded: '+_viewName);
 		}
 
 		//Autoloading
@@ -530,7 +530,7 @@
 
 		//Private methods
 		function handleAjaxError(_e){
-            console.log('handleAjaxError called in UI:',_e.message);
+            KUBE.console.log('handleAjaxError called in UI:',_e.message);
 			alert(_e.message);
             //debugger;
 		}

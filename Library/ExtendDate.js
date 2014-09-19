@@ -12,7 +12,7 @@
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('date','format',Format);
 		KUBE.EmitState('ExtendDate');
-		console.log('ExtendDate Loaded');
+		KUBE.console.log('ExtendDate Loaded');
 	}
 	
 	// Declare functions here

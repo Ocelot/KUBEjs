@@ -29,7 +29,7 @@
 	};
 	
 	function cleanCache(){
-		console.log('clean cache fired');
+		KUBE.console.log('clean cache fired');
 		var offset,id,i,slice,slices = [];
 		offset = 0;
 		slice = [undefined,0];
@@ -71,7 +71,7 @@
 		jackCache.KUBE().each(function(_id,_dj){
 			if(KUBE.Is(_dj) === 'object' && _dj.GetNode().KUBEDJ.save && _dj.IsDetached()){
 				if(_output){
-					console.log(_id,_dj.GetRoot().GetInner());
+					KUBE.console.log(_id,_dj.GetRoot().GetInner());
 				}
 				else{
 					detached[_id] = _dj;
@@ -283,7 +283,7 @@
 		
 		function checkTypeAndCreate(_type){
 			var $return = false;
-			//console.log(_type+': '+KUBENodeId+1);
+			//KUBE.console.log(_type+': '+KUBENodeId+1);
 			try{
 				$return = document.createElement(''+_type.toLowerCase());
 			}
