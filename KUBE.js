@@ -5,6 +5,7 @@
 
     //Moved safely to a short circuit because now a safe default exists
     config = (typeof window.KUBE === 'object' && typeof window.KUBE.config === 'object') ? window.KUBE.config : initDefaultConfig();
+    window.console = window.console || initFakeConsole();
 
     /*
      * As an addendum KUBEjs is an ugly file with a ton of complex stuff going on which makes it ugly to work on.
@@ -17,7 +18,8 @@
     //Because I went retarded, I removed the comments
     function initDefaultConfig(){
         var config = {
-            "autoLoadPath" : getAutoLoadPath()
+            "autoLoadPath" : getAutoLoadPath(),
+            "debug": true
         };
         return config;
 
@@ -40,6 +42,15 @@
             scripts = document.getElementsByTagName('script');
             return scripts[scripts.length - 1].src;
         }
+    }
+
+    function initFakeConsole(){
+        var $return = {};
+        var consoleProps = ['memory'];
+        var consoleFunctions = ["debug", "error", "info", "log", "warn", "dir", "dirxml", "table", "trace", "assert", "count", "markTimeline", "profile", "profileEnd", "time", "timeEnd", "timeStamp", "timeline", "timelineEnd", "group", "groupCollapsed", "groupEnd", "clear"];
+        for(var i = 0; i < consoleProps.length; i++){ $return[consoleProps[i]] = consoleProps[i]; }
+        for(i = 0; i < consoleFunctions.length; i++){ $return[consoleFunctions[i]] = function(){}; }
+        return $return;
     }
 	
 	/* Create KUBE */
