@@ -1,30 +1,213 @@
+/*
+
+ Copyright (c) 2006, Ivan Sagalaev
+ All rights reserved.
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+
+ * Redistributions of source code must retain the above copyright
+ notice, this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright
+ notice, this list of conditions and the following disclaimer in the
+ documentation and/or other materials provided with the distribution.
+ * Neither the name of highlight.js nor the names of its contributors
+ may be used to endorse or promote products derived from this software
+ without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY
+ EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY
+ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Original highlight.js License from highlight.js (https://highlightjs.org/)
+KUBE Port: Ian Reid
+
+ */
+
 (function(KUBE){
     "use strict";
     KUBE.LoadFactory('HighlightPHP', HighlightPHP,['StyleJack','ExtendObject','ExtendArray']);
     HighlightPHP.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
-    debugger;
-    var HighlightObj = CoreHighlight();
-    PHP(HighlightObj);
-    console.log(HighlightObj);
+    var HighlightObj = new CoreHighlight();
+    HighlightObj.registerLanguage('php',PHP);
 
-    function HighlightPHP(){
+    var LangObj = PHP(HighlightObj);
+    console.log(HighlightObj,LangObj);
+
+    function HighlightPHP() {
         var $HighlightAPI;
 
+        initStyle();
         $HighlightAPI = {
-            "ApplyHighlight":ApplyHighlight
+            "ApplyToString": ApplyToString,
+            "ApplyToNode": ApplyToNode
         }.KUBE().create(HighlightPHP.prototype);
-
         return $HighlightAPI;
 
-        function ApplyHighlight(_string,_useBR,_style){
+        function ApplyToString(_string, _useBR) {
             _useBR = _useBR || false;
-            _style = _style || 'default';
+            return HighlightObj.highlight('php', _string, true);
+        }
 
-
+        function ApplyToNode() {
 
         }
 
+        //Private
+
+        //This is a temporary measure. Will probably want to hook this into KUBE themeing? Something more flexible
+        function initStyle() {
+            var multiClassArray;
+            var SJ = KUBE.StyleJack;
+            SJ('.hljs').Display('block').Padding('0.5em').Background().Color('#282b2e').api.Overflow().X('auto');
+
+            multiClassArray = [
+                '.hljs-keyword',
+                '.hljs-literal',
+                '.hljs-change',
+                '.hljs-winutils',
+                '.hljs-flow',
+                '.nginx .hljs-title',
+                '.css .hljs-id',
+                '.tex .htljs-special'
+            ];
+            SJ(multiClassArray.join(',')).Color('#93c763');
+
+            SJ('.hljs-number').Color('#ffcd22');
+            SJ('.hljs').Color('#e0e2e4');
+
+            multiClassArray = [
+                '.css .hljs-tag',
+                '.css .hljs-pseudo'
+            ];
+            SJ(multiClassArray.join(',')).Color('#d0d2b5');
+
+            multiClassArray = [
+                '.hljs-attribute',
+                '.hljs .hljs-constant'
+            ];
+            SJ(multiClassArray.join(',')).Color('#668bb0');
+
+            SJ('.xml .hljs-attribute').Color('#b3b689');
+            SJ('.xml .hljs-tag .hljs-value').Color('#e8e2b7');
+
+            multiClassArray = [
+                '.hljs-code',
+                '.hljs-class .hljs-title',
+                '.hljs-header'
+            ];
+            SJ(multiClassArray.join(',')).Color('white');
+
+
+            multiClassArray = [
+                '.hljs-class',
+                '.hljs-hexcolor'
+            ];
+            SJ(multiClassArray.join(',')).Color('#93c763');
+
+
+            SJ('.hljs-regexp').Color('#d39745');
+
+            multiClassArray = [
+                '.hljs-at_rule',
+                '.hljs-at_rule .hljs-keyword'
+            ];
+            SJ(multiClassArray.join(',')).Color('#a082bd');
+
+            SJ('.hljs-doctype').Color('#557182');
+
+            multiClassArray = [
+                '.hljs-link_url',
+                '.hljs-tag',
+                '.hljs-tag .hljs-title',
+                '.hljs-bullet',
+                '.hljs-subst',
+                '.hljs-emphasis',
+                '.hljs-type',
+                '.hljs-preprocessor',
+                '.hljs-pragma',
+                '.ruby .hljs-class .hljs-parent',
+                '.hljs-built_in',
+                '.django .hljs-template_tag',
+                '.django .hljs-variable',
+                '.smalltalk .hljs-class',
+                '.hljs-javadoc',
+                '.django .hljs-filter .hljs-argument',
+                '.smalltalk .hljs-localvars',
+                '.smalltalk .hljs-array',
+                '.hljs-attr_selector',
+                '.hljs-pseudo',
+                '.hljs-addition',
+                '.hljs-stream',
+                '.hljs-envvar',
+                '.apache .hljs-tag',
+                '.apache .hljs-cbracket',
+                '.tex .hljs-command',
+                '.hljs-prompt'
+            ];
+
+            SJ(multiClassArray.join(',')).Color('#8cbbad');
+            SJ('.hljs-string').Color('#ec7600');
+            multiClassArray = [
+                '.hljs-comment',
+                '.hljs-annotation',
+                '.hljs-blockquote',
+                '.hljs-horizontal_rule',
+                '.hljs-decorator',
+                '.hljs-template_comment',
+                '.hljs-pi',
+                '.hljs-deletion',
+                '.hljs-shebang',
+                '.apache .hljs-sqbracket',
+                '.tex .hljs-formula'
+            ];
+
+            SJ(multiClassArray.join(',')).Color('#818e96');
+
+            multiClassArray = [
+                '.hljs-keyword',
+                '.hljs-literal',
+                '.css .hljs-id',
+                '.hljs-phpdoc',
+                '.hljs-dartdoc',
+                '.hljs-title',
+                '.hljs-header',
+                '.hljs-type',
+                '.vbscript .hljs-built_in',
+                '.rsl .hljs-built_in',
+                '.smalltalk .hljs-class',
+                '.diff .hljs-header',
+                '.hljs-chunk',
+                '.hljs-winutils',
+                '.bash .hljs-variable',
+                '.apache .hljs-tag',
+                '.tex .hljs-special',
+                '.hljs-request',
+                '.hljs-at_rule .hljs-keyword',
+                '.hljs-status'
+            ];
+            SJ(multiClassArray.join(',')).Font().Weight('bold');
+
+            multiClassArray = [
+                '.coffeescript .javascript',
+                '.javascript .xml',
+                '.tex .hljs-formula',
+                '.xml .javascript',
+                '.xml .vbscript',
+                '.xml .css',
+                '.xml .hljs-cdata'
+            ];
+
+            SJ(multiClassArray.join(',')).Opacity(0.5);
+
+        }
     }
 
     /*
@@ -33,7 +216,6 @@
      */
 
     function CoreHighlight() {
-        return this;
         //init();
         ////Let's return an API
         //return {
@@ -760,6 +942,8 @@
             begin: this.UNDERSCORE_IDENT_RE,
             relevance: 0
         };
+
+        return this;
     }
 
     /*
