@@ -51,8 +51,21 @@ KUBE Port: Ian Reid
         }.KUBE().create(HighlightPHP.prototype);
         return $HighlightAPI;
 
-        function ApplyToString(_string, _useBR) {
-            _useBR = _useBR || false;
+        function ApplyToString(_string, _preWrap) {
+            _preWrap = _preWrap || false;
+
+            if(!_preWrap){
+                HighlightObj.configure({
+                    'tabReplace':'    ',
+                    'useBR':true
+                });
+            }
+            else{
+                HighlightObj.configure({
+                    'tabReplace':null,
+                    'useBR':false
+                });
+            }
             return HighlightObj.highlight('php', _string, true);
         }
 
