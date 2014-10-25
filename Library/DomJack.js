@@ -140,8 +140,10 @@
 			
 			//Event management
 			'On':On,							//Set: Set a callback to fire on a certain event queue
+            'OnState': OnState,                  //Set: Bind a callback to be fired on state event
 			'Once':Once,						//Set: Set a callback that will only fire once on a certain event queue
 			'Emit':Emit,						//Utility: Trigger an event queue
+            'EmitState': EmitState,              //Utility: Trigger a state event on the DomJack
 			'Clear':Clear,						//Set: Clear an individual event, or event queue
 			'RemoveListener':RemoveListener,	//Set: **not sure what this does
 			'Ready':Ready,						//Utility: A special function that can fire callbacks when the Node is reinjected into the DOM
@@ -656,6 +658,11 @@
 		function bindOn(_event,_callback){
 			Events.On(_event,_callback,$DomJackAPI);
 		}
+
+        function OnState(_event,_callback){
+            initEventObj(); //This is done this way as OnState/EmitState can't use the DOM.
+            Events.OnState(_event,_callback);
+        }
 		
 		function Once(_event,_callback){
 			_event = translateEvent(_event);
@@ -673,6 +680,19 @@
 			}
 			Events.Emit.apply($DomJackAPI,args);
 		}
+
+        function EmitState(_event){
+            var args,i;
+            initEventObj();
+            args = [];
+            args[0] = _event;
+            if(arguments.length > 1){
+                for (i = 1; i < arguments.length; i++){
+                    args[i] = arguments[i];
+                }
+            }
+            Events.EmitState.apply($DomJackAPI,args);
+        }
 		
 		function Clear(_event){
 			_event = (_event === undefined ? undefined : translateEvent(_event));

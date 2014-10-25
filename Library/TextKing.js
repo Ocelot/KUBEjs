@@ -7,9 +7,21 @@
     TextKing.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
     //Argument passed in should be an Array.  Font first, then size
     function TextKing(fontArg){
+        var font, fontSize;
         //I’m here to measure glyphs and chew bubblegum and I’m all out of bubblegum
-        var font = fontArg[0];
-        var fontSize = fontArg[1];
+        if(KUBE.Is(fontArg) === "array"){
+            if(fontArg.length >= 2){
+                font = fontArg[0];
+                fontSize = fontArg[1];
+            }
+            else{
+                throw new Error('TextKing requires 2 elements in the fontArg array. First is font, second is font size in px');
+            }
+        }
+        else{
+            throw new Error('TextKing requires an array to be passed in as its first argument, with 2 elements, first is font, 2nd is font size in px');
+        }
+
         var cachedChars = {};
         var DJ = KUBE.DomJack;
         doInitialCache();

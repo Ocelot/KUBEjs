@@ -77,7 +77,7 @@
 	//This is the coreView that gets passed into each view
 	UIView.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function UIView(_Parent,_viewName,_viewType,_id){
-		var Children,$ViewAPI,UpdateResolver;
+		var Children,$ViewAPI,UpdateResolver,CSSClass = null;
 		Children = [];
 		UpdateResolver = KUBE.Patience();
 		
@@ -87,6 +87,7 @@
 			'UpdateChildren':UpdateChildren,
 			'Delay':Delay,
 			'Parent':Parent,
+            'GenCSSClass': GenCSSClass,
 			'Root':Root,
             'Type':Type,
 			'Name':Name,
@@ -204,6 +205,10 @@
 			}
 			return $ViewAPI;
 		}
+
+        function GenCSSClass(){
+            return Root().CSSClass($ViewAPI);
+        }
 		
 		function processUpdate(_views,_behavior,viewResolver){
 			//Create/Update only
@@ -416,7 +421,7 @@
 	
 	//This is the RootView
 	function RootView(CoreView,id,data){
-		var View,SJ,DJ,SendHandler,responseCall,width,height,deleteQ;
+		var View,SJ,DJ,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [];
 
         deleteQ = [];
 		SJ = KUBE.StyleJack;
@@ -433,7 +438,8 @@
 			'Width':Width,
 			'Height':Height,
 			'Resize':Resize,
-            'DeleteQ':DeleteQ
+            'DeleteQ':DeleteQ,
+            'CSSClass': CSSClass
 		});		
 		create();
 		return CoreView;
@@ -469,6 +475,42 @@
             }
             else{
                 deleteQ.push(_UIView);
+            }
+        }
+
+        function CSSClass(_CoreView){
+            var classUsed;
+            var genClass;
+
+            do{
+                genClass = generateCSSClass();
+                classUsed = isClassUsed(genClass);
+            } while(classUsed.found === true);
+
+            CSSClassCache.push(genClass);
+
+            _CoreView.Once('delete',function(){
+                var classUse = isClassUsed(genClass);
+                CSSClassCache.splice(classUse.index,1);
+
+            });
+
+            return genClass;
+
+            function isClassUsed(_class){
+                var index = CSSClassCache.indexOf(_class);
+                return (index !== -1 ? {'found': true, 'index': index} : {'found': false, 'index' : false});
+            }
+
+            function generateCSSClass(){
+                var $return = [], index, char;
+                for(var i = 0; i < 52; i++){
+                    index = Math.floor(Math.random() * 26) + 65;
+                    char = String.fromCharCode(index);
+                    char = (Math.random() > 0.5 ? char.toLowerCase() : char);
+                    $return.push(char);
+                }
+                return $return.join("");
             }
         }
 		
