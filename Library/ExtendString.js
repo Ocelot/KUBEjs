@@ -18,6 +18,7 @@
         ExtendAPI.Load('string','stripNonNumeric',StripNonNumeric);
         ExtendAPI.Load('string','b64Encode',B64Encode);
         ExtendAPI.Load('string','b64Decode',B64Decode);
+        ExtendAPI.Load('string','format',Format);
 
 		KUBE.EmitState('ExtendString');
 		KUBE.console.log('ExtendString Loaded');
@@ -76,6 +77,16 @@
 		debugger;
 		return this;
 	}
+
+    function Format(formats){
+        var formats = (KUBE.Is(formats) !== "array" && arguments.length >= 1 ? Array.prototype.slice.call(arguments, 0)  : formats);
+        var idx = 0;
+        return this.replace(/%@([0-9]+)?/g, function(s,index){
+            index = (index ? parseInt(index, 10) - 1 : idx++);
+            s = formats[index];
+            return (s === undefined ? '%@'+index : "" + s);
+        });
+    }
 
     //LICENSE CHECK: http://www.webtoolkit.info/javascript-base64.html
     var Base64 = {
