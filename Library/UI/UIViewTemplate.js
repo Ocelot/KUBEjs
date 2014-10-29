@@ -1,3 +1,7 @@
+/*
+TODO: COMMENTS HERE
+ */
+
 (function(KUBE){
 	"use strict";
 	KUBE.Uses(['UI','DomJack','ObjectKUBE']).then(function(_UI){
@@ -9,6 +13,7 @@
 		
 		//Required additions to every view
 		create();
+
 		return CoreView.KUBE().merge({
 			'Get':Get,
 			'Read':Read,
@@ -52,6 +57,12 @@
 		function Add(){
 			//Wants to add a new view
 		}
+
+        //Private
+        function create(){
+            //Gets called at initialization, must emitState DrawFinish on CoreView after it is ready to be injected
+            CoreView.EmitState('drawFinish');
+        }
 	}
 	
 }(KUBE));
