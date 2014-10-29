@@ -4,7 +4,7 @@
 
 (function(KUBE){
     "use strict";
-    KUBE.LoadSingleton('ThemeManager', ThemeManager,['Theme','Appearance','DomJack','StyleJack','Hash','ExtendObject','Color']);
+    KUBE.LoadSingleton('/Library/ThemeManager', ThemeManager,['/Library/Theme','/Library/Appearance','/Library/DomJack','/Library/StyleJack','/Library/Hash','/Library/ExtendObject','/Library/Color']);
     ThemeManager.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function ThemeManager(){
@@ -61,7 +61,7 @@
         function GetNewAppearance(){
             var $Appearance;
             if(KUBE.Is(CurrentTheme,true) === 'Theme'){
-                $Appearance = KUBE.Appearance(CurrentTheme);
+                $Appearance = KUBE.Class('/Library/Appearance')(CurrentTheme);
             }
             return $Appearance;
         }

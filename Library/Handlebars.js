@@ -2,7 +2,7 @@
 	"use strict";
 
 	/* Load class */
-	KUBE.LoadFunction('Handlebars', Handlebars);
+	KUBE.LoadFunction('/Library/Handlebars', Handlebars);
 
 	Handlebars.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Handlebars() {

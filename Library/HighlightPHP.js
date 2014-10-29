@@ -32,7 +32,7 @@ KUBE Port: Ian Reid
 
 (function(KUBE){
     "use strict";
-    KUBE.LoadFactory('HighlightPHP', HighlightPHP,['StyleJack','ExtendObject','ExtendArray']);
+    KUBE.LoadFactory('/Library/HighlightPHP', HighlightPHP,['/Library/StyleJack','/Library/ExtendObject','/Library/ExtendArray']);
     HighlightPHP.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     var HighlightObj = new CoreHighlight();
@@ -78,7 +78,7 @@ KUBE Port: Ian Reid
         //This is a temporary measure. Will probably want to hook this into KUBE themeing? Something more flexible
         function initStyle() {
             var multiClassArray;
-            var SJ = KUBE.StyleJack;
+            var SJ = KUBE.Class('/Library/StyleJack');
             SJ('.hljs').Display('block').Padding('0.5em').Background().Color('#282b2e').api.Overflow().X('auto');
 
             multiClassArray = [

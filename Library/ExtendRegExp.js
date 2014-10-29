@@ -7,13 +7,13 @@
 	
 	/* Load functions */
 	var ExtendAPI;
-	KUBE.SetAsLoaded('ExtendRegExp');
+	KUBE.SetAsLoaded('/Library/ExtendRegExp');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('regExp','matchAll',MatchAll);
 		ExtendAPI.Load('regExp','matchAndReplace',MatchAndReplace);
 		ExtendAPI.Load('regExp','replaceCallback',ReplaceCallback);
-		KUBE.EmitState('ExtendRegExp');
+		KUBE.EmitState('/Library/ExtendRegExp');
 		KUBE.console.log('ExtendRegExp Loaded');
 	}
 	

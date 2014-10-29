@@ -29,7 +29,7 @@
 
         function parseAutoLoadPath(_src) {
             var paths = _src.split('/');
-            return paths.splice(0,paths.length-1).join('/') + '/';
+            return paths.splice(0,paths.length-1).join('/');
         }
 
         function srcFromCurrentScript(){
@@ -61,7 +61,7 @@
 
 	/* Load in Patience */
 	AutoLoader = new KUBELoader(KUBE);
-    AutoLoader.SetAutoPath(config.autoLoadPath+'/Library');
+    AutoLoader.SetAutoPath(config.autoLoadPath);
 	KUBE.LoadFactory('Patience', Patience);
 	KUBE.LoadSingletonFactory('Loader',KUBELoader);
 
@@ -150,8 +150,9 @@
 	
 	/* Primary definition */
 	function E(){
-		var nativeTable,$KUBEAPI;
-		
+		var nativeTable,kubeManager,$KUBEAPI;
+
+        kubeManager = {};
 		nativeTable = { '[object Boolean]':'boolean', '[object Number]':'number', '[object String]':'string', '[object Function]':'function', '[object Array]':'array', '[object Date]':'date', '[object RegExp]':'regExp', '[object Object]':'object', '[object Undefined]':'undefined', '[object Null]':'null' };
 		$KUBEAPI = {
 			'Is':Is,
@@ -164,9 +165,10 @@
 			'SetAsLoaded':SetAsLoaded,
 			'Extend':Extend,
 			'Events':Events,
-			'Config':Config
+			'Config':Config,
+            'Class':Class
 		};
-		
+
 		return $KUBEAPI;
 		
 		/* public */
@@ -195,8 +197,10 @@
 			}
 
 			function load(){
-				$KUBEAPI[_fName] = _f;
-				KUBE.console.log('successfully loaded '+_fName);
+				//$KUBEAPI[_fName] = _f;
+
+                kubeManager[_class] = _f;
+                KUBE.console.log('successfully loaded '+_fName);
 				$KUBEAPI.EmitState(_fName);
 			}
 		}
@@ -208,7 +212,7 @@
 			}
 
 			function load(){
-				$KUBEAPI[_class] = function(){
+                kubeManager[_class] = function(){
 					var args = arguments;
 					function F(){
 						return _classFunction.apply(_classFunction,args);
@@ -229,7 +233,7 @@
 			function load(){
 				var $static = _classFunction.apply(_classFunction);
 				$static = Events($static);
-				$KUBEAPI[_class] = function(){
+				kubeManager[_class] = function(){
 					return (KUBE.Is($static) === 'function' ? $static.apply($static, Array.prototype.slice.call(arguments)) : $static);
 				};
 				KUBE.console.log('successfully loaded '+_class);
@@ -245,7 +249,7 @@
 
 			function load(){
 				var staticInstances = {};
-				$KUBEAPI[_class] = function(instance){
+				kubeManager[_class] = function(instance){
 					if(instance && !staticInstances[String(instance).toLowerCase()]){
 						staticInstances[String(instance).toLowerCase()] = Events(_classFunction.call(_classFunction,instance));
 					}
@@ -275,6 +279,10 @@
             }
 			return AutoLoader.Uses(_dependancies,_callback);
 		}
+
+        function Class(_namespace){
+            return kubeManager[_namespace];
+        }
 
 		function Extend(){
 			return KUBEExtend();
@@ -1092,6 +1100,7 @@
 		}
 		
 		function triggerLoad(_class){
+            console.log(_class);
 			var i;
 			map[_class].state = 1;
 			EventEmitter.OnState(_class,function(){

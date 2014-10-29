@@ -3,11 +3,11 @@
 
     /* Load functions */
     var ExtendAPI;
-    KUBE.SetAsLoaded('ExtendMath');
+    KUBE.SetAsLoaded('/Library/ExtendMath');
     if(KUBE.Extend){
         ExtendAPI = KUBE.Extend();
         ExtendAPI.Load('Math','scaleAspectRatio',ScaleAspectRatio);
-        KUBE.EmitState('ExtendMath');
+        KUBE.EmitState('/Library/ExtendMath');
         KUBE.console.log('ExtendMath Loaded');
     }
 

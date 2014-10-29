@@ -2,8 +2,8 @@
 	"use strict";
 
 	/* Load class */
-	KUBE.LoadFactory('LinearGradient', LinearGradient,['Color','FeatureDetect','Convert','ExtendObject']);
-	KUBE.LoadFactory('RadialGradient', RadialGradient,['Color', 'FeatureDetect','Convert','ExtendObject']);
+	KUBE.LoadFactory('/Library/LinearGradient', LinearGradient,['/Library/Color','/Library/FeatureDetect','/Library/Convert','/Library/ExtendObject']);
+	KUBE.LoadFactory('/Library/RadialGradient', RadialGradient,['/Library/Color', '/Library/FeatureDetect','/Library/Convert','/Library/ExtendObject']);
 
 	KUBE.EmitState('Gradient');
 
@@ -13,8 +13,8 @@
 		//This means a few things.  Vertical and Horizontal define the "to" direction.  It also means that Angle is different.
 		//In W3C mode, an angle of "0" means gradient goes bottom to top.  In  "middle" syntax, 0 is left to right.
 		//The only time someone should be getting out "Middle" syntax gradient is specific versions of webkit that don't support W3C
-		var Detect = KUBE.FeatureDetect;
-		var Check = KUBE.ConvertCheck;
+		var Detect = KUBE.Class('/Library/FeatureDetect');
+		var Check = KUBE.Class('/Library/ConvertCheck');
         var gradientStore = {
 			"angle": '',
 			'direction': {

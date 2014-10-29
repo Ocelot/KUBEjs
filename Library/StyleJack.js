@@ -1,7 +1,16 @@
 (function(KUBE){
 	
 	//This is totally v3
-	KUBE.LoadFactory('StyleJack',StyleJack,['DomJack','FeatureDetect','Color','Convert','ExtendString','ExtendObject','ExtendRegExp']);
+    var dependancyArray = [
+        '/Library/DomJack',
+        '/Library/FeatureDetect',
+        '/Library/Color',
+        '/Library/Convert',
+        '/Library/ExtendString',
+        '/Library/ExtendObject',
+        '/Library/ExtendRegExp'
+    ];
+	KUBE.LoadFactory('/Library/StyleJack',StyleJack,dependancyArray);
 	
 	//If we are Superman, StyleJack is Lex Luthor AND KRYPTONITE
 	var prefix,Convert;
@@ -22,13 +31,13 @@
 		
 		function initConvert(){
 			if(!Convert){
-				Convert = KUBE.Convert;
+				Convert = KUBE.Class('/Library/Convert');
 			}
 		}
 		
 		function assignPrefix(){
 			if(prefix === undefined){
-				prefix = KUBE.FeatureDetect().Prefix();
+				prefix = KUBE.Class('/Library/FeatureDetect')().Prefix();
 			}
 		}
 	
@@ -495,7 +504,7 @@
 		Events = KUBE.Events();
 		
 		if(_styleObj instanceof HTMLElement){
-			KUBE.DomJack(_styleObj).Once('cleanup',function(){
+			KUBE.Class('/Library/DomJack')(_styleObj).Once('cleanup',function(){
 				_styleObj = undefined;
 			});
 		}
@@ -875,7 +884,7 @@
 				$return = RawStyleGet(_styleObj,'backgroundColor');
 			}
 			else{
-				RawStyleSet(_styleObj,_API,'backgroundColor', KUBE.Color().Format(_color,'rgb',true));
+				RawStyleSet(_styleObj,_API,'backgroundColor', KUBE.Class('/Library/Color')().Format(_color,'rgb',true));
 			}
 			return $return;			
 		}
@@ -1487,7 +1496,7 @@
 
         function getShadowValues(){
             var shadow, shadowString, initialParse, vals, color, result;
-            initialParse = KUBE.Color().ParseColor(fastGetSet('boxShadow'));
+            initialParse = KUBE.Class('/Library/Color')().ParseColor(fastGetSet('boxShadow'));
             shadowString = initialParse[0];
 
             result = /\[[^\]]*\]/.KUBE().matchAndReplace(shadowString);
@@ -1585,7 +1594,7 @@
 			$return = RawStyleGet(_styleObj,'color');
 		}
 		else{
-			RawStyleSet(_styleObj,_API,'color', (_color === 'transparent' ? 'transparent' : KUBE.Color().Format(_color,'rgb',true)));
+			RawStyleSet(_styleObj,_API,'color', (_color === 'transparent' ? 'transparent' : KUBE.Class('/Library/Color')().Format(_color,'rgb',true)));
 		}
 		return $return;
 	}				//COLOR:END
@@ -2366,7 +2375,7 @@
 
 			function getShadowValues(){
 				var shadow, shadowString, initialParse, vals, color, result;
-                initialParse = KUBE.Color().ParseColor(fastShadow());
+                initialParse = KUBE.Class('/Library/Color')().ParseColor(fastShadow());
 				shadowString = initialParse[0];
 
                 result = /\[[^\]]*\]/.KUBE().matchAndReplace(shadowString);

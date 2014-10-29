@@ -3785,12 +3785,13 @@
     
 
 
-    KUBE.LoadFactory('Velocity', VelocityKUBE,['DomJack']);
+    KUBE.LoadFactory('/Library/Velocity', VelocityKUBE,['/Library/DomJack','/Library/Convert']);
 
     //I'm assuming we'll want to pass a DomJack into Velocity but let's hold off on that for now and just look at the API
     VelocityKUBE.prototype.toString = function(){ return '[object '+this.constructor.name+']'; };
     function VelocityKUBE(_DomJack){
-        var $API,OptionStore,PropertyStore,V;
+        var $API,OptionStore,PropertyStore, V,Convert;
+        Convert = KUBE.Class('/Library/Convert');
 
         initVelocity();
         initKUBEAnimationExtends();
@@ -4028,12 +4029,12 @@
                     var S = _DomJack.Style();
                     var compStyle = window.getComputedStyle(_DomJack.GetNode());
                     var origSlide = {
-                        'width': S.Width() || KUBE.Convert(compStyle.width,'px','number'),
-                        'height': S.Height() || KUBE.Convert(compStyle.height,'px','number'),
-                        'top': S.Top() || KUBE.Convert(compStyle.top,'px','number'),
-                        'right': S.Right() || KUBE.Convert(compStyle.right,'px','number'),
-                        'bottom': S.Bottom() || KUBE.Convert(compStyle.bottom,'px','number'),
-                        'left': S.Left() || KUBE.Convert(compStyle.left,'px','number'),
+                        'width': S.Width() || Convert(compStyle.width,'px','number'),
+                        'height': S.Height() || Convert(compStyle.height,'px','number'),
+                        'top': S.Top() || Convert(compStyle.top,'px','number'),
+                        'right': S.Right() || Convert(compStyle.right,'px','number'),
+                        'bottom': S.Bottom() || Convert(compStyle.bottom,'px','number'),
+                        'left': S.Left() || Convert(compStyle.left,'px','number'),
                         'position': S.Position() || compStyle.position
                     };
                     return [compStyle, origSlide]
@@ -4062,7 +4063,7 @@
                         styleCalc = [],
                         begin = options.begin,
                         complete = options.complete,
-                        _DomJackAPI = KUBE.DomJack(element),
+                        _DomJackAPI = KUBE.Class('/Library/DomJack')(element),
                         S = _DomJackAPI.Style(),
                         SlideContainer;
 
@@ -4075,7 +4076,7 @@
 
                         function initSlideContainer(){
                             if(!SlideContainer){
-                                SlideContainer = KUBE.DomJack('div');
+                                SlideContainer = KUBE.Class('/Library/DomJack')('div');
                                 SlideContainer.SetAttribute('KUBEIDENT',"SLIDECONTROLLER");
                                 _DomJackAPI.Once('cleanupSlide',function(){
                                     SlideContainer.Delete();
@@ -4160,7 +4161,7 @@
                         styleCalc = [],
                         begin = options.begin,
                         complete = options.complete,
-                        _DomJackAPI = KUBE.DomJack(element),
+                        _DomJackAPI = KUBE.Class('/Library/DomJack')(element),
                         S = _DomJackAPI.Style(),
                         SlideContainer;
 
@@ -4174,7 +4175,7 @@
 
                         function initSlideContainer(){
                             if(!SlideContainer){
-                                SlideContainer = KUBE.DomJack('div');
+                                SlideContainer = KUBE.Class('/Library/DomJack')('div');
                                 SlideContainer.SetAttribute('KUBEIDENT',"SLIDECONTROLLER");
                                 _DomJackAPI.Once('cleanupSlide',function(){
                                     SlideContainer.Delete();
@@ -4245,10 +4246,10 @@
 
                     function slideOut(_direction){
                         switch(_direction){
-                            case 'left': destinationProps.left = -1 * KUBE.Convert(compStyle.width,'px','number'); break;
-                            case 'right': destinationProps.left = KUBE.Convert(compStyle.width,'px','number'); break;
-                            case 'up':case "top": destinationProps.top = -1 * KUBE.Convert(compStyle.height,'px','number'); break;
-                            case 'down':case "bottom": destinationProps.top = KUBE.Convert(compStyle.height,'px','number'); break;
+                            case 'left': destinationProps.left = -1 * Convert(compStyle.width,'px','number'); break;
+                            case 'right': destinationProps.left = Convert(compStyle.width,'px','number'); break;
+                            case 'up':case "top": destinationProps.top = -1 * Convert(compStyle.height,'px','number'); break;
+                            case 'down':case "bottom": destinationProps.top = Convert(compStyle.height,'px','number'); break;
                         }
 
                     }

@@ -21,7 +21,7 @@
 		}());
 	}
 	
-	KUBE.LoadSingleton('JSON',JSONPoly);
+	KUBE.LoadSingleton('/Library/JSON',JSONPoly);
 	function JSONPoly(){		
 		return JSON;
 	}	

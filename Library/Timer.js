@@ -1,5 +1,5 @@
 (function(KUBE){
-	KUBE.LoadFactory('Timer', Timer,['ExtendObject']);
+	KUBE.LoadFactory('/Library/Timer', Timer,['/Library/ExtendObject']);
 	
 	Timer.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
     function Timer(){

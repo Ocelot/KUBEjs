@@ -5,11 +5,12 @@
 
 //TODO: CHANGE THIS TO A FACTORY. SINGLETONS CAUSE PROBLEMS. REMEMBER UPLOAD EVENTS
 (function(KUBE){
-	KUBE.LoadSingletonFactory('Ajax', Ajax,['JSON','ExtendObject']);
+	KUBE.LoadSingletonFactory('/Library/Ajax', Ajax,['/Library/JSON','/Library/ExtendObject']);
 	
 	/* Currently this is an ugly piece of code and required refactoring and cleanup */
 	Ajax.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Ajax(){
+        var JSON = KUBE.Class('/Library/JSON');
 		var interrupt = false;
 		var processing = false;
 		var currentRequest;
@@ -184,7 +185,7 @@
 								response = XHR.responseText;
                                 if(response){
                                     try{
-                                        response = KUBE.JSON().parse(response);
+                                        response = JSON().parse(response);
                                     }
                                     catch(e){
                                         KUBE.console.log('AJAX ERROR: ',response);
@@ -250,14 +251,14 @@
 							$return = '';
 							for(var prop in _data){
 								key = encodeURIComponent(prop);
-								val = encodeURIComponent((KUBE.Is(_data[prop]) == 'object' ? KUBE.JSON().stringify(_data[prop]) : _data[prop]));
+								val = encodeURIComponent((KUBE.Is(_data[prop]) == 'object' ? JSON().stringify(_data[prop]) : _data[prop]));
 								$return = $return+(!count ? key+'='+val : '&'+key+'='+val);
 								count++;
 							}
 						}
 						else if(!_flatten && KUBE.Is(_data) == 'object'){
                             _XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-							$return = 'data='+encodeURIComponent((KUBE.Is(_data) == 'object' ? KUBE.JSON().stringify(_data) : _data));
+							$return = 'data='+encodeURIComponent((KUBE.Is(_data) == 'object' ? JSON().stringify(_data) : _data));
 						}
 						else{
                             _XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -287,7 +288,7 @@
 							count = 0;
 							for(var prop in _data){
 								key = encodeURIComponent(prop);
-								val = (KUBE.Is(_data[prop]) == 'object' ? encodeURIComponent(KUBE.JSON().stringify(_data[prop])) : (KUBE.Is(_data[prop]) == 'string' ? encodeURIComponent(_data[prop]) : ''));
+								val = (KUBE.Is(_data[prop]) == 'object' ? encodeURIComponent(JSON().stringify(_data[prop])) : (KUBE.Is(_data[prop]) == 'string' ? encodeURIComponent(_data[prop]) : ''));
 								uri = uri+(!count ? key+'='+val : '&'+key+'='+val);
 							}
 						}

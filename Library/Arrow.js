@@ -4,15 +4,16 @@
 
 (function(KUBE){
     "use strict";
-    KUBE.LoadFactory('Arrow', Arrow,['DomJack','StyleJack','ExtendObject','ExtendArray']);
+    KUBE.LoadFactory('/Library/Arrow', Arrow,['/Library/DomJack','/Library/StyleJack','/Library/ExtendObject','/Library/ExtendArray']);
     Arrow.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function Arrow(_width,_height){
-        var $API,Container,arrows,cWidth,cHeight;
+        var $API,Container,arrows,cWidth,cHeight,DomJack;
+        DomJack = KUBE.Class('/Library/DomJack');
         arrows = [];
         cWidth = (KUBE.Is(_width) === 'number' ? _width : 0);
         cHeight = (KUBE.Is(_height) === 'number' ? _height : 0);
-        Container = KUBE.DomJack('div');
+        Container = DomJack('div');
         Container.Style().Width(cWidth).Height(cHeight).Position('relative').Box().Sizing('border-box');
 
         $API = {

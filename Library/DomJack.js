@@ -8,7 +8,17 @@
 	"use strict";
 
     //Remove Animate from this, will be removing animations from it entirely as they don't belong here
-	KUBE.LoadFactory('DomJack', DomJack,['WinDocJack','StyleJack','FeatureDetect','Convert','ExtendArray','ExtendObject','ExtendRegExp']);
+    var dependancyArray = [
+        '/Library/WinDocJack',
+        '/Library/StyleJack',
+        '/Library/FeatureDetect',
+        '/Library/Convert',
+        '/Library/ExtendArray',
+        '/Library/ExtendObject',
+        '/Library/ExtendRegExp'
+    ];
+
+	KUBE.LoadFactory('/Library/DomJack', DomJack,dependancyArray);
 	
 	//These are global cache variables
 	var KUBENodeId,jackCache,cleanPointer,wordToKeyCodeMap,scheduleClean,cleanupCache;
@@ -99,7 +109,12 @@
 	DomJack.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	// Primary class declaration
 	function DomJack(initNode){
-		var Events,Node,nodeType,StyleJack,domListeners,id,mapId,rawAPI,$DomJackAPI = {},animationAPI,prefix,keyListener,keyStore,keyComboTriggered,keyF;
+		var FeatureDetect,SJ,DJ,Events,Node,nodeType,StyleJack,domListeners,id,mapId,rawAPI,$DomJackAPI = {},animationAPI,prefix,keyListener,keyStore,keyComboTriggered,keyF;
+
+        DJ = KUBE.Class('/Library/DomJack');
+        SJ = KUBE.Class('/Library/StyleJack');
+        FeatureDetect = KUBE.Class('/Library/FeatureDetect');
+
 		domListeners = {};
 		keyListener = false;
 		keyStore = {};
@@ -212,7 +227,7 @@
 		function initWinDocJack(_initVar){
 			var $return = false;
 			if(!_initVar || _initVar === window || _initVar === document){
-				$DomJackAPI = KUBE.WinDocJack();
+				$DomJackAPI = KUBE.Class('/Library/WinDocJack')();
 				$return = true;
 			}
 			return $return;
@@ -405,26 +420,26 @@
 		function GetRoot(){
 			return rGetRoot(Node);
 			function rGetRoot(_N){
-				return (_N.parentNode === null ? KUBE.DomJack(_N) : rGetRoot(_N.parentNode));
+				return (_N.parentNode === null ? DJ(_N) : rGetRoot(_N.parentNode));
 			}
 		}
 		
 		function GetParent(){
-			return (Node.parentNode !== null ? KUBE.DomJack(Node.parentNode) : false);
+			return (Node.parentNode !== null ? DJ(Node.parentNode) : false);
 		}
 		
 		function GetChildren(){
 			var i,$return = [];
 			if(Node.children.length){
 				for(i=0;i<Node.children.length;i++){
-					$return.push(KUBE.DomJack(Node.children[i]));
+					$return.push(DJ(Node.children[i]));
 				}
 			}
 			return $return;
 		}
 		
 		function GetChild(_index){
-			return (Node.children[_index] ? KUBE.DomJack(Node.children[_index]) : undefined);
+			return (Node.children[_index] ? DJ(Node.children[_index]) : undefined);
 		}
 		
 		function GetFirstChild(){
@@ -458,7 +473,7 @@
 		function Insert(_Node, _index){
 			var Inject,$return = false;
 			
-			Inject = KUBE.DomJack(_Node);
+			Inject = DJ(_Node);
 			
 			if(isDJ(Inject)){
 				$return = insertAtNumber(Inject,_index) || insertAtObject(Inject,_index) || Append(Inject);
@@ -489,7 +504,7 @@
 			var target,$return = false;
 			
 			if(KUBE.Is(_index) === 'object'){
-				target = KUBE.DomJack(_index);
+				target = DJ(_index);
 				if(isDJ(target) && target.GetParent().GetNode() === Node){
 					Node.insertBefore(_Inject.GetNode(),target.GetNode());
 					$return = true;
@@ -508,7 +523,7 @@
 			}
 			else{
 				var Inject,$return = false;
-				Inject = (!isDJ(_Node) ? KUBE.DomJack(_Node) : _Node);
+				Inject = (!isDJ(_Node) ? DJ(_Node) : _Node);
 				if(Inject){
 					Node.appendChild(Inject.GetNode());
 					Inject.UpdateAPI();
@@ -522,7 +537,7 @@
 		//Not sure about Before/After yet, will have to use them first
 		function InsertBefore(_Target){
 			var Parent;
-			_Target = (!isDJ(_Target) ? KUBE.DomJack(_Target) : _Target);
+			_Target = (!isDJ(_Target) ? DJ(_Target) : _Target);
 			if(_Target.GetParent()){
 				Parent = _Target.GetParent();
 				Parent.Insert($DomJackAPI,_Target.GetIndex());
@@ -531,7 +546,7 @@
 		
 		function InsertAfter(_Target){
 			var Parent;
-			_Target = (!isDJ(_Target) ? KUBE.DomJack(_Target) : _Target);
+			_Target = (!isDJ(_Target) ? DJ(_Target) : _Target);
 			if(_Target.GetParent()){
 				Parent = _Target.GetParent();
 				Parent.Insert($DomJackAPI,_Target.GetIndex()+1);
@@ -749,7 +764,7 @@
 			//Apparently at one point firefox did use mozAnimationEnd, and I don't know if IE9 ever supported animations. But regardless
 			//as of current testing, webkit is the only one who hasn't implemented it to spec
 			if(_event.substr(0,9) === 'animation' || _event.substr(0,10) === 'transition'){
-				prefix = prefix || KUBE.FeatureDetect().Prefix();
+				prefix = prefix || FeatureDetect.Prefix();
 				if(prefix === 'webkit'){
 					switch(_event){
 						case 'animationstart':
@@ -949,7 +964,7 @@
 		//Utilities		
 		//Warning: Copies need to be Deleted() after they have been used just like any other DomJack or they will result in a memory leak (cached, never released, etc)
 		function Copy(_recursive){
-			var Children,NewCopy = KUBE.DomJack(nodeType);
+			var Children,NewCopy = DJ(nodeType);
 			NewCopy.SetAttribute(GetAttribute());
 			NewCopy.SetMapId(mapId);
 			
@@ -1007,7 +1022,7 @@
 			var DJCopy,clientRect;
 			
 			//Where are we injecting?
-			_Parent = _Parent || KUBE.DomJack(document.body);
+			_Parent = _Parent || DJ(document.body);
 			
 			//Copy it
 			DJCopy = Copy();
@@ -1050,9 +1065,9 @@
             return _return;
         }
         function GetScrollBarDimensions(){
-            var container = KUBE.DomJack('div'),
-                inner = KUBE.DomJack('div'),
-                body =  KUBE.DomJack(document.body),
+            var container = DJ('div'),
+                inner = DJ('div'),
+                body =  DJ(document.body),
                 initialWidth = 200,
                 scrollBarWidth;
 
@@ -1067,7 +1082,7 @@
 		//Style management
 		function Style(){
 			if(!StyleJack){
-				StyleJack = KUBE.StyleJack(Node);
+				StyleJack = SJ(Node);
 			}
 			return StyleJack;
 		}
@@ -1082,7 +1097,7 @@
 			var $classes;
 			$classes = getFromClassList() || getFromClassName();			
 			$classes.KUBE().each(function(_val){
-				return KUBE.StyleJack(_val);
+				return SJ(_val);
 			},true);
 			return $classes;
 		}
@@ -1122,7 +1137,7 @@
                 if(_val){
                     //This is possibly retarded, although possibly awesome.
                     _val = (_val.substr(0,1) !== "." ? "." + _val : _val);
-                    $return[strVal] = KUBE.StyleJack(_val);
+                    $return[strVal] = SJ(_val);
                 }
 			});
 			return $return;
@@ -1551,7 +1566,7 @@
 		function findForm(_Node){
 			var $return = false;
 			if(_Node.parentNode && KUBE.Is(_Node.parentNode) === 'object' && KUBE.Is(_Node.parentNode.tagName) === 'string'){
-				$return = (_Node.parentNode.tagName.toLowerCase() === 'form' ? KUBE.DomJack(_Node.parentNode) : findForm(_Node.parentNode));
+				$return = (_Node.parentNode.tagName.toLowerCase() === 'form' ? DJ(_Node.parentNode) : findForm(_Node.parentNode));
 			}
 			return $return;
 		}
@@ -1562,7 +1577,7 @@
 		var i,DomNode,$return = [];
 		DomNode = _DJ.GetNode();
 		for(i=0;i<DomNode.length;i++){
-			$return.push(KUBE.DomJack(DomNode[i]));
+			$return.push(DJ(DomNode[i]));
 		}
 		return $return;
 	}
@@ -1632,7 +1647,7 @@
 	}
 	
 	function AddOptionGroup(_DJ,_label){
-		var OG = KUBE.DomJack('optgroup');
+		var OG = DJ('optgroup');
 		_DJ.Append(OG);
 		OG.Label(_label);
 		return OG;

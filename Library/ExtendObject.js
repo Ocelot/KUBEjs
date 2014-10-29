@@ -7,7 +7,7 @@
 
 	/* Load functions */
 	var ExtendAPI;
-	KUBE.SetAsLoaded('ExtendObject');
+	KUBE.SetAsLoaded('/Library/ExtendObject');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('object','merge',Merge);
@@ -19,7 +19,7 @@
 		ExtendAPI.Load('object','each',Each);
 		ExtendAPI.Load('object','duckType',DuckType);
 		ExtendAPI.Load('object','isEmpty',IsEmpty);
-		KUBE.EmitState('ExtendObject');
+		KUBE.EmitState('/Library/ExtendObject');
 		KUBE.console.log('ExtendObject Loaded');
 	}
 	

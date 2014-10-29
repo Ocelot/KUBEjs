@@ -1,7 +1,7 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFunction('Convert',Convert,['ExtendRegExp']);
-	KUBE.LoadFunction('ConvertCheck',ConvertCheck,['ExtendRegExp']);
+	KUBE.LoadFunction('/Library/Convert',Convert,['/Library/ExtendRegExp']);
+	KUBE.LoadFunction('/Library/ConvertCheck',ConvertCheck,['/Library/ExtendRegExp']);
 	
 	function Convert(_originalValue,_from,_to){
 		var conversionMethods = {

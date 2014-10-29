@@ -1,7 +1,7 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFactory('ControlPoint',ControlPoint,['ExtendObject']);
-	KUBE.LoadFactory('Bezier',Bezier,['ExtendObject']);
+	KUBE.LoadFactory('/Library/ControlPoint',ControlPoint,['/Library/ExtendObject']);
+	KUBE.LoadFactory('/Library/Bezier',Bezier,['/Library/ExtendObject']);
 
 	//http://wiki.teamfortress.com/w/images/6/69/Announcer_control_point_warning.wav?t=20100625225237
 	//OUR CONTROL POINT IS BEING CAPTURED

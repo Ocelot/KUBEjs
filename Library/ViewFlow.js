@@ -1,13 +1,13 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFactory('ViewFlow',ViewFlow,['DomJack','StyleJack','ExtendObject','ExtendArray']);
+	KUBE.LoadFactory('/Library/ViewFlow',ViewFlow,['/Library/DomJack','/Library/StyleJack','/Library/ExtendObject','/Library/ExtendArray']);
 	
 	ViewFlow.prototype.toString = function(){ return '[object '+this.constructor.name+']'; };
 	function ViewFlow(viewHeight,itemHeight,ItemMap,mapArray,Target){
 		var $API,DJ,SJ,TallBlock,ItemCache,positionCache,totalItems,pauseScroll,currentCount, currentScrollState = false;
 		
-		DJ = KUBE.DomJack;
-		SJ = KUBE.StyleJack;
+		DJ = KUBE.Class('/Library/DomJack');
+		SJ = KUBE.Class('/Library/StyleJack');
 
 		initQuickFlow();
 		$API = {
@@ -170,7 +170,7 @@
 		}
 
         function calcScrollBar(){
-            var scroll = KUBE.DomJack(document.body).GetScrollBarDimensions();
+            var scroll = DJ(document.body).GetScrollBarDimensions();
             var event = {};
             var previousScrollState = currentScrollState;
             var scrollHeight = Target.GetNode().scrollHeight

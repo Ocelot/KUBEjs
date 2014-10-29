@@ -4,7 +4,7 @@
 
 (function(KUBE){
     "use strict";
-    KUBE.LoadSingleton('Hash', Hash,['ExtendObject','ExtendArray','ExtendString']);
+    KUBE.LoadSingleton('/Library/Hash', Hash,['/Library/ExtendObject','/Library/ExtendArray','/Library/ExtendString']);
     Hash.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function Hash(){

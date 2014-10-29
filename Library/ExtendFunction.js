@@ -7,11 +7,11 @@
 	
 	/* Load functions */
 	var ExtendAPI;
-	KUBE.SetAsLoaded('ExtendFunction');
+	KUBE.SetAsLoaded('/Library/ExtendFunction');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('function','promise',Promise);
-		KUBE.EmitState('ExtendFunction');
+		KUBE.EmitState('/Library/ExtendFunction');
 		KUBE.console.log('ExtendFunction Loaded');
 	}
 	

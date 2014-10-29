@@ -7,7 +7,7 @@
 	var ExtendAPI;
 	
 	/* Load functions into Extend */
-	KUBE.SetAsLoaded('ExtendArray');
+	KUBE.SetAsLoaded('/Library/ExtendArray');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('array','joinCallback',JoinCallback);
@@ -16,7 +16,7 @@
 		ExtendAPI.Load('array','sum',Sum);
 		ExtendAPI.Load('array','rand',Rand);
 		ExtendAPI.Load('array','args',Args);
-		KUBE.EmitState('ExtendArray');
+		KUBE.EmitState('/Library/ExtendArray');
 		KUBE.console.log('ExtendArray Loaded');
 	}
 	

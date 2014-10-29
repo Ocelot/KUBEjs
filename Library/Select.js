@@ -1900,7 +1900,7 @@
 		return Sizzle;
 	}());
 	
-	KUBE.LoadFactory('Select', Select, ['DomJack','ExtendObject']);
+	KUBE.LoadFactory('/Library/Select', Select, ['/Library/DomJack','/Library/ExtendObject']);
 	
 	Select.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Select(){
@@ -1914,7 +1914,7 @@
 			var i,$return = [];
 			if(KUBE.Is(_array) === 'array'){
 				for(i=0;i<_array.length;i++){
-					$return.push(KUBE.DomJack(_array[i]));
+					$return.push(KUBE.Class('/Library/DomJack')(_array[i]));
 				}
 			}
 			return $return;

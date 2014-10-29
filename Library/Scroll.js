@@ -1,10 +1,11 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFactory("Scroll",Scroll,['DomJack','Bezier','ExtendObject']); //TODO: MathKUBE wut?
+	KUBE.LoadFactory("/Library/Scroll",Scroll,['/Library/DomJack','/Library/Bezier','/Library/ExtendObject']); //TODO: MathKUBE wut?
 	
 	Scroll.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Scroll(_DomJack){
-		var $scrollAPI, animating, interrupt, defaultAnimations;
+		var $scrollAPI, animating, interrupt, defaultAnimations,CP;
+        CP = KUBE.Class('/Library/ControlPoint');
 		animating = false;
 		interrupt = false;
 		$scrollAPI = {
@@ -20,13 +21,13 @@
 		}.KUBE().create(Scroll.prototype);
 
 		defaultAnimations = {
-			"easeIn": { "P1": KUBE.ControlPoint(0.42,0.00), "P2": KUBE.ControlPoint(1.00,1.00) },
-			"easeOut": { "P1": KUBE.ControlPoint(0.00,0.00), "P2": KUBE.ControlPoint(0.58,1.00) },
-			"ease" : { "P1": KUBE.ControlPoint(0.25,0.10), "P2": KUBE.ControlPoint(0.25,1.00) },
-			"easeInOut": { "P1": KUBE.ControlPoint(0.42,0.00), "P2": KUBE.ControlPoint(0.58,1.00) },
-			"linear" : { "P1": KUBE.ControlPoint(0.00,0.00), "P2": KUBE.ControlPoint(1.00,1.00) },
-			"crazy":{ "P1": KUBE.ControlPoint(0.02,0.99), "P2": KUBE.ControlPoint(0.98,0.02) },
-            "weird":{ "P1": KUBE.ControlPoint(0.65,0.42), "P2": KUBE.ControlPoint(0.3,1.5) }
+			"easeIn": { "P1": CP(0.42,0.00), "P2": CP(1.00,1.00) },
+			"easeOut": { "P1": CP(0.00,0.00), "P2": CP(0.58,1.00) },
+			"ease" : { "P1": CP(0.25,0.10), "P2": CP(0.25,1.00) },
+			"easeInOut": { "P1": CP(0.42,0.00), "P2": CP(0.58,1.00) },
+			"linear" : { "P1": CP(0.00,0.00), "P2": CP(1.00,1.00) },
+			"crazy":{ "P1": CP(0.02,0.99), "P2": CP(0.98,0.02) },
+            "weird":{ "P1": CP(0.65,0.42), "P2": CP(0.3,1.5) }
 		}
 
 		if(!isDJ(_DomJack)){
@@ -128,11 +129,10 @@
 		/* Private */
 		function animateScroll(_animationObj){
 			var duration, Bezier, DJNode, destinationObj = {}, initialPosition = {}, startTs = null;
-			Bezier = KUBE.Bezier(_animationObj.P1,_animationObj.P2,20);
+			Bezier = KUBE.Class('/Library/Bezier')(_animationObj.P1,_animationObj.P2,20);
 			duration = _animationObj.duration;
 			destinationObj = _animationObj.destination;
 			DJNode = _DomJack.GetNode();
-            window.XXX = Bezier;
 			initialPosition = {"x":DJNode.scrollLeft, "y":DJNode.scrollTop};
 
 			if(!_DomJack.IsDetached() && (destinationObj.x !== undefined || destinationObj.y !== undefined)){

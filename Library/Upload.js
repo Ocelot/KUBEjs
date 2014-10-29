@@ -1,6 +1,6 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFactory('Upload',Upload,['Ajax']);
+	KUBE.LoadFactory('/Library/Upload',Upload,['/Library/Ajax']);
 	//Unofficial codename is totally DangerZone, simply so we can have http://www.youtube.com/watch?v=siwpn14IE7E as its theme song.
 	Upload.prototype.toString = function(){return '[object ' + 'Upload]';};
 	function Upload(_DomJack, _UploadURL){
@@ -55,7 +55,7 @@
         }
 
 		function initAjax(){
-			Ajax = KUBE.Ajax(_UploadURL);
+			Ajax = KUBE.Class('/Library/Ajax')(_UploadURL);
             Ajax.Settings().Method('post');
 			Ajax.Settings().RequestHandler(_UploadURL);
             Ajax.On('response',handleResponse);

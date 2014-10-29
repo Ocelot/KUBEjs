@@ -4,7 +4,7 @@
 
 (function(KUBE){
     "use strict";
-    KUBE.LoadFactory('Appearance', Appearance,['Theme','ExtendObject']);
+    KUBE.LoadFactory('/Library/Appearance', Appearance,['/Library/Theme','/Library/ExtendObject']);
     Appearance.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
     function Appearance(_Theme){
         var $AppearanceAPI,appearanceList,using;
