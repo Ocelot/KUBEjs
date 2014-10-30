@@ -1,7 +1,7 @@
 (function(KUBE){
     var DOMIndex = KUBE.AutoLoad().GetNewIndex();
     DOMIndex.SetNamespace('/Library/DOM');
-    DOMIndex.SetBaseURL('KUBEjs/Library/DOM');
+    DOMIndex.SetBaseURL(KUBE.Config().autoLoadPath+'Library/DOM');
     DOMIndex.SetIndex([
         'Ajax',
         'DomJack',

@@ -1,8 +1,8 @@
 (function(KUBE){
 	"use strict";
-	var UIAutoLoader = KUBE.Loader();	
+	var UIAutoLoader = KUBE.Class('Loader')();
 	KUBE.LoadSingleton('/Library/UI/UI',UI,['/Library/DOM/Ajax','/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date']);
-	
+
 	UI.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function UI(){
 		var loadedViews,instances,$uiAPI;
@@ -11,7 +11,7 @@
 		instances = {};
 		$uiAPI = {
 			'Load':Load,
-			'AutoLoad':AutoLoad,
+            'AutoLoad':AutoLoad,
 			'Uses':Uses,
 			'CreateRoot':CreateRoot,
 			'Create':Create
@@ -41,10 +41,9 @@
 			KUBE.console.log('UI Loaded: '+_viewName);
 		}
 
-		//Autoloading
-		function AutoLoad(_map,_basePath,_overwrite){
-			UIAutoLoader.Map(_map,_basePath,_overwrite);
-		}
+        function AutoLoad(){
+            return UIAutoLoader;
+        }
 		
 		function Uses(_dependancies,_callback){
 			return UIAutoLoader.Uses(_dependancies,_callback);
@@ -79,7 +78,7 @@
 	function UIView(_Parent,_viewName,_viewType,_id){
 		var Children,$ViewAPI,UpdateResolver,CSSClass = null;
 		Children = [];
-		UpdateResolver = KUBE.Patience();
+		UpdateResolver = KUBE.Class('Patience')();
 		
 		$ViewAPI = {
 			'Find':Find,
@@ -292,7 +291,7 @@
 		}
 		
 		function createChildren(_createArray,viewResolver){
-			var P = KUBE.Patience();
+			var P = KUBE.Class('Patience')();
 			P.Wait(createFreezeTimer);
 			P.LazyLoop(_createArray,yieldChildren);
 			P.Wait(function(_tObj){
@@ -633,7 +632,7 @@
 		//This allows for autoloading of UI components
 		function autoLoad(_autoLoadInstructions){
 			if(KUBE.Is(_autoLoadInstructions) === 'object'){
-				KUBE.Class('/Library/UI/UI')().AutoLoad(_autoLoadInstructions.views,_autoLoadInstructions.basePath);
+                KUBE.Class('/Library/UI/UI')().AutoLoad().LoadAutoIndex(_autoLoadInstructions.namespace,_autoLoadInstructions.indexURL);
 			}
 		}
 

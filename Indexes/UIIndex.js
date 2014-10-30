@@ -1,7 +1,7 @@
 (function(KUBE){
     var UIIndex = KUBE.AutoLoad().GetNewIndex();
     UIIndex.SetNamespace('/Library/UI');
-    UIIndex.SetBaseURL('KUBEjs/Library/UI');
+    UIIndex.SetBaseURL(KUBE.Config().autoLoadPath+'Library/UI');
     UIIndex.SetIndex([
         'Appearance',
         'Theme',
@@ -9,6 +9,6 @@
         'UI'
     ]);
 
-    KUBE.AutoLoad().AddIndex(ToolsIndex);
+    KUBE.AutoLoad().AddIndex(UIIndex);
 
 }(KUBE));

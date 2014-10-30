@@ -5,23 +5,23 @@
 (function(KUBE){
     "use strict";
 
-    var uses = [
-        '/Library/UI/Theme',
-        '/Library/UI/Appearance',
-        '/Library/DOM/DomJack',
-        '/Library/DOM/StyleJack',
-        '/Library/Tools/Hash',
-        '/Library/Extend/Object',
-        '/Library/Drawing/Color'
-    ];
+    var uses = {
+        'Theme':'/Library/UI/Theme',
+        'Appearance':'/Library/UI/Appearance',
+        'DJ':'/Library/DOM/DomJack',
+        'SJ':'/Library/DOM/StyleJack',
+        'Hash':'/Library/Tools/Hash',
+        'XObject':'/Library/Extend/Object',
+        'Color':'/Library/Drawing/Color'
+    };
 
     KUBE.LoadSingleton('/Library/UI/ThemeManager', ThemeManager,uses);
     ThemeManager.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function ThemeManager(){
-        var $API,themeStore,CurrentTheme,Hash,SJ;
-        Hash = KUBE.Hash();
-        SJ = KUBE.StyleJack;
+        var $API,themeStore,CurrentTheme,Hash,SJ,$K;
+        $K = KUBE.Class(uses);
+
         themeStore = {};
         $API = {
             'LoadTheme':LoadTheme,
@@ -63,7 +63,7 @@
             var using,$return;
             if(KUBE.Is(_Appearance,true) === 'Appearance'){
                 using = _Appearance.GetUsing();
-                $return = '.s'+Hash.DeepHash(using);
+                $return = '.s'+$K.Hash().DeepHash(using);
                 initializeClass($return,_Appearance);
             }
             return $return;
@@ -72,7 +72,7 @@
         function GetNewAppearance(){
             var $Appearance;
             if(KUBE.Is(CurrentTheme,true) === 'Theme'){
-                $Appearance = KUBE.Class('/Library/UI/Appearance')(CurrentTheme);
+                $Appearance = $K.Appearance(CurrentTheme);
             }
             return $Appearance;
         }
@@ -80,7 +80,7 @@
         //Private
         function initializeClass(_className,_Appearance){
             var Visible,Active,Hover,Select,using;
-            Visible = SJ(_className);
+            Visible = $K.SJ(_className);
             //Active = SJ(_className+"::active");
             //Hover = SJ(_className+"::hover");
             //Select = SJ(_className+"::select");

@@ -918,7 +918,6 @@
     }
 
 	function KUBELoader(_EventObj,_StorageContext){
-        debugger;
 		var callQ,map,$API,EventEmitter,loadedCode,maps,autoPath,autoIndexPaths,deferred;
 		var StorageContext = (KUBE.Is(_StorageContext) === 'function' ? _StorageContext : null);
 		callQ = [];
@@ -1312,11 +1311,42 @@
 	}
 }(window,true));
 
-KUBE.AutoLoad().LoadAutoIndex('/Library/Test','KUBEjs/Indexes/TestIndex.js');
-KUBE.AutoLoad().LoadAutoIndex('/Library/DOM','KUBEjs/Indexes/DOMIndex.js');
-KUBE.AutoLoad().LoadAutoIndex('/Library/Drawing','KUBEjs/Indexes/DrawingIndex.js');
-KUBE.AutoLoad().LoadAutoIndex('/Library/Extend','KUBEjs/Indexes/ExtendIndex.js');
-KUBE.AutoLoad().LoadAutoIndex('/Library/Tools','KUBEjs/Indexes/ToolsIndex.js');
+
+function initDefaultConfig(){
+    var config = {
+        "autoLoadPath" : getAutoLoadPath(),
+        "debug": true
+    };
+    return config;
+
+    function getAutoLoadPath() {
+        var src = srcFromCurrentScript() || srcFallback();
+        return parseAutoLoadPath(src);
+    }
+
+    function parseAutoLoadPath(_src) {
+        var paths = _src.split('/');
+        return paths.splice(0,paths.length-1).join('/');
+    }
+
+    function srcFromCurrentScript(){
+        return (document.currentScript !== undefined) ? document.currentScript.getAttribute('src') : false;
+    }
+
+    function srcFallback(){
+        var scripts;
+        scripts = document.getElementsByTagName('script');
+        return scripts[scripts.length - 1].src;
+    }
+}
+
+KUBE.AutoLoad().LoadAutoIndex('/Library/Test',KUBE.Config().autoLoadPath+'Indexes/TestIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/DOM',KUBE.Config().autoLoadPath+'Indexes/DOMIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/Drawing',KUBE.Config().autoLoadPath+'Indexes/DrawingIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/Extend',KUBE.Config().autoLoadPath+'Indexes/ExtendIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/Tools',KUBE.Config().autoLoadPath+'Indexes/ToolsIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/UI',KUBE.Config().autoLoadPath+'Indexes/UIIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/FontAwesome',KUBE.Config().autoLoadPath+'Indexes/FontAwesome.js');
 
 
 //KUBEjs utilities will autoload out of the Library subdirectory.
