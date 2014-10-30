@@ -60,7 +60,7 @@
 	KUBE.console = window.console || initFakeConsole();
 
 	/* Load in Patience */
-	AutoLoader = new KUBELoader(KUBE);
+	AutoLoader = new KUBELoader(KUBE, KUBE.Class);
     //AutoLoader.SetAutoPath(config.autoLoadPath);
 	KUBE.LoadFactory('Patience', Patience);
 	KUBE.LoadSingletonFactory('Loader',KUBELoader);
@@ -269,19 +269,33 @@
 		}
 
 		function Uses(_dependancies,_callback){
-            //This could possibly be broken maybe.
-            if(KUBE.Is(_dependancies) === "string"){
-                var argsArray = Array.prototype.slice.call(arguments,0);
-                if(KUBE.Is(argsArray[argsArray.length - 1]) === "function"){
-                    _callback = argsArray.pop();
-                }
-                _dependancies = argsArray;
-            }
 			return AutoLoader.Uses(_dependancies,_callback);
 		}
 
-        function Class(_namespace){
-            return kubeManager[_namespace];
+        function Class(_mixed){
+            var $return;
+            switch(KUBE.Is(_mixed)){
+                case 'string':
+                    $return = kubeManager[_mixed];
+                    break;
+
+                case 'array':
+                    $return = [];
+                    for(var i=0;i<_mixed.length;i++){
+                        $return.push(kubeManager[_mixed[i]]);
+                    }
+                    break;
+
+                case 'object':
+                    $return = {};
+                    for(var aliasName in _mixed){
+                        if(_mixed.hasOwnProperty(aliasName)){
+                            $return[aliasName] = kubeManager[_mixed[aliasName]];
+                        }
+                    }
+                    break;
+            }
+            return $return;
         }
 
 		function Extend(){
@@ -903,9 +917,10 @@
         }
     }
 
-	function KUBELoader(_EventObj){
+	function KUBELoader(_EventObj,_StorageContext){
+        debugger;
 		var callQ,map,$API,EventEmitter,loadedCode,maps,autoPath,autoIndexPaths,deferred;
-		
+		var StorageContext = (KUBE.Is(_StorageContext) === 'function' ? _StorageContext : null);
 		callQ = [];
 		map = {};
 		maps = [];
@@ -915,11 +930,9 @@
         var waitForIndex = {};
 
 		$API = {
-			'Map':Map,
 			'Uses':Uses,
 			'SetEmitter':SetEmitter,
 			'SetAsLoaded':SetAsLoaded,
-//            'SetAutoPath':SetAutoPath,
             'GetNewIndex':GetNewIndex,
             'AddIndex':AddIndex,
             'LoadAutoIndex':LoadAutoIndex
@@ -977,15 +990,6 @@
             }
         }
 
-
-        //In the event that a request is made to a name that is not mapped, it will try to autoload from this path
-        //function SetAutoPath(_autoPath){
-        //    if(KUBE.Is(_autoPath) === 'string'){
-        //        autoPath = _autoPath;
-        //    }
-        //    return $API;
-        //}
-
 		//Set up our EventEmitter. Without this, Loader won't work
 		function SetEmitter(_EventObj){
 			if(KUBE.Is(_EventObj) === 'object' && KUBE.Is(_EventObj.Once) === 'function'){
@@ -1002,34 +1006,29 @@
 			}
 		}
 		
-		//Sets up our loader map
-		//function Map(_map,_basePath,_overwrite){
-		//	var prop;
-		//	_basePath = _basePath || '';
-		//	if(KUBE.Is(_map) === 'object'){
-		//		if(_overwrite) { overwrite(); }
-		//		for(prop in _map){
-		//			if(_map.hasOwnProperty(prop) && !map[prop]){
-		//				map[prop] = {'state':0,'src':_basePath+_map[prop]};
-		//			}
-		//		}
-		//	}
-		//}
-		
-		//function overwrite(){
-		//	var prop;
-		//	for(prop in map){
-		//		if(map.hasOwnProperty(prop) && !map[prop].state){
-		//			delete map[prop];
-		//		}
-		//	}
-		//}
-		
 		//Returns a promise, also will shortcut a second argument directly into the promise
 		function Uses(_dependancies,_callback,_useName){
-            console.log(_dependancies);
+            var aliasObject = false;
+            switch(KUBE.Is(_dependancies)){
+                case 'string':
+                    _dependancies = [_dependancies];
+                    break;
+
+                case 'object':
+                    var tempDependancies = [];
+                    for(var key in _dependancies){
+                        if(_dependancies.hasOwnProperty(key)){
+                            tempDependancies.push(_dependancies[key]);
+                        }
+                    }
+                    aliasObject = _dependancies;
+                    _dependancies = tempDependancies;
+                    break;
+            }
+
+
 			validateEmitter();
-			return (validateDependancies(_dependancies,_callback) ? getPromise(_dependancies,_callback,_useName) : false);
+			return (validateDependancies(_dependancies,_callback) ? getPromise(_dependancies,_callback,_useName,aliasObject) : false);
 		}
 		
 		function SetAsLoaded(_codeName){
@@ -1135,7 +1134,7 @@
 			return $allowDependancy;
 		}
 		
-		function getPromise(_dependancies,_callback,_useName){
+		function getPromise(_dependancies,_callback,_useName,_aliasObject){
 			var index;
 			
 			//Now, if _useName is set, we can look to see if a circular dependancy has been set up. If it has, we bail on the current one. Which resolves in reverse, etc
@@ -1146,13 +1145,13 @@
 			index = checkForExistingIndex(_dependancies) || getNewIndex(_dependancies);
 			addScripts(_dependancies);
 			if(KUBE.Is(_callback) === 'function'){
-				callQ[index].callbacks.push({'f':_callback,'resolveName':_useName});
+				callQ[index].callbacks.push({'f':_callback,'resolveName':_useName,'aliasObj':_aliasObject});
 				checkScriptReady(index);
 			}
 			return {
 				'then':function(_callback){
 					if(KUBE.Is(_callback) === 'function'){
-						callQ[index].callbacks.push({'f':_callback,'resolveName':_useName});
+						callQ[index].callbacks.push({'f':_callback,'resolveName':_useName,'aliasObj':_aliasObject});
 						checkScriptReady(index);
 					}
 				}
@@ -1210,23 +1209,48 @@
                     fire = false;
                 }
 			}
-			
 			fireCalls(fire,_index,args);
 		}
 		
 		function fireCalls(_fire,_index,_args){
-			var i,calls,call;
+			var i,calls,call,aliasObj;
 			if(_fire === true){
 				calls = callQ[_index].callbacks;
 				for(i=0;i<calls.length;i++){
 					if(calls[i] !== true){
-                        //TODO: this.classes. _args should be available KUBE.Class now, let's do stuff
+                        aliasObj = calls[i].aliasObj;
 						call = calls[i].f;
 						calls[i] = true;
-						call.apply(undefined,_args);
+
+						call.apply(undefined,(StorageContext ? buildArgs(_args,aliasObj) : []));
 					}
 				}
 			}
+
+            function buildArgs(_args,_aliasObj){
+                //So we have 2 variations, one is a multiargument list in order of the arguments that were passed in that contain the class/function constructs
+                var Alias,$return = [];
+                if(KUBE.Is(_aliasObj) === 'object'){
+                    Alias = {};
+                    for(var aliasName in _aliasObj){
+                        if(_aliasObj.hasOwnProperty(aliasName)){
+                            Alias[aliasName] = StorageContext(_aliasObj[aliasName]);
+                        }
+                    }
+                    $return.push(Alias);
+                }
+                else{
+                    for(var i=0;i<_args.length;i++){
+                        if(KUBE.Is(_args[i]) !== 'function'){
+                            $return.push(StorageContext(_args[i]));
+                        }
+                        else{
+                            $return.push(_args[i]);
+                        }
+                    }
+                }
+                return $return;
+            }
 		}
 		
 		function addArg(_argArray,_className){
