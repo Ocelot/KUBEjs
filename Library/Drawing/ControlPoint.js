@@ -1,6 +1,6 @@
 (function(KUBE){
     "use strict";
-    KUBE.LoadFactory('/Library/ControlPoint',ControlPoint,['/Library/ExtendObject']);
+    KUBE.LoadFactory('/Library/Drawing/ControlPoint',ControlPoint,['/Library/Extend/Object']);
 
     ControlPoint.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
     function ControlPoint(_x,_y,clipBounds){

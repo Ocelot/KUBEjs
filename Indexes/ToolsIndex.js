@@ -4,6 +4,7 @@
     ToolsIndex.SetBaseURL('KUBEjs/Library/Tools');
     ToolsIndex.SetIndex([
         'Convert',
+        'ConvertCheck',
         'Handlebars',
         'Hash'
     ]);

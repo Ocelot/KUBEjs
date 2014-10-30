@@ -1,7 +1,7 @@
 (function(KUBE){
 	"use strict";
 	var UIAutoLoader = KUBE.Loader();	
-	KUBE.LoadSingleton('/Library/UI',UI,['/Library/Ajax','/Library/DomJack','/Library/StyleJack','/Library/ExtendObject','/Library/ExtendArray','/Library/ExtendDate']);
+	KUBE.LoadSingleton('/Library/UI/UI',UI,['/Library/DOM/Ajax','/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date']);
 	
 	UI.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function UI(){
@@ -240,7 +240,7 @@
 		}
 
 		function createFreezeTimer(){
-			var timeoutObj = setTimeout(function(){ KUBE.Class('/Library/Ajax')('Action').Emit('freeze',true); },250);
+			var timeoutObj = setTimeout(function(){ KUBE.Class('/Library/DOM/Ajax')('Action').Emit('freeze',true); },250);
 			this.resolve(timeoutObj);			
 		}
 		
@@ -255,7 +255,7 @@
 				}
 				catch(E){
 					if(E.message === 'UI Could not create new view. Has not been loaded' && choke < 50){
-						KUBE.Class('/Library/UI')().Uses([newChild.name],function(){
+						KUBE.Class('/Library/UI/UI')().Uses([newChild.name],function(){
 							yieldChildren(i,_views,timeoutObj,resolver,++choke);
 						});
 					}
@@ -285,7 +285,7 @@
 		
 		function finishUpdate(_timeoutObj){
 			clearTimeout(_timeoutObj);
-			KUBE.Class('/Library/Ajax')('Action').Emit('freeze',false);
+			KUBE.Class('/Library/DOM/Ajax')('Action').Emit('freeze',false);
 			if(KUBE.Is($ViewAPI.AddFinish) === 'function'){
 				$ViewAPI.AddFinish();
 			}
@@ -375,7 +375,7 @@
 		function createNewChildView(viewObject){
 			//_Parent,_type,_createId,_data
 			var numChildren = (KUBE.Is(viewObject.views) === 'array' && viewObject.views.length ? viewObject.views.length : 0);
-			return KUBE.Class('/Library/UI')().Create($ViewAPI,viewObject.name,viewObject.type,viewObject.id,viewObject.data,numChildren);
+			return KUBE.Class('/Library/UI/UI')().Create($ViewAPI,viewObject.name,viewObject.type,viewObject.id,viewObject.data,numChildren);
 		}
 		
 		function updateChildView(_ChildView,_data,_views,_behavior){
@@ -424,8 +424,8 @@
 		var View,SJ,DJ,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [];
 
         deleteQ = [];
-		SJ = KUBE.Class('/Library/StyleJack');
-		DJ = KUBE.Class('/Library/DomJack');
+		SJ = KUBE.Class('/Library/DOM/StyleJack');
+		DJ = KUBE.Class('/Library/DOM/DomJack');
 		
 		CoreView.KUBE().merge({
 			'Get':Get,
@@ -633,7 +633,7 @@
 		//This allows for autoloading of UI components
 		function autoLoad(_autoLoadInstructions){
 			if(KUBE.Is(_autoLoadInstructions) === 'object'){
-				KUBE.Class('/Library/UI')().AutoLoad(_autoLoadInstructions.views,_autoLoadInstructions.basePath);
+				KUBE.Class('/Library/UI/UI')().AutoLoad(_autoLoadInstructions.views,_autoLoadInstructions.basePath);
 			}
 		}
 

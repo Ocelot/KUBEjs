@@ -199,7 +199,7 @@
 			function load(){
 				//$KUBEAPI[_fName] = _f;
 
-                kubeManager[_class] = _f;
+                kubeManager[_fName] = _f;
                 KUBE.console.log('successfully loaded '+_fName);
 				$KUBEAPI.EmitState(_fName);
 			}
@@ -1027,6 +1027,7 @@
 		
 		//Returns a promise, also will shortcut a second argument directly into the promise
 		function Uses(_dependancies,_callback,_useName){
+            console.log(_dependancies);
 			validateEmitter();
 			return (validateDependancies(_dependancies,_callback) ? getPromise(_dependancies,_callback,_useName) : false);
 		}
@@ -1243,7 +1244,6 @@
 		}
 		
 		function triggerLoad(_class){
-            console.log(_class);
 			var i;
 			map[_class].state = 1;
 			EventEmitter.OnState(_class,function(){

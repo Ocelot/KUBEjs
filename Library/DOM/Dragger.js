@@ -4,7 +4,7 @@
 
 (function(KUBE){
     "use strict";
-    KUBE.LoadSingletonFactory('/Library/Dragger', Dragger,['/Library/DomJack','/Library/StyleJack','/Library/ExtendObject','/Library/ExtendArray']);
+    KUBE.LoadSingletonFactory('/Library/DOM/Dragger', Dragger,['/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Extend/Object','/Library/Extend/Array']);
     Dragger.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function Dragger(){

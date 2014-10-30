@@ -8,7 +8,7 @@
 	
 	/* Load functions */
 	var ExtendAPI;
-	KUBE.SetAsLoaded('/Library/ExtendString');
+	KUBE.SetAsLoaded('/Library/Extend/String');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('string','trim',Trim);
@@ -20,8 +20,8 @@
         ExtendAPI.Load('string','b64Decode',B64Decode);
         ExtendAPI.Load('string','format',Format);
 
-		KUBE.EmitState('/Library/ExtendString');
-		KUBE.console.log('ExtendString Loaded');
+		KUBE.EmitState('/Library/Extend/String');
+		KUBE.console.log('/Library/Extend/String Loaded');
 	}
 	
 	/* Declare functions */

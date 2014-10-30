@@ -4,7 +4,18 @@
 
 (function(KUBE){
     "use strict";
-    KUBE.LoadSingleton('/Library/ThemeManager', ThemeManager,['/Library/Theme','/Library/Appearance','/Library/DomJack','/Library/StyleJack','/Library/Hash','/Library/ExtendObject','/Library/Color']);
+
+    var uses = [
+        '/Library/UI/Theme',
+        '/Library/UI/Appearance',
+        '/Library/DOM/DomJack',
+        '/Library/DOM/StyleJack',
+        '/Library/Tools/Hash',
+        '/Library/Extend/Object',
+        '/Library/Drawing/Color'
+    ];
+
+    KUBE.LoadSingleton('/Library/UI/ThemeManager', ThemeManager,uses);
     ThemeManager.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function ThemeManager(){
@@ -61,7 +72,7 @@
         function GetNewAppearance(){
             var $Appearance;
             if(KUBE.Is(CurrentTheme,true) === 'Theme'){
-                $Appearance = KUBE.Class('/Library/Appearance')(CurrentTheme);
+                $Appearance = KUBE.Class('/Library/UI/Appearance')(CurrentTheme);
             }
             return $Appearance;
         }

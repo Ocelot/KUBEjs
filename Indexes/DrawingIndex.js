@@ -3,17 +3,10 @@
     DrawingIndex.SetNamespace('/Library/Drawing');
     DrawingIndex.SetBaseURL('KUBEjs/Library/Drawing');
     DrawingIndex.SetIndex([
-        'Ajax',
-        'DomJack',
-        'Dragger',
-        'FeatureDetect',
-        'Scroll',
-        'Select',
-        'StyleJack',
-        'TextKing',
-        'Upload',
-        'Velocity',
-        'WinDocJack'
+        'Arrow',
+        'Bezier',
+        'Color',
+        'ControlPoint'
     ]);
 
     KUBE.AutoLoad().AddIndex(DrawingIndex);

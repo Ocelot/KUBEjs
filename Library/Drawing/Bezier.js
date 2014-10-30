@@ -25,7 +25,7 @@
 
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFactory('/Library/Bezier',Bezier,['/Library/ExtendObject', '/Library/ControlPoint']);
+	KUBE.LoadFactory('/Library/Drawing/Bezier',Bezier,['/Library/Extend/Object', '/Library/Drawing/ControlPoint']);
 
 	Bezier.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Bezier(_CP1,_CP2,_NRIteration){

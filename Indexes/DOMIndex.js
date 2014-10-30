@@ -11,7 +11,6 @@
         'Select',
         'StyleJack',
         'TextKing',
-        'Upload',
         'Velocity',
         'WinDocJack'
     ]);

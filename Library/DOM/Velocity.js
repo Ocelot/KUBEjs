@@ -3785,13 +3785,14 @@
     
 
 
-    KUBE.LoadFactory('/Library/Velocity', VelocityKUBE,['/Library/DomJack','/Library/Convert']);
+    KUBE.LoadFactory('/Library/DOM/Velocity', VelocityKUBE,['/Library/DOM/DomJack','/Library/Tools/Convert']);
 
     //I'm assuming we'll want to pass a DomJack into Velocity but let's hold off on that for now and just look at the API
     VelocityKUBE.prototype.toString = function(){ return '[object '+this.constructor.name+']'; };
     function VelocityKUBE(_DomJack){
-        var $API,OptionStore,PropertyStore, V,Convert;
-        Convert = KUBE.Class('/Library/Convert');
+        var $API,OptionStore,PropertyStore, V,Convert,DJ;
+        Convert = KUBE.Class('/Library/Tools/Convert');
+        DJ = KUBE.Class('/Library/DOM/DomJack');
 
         initVelocity();
         initKUBEAnimationExtends();
@@ -4063,7 +4064,7 @@
                         styleCalc = [],
                         begin = options.begin,
                         complete = options.complete,
-                        _DomJackAPI = KUBE.Class('/Library/DomJack')(element),
+                        _DomJackAPI = DJ(element),
                         S = _DomJackAPI.Style(),
                         SlideContainer;
 
@@ -4076,7 +4077,7 @@
 
                         function initSlideContainer(){
                             if(!SlideContainer){
-                                SlideContainer = KUBE.Class('/Library/DomJack')('div');
+                                SlideContainer = DJ('div');
                                 SlideContainer.SetAttribute('KUBEIDENT',"SLIDECONTROLLER");
                                 _DomJackAPI.Once('cleanupSlide',function(){
                                     SlideContainer.Delete();
@@ -4161,7 +4162,7 @@
                         styleCalc = [],
                         begin = options.begin,
                         complete = options.complete,
-                        _DomJackAPI = KUBE.Class('/Library/DomJack')(element),
+                        _DomJackAPI = DJ(element),
                         S = _DomJackAPI.Style(),
                         SlideContainer;
 
@@ -4175,7 +4176,7 @@
 
                         function initSlideContainer(){
                             if(!SlideContainer){
-                                SlideContainer = KUBE.Class('/Library/DomJack')('div');
+                                SlideContainer = DJ('div');
                                 SlideContainer.SetAttribute('KUBEIDENT',"SLIDECONTROLLER");
                                 _DomJackAPI.Once('cleanupSlide',function(){
                                     SlideContainer.Delete();

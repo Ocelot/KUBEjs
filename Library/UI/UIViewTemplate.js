@@ -4,13 +4,13 @@ TODO: COMMENTS HERE
 
 (function(KUBE){
 	"use strict";
-	KUBE.Uses(['UI','DomJack','ObjectKUBE']).then(function(_UI){
+	KUBE.Uses(['/Library/UI/UI','/Library/DOM/DomJack','/Library/Extend/Object']).then(function(_UI){
 		_UI().Load('NewView',NewView);
 	});
 	
 	function NewView(CoreView,id,data,numChildren){
-		var DomView = KUBE.DomJack('div');
-		
+		var DomView = KUBE.Class('/Library/DOM/DomJack');
+
 		//Required additions to every view
 		create();
 
