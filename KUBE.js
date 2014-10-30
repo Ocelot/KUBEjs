@@ -61,7 +61,7 @@
 
 	/* Load in Patience */
 	AutoLoader = new KUBELoader(KUBE);
-    AutoLoader.SetAutoPath(config.autoLoadPath);
+    //AutoLoader.SetAutoPath(config.autoLoadPath);
 	KUBE.LoadFactory('Patience', Patience);
 	KUBE.LoadSingletonFactory('Loader',KUBELoader);
 
@@ -260,8 +260,8 @@
 			}
 		}
 
-		function AutoLoad(_map,_overwrite){
-			AutoLoader.Map(_map,config.autoLoadPath,_overwrite);
+		function AutoLoad(){
+            return AutoLoader;
 		}
 
 		function SetAsLoaded(_codeName){
@@ -853,34 +853,138 @@
 			}
 		}
 	}
-	
+
+    //KUBELoaderIndex
+    function KUBELoaderIndex(){
+        var $API,index,namespace,baseURL;
+        $API = {
+            'GetIndex':GetIndex,
+            'GetNamespace':GetNamespace,
+            'GetBaseURL':GetBaseURL,
+            'SetIndex':SetIndex,
+            'SetNamespace':SetNamespace,
+            'SetBaseURL':SetBaseURL
+        };
+        return $API;
+
+        //Getters
+        function GetNamespace(){
+            return namespace;
+        }
+
+        function GetBaseURL(){
+            return baseURL;
+        }
+
+        function GetIndex(){
+            return index;
+        }
+
+        //Setters
+        function SetNamespace(_namespace){
+            if(KUBE.Is(_namespace) === 'string'){
+                namespace = _namespace;
+            }
+            return $API;
+        }
+
+        function SetBaseURL(_baseURL){
+            if(KUBE.Is(_baseURL) === 'string'){
+                baseURL = _baseURL;
+            }
+            return $API;
+        }
+
+        function SetIndex(_index){
+            if(KUBE.Is(_index) === 'array'){
+                index = _index;
+            }
+            return $API;
+        }
+    }
+
 	function KUBELoader(_EventObj){
-		var callQ,map,$API,EventEmitter,loadedCode,maps,autoPath;
+		var callQ,map,$API,EventEmitter,loadedCode,maps,autoPath,autoIndexPaths,deferred;
 		
 		callQ = [];
 		map = {};
 		maps = [];
 		loadedCode = {};
+        autoIndexPaths = {};
+        deferred = [];
+        var waitForIndex = {};
 
 		$API = {
 			'Map':Map,
 			'Uses':Uses,
 			'SetEmitter':SetEmitter,
 			'SetAsLoaded':SetAsLoaded,
-            'SetAutoPath':SetAutoPath
+//            'SetAutoPath':SetAutoPath,
+            'GetNewIndex':GetNewIndex,
+            'AddIndex':AddIndex,
+            'LoadAutoIndex':LoadAutoIndex
 		};
 		if(_EventObj){
 			SetEmitter(_EventObj);
 		}
 		return $API;
 
-        //In the event that a request is made to a name that is not mapped, it will try to autoload from this path
-        function SetAutoPath(_autoPath){
-            if(KUBE.Is(_autoPath) === 'string'){
-                autoPath = _autoPath;
-            }
-            return $API;
+        //Working on our new AutoIndex methodology
+        function GetNewIndex(){
+            return new KUBELoaderIndex();
         }
+
+        function AddIndex(_AutoIndex){
+            //_AutoIndex should be KUBEAutoIndex (we may want to verify this later)
+            var baseURL,namespace,index,fullNS,fullSrc;
+            baseURL = _AutoIndex.GetBaseURL();
+            namespace = _AutoIndex.GetNamespace();
+            index = _AutoIndex.GetIndex();
+
+            for(var i=0;i<index.length;i++){
+                fullNS = namespace+"/"+index[i];
+                if(!map[fullNS]){
+                    fullSrc = baseURL+"/"+index[i]+".js";
+                    map[fullNS] = {'state':0,'src':fullSrc};
+                }
+            }
+
+            //Then we copy our deferred list, turn the new one into a new array, and attempt to validate / load scripts
+            var deferredCopy = deferred;
+            deferred = [];
+            for(var i=0;i<deferredCopy.length;i++){
+                if(validateDependancies(deferredCopy[i])){
+                    addScripts(deferredCopy[i]);
+                }
+            }
+        }
+
+        function LoadAutoIndex(_namespace,_indexURL){
+            if(!autoIndexPaths[_namespace]){
+                autoIndexPaths[_namespace] = [];
+            }
+
+            var addNew = true;
+            for(var i=0;i<autoIndexPaths[_namespace].length;i++){
+                if(autoIndexPaths[_namespace][i] == _indexURL){
+                    addNew = false;
+                    break;
+                }
+            }
+
+            if(addNew){
+                autoIndexPaths[_namespace].push(_indexURL);
+            }
+        }
+
+
+        //In the event that a request is made to a name that is not mapped, it will try to autoload from this path
+        //function SetAutoPath(_autoPath){
+        //    if(KUBE.Is(_autoPath) === 'string'){
+        //        autoPath = _autoPath;
+        //    }
+        //    return $API;
+        //}
 
 		//Set up our EventEmitter. Without this, Loader won't work
 		function SetEmitter(_EventObj){
@@ -899,32 +1003,32 @@
 		}
 		
 		//Sets up our loader map
-		function Map(_map,_basePath,_overwrite){
-			var prop;
-			_basePath = _basePath || '';
-			if(KUBE.Is(_map) === 'object'){
-				if(_overwrite) { overwrite(); }
-				for(prop in _map){
-					if(_map.hasOwnProperty(prop) && !map[prop]){
-						map[prop] = {'state':0,'src':_basePath+_map[prop]};
-					}
-				}
-			}
-		}
+		//function Map(_map,_basePath,_overwrite){
+		//	var prop;
+		//	_basePath = _basePath || '';
+		//	if(KUBE.Is(_map) === 'object'){
+		//		if(_overwrite) { overwrite(); }
+		//		for(prop in _map){
+		//			if(_map.hasOwnProperty(prop) && !map[prop]){
+		//				map[prop] = {'state':0,'src':_basePath+_map[prop]};
+		//			}
+		//		}
+		//	}
+		//}
 		
-		function overwrite(){
-			var prop;
-			for(prop in map){
-				if(map.hasOwnProperty(prop) && !map[prop].state){
-					delete map[prop];
-				}
-			}
-		}
+		//function overwrite(){
+		//	var prop;
+		//	for(prop in map){
+		//		if(map.hasOwnProperty(prop) && !map[prop].state){
+		//			delete map[prop];
+		//		}
+		//	}
+		//}
 		
 		//Returns a promise, also will shortcut a second argument directly into the promise
 		function Uses(_dependancies,_callback,_useName){
 			validateEmitter();
-			return (validateDependancies(_dependancies) ? getPromise(_dependancies,_callback,_useName) : false);
+			return (validateDependancies(_dependancies,_callback) ? getPromise(_dependancies,_callback,_useName) : false);
 		}
 		
 		function SetAsLoaded(_codeName){
@@ -933,20 +1037,56 @@
 			}
 		}
 
+
         function validateDependancies(_dependancies){
-            var className,$return = false;
+            var className,defer,$return;
+            $return = false;
+            defer = false;
             if(KUBE.Is(_dependancies) === 'array'){
                 $return = true;
-                if(autoPath){
-                    for(i=0;i<_dependancies.length;i++){
-                        className = _dependancies[i];
-                        if(!map[className]){
-                            map[className] = {'state':0,'src':autoPath+"/"+className+".js"};
+                for(var i=0;i<_dependancies.length;i++){
+                    className = _dependancies[i];
+                    if(!map[className]){
+                        //This is where we want to attempt to load in the namespace?
+                        var nameSpace = parseNamespace(className);
+                        if(nameSpace && autoIndexPaths[nameSpace]){
+                            if(!waitForIndex[nameSpace]){
+                                waitForIndex[nameSpace] = true;
+                                for(var i2=0;i2<autoIndexPaths[nameSpace].length;i2++){
+                                    initAutoLoadLoop(autoIndexPaths[nameSpace],className);
+                                }
+                            }
+                            defer = true;
+                        }
+                        else{
+                            //In this case a request for a namespace that has not been set up has occurred. So throw an error I'd imagine?
                         }
                     }
                 }
             }
+
+            if(defer){
+                var add = true;
+                for(var i=0;i<deferred.length;i++){
+                    if(compareArray(_dependancies,deferred[i])){
+                        add = false;
+                        break;
+                    }
+                }
+                if(add){
+                    deferred.push(_dependancies);
+                }
+            }
+
             return $return;
+        }
+
+        function parseNamespace(_classPath){
+            if(KUBE.Is(_classPath) === 'string'){
+                var splitPath = _classPath.split("/");
+                splitPath.pop();
+                return splitPath.join("/");
+            }
         }
 		
 		//The following is a bit hacky. Refactor
@@ -1065,6 +1205,9 @@
 						addArg(args,dependancies[i]);
 					}
 				}
+                else{
+                    fire = false;
+                }
 			}
 			
 			fireCalls(fire,_index,args);
@@ -1076,9 +1219,8 @@
 				calls = callQ[_index].callbacks;
 				for(i=0;i<calls.length;i++){
 					if(calls[i] !== true){
-                        //TODO: this.classes
+                        //TODO: this.classes. _args should be available KUBE.Class now, let's do stuff
 						call = calls[i].f;
-						calls[i] = true;
 						calls[i] = true;
 						call.apply(undefined,_args);
 					}
@@ -1124,8 +1266,34 @@
 			script.src = _src;
 			document.head.appendChild(script);
 		}
+
+        //This occurs when a namespace has been requested that we do not have an actively mapped class for. If there was
+        function initAutoLoadLoop(_indexSrc,_class){
+            var totalLoops = 0;
+            var loopId = setInterval(function(){
+                if(!map[_class]){
+                    totalLoops++;
+                    if(totalLoops > 25){
+                        clearTimeout(loopId);
+                    }
+                    else{
+                        fetchScript(_indexSrc);
+                    }
+                }
+                else{
+                    clearTimeout(loopId);
+                }
+            },200);
+        }
 	}
 }(window,true));
+
+KUBE.AutoLoad().LoadAutoIndex('/Library/Test','KUBEjs/Indexes/TestIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/DOM','KUBEjs/Indexes/DOMIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/Drawing','KUBEjs/Indexes/DrawingIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/Extend','KUBEjs/Indexes/ExtendIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/Tools','KUBEjs/Indexes/ToolsIndex.js');
+
 
 //KUBEjs utilities will autoload out of the Library subdirectory.
 //External classes will need to use KUBE.AutoLoad({ClassName:FilePath})
