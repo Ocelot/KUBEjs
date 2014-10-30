@@ -3,12 +3,12 @@
 
     /* Load functions */
     var ExtendAPI;
-    KUBE.SetAsLoaded('/Library/ExtendMath');
+    KUBE.SetAsLoaded('/Library/Extend/Math');
     if(KUBE.Extend){
         ExtendAPI = KUBE.Extend();
         ExtendAPI.Load('Math','scaleAspectRatio',ScaleAspectRatio);
-        KUBE.EmitState('/Library/ExtendMath');
-        KUBE.console.log('ExtendMath Loaded');
+        KUBE.EmitState('/Library/Extend/Math');
+        KUBE.console.log('/Library/Extend/Math Loaded');
     }
 
     /* Declare functions */

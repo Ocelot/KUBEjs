@@ -7,14 +7,14 @@
 	
 	/* Load functions */
 	var ExtendAPI;
-	KUBE.SetAsLoaded('/Library/ExtendRegExp');
+	KUBE.SetAsLoaded('/Library/Extend/RegExp');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('regExp','matchAll',MatchAll);
 		ExtendAPI.Load('regExp','matchAndReplace',MatchAndReplace);
 		ExtendAPI.Load('regExp','replaceCallback',ReplaceCallback);
-		KUBE.EmitState('/Library/ExtendRegExp');
-		KUBE.console.log('ExtendRegExp Loaded');
+		KUBE.EmitState('/Library/Extend/RegExp');
+		KUBE.console.log('/Library/Extend/RegExp Loaded');
 	}
 	
 	/* Declare functions */

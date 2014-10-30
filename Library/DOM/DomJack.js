@@ -9,16 +9,16 @@
 
     //Remove Animate from this, will be removing animations from it entirely as they don't belong here
     var dependancyArray = [
-        '/Library/WinDocJack',
-        '/Library/StyleJack',
-        '/Library/FeatureDetect',
-        '/Library/Convert',
-        '/Library/ExtendArray',
-        '/Library/ExtendObject',
-        '/Library/ExtendRegExp'
+        '/Library/DOM/WinDocJack',
+        '/Library/DOM/StyleJack',
+        '/Library/DOM/FeatureDetect',
+        '/Library/Tools/Convert',
+        '/Library/Extend/Array',
+        '/Library/Extend/Object',
+        '/Library/Extend/RegExp'
     ];
 
-	KUBE.LoadFactory('/Library/DomJack', DomJack,dependancyArray);
+	KUBE.LoadFactory('/Library/DOM/DomJack', DomJack,dependancyArray);
 	
 	//These are global cache variables
 	var KUBENodeId,jackCache,cleanPointer,wordToKeyCodeMap,scheduleClean,cleanupCache;
@@ -111,9 +111,9 @@
 	function DomJack(initNode){
 		var FeatureDetect,SJ,DJ,Events,Node,nodeType,StyleJack,domListeners,id,mapId,rawAPI,$DomJackAPI = {},animationAPI,prefix,keyListener,keyStore,keyComboTriggered,keyF;
 
-        DJ = KUBE.Class('/Library/DomJack');
-        SJ = KUBE.Class('/Library/StyleJack');
-        FeatureDetect = KUBE.Class('/Library/FeatureDetect');
+        DJ = KUBE.Class('/Library/DOM/DomJack');
+        SJ = KUBE.Class('/Library/DOM/StyleJack');
+        FeatureDetect = KUBE.Class('/Library/DOM/FeatureDetect');
 
 		domListeners = {};
 		keyListener = false;
@@ -227,7 +227,7 @@
 		function initWinDocJack(_initVar){
 			var $return = false;
 			if(!_initVar || _initVar === window || _initVar === document){
-				$DomJackAPI = KUBE.Class('/Library/WinDocJack')();
+				$DomJackAPI = KUBE.Class('/Library/DOM/WinDocJack')();
 				$return = true;
 			}
 			return $return;

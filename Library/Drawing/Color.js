@@ -4,11 +4,11 @@
  */
 (function(KUBE){
 	"use strict";
-	KUBE.LoadSingleton('/Library/Color', Color,['/Library/FeatureDetect','/Library/ExtendRegExp','/Library/ExtendObject']);
+	KUBE.LoadSingleton('/Library/Drawing/Color', Color,['/Library/DOM/FeatureDetect','/Library/Extend/RegExp','/Library/Extend/Object']);
 	
 	Color.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Color(){
-        var FeatureDetect;
+        var FD = KUBE.Class('/Library/DOM/FeatureDetect')();
 		var $public = {
 			'Format':Format,
 			'GetWebColors':stringColorTable,
@@ -117,7 +117,6 @@
 		};
 
 		function RGBString(r,g,b,a){
-			var FD = KUBE.Class('/Library/FeatureDetect')();
 			r = (KUBE.Is(r) === 'undefined' || r > 255 ? 255 : r);
 			g = (KUBE.Is(g) === 'undefined' || g > 255 ? 255 : g);
 			b = (KUBE.Is(b) === 'undefined' || b > 255 ? 255 : b);
@@ -126,7 +125,6 @@
 		};
 		
 		function HSLString(h,s,l,a){
-            var FD = KUBE.Class('/Library/FeatureDetect')();
 			//h = (typeof h == 'undefined' || h > 255 ? 255 : r);
 			s = (KUBE.Is(s) === 'undefined' || s > 100 ? 100 : s);
 			l = (KUBE.Is(l) === 'undefined' || l > 100 ? 100 : l);

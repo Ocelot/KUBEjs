@@ -3,7 +3,7 @@
     var measureChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890-=!@#$%^&*()_+{}[]:";\'<>,.?|\\/~`';
     var fallBackCharcode = 87; //capital W
 
-    KUBE.LoadSingletonFactory('/Library/TextKing', TextKing,['/Library/ExtendObject','/Library/DomJack','/Library/Convert']);
+    KUBE.LoadSingletonFactory('/Library/DOM/TextKing', TextKing,['/Library/Extend/Object','/Library/DOM/DomJack','/Library/Tools/Convert']);
     TextKing.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
     //Argument passed in should be an Array.  Font first, then size
     function TextKing(fontArg){
@@ -23,7 +23,7 @@
         }
 
         var cachedChars = {};
-        var DJ = KUBE.Class('/Library/DomJack');
+        var DJ = KUBE.Class('/Library/DOM/DomJack');
         doInitialCache();
 
         var $return = {

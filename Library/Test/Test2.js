@@ -1,15 +1,16 @@
 (function(KUBE){
     "use strict";
-    KUBE.LoadFactory('/Library/Test2',Test2,['/Library/Test']);
+    KUBE.LoadFactory('/Library/Test/Test2',Test2,['/Library/Test/Test','/Library/DOM/DomJack']);
 
     function Test2(){
-        var Test = KUBE.Classes('/Library/Test');
+        var DJ = KUBE.Class('/Library/DOM/DomJack');
         return {
-            'Call':function(){
-                console.log(Test.Get()+' from Test2');
-            },
-            'Get':function(){
-                return 'Test2';
+            'Draw':function(){
+                DJ().Ready(function(){
+                    var Box = DJ('div');
+                    Box.Style().Width(100).Height(100).Position('relative').Background().Color('black');
+                    DJ(document.body).Dump().Append(Box);
+                });
             }
         };
     }

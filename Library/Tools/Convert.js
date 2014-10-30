@@ -1,9 +1,9 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFunction('/Library/Convert',Convert,['/Library/ExtendRegExp', '/Library/ConvertCheck']);
+	KUBE.LoadFunction('/Library/Tools/Convert',Convert,['/Library/Extend/RegExp', '/Library/Tools/ConvertCheck']);
 
 	function Convert(_originalValue,_from,_to){
-        var ConvertCheck = KUBE.Class('/Library/ConvertCheck');
+        var ConvertCheck = KUBE.Class('/Library/Tools/ConvertCheck');
 		var conversionMethods = {
 			'px':px,
 			'number':number,

@@ -1,11 +1,11 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFactory("/Library/Scroll",Scroll,['/Library/DomJack','/Library/Bezier','/Library/ExtendObject']);
+	KUBE.LoadFactory("/Library/DOM/Scroll",Scroll,['/Library/DOM/DomJack','/Library/Drawing/Bezier','/Library/Extend/Object']);
 
 	Scroll.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Scroll(_DomJack){
 		var $scrollAPI, animating, interrupt, defaultAnimations,CP;
-        CP = KUBE.Class('/Library/ControlPoint');
+        CP = KUBE.Class('/Library/Drawing/ControlPoint');
 		animating = false;
 		interrupt = false;
 		$scrollAPI = {
@@ -129,7 +129,7 @@
 		/* Private */
 		function animateScroll(_animationObj){
 			var duration, Bezier, DJNode, destinationObj = {}, initialPosition = {}, startTs = null;
-			Bezier = KUBE.Class('/Library/Bezier')(_animationObj.P1,_animationObj.P2,20);
+			Bezier = KUBE.Class('/Library/Drawing/Bezier')(_animationObj.P1,_animationObj.P2,20);
 			duration = _animationObj.duration;
 			destinationObj = _animationObj.destination;
 			DJNode = _DomJack.GetNode();

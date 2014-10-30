@@ -4,13 +4,13 @@
 
 (function(KUBE){
     "use strict";
-    KUBE.LoadFactory('/Library/Theme', Theme,['/Library/DomJack','/Library/StyleJack','/Library/Hash','/Library/ExtendObject','/Library/Color']);
+    KUBE.LoadFactory('/Library/UI/Theme', Theme,['/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Tools/Hash','/Library/Extend/Object','/Library/Drawing/Color']);
     Theme.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function Theme(_name){
         var $ThemeAPI,theme,quickSets,SJ;
         quickSets = {};
-        SJ = KUBE.Class('/Library/StyleJack');
+        SJ = KUBE.Class('/Library/DOM/StyleJack');
 
         $ThemeAPI = {
             'Font':Font(),
@@ -343,7 +343,7 @@
         }
 
         function validateColor(_color){
-            var Color = KUBE.Class('/Library/Color')();
+            var Color = KUBE.Class('/Library/Drawing/Color')();
             return Color.IsValidColor(_color);
         }
 

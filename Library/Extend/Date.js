@@ -7,12 +7,12 @@
 	
 	// Load functions here 
 	var ExtendAPI;
-	KUBE.SetAsLoaded('/Library/ExtendDate');
+	KUBE.SetAsLoaded('/Library/Extend/Date');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('date','format',Format);
-		KUBE.EmitState('/Library/ExtendDate');
-		KUBE.console.log('ExtendDate Loaded');
+		KUBE.EmitState('/Library/Extend/Date');
+		KUBE.console.log('/Library/Extend/Date Loaded');
 	}
 	
 	// Declare functions here

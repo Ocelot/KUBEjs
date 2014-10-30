@@ -7,7 +7,7 @@
 
 	/* Load functions */
 	var ExtendAPI;
-	KUBE.SetAsLoaded('/Library/ExtendObject');
+	KUBE.SetAsLoaded('/Library/Extend/Object');
 	if(KUBE.Extend){
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('object','merge',Merge);
@@ -19,8 +19,8 @@
 		ExtendAPI.Load('object','each',Each);
 		ExtendAPI.Load('object','duckType',DuckType);
 		ExtendAPI.Load('object','isEmpty',IsEmpty);
-		KUBE.EmitState('/Library/ExtendObject');
-		KUBE.console.log('ExtendObject Loaded');
+		KUBE.EmitState('/Library/Extend/Object');
+		KUBE.console.log('/Library/Extend/Object Loaded');
 	}
 	
 	/* Declare functions */
