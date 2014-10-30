@@ -1,7 +1,7 @@
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFactory("/Library/Scroll",Scroll,['/Library/DomJack','/Library/Bezier','/Library/ExtendObject']); //TODO: MathKUBE wut?
-	
+	KUBE.LoadFactory("/Library/Scroll",Scroll,['/Library/DomJack','/Library/Bezier','/Library/ExtendObject']);
+
 	Scroll.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Scroll(_DomJack){
 		var $scrollAPI, animating, interrupt, defaultAnimations,CP;
@@ -31,8 +31,8 @@
 		}
 
 		if(!isDJ(_DomJack)){
-			throw new Error("Scroll requires a valid DomJack to be initialized");
-			$scrollAPI = false;
+            $scrollAPI = false;
+            throw new Error("Scroll requires a valid DomJack to be initialized");
 		}
 		
 		return $scrollAPI;
@@ -214,46 +214,3 @@
         }
 	}	
 }(KUBE));
-
-
-/*
-//This actually does do correct bezier animations of scroll bar!  I KNOW, LE GASP!
-
-//saving this here for posterity so I can implement it tomorrow.  Like a boss.
-
- KUBE.Uses(['Bezier','DomJack','Select','Gradient'],function(BZ,DJ,S,G){
-     DJ().Ready(function(){
-         var BG = KUBE.LinearGradient();
-         BG.Repeating(true);
-         BG.Add('','black').Add('63px','black').Add('64px','white').Add('128px','white').ToRight();
-         var P = KUBE.DomJack('div');
-         var C = KUBE.DomJack('div');
-         P.Style().Overflow('auto').Width(500).Height(500).Background().Color('blue');
-         C.Style().Width(4000).Height(250).Background().Image(BG.GetImage());
-         DJ(document.body).Append(P.Append(C));
-         P.GetNode().scrollLeft = 2500;
-         window.P = P;
-         //Retarded.  Fast to middle, stop, fast to end
-         //					var CP1 = KUBE.ControlPoint(0.02,0.99); var CP2 = KUBE.ControlPoint(0.98,0.02);
-         //Ease-in
-         //					var CP1 = KUBE.ControlPoint(0.42,0); var CP2 = KUBE.ControlPoint(1,1);
-         //Ease-out
-         //					var CP1 = KUBE.ControlPoint(0,0); var CP2 = KUBE.ControlPoint(0.58,1);
-         //Ease
-         //					var CP1 = KUBE.ControlPoint(0.25,0.1); var CP2 = KUBE.ControlPoint(0.25,1.0);
-         //Ease-in-out
-         var CP1 = KUBE.ControlPoint(0.42,0); var CP2 = KUBE.ControlPoint(0.58,1.0);
-         //Linear
-         //var CP1 = KUBE.ControlPoint(0,0); var CP2 = KUBE.ControlPoint(1,1);
-
-
-
-         setTimeout(function(){
-             requestAnimationFrame(run);
-         },1000);
-     });
-
- })
-
-
- */
