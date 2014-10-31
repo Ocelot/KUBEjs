@@ -2,10 +2,10 @@
 	"use strict";
 
 	/* Load class */
-	KUBE.LoadFactory('/Library/LinearGradient', LinearGradient,['/Library/Color','/Library/FeatureDetect','/Library/Convert','/Library/ExtendObject']);
+	KUBE.LoadFactory('/Library/Drawing/LinearGradient', LinearGradient,['/Library/Drawing/Color','/Library/DOM/FeatureDetect','/Library/Tools/Convert','/Library/Extend/Object']);
 
 
-	KUBE.EmitState('Gradient');
+	//KUBE.EmitState('Gradient');
 
 	LinearGradient.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function LinearGradient(){
@@ -13,8 +13,8 @@
 		//This means a few things.  Vertical and Horizontal define the "to" direction.  It also means that Angle is different.
 		//In W3C mode, an angle of "0" means gradient goes bottom to top.  In  "middle" syntax, 0 is left to right.
 		//The only time someone should be getting out "Middle" syntax gradient is specific versions of webkit that don't support W3C
-		var Detect = KUBE.Class('/Library/FeatureDetect');
-		var Check = KUBE.Class('/Library/ConvertCheck');
+		var Detect = KUBE.Class('/Library/DOM/FeatureDetect');
+		var Check = KUBE.Class('/Library/Tools/ConvertCheck');
         var gradientStore = {
 			"angle": '',
 			'direction': {
@@ -78,7 +78,7 @@
 		}
 
 		function Add(_val,_color){
-			if(KUBE.Color().IsValidColor(_color)){
+			if(KUBE.Class('/Library/Drawing/Color')().IsValidColor(_color)){
 				gradientStore.colors.push({'position': _val, 'color': _color});
 			}
             return $api

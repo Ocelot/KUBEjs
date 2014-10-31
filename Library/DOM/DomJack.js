@@ -1484,7 +1484,7 @@
 				});
 				break;
 		}
-		
+
 		if(GetForm(_DomJackAPI)){
 			//It lives in a form
 			typeAPI.KUBE().merge({
@@ -1566,7 +1566,7 @@
 		function findForm(_Node){
 			var $return = false;
 			if(_Node.parentNode && KUBE.Is(_Node.parentNode) === 'object' && KUBE.Is(_Node.parentNode.tagName) === 'string'){
-				$return = (_Node.parentNode.tagName.toLowerCase() === 'form' ? DJ(_Node.parentNode) : findForm(_Node.parentNode));
+				$return = (_Node.parentNode.tagName.toLowerCase() === 'form' ? KUBE.Class('/Library/DOM/DomJack')(_Node.parentNode) : findForm(_Node.parentNode));
 			}
 			return $return;
 		}
