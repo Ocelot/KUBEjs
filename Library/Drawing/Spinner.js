@@ -13,9 +13,17 @@
         return '[object ' + this.constructor.name + ']'
     };
     function Spinner(options) {
-        var $K = KUBE.Class(uses);
-        var spinJack, rawSpin, rawCtx, playTimer, lastFrameTime, framePos = -1, playState = false;
-        var DJ = $K.DJ;
+        var $K = KUBE.Class(uses),
+            spinJack,
+            rawSpin,
+            rawCtx,
+            playTimer,
+            lastFrameTime,
+            framePos = -1,
+            playState = false,
+            DJ = $K.DJ;
+        
+        //DEFAULT SPINNER SETTINGS
         var options = {
             "radius": 25,
             "height": 25,
@@ -30,12 +38,20 @@
         var $spinAPI = {
             "Get": Get,
             "Play": Play,
-            "Pause": Pause
-
+            "Pause": Pause,
+            "Radius": SetRadius,
+            "Height": SetHeight,
+            "Width": SetWidth,
+            "Dashes": SetDashes,
+            "Opacity": SetOpacity,
+            "Padding": SetPadding,
+            "Rotation": SetRotation,
+            "Color": SetColor
         }
 
         return $spinAPI;
 
+        //THIS IS HOW YOU GET YOUR SPINNER DOMJACK!
 
         function Get(){
             if(!spinJack){
@@ -43,6 +59,9 @@
             }
             return spinJack;
         }
+
+        //STATE CONTROL 
+        //TODO: ADD EVENTS TO CONTROL STATE AS WELL
 
         function Play(){
             if(playState){
@@ -59,6 +78,67 @@
             lastFrameTime = 0;
             playState = false;
         }
+
+        //SETTERS FOR OPTIONS
+        //TODO: A SETTER THAT TAKES IN AN OBJECT AND CALLS ALL OF THEM, OR AS PART OF INITIAL CALL
+
+        function SetRadius(_radius){
+            if(KUBE.Is(radius) === "number"){
+                options.radius = _radius;
+            }
+            return $spinAPI;
+        }
+        
+        function SetHeight(_height){
+            if(KUBE.Is(_height) === "number"){
+                options.height = _height;
+            }
+            return $spinAPI;
+        }
+        
+        function SetWidth(width){
+            if(KUBE.Is(_width) === "number"){
+                options.width = _width;
+            }
+            return $spinAPI;
+        }
+        
+        function SetDashes(_dashes){
+            if(KUBE.Is(_dashes) === "number"){
+                options.dashes = _dashes;
+            }
+            return $spinAPI;
+        }
+        
+        function SetOpacity(_opacity){
+            if(KUBE.Is(_opacity) === "number" && (_opacity >= 0 && _opacity <= 1)){
+                options.opacity = _opacity;
+            }
+            return $spinAPI;
+        }
+        
+        function SetPadding(_padding){
+            if(KUBE.Is(_padding) === "number"){
+                options.padding = _padding;
+            }
+            return $spinAPI;
+        }
+        
+        function SetRotation(_rotation){
+            if(KUBE.Is(_rotation) === "number"){
+                options.rotation = _rotation;
+            }
+            return $spinAPI;
+        }
+        
+        function SetColor(_color){
+            if($K.Color(_color) === true){
+                options.color = _color;
+            }
+            return $spinAPI;
+        }
+        
+        //PRIVATE UTILS
 
         function initSpinJack(){
             spinJack = DJ('canvas');
