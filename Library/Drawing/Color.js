@@ -289,13 +289,15 @@
 			return $return;
 		};
 
-		function hexToRgb(hex, stringify){
+		function hexToRgb(hex, stringify, opacity){
 			var $color = {};
 			hex = String(hex);
 			if(hex.substring(0,1) === '#'){
 				hex = hex.substring(1);
 			}
 
+            opacity = (opacity === undefined || parseFloat(opacity) > 1 || parseFloat(opacity) < 0) ? 1 : opacity;
+            $color.a = opacity;
 			if(hex.length === 3){
 				//Shorthand
 				$color.r = hex.substring(0,1);
@@ -312,8 +314,15 @@
 				$color.g = parseInt(hex.substring(2,4),16);
 				$color.b = parseInt(hex.substring(4,6),16);
 			}
+
 			if(stringify){
-				$color = "rgb("+$color.r+","+$color.g+","+$color.b+")";
+                if($color.a !== 1){
+                    $color = "rgba("+$color.r+","+$color.g+","+$color.b+","+$color.a+")";
+                }
+                else{
+                    $color = "rgb("+$color.r+","+$color.g+","+$color.b+")";
+                }
+
 			}
 			return $color;
 		};

@@ -7,7 +7,8 @@
         'Bezier',
         'Color',
         'ControlPoint',
-        'LinearGradient'
+        'LinearGradient',
+        'Spinner'
     ]);
 
     KUBE.AutoLoad().AddIndex(DrawingIndex);

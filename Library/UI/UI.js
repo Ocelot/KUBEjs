@@ -91,7 +91,8 @@
             'Type':Type,
 			'Name':Name,
 			'Id':Id,
-			'DeepRead':DeepRead
+			'DeepRead':DeepRead,
+            'ResizeChildren': ResizeChildren
 		}.KUBE().create(UIView.prototype);
 		
 		$ViewAPI = KUBE.Events($ViewAPI);
@@ -416,11 +417,21 @@
 			}
 			return $return;
 		}
+
+        function ResizeChildren(){
+            var $return = [];
+            if(Children.length){
+                Children.KUBE().each(function(_Child){
+                    _Child.Resize();
+                });
+            }
+            return $return;
+        }
 	}
 	
 	//This is the RootView
 	function RootView(CoreView,id,data){
-		var View,SJ,DJ,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [];
+		var View,SJ,DJ,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [],resizePause, blackout;
 
         deleteQ = [];
 		SJ = KUBE.Class('/Library/DOM/StyleJack');
@@ -441,6 +452,7 @@
             'CSSClass': CSSClass
 		});		
 		create();
+        bindResizeEvent();
 		return CoreView;
 
 		//Public
@@ -551,22 +563,7 @@
 		}
 		
 		function Resize(){
-			//Finish this. Animated gif, or animated css?
-			var blackOut,resizePause;
-			DJ().Window().On('resize',function(){
-				if(resizePause){
-					clearTimeout(resizePause);
-				}
-				else{
-					//First time it's fired, trigger black out
-				}
-				resizePause = setTimeout(function(){
-					//Call resize on UI
-					setTimeout(function(){
-						//And restore views
-					},1000);
-				},1000);
-			});
+			CoreView.ResizeChildren();
 		}
 
 		//Private methods
@@ -575,6 +572,27 @@
 			alert(_e.message);
             //debugger;
 		}
+
+        function bindResizeEvent(){
+            blackout = DJ(document.body).Append('div');
+            blackout.Detach();
+            blackout.Style().Position('fixed');
+            blackout.Style().Top(0).Bottom(0).Left(0).Right(0).Background().Color('rgba(0,0,0,0.7)');
+            blackout.Style().Padding(10);
+            DJ().Window().On('resize',function(){
+                if(resizePause){
+                    clearTimeout(resizePause);
+                }
+                else{
+                    DJ(document.body).Append(blackout);
+                }
+                resizePause = setTimeout(function(){
+                    CoreView.Resize();
+                    blackout.Detach();
+                    resizePause = undefined;
+                },1000);
+            });
+        }
 		
 		function handleInstructions(_response){
 			var rCall;
