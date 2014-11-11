@@ -422,7 +422,13 @@
             var $return = [];
             if(Children.length){
                 Children.KUBE().each(function(_Child){
-                    _Child.Resize();
+                    try{
+                        _Child.Resize();
+                    }
+                    catch(e){
+                        KUBE.console.log(_Child.Name() + ' failed to resize');
+                    }
+
                 });
             }
             return $return;
