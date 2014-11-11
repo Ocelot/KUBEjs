@@ -132,7 +132,7 @@
         }
         
         function SetColor(_color){
-            if($K.Color(_color) === true){
+            if($K.Color().IsValidColor(_color) === true){
                 options.color = _color;
             }
             return $spinAPI;

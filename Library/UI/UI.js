@@ -1,7 +1,7 @@
 (function(KUBE){
 	"use strict";
 	var UIAutoLoader = KUBE.Class('Loader')();
-	KUBE.LoadSingleton('/Library/UI/UI',UI,['/Library/DOM/Ajax','/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date']);
+	KUBE.LoadSingleton('/Library/UI/UI',UI,['/Library/DOM/Ajax','/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Drawing/Spinner','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date']);
 
 	UI.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function UI(){
@@ -431,11 +431,12 @@
 	
 	//This is the RootView
 	function RootView(CoreView,id,data){
-		var View,SJ,DJ,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [],resizePause, blackout;
+		var View,SJ,DJ,Spin,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [],resizePause, blackout, spinner;
 
         deleteQ = [];
 		SJ = KUBE.Class('/Library/DOM/StyleJack');
 		DJ = KUBE.Class('/Library/DOM/DomJack');
+        Spin = KUBE.Class('/Library/Drawing/Spinner');
 		
 		CoreView.KUBE().merge({
 			'Get':Get,
@@ -563,7 +564,9 @@
 		}
 		
 		function Resize(){
-			CoreView.ResizeChildren();
+            width = DJ().WindowWidth();
+            height = DJ().WindowHeight();
+            CoreView.ResizeChildren();
 		}
 
 		//Private methods
@@ -574,20 +577,31 @@
 		}
 
         function bindResizeEvent(){
+            var spinDJ;
+            spinner = Spin();
+            spinner.Color('#FFF');
+            spinDJ = spinner.Get();
+            spinDJ.Style().Position('fixed').Top('50%').Left('50%').Margin().Top(-53).Left(-53);
+
             blackout = DJ(document.body).Append('div');
+            blackout.Append(spinDJ);
             blackout.Detach();
+
             blackout.Style().Position('fixed');
-            blackout.Style().Top(0).Bottom(0).Left(0).Right(0).Background().Color('rgba(0,0,0,0.7)');
+            blackout.Style().Top(0).Bottom(0).Left(0).Right(0).Background().Color('rgba(0,0,0,0.85)');
             blackout.Style().Padding(10);
             DJ().Window().On('resize',function(){
                 if(resizePause){
                     clearTimeout(resizePause);
                 }
                 else{
+                    Resize();
+                    spinner.Play();
                     DJ(document.body).Append(blackout);
                 }
                 resizePause = setTimeout(function(){
                     CoreView.Resize();
+                    spinner.Pause();
                     blackout.Detach();
                     resizePause = undefined;
                 },1000);
