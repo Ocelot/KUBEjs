@@ -18,7 +18,9 @@
     function initDefaultConfig(){
         var config = {
             "autoLoadPath" : getAutoLoadPath(),
-            "debug": true
+            "debug": true,
+            "key1":false,
+            "key2":false
         };
         return config;
 

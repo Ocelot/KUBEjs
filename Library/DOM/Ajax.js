@@ -20,7 +20,8 @@
 			'freezeDelay':2500,
 			'timeout':10000,
 			'method':'post',
-			'flatten':false
+			'flatten':false,
+            'customHeaders':{}
 		};
 		
 		var $return = {
@@ -37,7 +38,8 @@
                 'ParseFailHandler': ParseFailHandler,
 				'FreezeDelay':FreezeDelay,
 				'Method':Method,
-				'Timeout':Timeout
+				'Timeout':Timeout,
+                'AddCustomHeader':AddCustomHeader
 			};
 			return $return;
 			
@@ -46,7 +48,7 @@
 					settings.requestHandler = _urlOrFunction;
 				}
 				return settings.requestHandler;
-			};
+			}
 
             function ParseFailHandler(_function){
                 if(KUBE.Is(_function) === "function"){
@@ -60,14 +62,14 @@
 					settings.timeout = _ms;
 				}
 				return settings.timeout;
-			};
+			}
 			
 			function FreezeDelay(_ms){
 				if(KUBE.Is(_ms) == 'number'){
 					settings.freezeDelay = _ms;
 				}
 				return settings.freezeDelay;
-			};
+			}
 			
 			function Method(_method){
 				if(KUBE.Is(_method) == 'string'){
@@ -78,18 +80,22 @@
 					}
 				}
 				return settings.method;
-			};
+			}
 			
 			function Flatten(_bool){
 				if(_bool === true || _bool === false){
 					settings.flatten = _bool;
 				}
 				return settings.flatten;
-			};
+			}
 			
 			function Format(_json){
 				
-			};
+			}
+
+            function AddCustomHeader(_headerName,_headerData){
+                settings.customHeaders[_headerName] = _headerData;
+            }
 		};
 		
 		function Send(_json, _interrupt, _responseEvent){
@@ -182,6 +188,9 @@
 							//In theory our request has responded, but as we've found this doesn't work entirely how expected
 							try{
 								response = XHR.responseText;
+                                if(XHR.getResponseHeader('X-CSRF')){
+                                    settings.customHeaders['X-CSRF'] = XHR.getResponseHeader('X-CSRF');
+                                }
                                 if(response){
                                     try{
                                         response = JSON.parse(response);
@@ -302,6 +311,13 @@
 						_XHR.open('get', _url+uri, true);
 						break;
 				}
+
+                if(!settings.customHeaders.KUBE().isEmpty()){
+                    settings.customHeaders.KUBE().each(function(_headerName,_headerData){
+                        _XHR.setRequestHeader(_headerName,_headerData);
+                    });
+                }
+
 				return $return;
 			};			
 
