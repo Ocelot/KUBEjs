@@ -594,7 +594,7 @@
             blackout.Detach();
 
             blackout.Style().Position('fixed');
-            blackout.Style().Top(0).Bottom(0).Left(0).Right(0).Background().Color('rgba(0,0,0,0.85)');
+            blackout.Style().Top(0).Bottom(0).Left(0).Right(0).Background().Color('rgba(0,0,0,0.9)');
             blackout.Style().Padding(10);
             DJ().Window().On('resize',function(){
                 if(resizePause){
