@@ -632,7 +632,11 @@
 				if(_response.autoLoad){
 					processAutoLoad(_response.autoLoad);
 				}
-				
+
+                if(_response.indexes && _response.indexes.length > 0){
+                    _response.indexes.KUBE().each(processIndexes);
+                }
+
 				if(_response.instructions){
 					switch(KUBE.Is(_response.instructions)){
 						case 'array':
@@ -665,7 +669,14 @@
 					}
 				}
 			}
-		}	
+		}
+
+        function processIndexes(indexObj){
+            if(indexObj.namespace && indexObj.indexURL){
+                KUBE.Class('/Library/UI/UI')().AutoLoad().LoadAutoIndex(indexObj.namespace,indexObj.indexURL);
+            }
+
+        }
 
 		//This allows for autoloading of UI components
 		function autoLoad(_autoLoadInstructions){
