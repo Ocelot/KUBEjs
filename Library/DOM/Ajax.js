@@ -201,6 +201,7 @@
                                             settings.parseFailHandler(response);
                                         }
                                         else{
+                                            //document.body.innerHTML = _settings.requestHandler+"<br />"+response+"<br />"+JSON.stringify(_data);
                                             throw new Error('AJAX JSON Parse Failed. Possibly Not JSON?');
                                         }
                                     }
