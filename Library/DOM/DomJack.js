@@ -963,6 +963,7 @@
 		
 		//Utilities		
 		//Warning: Copies need to be Deleted() after they have been used just like any other DomJack or they will result in a memory leak (cached, never released, etc)
+        //TODO: Node.cloneNode exists... that would probably make more sense than this insanity. And be faster.
 		function Copy(_recursive){
 			var Children,NewCopy = DJ(nodeType);
 			NewCopy.SetAttribute(GetAttribute());
