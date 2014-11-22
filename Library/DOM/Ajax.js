@@ -177,6 +177,7 @@
 			if(KUBE.Is(_settings.requestHandler) == 'string'){
 				//XHR Request
 				var XHR = initXHR();
+                var retry = false;
 				
 				if(XHR){
 					requestData = setupMethod(XHR,_settings.method,_settings.requestHandler,_data,_settings.flatten);
@@ -190,8 +191,15 @@
 								response = XHR.responseText;
                                 if(XHR.getResponseHeader('X-CSRF')){
                                     settings.customHeaders['X-CSRF'] = XHR.getResponseHeader('X-CSRF');
+                                    if(XHR.status == 449){
+                                        retry = true;
+                                    }
                                 }
-                                if(response){
+
+                                if(retry){
+                                    startRequest(_data,_responseEvent,_settings);
+                                }
+                                else if(response){
                                     try{
                                         response = JSON.parse(response);
                                     }
@@ -205,8 +213,8 @@
                                             throw new Error('AJAX JSON Parse Failed. Possibly Not JSON?');
                                         }
                                     }
+                                    completeRequest(response,_responseEvent);
                                 }
-								completeRequest(response,_responseEvent);
 							}
 							catch(e){
 								$return.Emit('error',e);
