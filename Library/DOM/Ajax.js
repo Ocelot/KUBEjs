@@ -2,7 +2,7 @@
  * Name: Ajax
  * Type: KUBESingletonFactoryClass
  */
-
+//TODO: THIS HAS SOME CONCEPTUAL FLAWS! REWRITE!!!!!!!!!!!!!
 //TODO: CHANGE THIS TO A FACTORY. SINGLETONS CAUSE PROBLEMS. REMEMBER UPLOAD EVENTS
 (function(KUBE){
 	KUBE.LoadSingletonFactory('/Library/DOM/Ajax', Ajax,['/Library/Extend/Object']);
@@ -164,7 +164,7 @@
 		};
 		
 		function startRequest(_data, _responseEvent, _settings){
-			var requestData,response,XHR;
+			var requestData,response,XHR, status;
 			var timer = {};
 			var $api = {
 				'cancel':cancel,
@@ -189,6 +189,7 @@
 							//In theory our request has responded, but as we've found this doesn't work entirely how expected
 							try{
 								response = XHR.responseText;
+                                status = XHR.status;
                                 if(XHR.getResponseHeader('X-CSRF')){
                                     settings.customHeaders['X-CSRF'] = XHR.getResponseHeader('X-CSRF');
                                     if(XHR.status == 449){
@@ -200,18 +201,23 @@
                                     startRequest(_data,_responseEvent,_settings);
                                 }
                                 else if(response){
-                                    try{
-                                        response = JSON.parse(response);
+                                    if(status === 200){
+                                        try{
+                                            response = JSON.parse(response);
+                                        }
+                                        catch(e){
+                                            KUBE.console.log('AJAX ERROR: ',response);
+                                            if(settings.parseFailHandler){
+                                                settings.parseFailHandler(response);
+                                            }
+                                            else{
+                                                //document.body.innerHTML = _settings.requestHandler+"<br />"+response+"<br />"+JSON.stringify(_data);
+                                                throw new Error('AJAX JSON Parse Failed. Possibly Not JSON?');
+                                            }
+                                        }
                                     }
-                                    catch(e){
-                                        KUBE.console.log('AJAX ERROR: ',response);
-                                        if(settings.parseFailHandler){
-                                            settings.parseFailHandler(response);
-                                        }
-                                        else{
-                                            //document.body.innerHTML = _settings.requestHandler+"<br />"+response+"<br />"+JSON.stringify(_data);
-                                            throw new Error('AJAX JSON Parse Failed. Possibly Not JSON?');
-                                        }
+                                    else{
+                                        response = {'status': status, 'response': response};
                                     }
                                     completeRequest(response,_responseEvent);
                                 }
