@@ -207,7 +207,10 @@
 		}
 
         function GenCSSClass(){
-            return Root().CSSClass($ViewAPI);
+            if(!CSSClass){
+                CSSClass = Root().CSSClass($ViewAPI);
+            }
+            return CSSClass;
         }
 		
 		function processUpdate(_views,_behavior,viewResolver){

@@ -1925,10 +1925,30 @@
 			else{
 				switch(KUBE.Is(_val)){
 					case 'array':
-						(_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginTop',Convert(_val[0],'number','px')) : false);
-						(_val[1] !== undefined ? RawStyleSet(_styleObj,_API,'marginRight',Convert(_val[1],'number','px')) : false);
-						(_val[2] !== undefined ? RawStyleSet(_styleObj,_API,'marginBottom',Convert(_val[2],'number','px')) : false);
-						(_val[3] !== undefined ? RawStyleSet(_styleObj,_API,'marginLeft',Convert(_val[3],'number','px')) : false);
+                        if(_val.length === 1){
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginTop',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginRight',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginBottom',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginLeft',Convert(_val[0],'number','px')) : false);
+                        }
+                        else if(_val.length === 2){
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginTop',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginRight',Convert(_val[1],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginBottom',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginLeft',Convert(_val[1],'number','px')) : false);
+                        }
+                        else if(_val.length === 3){
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginTop',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginRight',Convert(_val[1],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginBottom',Convert(_val[2],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginLeft',Convert(_val[1],'number','px')) : false);
+                        }
+                        else{
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'marginTop',Convert(_val[0],'number','px')) : false);
+                            (_val[1] !== undefined ? RawStyleSet(_styleObj,_API,'marginRight',Convert(_val[1],'number','px')) : false);
+                            (_val[2] !== undefined ? RawStyleSet(_styleObj,_API,'marginBottom',Convert(_val[2],'number','px')) : false);
+                            (_val[3] !== undefined ? RawStyleSet(_styleObj,_API,'marginLeft',Convert(_val[3],'number','px')) : false);
+                        }
 						break;
 						
 					case 'object':
@@ -2170,10 +2190,30 @@
 			else{
 				switch(KUBE.Is(_val)){
 					case 'array':
-						(_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingTop',Convert(_val[0],'number','px')) : false);
-						(_val[1] !== undefined ? RawStyleSet(_styleObj,_API,'paddingRight',Convert(_val[1],'number','px')) : false);
-						(_val[2] !== undefined ? RawStyleSet(_styleObj,_API,'paddingBottom',Convert(_val[2],'number','px')) : false);
-						(_val[3] !== undefined ? RawStyleSet(_styleObj,_API,'paddingLeft',Convert(_val[3],'number','px')) : false);
+                        if(_val.length === 1){
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingTop',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingRight',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingBottom',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingLeft',Convert(_val[0],'number','px')) : false);
+                        }
+                        else if(_val.length === 2){
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingTop',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingRight',Convert(_val[1],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingBottom',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingLeft',Convert(_val[1],'number','px')) : false);
+                        }
+                        else if(_val.length === 3){
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingTop',Convert(_val[0],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingRight',Convert(_val[1],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingBottom',Convert(_val[2],'number','px')) : false);
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingLeft',Convert(_val[1],'number','px')) : false);
+                        }
+                        else{
+                            (_val[0] !== undefined ? RawStyleSet(_styleObj,_API,'paddingTop',Convert(_val[0],'number','px')) : false);
+                            (_val[1] !== undefined ? RawStyleSet(_styleObj,_API,'paddingRight',Convert(_val[1],'number','px')) : false);
+                            (_val[2] !== undefined ? RawStyleSet(_styleObj,_API,'paddingBottom',Convert(_val[2],'number','px')) : false);
+                            (_val[3] !== undefined ? RawStyleSet(_styleObj,_API,'paddingLeft',Convert(_val[3],'number','px')) : false);
+                        }
 						break;
 						
 					case 'object':
