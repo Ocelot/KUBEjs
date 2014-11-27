@@ -1,3 +1,12 @@
+/*
+ * This file is part of the KUBEjs package
+ *
+ * (c) Red Scotch Software Inc <kube+js@redscotch.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 // This utility measures text.  Because Ruler == King.  So TextRuler == TextKing.  So laugh.
 (function(KUBE){
     var measureChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890-=!@#$%^&*()_+{}[]:";\'<>,.?|\\/~`';

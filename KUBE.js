@@ -1,3 +1,11 @@
+/*
+ * This file is part of the KUBEjs package
+ *
+ * (c) Red Scotch Software Inc <kube+js@redscotch.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 (function(window,KUBEPrototype){
 	"use strict";
 	
@@ -5,14 +13,6 @@
 
     //Moved safely to a short circuit because now a safe default exists
     config = (typeof window.KUBE === 'object' && typeof window.KUBE.config === 'object') ? window.KUBE.config : initDefaultConfig();
-
-    /*
-     * As an addendum KUBEjs is an ugly file with a ton of complex stuff going on which makes it ugly to work on.
-     * Regardless I try to not have grouped logic just floating around in a non specific scope. Previously I was accepting
-     * the global setting (window.KUBE.config). Now that we have internal logic to define a default config, I'll group that
-     * into its own space with the assumption that it will probably be added to and extended later. This just assists in
-     * future proofing for future developers/
-     */
 
     //Because I went retarded, I removed the comments
     function initDefaultConfig(){
@@ -22,6 +22,7 @@
             "key1":false,
             "key2":false
         };
+        console.log(config);
         return config;
 
         function getAutoLoadPath() {
@@ -31,7 +32,7 @@
 
         function parseAutoLoadPath(_src) {
             var paths = _src.split('/');
-            return paths.splice(0,paths.length-1).join('/');
+            return paths.splice(0,paths.length-1).join('/')+'/';
         }
 
         function srcFromCurrentScript(){
@@ -1342,13 +1343,13 @@ function initDefaultConfig(){
     }
 }
 
-KUBE.AutoLoad().LoadAutoIndex('/Library/Test',KUBE.Config().autoLoadPath+'Indexes/TestIndex.js');
-KUBE.AutoLoad().LoadAutoIndex('/Library/DOM',KUBE.Config().autoLoadPath+'Indexes/DOMIndex.js');
-KUBE.AutoLoad().LoadAutoIndex('/Library/Drawing',KUBE.Config().autoLoadPath+'Indexes/DrawingIndex.js');
-KUBE.AutoLoad().LoadAutoIndex('/Library/Extend',KUBE.Config().autoLoadPath+'Indexes/ExtendIndex.js');
-KUBE.AutoLoad().LoadAutoIndex('/Library/Tools',KUBE.Config().autoLoadPath+'Indexes/ToolsIndex.js');
-KUBE.AutoLoad().LoadAutoIndex('/Library/UI',KUBE.Config().autoLoadPath+'Indexes/UIIndex.js');
-KUBE.AutoLoad().LoadAutoIndex('/Library/FontAwesome',KUBE.Config().autoLoadPath+'Indexes/FontAwesome.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/Test',KUBE.Config().autoLoadPath+'/Indexes/TestIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/DOM',KUBE.Config().autoLoadPath+'/Indexes/DOMIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/Drawing',KUBE.Config().autoLoadPath+'/Indexes/DrawingIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/Extend',KUBE.Config().autoLoadPath+'/Indexes/ExtendIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/Tools',KUBE.Config().autoLoadPath+'/Indexes/ToolsIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/UI',KUBE.Config().autoLoadPath+'/Indexes/UIIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/FontAwesome',KUBE.Config().autoLoadPath+'/Indexes/FontAwesome.js');
 
 
 //KUBEjs utilities will autoload out of the Library subdirectory.

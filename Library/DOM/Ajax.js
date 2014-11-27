@@ -1,9 +1,15 @@
-/* 
- * Name: Ajax
- * Type: KUBESingletonFactoryClass
+/*
+ * This file is part of the KUBEjs package
+ *
+ * (c) Red Scotch Software Inc <kube+js@redscotch.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
+
 //TODO: THIS HAS SOME CONCEPTUAL FLAWS! REWRITE!!!!!!!!!!!!!
 //TODO: CHANGE THIS TO A FACTORY. SINGLETONS CAUSE PROBLEMS. REMEMBER UPLOAD EVENTS
+
 (function(KUBE){
 	KUBE.LoadSingletonFactory('/Library/DOM/Ajax', Ajax,['/Library/Extend/Object']);
 	
