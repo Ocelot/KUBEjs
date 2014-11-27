@@ -4,13 +4,20 @@
     <title>KUBEjs Examples: Table of Contents</title>
     <!-- Include KUBE.js -->
     <script src="../../src/KUBE.js"></script>
+
+    <!-- Include an Index custom to this project (we could defer this as well with KUBE.AutoLoad().LoadAutoIndex()) -->
+    <script src="js/ExampleIndex.js"></script>
+
+    <!-- Build out our Table of Contents for our Examples -->
     <script type="text/javascript">
 
         //Set up a key:value object
         //  -key    = alias
         //  -value  = namespace of KUBE Class
         var uses = {
-            'DJ':'/Library/DOM/DomJack'
+            'DJ':'/Library/DOM/DomJack',
+            'SJ':'/Library/DOM/StyleJack',
+            'ToC':'/KUBEjs/Examples/TableOfContents'
         };
 
         //Request dependancy resolution. Returns a promise (var p.then(callback)) which can be used instead of the callback
@@ -23,10 +30,8 @@
         }
 
         function domLoaded($K){
-            var Body = $K.DJ(document.body);
-            Body.SetInner('Hello World');
+            alert(KUBE.Is($K.ToC(),true));
         }
-
     </script>
 </head>
 <body>
