@@ -17,7 +17,8 @@
         "SJ":"/Library/DOM/StyleJack",
         "Index":"/KUBEjs/Examples/TableIndex",
         "XO":"/Library/Extend/Object",
-        "XA":"/Library/Extend/Array"
+        "XA":"/Library/Extend/Array",
+        "XN":"/Library/Extend/Number"
     };
 
     //arg1:string   = Namespace (accessible through KUBE.Class(var namespace)) or autoloaded through Uses/Dependancy etc
@@ -32,7 +33,7 @@
 
     //Our actual 'class'/function (arguments can be used, and will be passed in on construction
     function TableOfContents(_title){
-        var title,contents,indentSize,listFormat,$K,$API;
+        var title,contents,indentSize,listFormat,$K,$API,TitleDJ,ContentsDJ;
         title = _title || 'Unknown';
         indentSize = 5;
 
@@ -75,24 +76,27 @@
             switch(String(_format).toLowerCase()){
                 case 'num':case '#': listFormat = '#'; break;
                 case 'alpha':case 'a': listFormat = 'a'; break;
+                case 'roman':case 'r': listFormat = 'r'; break;
+            }
+            return $API;
+        }
+
+        function SetTitle(_newTitle){
+            if(KUBE.Is(_newTitle) === 'string'){
+                title = _newTitle;
+            }
+
+            if(KUBE.Is(TitleDJ,true) === 'DomJack'){
+                TitleDJ.SetInner(title);
             }
             return $API;
         }
 
         //Utilities
-        function RenderToContainer(_DJ){
-            if(KUBE.Is(_DJ,true) == 'DomJack'){
-                //Check to make sure it's a DomJack
-                var Title = $K.DJ('div');
-                Title.AddClass(['.toc','.main','.title']);
-                Title.SetInner(title);
-
-                var Contents = $K.DJ('div');
-                Contents.AddClass(['.toc','.main','.contents']);
-
-
-                _DJ.Append(Title);
-                _DJ.Append(Contents);
+        function RenderToContainer(_DJNode){
+            if(KUBE.Is(_DJNode,true) == 'DomJack'){
+                _DJNode.Append(buildTitle());
+                _DJNode.Append(buildContents());
             }
         }
 
@@ -106,8 +110,28 @@
 
         //Private methods would go here if we had any
         function buildTitle(){
-            
+            if(KUBE.Is(TitleDJ,true) !== 'DomJack'){
+                TitleDJ = $K.DJ('div');
+                TitleDJ.AddClass(['.toc','.main','.title']);
+                TitleDJ.SetInner(title);
+            }
+            return TitleDJ;
         }
+
+        function buildContents(){
+            var count = 0;
+            if(KUBE.Is(ContentsDJ,true) !== 'DomJack'){
+                ContentsDJ = $K.DJ('div');
+                ContentsDJ.AddClass(['.toc','.main','.contents']);
+
+                contents.KUBE().each(function(_TableIndex){
+                    count++;
+                    _TableIndex.Render()
+                });
+            }
+            return ContentsDJ;
+        }
+
 
     }
 }(KUBE));
