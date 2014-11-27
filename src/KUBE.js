@@ -1062,6 +1062,7 @@
                         }
                         else{
                             //In this case a request for a namespace that has not been set up has occurred. So throw an error I'd imagine?
+                            throw new Error('A class was requested for a namespace that has no reference ('+nameSpace+':'+className+') KUBE will not be able to resolve this. Ensure namespace index is registered and namespace case is correct');
                         }
                     }
                 }

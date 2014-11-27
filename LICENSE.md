@@ -1,4 +1,4 @@
-Copyright (c) 2014, Red Scotch Software 
+Copyright (c) 2014, Red Scotch Software <kube+js@redscotch.com>
 All rights reserved. 
 
 Redistribution and use in source and binary forms, with or without 
