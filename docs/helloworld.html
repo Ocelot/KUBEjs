@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="../src/KUBE.js"></script>
+    <script type="text/javascript">
+
+        //Set up a key:value object
+        //  -key    = alias
+        //  -value  = namespace of KUBE Class
+        var uses = {
+            'DJ':'/Library/DOM/DomJack'
+        };
+
+        //Request dependancy resolution. Returns a promise (var p.then(callback)) which can be used instead of the callback
+        KUBE.Uses(uses,resolved);
+
+        //When the dependancies resolve, receives an object that matches initial uses object
+        function resolved($K){
+            //$K.DJ == /Library/DOM/DomJack (Dom Abstraction)
+            $K.DJ().Ready(function(){ domLoaded($K) }); //Let's pass our initial uses object in
+        }
+
+        function domLoaded($K){
+            var Body = $K.DJ(document.body);
+            Body.SetInner('Hello World');
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>
