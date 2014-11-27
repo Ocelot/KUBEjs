@@ -30,8 +30,56 @@
         }
 
         function domLoaded($K){
-            alert(KUBE.Is($K.ToC(),true));
+            var TableContainer;
+            var ExampleToC = $K.ToC('KUBEjs: Examples/Demo');
+            if(KUBE.Is(ExampleToC,true) === 'TableOfContents'){
+                loadCoreBasicIndex(ExampleToC);
+//                loadExtendIndex(ExampleToC);
+//                loadDomJackIndex(ExampleToC);
+//                loadStyleJackIndex(ExampleToC);
+//                loadUIIndex(ExampleToC);
+//                loadAjaxIndex(ExampleToC);
+
+                TableContainer = $K.DJ('div');
+                ExampleToC.RenderToContainer(TableContainer);
+                $K.DJ(document.body).Append(TableContainer);
+            }
         }
+
+        function loadCoreBasicIndex(_ToC){
+            var Core;
+            Core = _ToC.CreateNewIndex('Basic Core: Starting KUBEjs');
+        }
+
+        function loadExtendIndex(_ToC){
+            var Extend;
+            Extend = _ToC.CreateNewIndex('Extending Native Types in KUBEjs');
+        }
+
+        function loadDomJackIndex(_ToC){
+            var DomJack;
+            DomJack = _ToC.CreateNewIndex('DomJack: DOM Abstraction');
+        }
+
+        function loadStyleJackIndex(_ToC){
+            var StyleJack;
+            StyleJack = _ToC.CreateNewIndex('StyleJack: Working with CSS');
+        }
+
+        function loadUIIndex(_ToC){
+            var UI;
+            UI = _ToC.CreateNewIndex('Building UI in KUBEjs');
+        }
+
+        function loadAjaxIndex(_ToC){
+            var Ajax;
+            Ajax = _ToC.CreateNewIndex('Ajax: Client/Server in KUBEjs');
+        }
+
+
+
+
+
     </script>
 </head>
 <body>

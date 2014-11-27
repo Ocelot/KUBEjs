@@ -25,11 +25,11 @@
     function TableIndex(_TableOfContents,_name){
         var name,ToC;
 
-        if(KUBE.Is(ToC,true) == 'TableOfContents'){
+        if(KUBE.Is(_TableOfContents,true) == 'TableOfContents'){
             ToC = _TableOfContents;
         }
         else{
-            throw new Error('Cannot initialize TableIndex: Requires TableOfContents Object: '.KUBE.Is(_TableOfContents,true));
+            throw new Error('Cannot initialize TableIndex: Requires TableOfContents Object: '+KUBE.Is(_TableOfContents,true));
         }
 
         name = _name || 'Untitled';

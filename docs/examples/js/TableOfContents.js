@@ -31,9 +31,9 @@
     TableOfContents.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     //Our actual 'class'/function (arguments can be used, and will be passed in on construction
-    function TableOfContents(_name){
-        var name,contents,indentSize,listFormat,$K,$API;
-        name = _name || 'Unknown';
+    function TableOfContents(_title){
+        var title,contents,indentSize,listFormat,$K,$API;
+        title = _title || 'Unknown';
         indentSize = 5;
 
         contents = [];
@@ -44,6 +44,7 @@
         //This is how we set up our public methods/properties in KUBE classes (the KUBE().create calls a native Object Extend method (/Library/Extend/Object.js)
         $API = {
             'GetContents':GetContents,
+            'GetTitle':GetTitle,
             'SetIndentSize':SetIndentSize,
             'SetListFormat':SetListFormat,
             'RenderToContainer':RenderToContainer,
@@ -56,6 +57,10 @@
         //Getters
         function GetContents(){
             return contents;
+        }
+
+        function GetTitle(){
+            return title;
         }
 
         //Setters
@@ -78,6 +83,16 @@
         function RenderToContainer(_DJ){
             if(KUBE.Is(_DJ,true) == 'DomJack'){
                 //Check to make sure it's a DomJack
+                var Title = $K.DJ('div');
+                Title.AddClass(['.toc','.main','.title']);
+                Title.SetInner(title);
+
+                var Contents = $K.DJ('div');
+                Contents.AddClass(['.toc','.main','.contents']);
+
+
+                _DJ.Append(Title);
+                _DJ.Append(Contents);
             }
         }
 
@@ -90,5 +105,9 @@
         }
 
         //Private methods would go here if we had any
+        function buildTitle(){
+            
+        }
+
     }
 }(KUBE));
