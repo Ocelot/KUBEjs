@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>KUBEjs: Hello World Example</title>
+    <title>KUBEjs Examples: Table of Contents</title>
     <!-- Include KUBE.js -->
     <script src="../../src/KUBE.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
 
         //When the dependancies resolve, receives an object that matches initial uses object
         function resolved($K){
-            //$K.DJ == /Library/DOM/DomJack (Dom Abstraction)
+            //$K.DJ == /Library/DOM/DomJack (Dom Abstraction: See DomJack examples)
             $K.DJ().Ready(function(){ domLoaded($K) }); //Let's pass our initial uses object in
         }
 
@@ -26,6 +26,7 @@
             var Body = $K.DJ(document.body);
             Body.SetInner('Hello World');
         }
+
     </script>
 </head>
 <body>
