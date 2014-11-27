@@ -1,8 +1,55 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+<head>
+    <title>KUBEjs: Add Namespace Index</title>
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <!-- Set up our ExampleIndex -->
+    <script type="text/javascript">
+
+        //Let's load our ExampleIndex
+        (function(KUBE){
+
+            //First we'll get a new Index Object from the KUBE AutoLoader
+            var ExampleIndex = KUBE.AutoLoad().GetNewIndex();
+
+            //Then we'll set the namespace
+            ExampleIndex.SetNamespace('/KUBEjs/Examples');
+
+            //Our baseURL tells which directory to load files from (KUBE.Config().autoLoadPath will point to the KUBEjs/src)
+            ExampleIndex.SetBaseURL(KUBE.Config().autoLoadPath+'/../../docs/examples/js');
+
+            //And then we set which classes our available in our Index (it will expect file names to match class names
+            ExampleIndex.SetIndex([
+                'IndexTest'
+            ]);
+
+            //Now we add our Index object back to the KUBE AutoLoader
+            KUBE.AutoLoad().AddIndex(ExampleIndex);
+        }(KUBE));
+
+    </script>
+
+    <!-- Now let's try our index -->
+    <script>
+        KUBE.Uses({'Test':'/KUBEjs/Examples/IndexTest'}).then(function($K){
+            //This will be an IndexTest object
+            var Test1 = $K.Test('My First Message');
+
+            //This will be a new IndexTest object
+            var Test2 = $K.Test('My Second Message');
+
+            //We will just alert them appropriately (see docs/examples/js/IndexTest.js for API)
+            Test1.Alert();
+            Test2.Alert();
+
+            //Let's see exactly what the Object is
+            alert(KUBE.Is(Test1,true));
+
+        });
+    </script>
+
 </head>
 <body>
 
