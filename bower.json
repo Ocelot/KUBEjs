@@ -3,7 +3,7 @@
     "description": "Javascript library for DOM manipulation, along with other tools and utilities. REWRITE THIS TEXT",
     "licence": "BSD-3-Clause",
     "authors": [
-        {"name": "Red Scotch Software", "email": "kube+js@redscotch.com","homepage": "http://www.redscotch.com"},
+        {"name": "Red Scotch Software", "email": "kube+js@redscotch.com","homepage": "http://www.redscotch.com"}
     ],
     "homepage": "http://www.redscotch.com",
     "main": "src/KUBE.js",
