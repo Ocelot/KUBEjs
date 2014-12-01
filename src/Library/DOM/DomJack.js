@@ -26,7 +26,6 @@
 	var KUBENodeId,jackCache,cleanPointer,wordToKeyCodeMap,scheduleClean,cleanupCache;
 	
 	KUBENodeId = 0;			//Current KUBE Node ID
-	cleanPointer = 0;		//Not sure what this does
 	jackCache = {};			//Our cache
 	jackCache.length = 0;	//Start our cache length
 	cleanupCache = [];
@@ -103,11 +102,7 @@
 			requestAnimationFrame(cleanCache);
 		}
 	}
-	
-	//Start our runaway process
-	//setInterval(cleanCache,60000);
-	
-	
+
 	DomJack.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	// Primary class declaration
 	function DomJack(initNode){
@@ -196,18 +191,6 @@
 			//Mapping
 			'SetMapId':SetMapId,
 			'MapData':MapData,
-			
-			//Animation
-            //THESE METHODS ARE DEPRECATED. IF YOU WANT ANIMATIONS, USE VELOCITY.
-            //THESE METHODS DO NOTHING EXCEPT TRIGGER ERRORS. USE AT OWN RISK (OR DON'T USE AT ALL PLS)
-			'Fade':Fade,						//ERRORS SAYING THAT DJ ANIMATIONS ARE GONE
-			'Slide':Slide						//ERRORS SAYING THAT DJ ANIMATIONS ARE GONE
-			
-
-			//**Not sure
-			//'Each':Each,
-			//'CheckCache':CheckCache,
-			//'CheckNode':CheckNode
 		};
 
 		//Init and return our API
@@ -1394,19 +1377,6 @@
 					_Child.MapData(_map);
 				});
 			}
-		}
-		
-		//Animations
-		function Fade(_ms,_callback){
-            console.error('Fade was called! DomJack Fade is deprecated for Velocity animations.');
-			//initDJAnimation();
-			//return animationAPI.Fade(_ms,_callback);
-		}
-		
-		function Slide(_direction,_ms,_callback){
-            console.error('Slide was called! DomJack Slide is deprecated for Velocity animations.');
-			//initDJAnimation();
-			//return animationAPI.Slide(_direction,_ms,_callback);
 		}
 
 	}
