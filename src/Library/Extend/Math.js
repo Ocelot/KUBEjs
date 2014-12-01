@@ -15,6 +15,7 @@
     if(KUBE.Extend){
         ExtendAPI = KUBE.Extend();
         ExtendAPI.Load('Math','scaleAspectRatio',ScaleAspectRatio);
+        ExtendAPI.Load('Math','random',Random);
         KUBE.EmitState('/Library/Extend/Math');
         KUBE.console.log('/Library/Extend/Math Loaded');
     }
@@ -50,6 +51,10 @@
             $return.width = this.round(_currentWidth*factor);
         }
         return $return;
+    }
+
+    function Random(_min,_max){
+        return Math.floor((Math.random() * _max) + _min);
     }
 
 }(KUBE));

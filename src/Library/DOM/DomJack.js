@@ -145,8 +145,7 @@
 			'GetType':GetType,					//Get: type of Node (tag type)
 			'GetIndex':GetIndex,				//Get: index of placement within parent
 			'GetRoot':GetRoot,
-			'SetParent':SetParent,				//Set: **attempts to set the parent, not sure about this
-					
+
 			//Children management
 			'Insert':Insert,					//Utility: Inject a node at a specific index within the children list
 			'Prepend':Prepend,					//Utility: Inject a node at the beginning of the children list
@@ -465,10 +464,6 @@
 				}
 			});
 			return $return;
-		}
-		
-		function SetParent(_parent){
-			// Deprecating this for now: look at github for older hacky code
 		}
 				
 		// Children Management
