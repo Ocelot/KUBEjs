@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KUBEjs Core: Simple Events Example</title>
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <!-- KUBE Events (located in KUBE.js) -->
+    <script type="text/javascript">
+
+        //Quick function to log event
+        var log = [];
+        function simpleLog(_event){
+            log.push(_event);
+        }
+
+        //Let's generate a simple Event container (in this case KUBE.Events() will return a new scoped event object to us).
+        //Otherwise we could pass in an already instantiated Object and it would merge the API with that object
+        var SimpleEventObj = KUBE.Events(); //Also Events is part of KUBE.js so does not require autoLoading
+
+        /*
+         *   Our Simple Event Object has the following methods available:
+         *      1. On
+         *      2. Once
+         *      3. Emit
+         *      4. Clear
+         *      5. RemoveListener
+         *      6. EmitState
+         *      7. OnState
+         *      8. ClearState
+         *      9. CheckState
+         */
+
+        //On binds a callback to listen for the Event
+        SimpleEventObj.On('test',simpleLog);
+
+        //Emit fires the event, which in turn fires any listener callbacks
+        SimpleEventObj.Emit('test','First emit call on test event (should fire a single console.log of this message)');
+
+        //Clear will clear any listeners on the space (if no argument is passed in, should clear all listeners
+        SimpleEventObj.Clear('test');
+        SimpleEventObj.Emit('test','this will not log');
+
+        //Once Example
+        SimpleEventObj.On('once',simpleLog);
+        SimpleEventObj.Once('once',simpleLog);
+        SimpleEventObj.Emit('once','First fire of once: we have two listeners. An On listener, and a Once listener. Both should log this');
+        SimpleEventObj.Emit('once','Second fire of once: At this point the Once listener has cleared and only the On listener will log this');
+        SimpleEventObj.Clear('once');
+
+        //We can do removal by function as well, this is useful for spot removal of anonymous functions
+        var anon = function(){
+            simpleLog('anon fired');
+        };
+        SimpleEventObj.On('targetRemoval',anon);
+        SimpleEventObj.RemoveListener('targetRemoval',anon);
+        SimpleEventObj.Emit('targetRemoval','will not fire');
+
+
+        //States are a bit different. We can bind callbacks to states and if the state has not been emitted, it will wait until the state is emitted
+        SimpleEventObj.OnState('someState',function(){ simpleLog('waiting for some state'); });
+
+        //States do not take in event objects, they are a true/false state. When they get emitted for the first time, they trigger any listeners
+        SimpleEventObj.EmitState('someState')
+
+        //After a state has already been emitted, callbacks are called immediately
+        SimpleEventObj.OnState('someState',function(){ simpleLog('will fire immediately'); });
+
+        //We can also just do a Check State if we want to make a decision
+        if(SimpleEventObj.CheckState('someState')){
+            simpleLog('Some state has already occurred');
+        }
+
+        //Or we can clear the state, which clears all listeners, and reverts the state back to a false state
+        SimpleEventObj.ClearState('someState');
+        if(SimpleEventObj.CheckState('someState')){
+            simpleLog('State has not occurred, this will not fire');
+        }
+
+        //Dump out to the page using KUBE (first establish what we want) then we'll use our promise
+        KUBE.Uses(['/Library/DOM/DomJack','/Library/Extend/Array']).then(function(_DJ){
+
+            //Because we used an array, we get objects in the order of classes we requested. We use Ready (DOM Ready)
+            _DJ().Ready(function(){
+
+                //log is an array we defined at the beginning of this example array.KUBE() returns an API from extend libraries. In this case each
+                log.KUBE().each(function(_event){
+
+                    //Now let's grab the Body Node, append a new Div, and set the inner contents of that div with our event
+                    _DJ(document.body).Append('div').SetInner(_event);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

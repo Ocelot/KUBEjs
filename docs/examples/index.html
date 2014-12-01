@@ -33,7 +33,7 @@
             var TableContainer;
             var ExampleToC = $K.ToC('KUBEjs: Examples/Demo');
             if(KUBE.Is(ExampleToC,true) === 'TableOfContents'){
-//                loadCoreBasicIndex(ExampleToC);
+                loadCoreBasicIndex(ExampleToC);
 //                loadExtendIndex(ExampleToC);
 //                loadDomJackIndex(ExampleToC);
 //                loadStyleJackIndex(ExampleToC);
@@ -44,16 +44,12 @@
                 ExampleToC.RenderToContainer(TableContainer);
                 $K.DJ(document.body).Append(TableContainer);
             }
-
-//            for(var i=0;i<200;i++){
-//                console.log(Number(i).KUBE().roman());
-//            }
         }
 
-//        function loadCoreBasicIndex(_ToC){
-//            var Core;
-//            Core = _ToC.CreateNewIndex('Basic Core: Starting KUBEjs');
-//        }
+        function loadCoreBasicIndex(_ToC){
+            var Core;
+            Core = _ToC.CreateNewIndex('Basic Core: Starting KUBEjs');
+        }
 //
 //        function loadExtendIndex(_ToC){
 //            var Extend;
