@@ -135,7 +135,7 @@
             Body.Append(Box);
 
             //Now let's whip up a property table in CSS (we are going to use TextKing to cheat and make flexible but consistent column widths)
-            SJ('.table').Position('relative').Box().Sizing('border-box').api.Border().Top('1px solid black').Left('1px solid black');
+            SJ('.table').Position('relative').Margin(10).Border().Top('1px solid black').Left('1px solid black');
             SJ('.row').Position('relative').Height(30).Border().Bottom('1px solid black');
             SJ('.col').Position('relative').Height(30).LineHeight(30).Float('left').Border().Right('1px solid black').api.Text().Align('center');
 
@@ -162,8 +162,8 @@
             rowBuilder('','Raw Value','Parsed Value','Level 2 API');
             rowBuilder('Top',BoxClass.Top('$'),BoxClass.Top(),'false');
             rowBuilder('Left',BoxClass.Left('$'),BoxClass.Left(),'false');
-            rowBuilder('Border',BoxClass.Border('$'),KUBE.Is(BoxClass.Border().Get()),'true');
-            rowBuilder('Margin',BoxClass.Margin('$'),KUBE.Is(BoxClass.Margin().Get()),'true');
+            rowBuilder('Border',BoxClass.Border('$'),JSON.stringify(BoxClass.Border().Get()),'true');
+            rowBuilder('Margin',BoxClass.Margin('$'),JSON.stringify(BoxClass.Margin().Get()),'true');
 
             //Build our row out
             function rowBuilder(_label,_rawVal,_parseVal,_subAPI){
@@ -186,7 +186,7 @@
                 Row.Append('div').AddClass(['.col','.subAPI']).SetInner(_subAPI);
                 measure('subAPI',_subAPI);
             }
-            
+
             Body.Append(PropTable);
         }
 
