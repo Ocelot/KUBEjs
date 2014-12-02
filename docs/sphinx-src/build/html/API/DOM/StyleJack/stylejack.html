@@ -121,22 +121,104 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>context</strong> (<em>HTMLElement/String</em>) &#8211; Either a HTMLElement or a string containing a style rule (ex. &#8220;div.class&#8221; or HTMLDivElement)</li>
+<li><strong>context</strong> (<em>HTMLElement/String</em>) &#8211; Either a HTMLElement or a string containing a style rule (ex. &#8220;div.class&#8221; or HTMLDivElement)
+StyleJack also supports &#64;font-face rules and &#64;keyframes.
+These return their own APIs instead of StyleJack API.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">StyleJackAPI</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a> or <a class="reference internal" href="#StyleJackFontFaceAPI" title="StyleJackFontFaceAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackFontFaceAPI()</span></code></a> or <code class="xref js js-class docutils literal"><span class="pre">StyleJackCSSKeyFrameAPI()</span></code></p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
+<div class="section" id="stylejack-fontface-api">
+<h2>StyleJack FontFace API<a class="headerlink" href="#stylejack-fontface-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="StyleJackFontFaceAPI">
+<code class="descname">StyleJackFontFaceAPI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackFontFaceAPI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="stylejack-csskeyframe-api">
+<h2>StyleJack CSSKeyFrame API<a class="headerlink" href="#stylejack-csskeyframe-api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="StyleJackCSSKeyFrameAPI.Index">
+<code class="descclassname">StyleJackCSSKeyFrameAPI.</code><code class="descname">Index</code><span class="sig-paren">(</span><em>_index</em><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackCSSKeyFrameAPI.Index" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is for inserting a new Keyframe at the given index. This returns the Stylejack
+representing the given index. Indexes should be 0-100 as they&#8217;re percentages along the animations duration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_index</strong> (<em>Number</em>) &#8211; The percentage (0-100) of the animation where you want
+to create a new keyframe</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackCSSKeyFrameAPI.Delete">
+<code class="descclassname">StyleJackCSSKeyFrameAPI.</code><code class="descname">Delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackCSSKeyFrameAPI.Delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the Keyframe rule entirely.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><cite>Boolean</cite> Represents success/failure of removing the given keyframe rule.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackCSSKeyFrameAPI.Debug">
+<code class="descclassname">StyleJackCSSKeyFrameAPI.</code><code class="descname">Debug</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackCSSKeyFrameAPI.Debug" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><cite>CSSKeyFramesRule</cite> Returns the raw DOM CSSKeyFramesRule object for debugging</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p>These methods require implementation still.</p>
+<dl class="function">
+<dt id="StyleJackCSSKeyFrameAPI.Clear">
+<code class="descclassname">StyleJackCSSKeyFrameAPI.</code><code class="descname">Clear</code><span class="sig-paren">(</span><em>_index</em><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackCSSKeyFrameAPI.Clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="last function">
+<dt id="StyleJackCSSKeyFrameAPI.Each">
+<code class="descclassname">StyleJackCSSKeyFrameAPI.</code><code class="descname">Each</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackCSSKeyFrameAPI.Each" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
 <div class="section" id="stylejack-api">
 <h2>StyleJack API<a class="headerlink" href="#stylejack-api" title="Permalink to this headline">¶</a></h2>
 <p>StyleJack API is simply a representation of the Object that you are returned after initializing
 a new StyleJack with a Node/StyleRule</p>
-<p>You cannot instatiate this manually, as it&#8217;s the return value from StyleJack</p>
+<p>You cannot instantiate this manually, as it&#8217;s the return value from StyleJack</p>
+<p>The String &#8220;$&#8221; Is a special value that you can pass into all of the StyleJackAPI methods to get the raw value back. Else, StyleJack will
+attempt to parse the value (if applicable) to a programatically usable value (eg: String(&#8220;16px&#8221;) =&gt; Number(16)</p>
+<p>StyleJack is a fairly fluid API. For most contexts, if you are setting a value, you will receive the relevant API back.
+This means that if you&#8217;re on the level 1 API (StyleJackAPI), you will receive the StyleJack API back to allow chaining.
+If you are on a level 2 API (StyleJackBackgroundAPI), you will receive that API back. The property .api will allow you
+to return to the level 1 API</p>
 <dl class="class">
 <dt id="StyleJackAPI">
 <em class="property">class </em><code class="descname">StyleJackAPI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI" title="Permalink to this definition">¶</a></dt>
@@ -149,7 +231,764 @@ a new StyleJack with a Node/StyleRule</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Test</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.GetStyleObj">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">GetStyleObj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.GetStyleObj" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Appearance">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Appearance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Appearance" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.BackfaceVisibility">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">BackfaceVisibility</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.BackfaceVisibility" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Background">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Background</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Background" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Border">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Border</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Border" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Bottom">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Bottom</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Bottom" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Box">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Box</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Box" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.CaptionSide">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">CaptionSide</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.CaptionSide" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Clip">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Clip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Clip" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Color">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Color" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Content">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Content</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Content" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Cursor">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Cursor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Cursor" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Direction">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Direction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Direction" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Display">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Display</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Display" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.EmptyCells">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">EmptyCells</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.EmptyCells" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Float">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Float</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Float" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Font">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Font</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Font" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Height">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Height</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Height" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Left">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Left</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Left" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.LetterSpacing">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">LetterSpacing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.LetterSpacing" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.LineHeight">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">LineHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.LineHeight" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Margin">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Margin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Margin" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.MinHeight">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">MinHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MinHeight" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.MinWidth">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">MinWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MinWidth" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.MaxHeight">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">MaxHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MaxHeight" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.MaxWidth">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">MaxWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MaxWidth" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Opacity">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Opacity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Opacity" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Outline">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Outline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Outline" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Overflow">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Overflow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Overflow" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Padding">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Padding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Padding" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Position">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Position</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Position" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Resize">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Resize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Resize" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Right">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Right</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Right" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.TableLayout">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">TableLayout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.TableLayout" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Text">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Text" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Top">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Top</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Top" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Transform">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Transform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Transform" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Transition">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Transition</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Transition" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.VerticalAlign">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">VerticalAlign</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.VerticalAlign" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Visibility">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Visibility</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Visibility" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Width">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Width</code><span class="sig-paren">(</span><em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Width" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>width</strong> (<em>mixed</em>) &#8211; <p>Width Value</p>
+<p>Used for</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a> Or Number</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.WhiteSpace">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">WhiteSpace</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WhiteSpace" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.WordSpacing">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">WordSpacing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WordSpacing" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.WordBreak">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">WordBreak</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WordBreak" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.WordWrap">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">WordWrap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WordWrap" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.ZIndex">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">ZIndex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.ZIndex" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="stylejackbackgroundapi">
+<h2>StyleJackBackgroundAPI<a class="headerlink" href="#stylejackbackgroundapi" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="StyleJackBackgroundAPI">
+<em class="property">class </em><code class="descname">StyleJackBackgroundAPI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBackgroundAPI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBackgroundAPI.Set">
+<code class="descclassname">StyleJackBackgroundAPI.</code><code class="descname">Set</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBackgroundAPI.Set" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBackgroundAPI.Get">
+<code class="descclassname">StyleJackBackgroundAPI.</code><code class="descname">Get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBackgroundAPI.Get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBackgroundAPI.Color">
+<code class="descclassname">StyleJackBackgroundAPI.</code><code class="descname">Color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBackgroundAPI.Color" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBackgroundAPI.Attachment">
+<code class="descclassname">StyleJackBackgroundAPI.</code><code class="descname">Attachment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBackgroundAPI.Attachment" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBackgroundAPI.Image">
+<code class="descclassname">StyleJackBackgroundAPI.</code><code class="descname">Image</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBackgroundAPI.Image" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBackgroundAPI.Position">
+<code class="descclassname">StyleJackBackgroundAPI.</code><code class="descname">Position</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBackgroundAPI.Position" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBackgroundAPI.Repeat">
+<code class="descclassname">StyleJackBackgroundAPI.</code><code class="descname">Repeat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBackgroundAPI.Repeat" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBackgroundAPI.Clip">
+<code class="descclassname">StyleJackBackgroundAPI.</code><code class="descname">Clip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBackgroundAPI.Clip" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBackgroundAPI.Origin">
+<code class="descclassname">StyleJackBackgroundAPI.</code><code class="descname">Origin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBackgroundAPI.Origin" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBackgroundAPI.Size">
+<code class="descclassname">StyleJackBackgroundAPI.</code><code class="descname">Size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBackgroundAPI.Size" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="StyleJackBackgroundAPI.api">
+<code class="descclassname">StyleJackBackgroundAPI.</code><code class="descname">api</code><a class="headerlink" href="#StyleJackBackgroundAPI.api" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
 </tr>
 </tbody>
 </table>
