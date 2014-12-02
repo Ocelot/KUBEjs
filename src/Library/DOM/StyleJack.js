@@ -2957,18 +2957,10 @@
 			try{
 				_styleObj.style[_property] = _newSet;
 				if(_styleObj.style[_property] === current){
-                    //debugger;
-					//I think I failed but am not sure...
-                    //I changed this from a debugger because it was annoying.
-                    // If you changed something to the same value, it failed.  This seems better.  -- Dustin
-//					KUBE.console.log('Set potentially failed.', {
-//                            'Property': _property,
-//                            'Before': current,
-//                            'After': _styleObj.style[_property],
-//                            'Attempted New Value': _newSet
-//                    });
+                    //This is a weird state. It happens sometimes because StyleSheets are a bit insane
 				}
 				else{
+                    _API.Emit('change',{'property':_property,'oldValue':current,'newValue':_newSet});
 					$return = true;
 				}
 			}
