@@ -586,8 +586,15 @@
 		
 		//Core methods
 		function Delete(){
-			//Boom
-            //debugger;
+            if(KUBE.Is(_styleObj,true) === 'CSSStyleRule' && _styleObj.parentStyleSheet){
+                var rules = _styleObj.parentStyleSheet.cssRules;
+                for(var i=0;i<rules.length;i++){
+                    if(rules[i] === _styleObj){
+                        _styleObj.parentStyleSheet.deleteRule(i);
+                        $API.Emit('delete');
+                    }
+                }
+            }
 		}
 		
 		function getArgsArray(_arguments){

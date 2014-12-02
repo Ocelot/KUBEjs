@@ -253,6 +253,11 @@
 
             Body.Prepend('div').SetInner('Click Me:').Style().Margin(10);
             Body.Append(PropTable);
+            var Button = Body.Append('input');
+            Button.Type('button').Value('Click to Delete Box Class');
+            Button.On('click',function(){
+               BoxClass.Delete();
+            });
 
         }
 
