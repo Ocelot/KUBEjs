@@ -11,7 +11,8 @@
         //Let's use DomJack && StyleJack
         var uses = {
             'DJ':'/Library/DOM/DomJack',
-            'SJ':'/Library/DOM/StyleJack'
+            'SJ':'/Library/DOM/StyleJack',
+            'TextKing':'/Library/DOM/TextKing'
         };
 
         //Let our dependencies load
@@ -21,8 +22,10 @@
         });
 
         function styleJackExample(){
-            //Because of the wrangling to get to a space where you can render to the DOM, it's sometimes easier to get a new KUBE Class object
-            var $K = KUBE.Class(uses);
+            //Because of the wrangling to get to a space where you can render to the DOM, it's sometimes easier to get KUBE Classes directly
+            var DJ = KUBE.Class('/Library/DOM/DomJack');
+            var SJ = KUBE.Class('/Library/DOM/StyleJack');
+            var TextKing = KUBE.Class('/Library/DOM/TextKing')(['Arial',14]);
 
             /*
              * StyleJack is not fundamentally an inline style layer but instead it is an entire StyleSheet abstraction. This makes it well suited for managing CSS classes, as opposed to just inline styles
@@ -100,10 +103,13 @@
              */
 
             //In this example we will be looking specifically in the context of classes, so we pass a class string into the constructor, which in turn will return a level 1 API for working on that class
-            var BoxClass = $K.SJ('.box');
+            var BoxClass = SJ('.box');
+
+            //Quickly because global margin/padding is stupid, let's turn it off also let's set Box Sizing to Border Box
+            DJ(document.body).Style().Margin(0).Padding(0).Font().Family('Arial').Size(14).api.Box().Sizing('border-box');
 
             //Let's do a really basic set chain (we are using INTs here which will be auto translated to px strings)
-            BoxClass.Top(10).Left(10).Width(100).Height(100).Position('relative').Border('1px solid black');
+            BoxClass.Margin(10).Width(100).Height(100).Position('relative').Border('1px solid black');
 
             /*
 
@@ -120,27 +126,68 @@
              */
 
             //Grab our body
-            var Body = $K.DJ(document.body);
+            var Body = DJ(document.body);
 
             //Let's make a box (create a new div, add the box class to the div)
-            var Box = $K.DJ('div').AddClass('.box');
+            var Box = DJ('div').AddClass('.box');
 
             //We'll append it to our Body
             Body.Append(Box);
 
+            //Now let's whip up a property table in CSS (we are going to use TextKing to cheat and make flexible but consistent column widths)
+            SJ('.table').Position('relative').Box().Sizing('border-box').api.Border().Top('1px solid black').Left('1px solid black');
+            SJ('.row').Position('relative').Height(30).Border().Bottom('1px solid black');
+            SJ('.col').Position('relative').Height(30).LineHeight(30).Float('left').Border().Right('1px solid black').api.Text().Align('center');
 
-            //Now let's whip up a property table to showcase a few things
-            var PropTable = $K.DJ('table');
-            var TR = PropTable.Append('tr');
-            var Label = TR.Append('td');
-            var Raw = TR.Append('td');
-//           var
+            //We will use textKing for setting up our measurements
+            var measurements = {'label':0,'rawVal':0,'parseVal':0,'subAPI':0}
+            function measure(_key,_string){
+                var currentVal = measurements[_key];
+                var checkVal = Math.floor(TextKing.MeasureString(_string).width)+50;
+                if(checkVal > currentVal){
+                    SJ('.'+_key).Width(checkVal);
+                    measurements[_key] = checkVal;
+                }
 
+                console.log(measurements);
+                var total = measurements.label+measurements.rawVal+measurements.parseVal+measurements.subAPI;
+                //alert(total);
+                if(SJ('.table').Width() < total){
+                    SJ('.table').Width(Math.floor(total)+5);
+                }
+            }
 
+            //Our faux table
+            var PropTable = DJ('div').AddClass('.table');
+            rowBuilder('','Raw Value','Parsed Value','Level 2 API');
+            rowBuilder('Top',BoxClass.Top('$'),BoxClass.Top(),'false');
+            rowBuilder('Left',BoxClass.Left('$'),BoxClass.Left(),'false');
+            rowBuilder('Border',BoxClass.Border('$'),KUBE.Is(BoxClass.Border().Get()),'true');
+            rowBuilder('Margin',BoxClass.Margin('$'),KUBE.Is(BoxClass.Margin().Get()),'true');
 
-///            console.log(BoxClass.Top());
+            //Build our row out
+            function rowBuilder(_label,_rawVal,_parseVal,_subAPI){
+                //Initialize a row
+                var Row = PropTable.Append('div').AddClass('.row');
 
+                //Our label column
+                Row.Append('div').AddClass(['.col','.label']).SetInner(_label);
+                measure('label',_label);
 
+                //Our raw value column
+                Row.Append('div').AddClass(['.col','.rawVal']).SetInner(_rawVal);
+                measure('rawVal',_rawVal);
+
+                //Parsed value
+                Row.Append('div').AddClass(['.col','.parseVal']).SetInner(_parseVal);
+                measure('parseVal',_parseVal);
+
+                //Sub API
+                Row.Append('div').AddClass(['.col','.subAPI']).SetInner(_subAPI);
+                measure('subAPI',_subAPI);
+            }
+            
+            Body.Append(PropTable);
         }
 
     </script>
