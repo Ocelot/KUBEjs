@@ -8,7 +8,7 @@
  */
 (function(KUBE){
 	"use strict";
-	KUBE.LoadSingleton('/Library/Drawing/Color', Color,['/Library/DOM/FeatureDetect','/Library/Extend/RegExp','/Library/Extend/Object']);
+	KUBE.LoadSingleton('/Library/Drawing/Color', Color,['/Library/DOM/FeatureDetect','/Library/Extend/RegExp','/Library/Extend/Object','/Library/Extend/Math']);
 	
 	Color.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Color(){
@@ -16,6 +16,7 @@
 		var $public = {
 			'Format':Format,
 			'GetWebColors':stringColorTable,
+            'GetRandomWebColor':GetRandomWebColor,
 			'Identify':identifyColorString,
 			'NumToHex':numToHex,
 			'ParseHSL':parseHSL,
@@ -112,13 +113,13 @@
 			$color.g = parseInt(hexA.substring(4,6),16);
 			$color.b = parseInt(hexA.substring(6,8),16);
 			return $color;
-		};
+		}
 		
 		function RGBAToAHex(rgb){
 			var parsed = parseRGB(rgb);
 			parsed.a = parsed.a || 255;
 			return "#"+numToHex(parsed.a)+numToHex(parsed.r)+numToHex(parsed.g)+numToHex(parsed.b);
-		};
+		}
 
 		function RGBString(r,g,b,a){
 			r = (KUBE.Is(r) === 'undefined' || r > 255 ? 255 : r);
@@ -126,7 +127,7 @@
 			b = (KUBE.Is(b) === 'undefined' || b > 255 ? 255 : b);
 			a = (KUBE.Is(a) === 'undefined' || a > 1 ? 1 : a);
 			return (KUBE.Is(a) !== 'undefined' && FD.rgba() ? "rgba("+r+","+g+","+b+","+a+")" : "rgb("+r+","+g+","+b+")");
-		};
+		}
 		
 		function HSLString(h,s,l,a){
 			//h = (typeof h == 'undefined' || h > 255 ? 255 : r);
@@ -134,7 +135,7 @@
 			l = (KUBE.Is(l) === 'undefined' || l > 100 ? 100 : l);
 			a = (KUBE.Is(a) === 'undefined' || a > 1 ? 1 : a);
 			return (KUBE.Is(a) !== 'undefined' && FD.hsla() ? "hsla("+h+","+s+","+l+","+a+")" : "hsl("+h+","+s+","+l+")");
-		};
+		}
 
 		function Format(colorString, format, stringify){
 			stringify = stringify || false;
@@ -187,7 +188,24 @@
 				}
 			}
 			return $return;
-		};
+		}
+
+        function GetRandomWebColor(_byName){
+            var colors,max,colorIndex,count,$return;
+            _byName = _byName || true;
+            colors = stringColorTable();
+            max = colors.KUBE().count();
+            colorIndex = Math.KUBE().random(0,max-1);
+            count = 0;
+            colors.KUBE().each(function(_key,_val){
+                count++;
+                if(count == colorIndex){
+                    $return = (_byName ? _key : _val);
+                    this.break();
+                }
+            });
+            return $return || (_byName ? 'black' : '#000000');
+        }
 
 		function hslToRgb(hsl){
 			var m1,m2;
@@ -228,8 +246,8 @@
 					_m1 = _m1+(_m2-_m1)*(2/3-_h)*6;
 				}
 				return Math.round((_m1*100)*(255/100));
-			};
-		};
+			}
+		}
 
 		function rgbToHsl(rgb) {
 			var $parsed = parseRGB(rgb);
@@ -262,13 +280,13 @@
 				$colors.a = $parsed.a;
 			}
 			return $colors;
-		};
+		}
 
 
 		function rgbToHex(rgb){
 			var parsed = parseRGB(rgb);
 			return "#"+numToHex(parsed.r)+numToHex(parsed.g)+numToHex(parsed.b);
-		};
+		}
 		
 		function stringToHex(string){
 			var $return = '#FFFFFF';
@@ -277,7 +295,7 @@
 				$return = colorTable[String(string).toLowerCase()];
 			}
 			return $return;
-		};
+		}
 
 		function hexToString(hex){
 			var $return = 'unknown';
@@ -291,7 +309,7 @@
 				}
 			}
 			return $return;
-		};
+		}
 
 		function hexToRgb(hex, stringify, opacity){
 			var $color = {};
@@ -329,7 +347,7 @@
 
 			}
 			return $color;
-		};
+		}
 
 		function parseRGB(rgb){
 			var $colors = {};
@@ -364,7 +382,7 @@
 				}
 			}
 			return $colors;
-		};
+		}
 
 		function numToHex(num, pad){
 			num = num || 0;
@@ -374,7 +392,7 @@
 				$hex = "0"+$hex;
 			}
 			return $hex;
-		};
+		}
 		
 		function identifyColorString(colorString){
 			var $return;
@@ -392,7 +410,7 @@
 				$return = 'string';
 			}
 			return $return;
-		};
+		}
 
 		function IsValidColor(_color){
 			var $return = false;
