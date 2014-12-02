@@ -587,6 +587,7 @@
 		//Core methods
 		function Delete(){
 			//Boom
+            //debugger;
 		}
 		
 		function getArgsArray(_arguments){
@@ -1926,9 +1927,18 @@
 			else if(_val === undefined){
 				top = Convert(RawStyleGet(_styleObj,'marginTop'),'px','number');
 				right = Convert(RawStyleGet(_styleObj,'marginRight'),'px','number');
-				bottom = Convert(RawStyleGet(_styleObj),'marginBottom','px','number');
-				left = Convert(RawStyleGet(_styleObj),'marginLeft','px','number');
-				$return = { 0:top,1:right,2:bottom,3:left,'top':top,'right':right,'bottom':bottom,'left':left };
+				bottom = Convert(RawStyleGet(_styleObj,'marginBottom'),'px','number');
+				left = Convert(RawStyleGet(_styleObj,'marginLeft'),'px','number');
+				$return = {
+                    0:top,
+                    1:right,
+                    2:bottom,
+                    3:left,
+                    'top':top,
+                    'right':right,
+                    'bottom':bottom,
+                    'left':left
+                };
 			}
 			else{
 				switch(KUBE.Is(_val)){

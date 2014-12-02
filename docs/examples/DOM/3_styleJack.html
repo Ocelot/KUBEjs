@@ -11,7 +11,9 @@
         //Let's use DomJack && StyleJack
         var uses = {
             'DJ':'/Library/DOM/DomJack',
-            'SJ':'/Library/DOM/StyleJack'
+            'SJ':'/Library/DOM/StyleJack',
+            'TextKing':'/Library/DOM/TextKing',
+            'XM':'/Library/Extend/Math'
         };
 
         //Let our dependencies load
@@ -21,8 +23,11 @@
         });
 
         function styleJackExample(){
-            //Because of the wrangling to get to a space where you can render to the DOM, it's sometimes easier to get a new KUBE Class object
-            var $K = KUBE.Class(uses);
+            //Because of the wrangling to get to a space where you can render to the DOM, it's sometimes easier to get KUBE Classes directly
+            var DJ = KUBE.Class('/Library/DOM/DomJack');
+            var SJ = KUBE.Class('/Library/DOM/StyleJack');
+            var TextKing = KUBE.Class('/Library/DOM/TextKing')(['Arial',14]);
+            var Color = KUBE.Class('/Library/Drawing/Color');
 
             /*
              * StyleJack is not fundamentally an inline style layer but instead it is an entire StyleSheet abstraction. This makes it well suited for managing CSS classes, as opposed to just inline styles
@@ -90,56 +95,164 @@
              *  -WordBreak
              *  -WordWrap
              *  -ZIndex
+             *
+             *  -api
              */
 
             /*
              * The APIs provided by Level 1 StyleJack follow a specific pattern:
-             *  -'$'            ie: StyleJack('.class').Top('$') will return the raw value from the actual CSSStyleRule object
-             *  -mixedVar       ie: StyleJack('.class').Top(10) will attempt to parse the value appropriately as best as possible, set the right rule, and return the Level 1 API for chaining
-             *  -No argument    ie: StyleJack('.class').Top() will return the value the API thinks most useful (parsed if possibly) OR an explicit Level 2 API if applicable
+             *  -arg '$'            ie: StyleJack('.class').Border('$') will return the raw value from the actual CSSStyleRule object (unless it detects a px value, in which case it will be translated to an int)
+             *  -arg string         ie: StyleJack('.class').Border('1px solid black') will attempt to set a raw value (in the exception that numbers will be translate to 'px' strings ) and return the Level 1 API for chaining
+             *  -arg array          ie: StyleJack('.class').Border([1,'solid','black']) will attempt to use the array to set the sub properties if applicable
+             *  -arg object         ie: StyleJack('.class').Border({'width':1,'style':'solid':'color:'black'}) will attempt to use the object to set the sub properties if applicable
+             *  -arg undefined      ie: StyleJack('.class').Border() will return the value the API thinks most useful OR an explicit Level 2 API if applicable
+             *
+             *  In the event an API returns a Level 2 StyleJack API it will often follow the same pattern laid out by the level 1 API but sometimes adds additional handling methods
+             *  -Get: is often a level 2 API method that will return the parsed, or deconstructed value as an Object (instead of the raw string)
+             *                      ie: StyleJack('.class').Border().Get() will return a special object with both key:value properties, as well as numeric indexes (like an array) of the appropriate properties
+             *
+             *
+             *  The result of this is patterns that allow fairly predictable use/access of any CSS property:
+             *      ie. StyleJack('.class').Background().Color('black');
+             *
+             *  Except also allows for special handling methods that require additional knowledge
+             *      ie. StyleJack('.class').Background().
+             *
              */
 
             //In this example we will be looking specifically in the context of classes, so we pass a class string into the constructor, which in turn will return a level 1 API for working on that class
-            var BoxClass = $K.SJ('.box');
+            var BoxClass = SJ('.box');
+
+            //Quickly because global margin/padding is stupid, let's turn it off also let's set Box Sizing to Border Box
+            DJ(document.body).Style().Margin(0).Padding(0).Font().Family('Arial').Size(14).api.Box().Sizing('border-box');
 
             //Let's do a really basic set chain (we are using INTs here which will be auto translated to px strings)
-            BoxClass.Top(10).Left(10).Width(100).Height(100).Position('relative').Border('1px solid black');
+            BoxClass.Margin(10).Width(100).Height(100).Position('relative').Border('1px solid black');
 
-            /*
-
-             //The CSS equivalent is
-
-            .box{
-                top:10px;
-                left:10px;
-                width:100px;
-                height:100px;
-                position:relative;
-            }
-
-             */
+            //Let's go to a Level 2 API to set our background color
+            BoxClass.Background().Color('red');
 
             //Grab our body
-            var Body = $K.DJ(document.body);
+            var Body = DJ(document.body);
 
             //Let's make a box (create a new div, add the box class to the div)
-            var Box = $K.DJ('div').AddClass('.box');
+            var Box = DJ('div').AddClass('.box');
 
             //We'll append it to our Body
             Body.Append(Box);
 
 
-            //Now let's whip up a property table to showcase a few things
-            var PropTable = $K.DJ('table');
-            var TR = PropTable.Append('tr');
-            var Label = TR.Append('td');
-            var Raw = TR.Append('td');
-//           var
+            //Great, we drew a box, let's do something a bit more interesting
+            //Now let's whip up a property table in CSS (we are going to use TextKing to cheat and make flexible but consistent column widths)
+            SJ('.table').Position('absolute').Top(400).Margin(10).Border().Top('1px solid black').Left('1px solid black');
+            SJ('.row').Position('relative').Height(30).Border().Bottom('1px solid black');
+            SJ('.col').Position('relative').Height(30).LineHeight(30).Float('left').Border().Right('1px solid black').api.Text().Align('center');
 
+            //We can create complex rules outside of classes as well
+            SJ('.table .row .col.label').Font().Weight('bold');
 
+            //We will use textKing for setting up our measurements
+            var measurements = {'label':0,'rawVal':0,'parseVal':0,'subAPI':0}
+            function measure(_key,_string){
+                var currentVal = measurements[_key];
+                var checkVal = Math.floor(TextKing.MeasureString(_string).width)+50;
+                if(checkVal > currentVal){
+                    SJ('.'+_key).Width(checkVal);
+                    measurements[_key] = checkVal;
+                }
 
-///            console.log(BoxClass.Top());
+                var total = measurements.label+measurements.rawVal+measurements.parseVal+measurements.subAPI;
+                if(SJ('.table').Width() < total){
+                    SJ('.table').Width(Math.floor(total)+4);
+                }
+            }
 
+            //Our faux table
+            var PropTable = DJ('div').AddClass('.table');
+            rowBuilder('','Raw Value','Parsed Value','Level 2 API');
+            rowBuilder('Width',BoxClass.Width('$'),BoxClass.Width(),'false');
+            rowBuilder('Height',BoxClass.Height('$'),BoxClass.Height(),'false');
+            rowBuilder('Border',BoxClass.Border('$'),JSON.stringify(BoxClass.Border().Get()),'true');
+            rowBuilder('Margin',BoxClass.Margin('$'),JSON.stringify(BoxClass.Margin().Get()),'true');
+            rowBuilder('Background.Color',BoxClass.Background().Color('$'),JSON.stringify(BoxClass.Background().Color()),'true');
+
+            //We can apply inline styles easily as well
+            PropTable.GetFirstChild().Style().Font().Weight('bold');
+
+            //Build our row out
+            function rowBuilder(_label,_rawVal,_parseVal,_subAPI){
+                //Initialize a row
+                var Row = PropTable.Append('div').AddClass('.row');
+
+                //Our label column
+                Row.Append('div').AddClass(['.col','.label']).SetInner(_label);
+                measure('label',_label);
+
+                //Our raw value column
+                Row.Append('div').AddClass(['.col','.rawVal']).SetInner(_rawVal);
+                measure('rawVal',_rawVal);
+
+                //Parsed value
+                Row.Append('div').AddClass(['.col','.parseVal']).SetInner(_parseVal);
+                measure('parseVal',_parseVal);
+
+                //Sub API
+                Row.Append('div').AddClass(['.col','.subAPI']).SetInner(_subAPI);
+                measure('subAPI',_subAPI);
+            }
+
+            //Write something to update our row
+            function updateRow(_property,_rawVal,_parsedVal){
+                var Row,rowIndex = 0;
+                switch(_property.toLowerCase()){
+                    case 'width': rowIndex = 1; break;
+                    case 'height': rowIndex = 2; break;
+                    case 'border': rowIndex = 3; break;
+                    case 'margin': rowIndex = 4; break;
+                    case 'background.color': rowIndex = 5; break;
+                }
+
+                Row = PropTable.GetChild(rowIndex);
+                if(KUBE.Is(Row,true) === 'DomJack'){
+                    measure('rawVal',_rawVal);
+                    measure('parseVal',_parsedVal);
+                    Row.GetChild(1).SetInner(_rawVal);
+                    Row.GetChild(2).SetInner(_parsedVal);
+                }
+            }
+
+            //Let's make it so every time we click our box, it randomizes our properties and updates our table
+            //Update all of our properties on click
+            Box.On('click',function(){
+                var width,height,randomColor,randomBorderColor,borderWidth;
+
+                width = Math.KUBE().random(50,300);
+                height = Math.KUBE().random(50,300);
+                randomColor = Color().GetRandomWebColor();
+                randomBorderColor = Color().GetRandomWebColor();
+                borderWidth = Math.KUBE().random(1,5);
+
+                BoxClass.Background().Color(randomColor);
+                BoxClass.Width(width).Height(height);
+                BoxClass.Border({'width':borderWidth,'color':randomBorderColor});
+
+                updateRow('Width',BoxClass.Width('$'),BoxClass.Width());
+                updateRow('Height',BoxClass.Height('$'),BoxClass.Height());
+                updateRow('Background.Color',BoxClass.Background().Color('$'),JSON.stringify(BoxClass.Background().Color()));
+                updateRow('Border',BoxClass.Border('$'),JSON.stringify(BoxClass.Border().Get()));
+            });
+
+            //Turn off auto select
+            Box.On('mousedown',function(){
+                return false;
+            });
+
+            Body.On('mousedown',function(){
+                return false;
+            });
+
+            Body.Prepend('div').SetInner('Click Me:').Style().Margin(10);
+            Body.Append(PropTable);
 
         }
 
