@@ -1,2 +1,0 @@
-DomJack Reference
-=================
