@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KUBEjs StyleJack: StyleSheet Abstraction and Basic API</title>
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <!-- StyleJack: Basic Usage -->
+    <script type="text/javascript">
+
+        //Let's use DomJack && StyleJack
+        var uses = {
+            'DJ':'/Library/DOM/DomJack',
+            'SJ':'/Library/DOM/StyleJack'
+        };
+
+        //Let our dependencies load
+        KUBE.Uses(uses,function($K){
+            //DJ() when called empty actually returns WinDocJack which has access to our DOMContentLoaded event management (Ready)
+            $K.DJ().Ready(styleJackExample);
+        });
+
+        function styleJackExample(){
+            //Because of the wrangling to get to a space where you can render to the DOM, it's sometimes easier to get a new KUBE Class object
+            var $K = KUBE.Class(uses);
+
+            /*
+             * StyleJack is not fundamentally an inline style layer but instead it is an entire StyleSheet abstraction. This makes it well suited for managing CSS classes, as opposed to just inline styles
+             * It provides:
+             *  -Special CSS Rule Handling
+             *  -Explicit CSS APIs
+             *  -Convenience methodology for specific APIs
+             *
+             *  In this section we will look at StyleJack: Class Management / general Style APIs
+             *
+             *  StyleJack takes in a mixed argument, and has different behavior based on the constructor argument
+             *      1. string argument. In this case StyleJack parses the string, and attempts to search the global stylesheets, and identify a matching CSSRule for the string.
+             *          a. In the event that the string is a special rule (ie. @font-face) it will attempt to provide a context specific API
+             *          b. In the event that the string can resolve into a basic rule, it provides the basic style API back
+             *
+             *      2. DOMNode. In this case StyleJack looks down the node for its own StyleRules, at which point it binds its basic style API to the individual Nodes StyleRules, resulting in an inline style interface
+             */
+
+            /*
+             * StyleJack Class API Level 1 Methods:
+             *  -Delete
+             *  -GetStyleObj
+             *  -Appearance
+             *  -BackfaceVisibility
+             *  -Background
+             *  -Border
+             *  -Bottom
+             *  -Box
+             *  -CaptionSide
+             *  -Clip
+             *  -Color
+             *  -Content
+             *  -Cursor
+             *  -Direction
+             *  -Display
+             *  -EmptyCells
+             *  -Float
+             *  -Font
+             *  -Height
+             *  -Left
+             *  -LetterSpacing
+             *  -LineHeight
+             *  -Margin
+             *  -MinHeight
+             *  -MinWidth
+             *  -MaxHeight
+             *  -MaxWidth
+             *  -Opacity
+             *  -Outline
+             *  -Overflow
+             *  -Padding
+             *  -Position
+             *  -Resize
+             *  -Right
+             *  -TableLayout
+             *  -Text
+             *  -Top
+             *  -Transform
+             *  -Transition
+             *  -VerticalAlign
+             *  -Visibility
+             *  -Width
+             *  -WhiteSpace
+             *  -WordSpacing
+             *  -WordBreak
+             *  -WordWrap
+             *  -ZIndex
+             */
+
+            /*
+             * The APIs provided by Level 1 StyleJack follow a specific pattern:
+             *  -'$'            ie: StyleJack('.class').Top('$') will return the raw value from the actual CSSStyleRule object
+             *  -mixedVar       ie: StyleJack('.class').Top(10) will attempt to parse the value appropriately as best as possible, set the right rule, and return the Level 1 API for chaining
+             *  -No argument    ie: StyleJack('.class').Top() will return the value the API thinks most useful (parsed if possibly) OR an explicit Level 2 API if applicable
+             */
+
+            //In this example we will be looking specifically in the context of classes, so we pass a class string into the constructor, which in turn will return a level 1 API for working on that class
+            var BoxClass = $K.SJ('.box');
+
+            //Let's do a really basic set chain (we are using INTs here which will be auto translated to px strings)
+            BoxClass.Top(10).Left(10).Width(100).Height(100).Position('relative').Border('1px solid black');
+
+            /*
+
+             //The CSS equivalent is
+
+            .box{
+                top:10px;
+                left:10px;
+                width:100px;
+                height:100px;
+                position:relative;
+            }
+
+             */
+
+            //Grab our body
+            var Body = $K.DJ(document.body);
+
+            //Let's make a box (create a new div, add the box class to the div)
+            var Box = $K.DJ('div').AddClass('.box');
+
+            //We'll append it to our Body
+            Body.Append(Box);
+
+
+            //Now let's whip up a property table to showcase a few things
+            var PropTable = $K.DJ('table');
+            var TR = PropTable.Append('tr');
+            var Label = TR.Append('td');
+            var Raw = TR.Append('td');
+//           var
+
+
+
+///            console.log(BoxClass.Top());
+
+
+        }
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KUBEjs DomJack: Basic Usage</title>
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <!-- DomJack: Basic Usage -->
+    <script type="text/javascript">
+
+        //Let's use DomJack
+        var uses = {
+            'DJ':'/Library/DOM/DomJack',
+            'XM':'/Library/Extend/Math'
+        };
+
+        //Let DomJack Load
+        KUBE.Uses(uses,function($K){
+            //DJ() when called empty actually returns WinDocJack which has access to our DOMContentLoaded event management (Ready)
+            $K.DJ().Ready(domJackExample);
+        });
+
+        function domJackExample(){
+            //Because of the wrangling to get to a space where you can render to the DOM, it's sometimes easier to grab an already loaded class directly
+            var DJ = KUBE.Class('/Library/DOM/DomJack');
+
+            /*
+             * DomJack is not a query layer (KUBE.Select wraps Sizzle) but instead a pure DOM abstraction. In this way it is intended to build and manage from the ground up, as opposed to post rendered querying
+             * It provides:
+             *  -Attribute Handling
+             *  -Node Management
+             *  -Relationship Management
+             *  -Event Abstraction
+             *  -Content Management
+             *  -General Information
+             *  -Utilities
+             *  -Class Management (with an additional inline Style abstraction)
+             *  -Element Mutation APIs
+             *
+             */
+
+            //In this section we will look at DomJack: Node Management / Relationship Management
+
+            /*
+             * Node Management Methods:
+             *  -GetNode
+             *  -GetParent
+             *  -GetChildren
+             *  -GetChild
+             *  -GetFirstChild
+             *  -GetLastChild
+             *  -GetType
+             *  -GetIndex
+             *  -GetRoot
+             *
+             * Relationship Management Methods:
+             *  -Insert
+             *  -Prepend
+             *  -Append
+             *  -InsertBefore
+             *  -InsertAfter
+             *  -Prune
+             */
+
+            //Creation of Elements happens on construction of a new DomJack object
+
+            //We can create a new div, or any element like this
+            var Log = DJ('div');
+
+            //If we use a raw Node, we will get back the DomJack object related to that Node
+            var Body = DJ(document.body);
+
+            //We will write a quick function for later user
+            function browserLog(_msg){
+                //In this case we will use the Detached Log DJ, and use the Append function to automatically create a new div:DJ, which is returned from Append
+                var NewDiv = Log.Append('div');
+
+                //And then we will use SetInner (not covered in detail here) to set the inner contents of the DIV
+                NewDiv.SetInner(_msg);
+            }
+
+
+            //All DomJacks are cached and managed inside of the DomJack container to their individual nodes. This means it acts somewhat like a singleton factory where existing Elements will return the same DJ object
+            if(DJ(document.body) === Body){
+                browserLog('Object Check: The same object was returned');
+            }
+
+            //GetNode provides direct raw access to the DOM Element
+            browserLog('GetNode() Return Object: '+KUBE.Is(Log.GetNode(),true));
+
+            //Let's append our finished Detached Log to Body
+            Body.Append(Log);
+
+            //Apart from GetNode though, every other method in DomJack deals with or returns other DomJack objects.
+
+            //GetParent() will return the Parent DomJack object, or if it's the root of the tree, will return an explicit false
+            browserLog('GetParent() Return Object: '+KUBE.Is(Log.GetParent(),true));
+
+            //GetType() returns the actual Element Type of the object itself
+            browserLog('GetType Check on Body: '+Body.GetType());
+            browserLog('GetType Check on Log: '+Log.GetType());
+
+            //GetChildren() returns an array of children DomJack objects. This is true even if the Node has no children (so an empty array)
+            var logEntries = Log.GetChildren();
+            browserLog('How many current log entries (based on GetChildren() of Log): '+logEntries.length);
+
+            //GetChild() accepts an index number as an argument, and returns the DomJack Node at that index
+            var RandChild = Log.GetChild(Math.KUBE().random(0,Log.GetChildren().length));
+            browserLog('The Node at Index ('+RandChild.GetIndex()+'): '+RandChild.GetInner());
+
+            //GetFirstChild() returns the first DomJack child of the Node or an explicit undefined if no children exist
+            Log.GetFirstChild().Style().Font().Weight('bold'); //We turned the first child bold
+
+            //Likewise GetLastChild() is self explanatory
+            Log.GetLastChild().Style().Color('red'); //Turn the current last entry red
+
+            //GetIndex() gives us the Index of the current Node in relationship to its parent.
+            var Entry = Log.GetLastChild();
+            browserLog('The index of a Node derived from GetLastChild(): '+Entry.GetIndex());
+
+            //Finally we have GetRoot() which will recurse up the tree and find the root node of the current node. This is primarily useful for detached trees, once a tree is attached (such as Log) it will result in a WinDocJack object
+            //TODO: Question? Should this stop before window?
+            browserLog('Our root object of Log is: '+KUBE.Is(Log.GetRoot(),true));
+
+            //Insert() accepts 2 arguments and has 2 methodologies
+
+            //Insert 1. Insert(DJObj,index): Used in this way, the parent takes a DomJack object, as well as an index, and inserts the new DomJack at that space
+            var randIndex = Math.KUBE().random(0,Log.GetChildren().length);
+            var Insert = DJ('div').SetInner('This is inserted by index: '+randIndex); //Insertion always bumps the node at that current index forward by one
+            Log.Insert(Insert,randIndex);
+
+            //Insert 2. Insert(DJObj,ChildDJObj): Used in this way, the parent will take the ChildObj, find it, and insert the new Object before it
+            //We won't show an example of this as it's fairly self explanatory. This is useful sometimes when managing deeper list states
+
+            //Prepend() accepts a DJObj or an element type string (div/span/input/etc) and inserts it into the Parents childNodes at Index(0) as well as returns the new DJObject if it was created
+            Log.Prepend('div').SetInner('This was a new div prepended to the log list');
+
+            //Append() accepts a DJObj or an element type string (as above) and adds it to the end of the Parents childNodes list, as well as returns the new DJObject if it was created
+            Log.Append('div').SetInner('This was a new div appended to the log list');
+
+            //InsertBefore and InsertAfter is a bit different than Insert.
+            //Instead of having the parent reference, and operating on the child list, InsertBefore/After accepts a DJObj, and attempts to detach/reattach the DJObj calling the method before/after the passed in Object wherever it is
+            //As an example of this, we do not exactly know where our above Insert DJ ended up in the list (as we randomized it)
+            var NewLog = DJ('div').SetInner('Insert this after the random index insertion');
+            NewLog.InsertAfter(Insert);
+
+            //Prune() takes an index and removes nodes after that Index point
+            var randIndex = Math.KUBE().random(0,Log.GetChildren().length);
+            alert('Pause: After this alert we will prune to: '+randIndex);
+            Log.Prune(randIndex);
+        }
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

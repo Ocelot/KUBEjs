@@ -22,13 +22,7 @@
 			'WindowWidth':WindowWidth,
 			'MouseX':MouseX,
 			'MouseY':MouseY,
-			'IsReady':IsReady,
 			'Ready':Ready,
-			'On':On,
-			'Once':Once,
-			'Emit':Emit,
-			'Clear':Clear,
-			'RemoveListener':RemoveListener,
 			'Style':Style,
             'Window': function(){return __windowAbs},
             'Document': function(){return __documentAbs}
@@ -59,49 +53,6 @@
 			return mouseY;
 		}
 
-		//Events handling
-		function On(_event,_callback){
-			if(_event.toLowerCase() === "ready"){
-				Ready(_callback);
-			}
-			else{
-				_event = translateEvent(_event);
-				if(!catchReady(_event,_callback)){
-					initDomListener(_event);
-					Events.On(_event, _callback, $api);
-				}
-			}
-		}
-
-		function Once(_event,_callback){
-			_event = translateEvent(_event);
-			initDomListener(_event);
-			Events.Once(_event,_callback, $api);
-		}
-
-		function Emit(_event){
-			_event = translateEvent(_event);
-			initDomListener(_event);
-			Events.Emit(_event);
-		}
-
-		function Clear(_event){
-			_event = translateEvent(_event);
-			initDomListener(_event);
-			Events.Clear(_event);
-			cleanListeners(_event);
-		}
-
-		function RemoveListener(_event){
-			// This is wrong. FIX (not sure how this is wrong months after the fact, look into more later)
-			_event = translateEvent(_event);
-			initDomListener(_event);
-			Events.RemoveListener(_event);
-			if(domListeners[_event]){
-				domListeners[_event] = false;
-			}
-		}
-
 		//Special event handling
 		function Ready(_callback){
 			if(KUBE.Is(_callback) === 'function'){
@@ -114,11 +65,6 @@
 					Events.Once('ready',_callback);
 				}
 			}
-		}
-
-		//Think I might deprecate this
-		function IsReady(){
-			return ready;
 		}
 
 		function Style(){
@@ -149,6 +95,7 @@
 		}
 
 		//Private methods
+        //TODO: WinDocJack used to provide a single event layer that attempt to auto handle events between window/document. This has changed since then, but not been entirely cleaned up.
 		function catchReady(_event,_callback){
 			var $return = false;
 			if(_event === 'ready'){
