@@ -128,7 +128,7 @@
 
             //Now let's add some keyboard bindings
 
-            //DomJack offers a key event abstraction layer. So key:(word) or key:[charCode] will bind an event to the appropriate key and manage it so it's not terrible
+            //DomJack offers a key event abstraction layer. So key:(word) or key:[letter] will bind an event to the appropriate key and manage it so it's not terrible
             //For example, let's just listen on our body layer, for arrow key events, and move the selected box appropriately
             DJ(document.body).On('key:up',function(){
                 if(Selected){

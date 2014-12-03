@@ -14,6 +14,11 @@
     //Moved safely to a short circuit because now a safe default exists
     config = (typeof window.KUBE === 'object' && typeof window.KUBE.config === 'object') ? window.KUBE.config : initDefaultConfig();
 
+    if(!config.autoLoadPath){
+        var tempConfig = initDefaultConfig();
+        config.autoLoadPath = tempConfig.autoLoadPath;
+    }
+
     //Because I went retarded, I removed the comments
     function initDefaultConfig(){
         var config = {
@@ -22,7 +27,6 @@
             "key1":false,
             "key2":false
         };
-        console.log(config);
         return config;
 
         function getAutoLoadPath() {
@@ -1314,35 +1318,6 @@
         }
 	}
 }(window,true));
-
-
-function initDefaultConfig(){
-    var config = {
-        "autoLoadPath" : getAutoLoadPath(),
-        "debug": true
-    };
-    return config;
-
-    function getAutoLoadPath() {
-        var src = srcFromCurrentScript() || srcFallback();
-        return parseAutoLoadPath(src);
-    }
-
-    function parseAutoLoadPath(_src) {
-        var paths = _src.split('/');
-        return paths.splice(0,paths.length-1).join('/');
-    }
-
-    function srcFromCurrentScript(){
-        return (document.currentScript !== undefined) ? document.currentScript.getAttribute('src') : false;
-    }
-
-    function srcFallback(){
-        var scripts;
-        scripts = document.getElementsByTagName('script');
-        return scripts[scripts.length - 1].src;
-    }
-}
 
 KUBE.AutoLoad().LoadAutoIndex('/Library/Test',KUBE.Config().autoLoadPath+'/Indexes/TestIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/DOM',KUBE.Config().autoLoadPath+'/Indexes/DOMIndex.js');

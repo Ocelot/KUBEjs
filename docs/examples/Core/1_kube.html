@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KUBEjs Core: KUBE Config / Uses / Class</title>
+
+    <script>
+        //KUBE Config is a pure dataObject. It will self initialize if not set, or can be set before KUBE is loaded. After it is set it can be accessed by KUBE.Config()
+        //To initially set it, we create a KUBE object
+        var KUBE = {
+            //then a sub config object
+            "config":{
+                //Current options are...
+                "autoLoadPath" : false,     //This is the path KUBE will look to to load Library indexes out of. For the most part it will intelligently figure it out based on the url the script is loading from, but can be explicitly set
+                "debug": true,              //This puts KUBE into debug mode, which should log messages and add a few behaviors for additional debugging
+                "key1":false,               //This is a key that is used by Ajax (DOM) that is automatically set in client request headers as SKey1 if it's set
+                "key2":false                //This is a key that is user by Ajax (DOM) that is automatically set in client request headers as SKey2 if it's set
+            }
+        };
+    </script>
+
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <!-- We will be looking at the core KUBE API -->
+    <script type="text/javascript">
+
+        /*
+         *  The global KUBE object provides the functionality required to break KUBEjs indexes and namespaces up into seperate spaces, as well as provide some core baked in functionality.
+         *  Every KUBEjs file gets wrapped in a closed scope, with the global KUBE object passed in, and interfaces only with it
+         *
+         *  The KUBE API is as follows:
+         *      (Primary API)
+         *      -Is
+         *      -LoadFunction
+         *      -LoadFactory
+         *      -LoadSingleton
+         *      -LoadSingletonFactory
+         *      -AutoLoad
+         *      -Uses
+         *      -SetAsLoaded
+         *      -Extend
+         *      -Events
+         *      -Config
+         *      -Class
+         *
+         *      (Event API)
+         *      -On
+         *      -OnState
+         *      -Once
+         *      -Emit
+         *      -EmitState
+         *      -Clear
+         *      -ClearState
+         *      -CheckState
+         *      -RemoveListener
+         */
+
+        //We will be looking at Config / Uses / Class specifically
+
+        KUBE.Config();  //This returns the raw data object as set above. We may turn our config into a properly scoped class at some point in time so it can't be exploded during runtime
+
+        //KUBE.Uses is our key loading method for KUBE Namespaced files. It can be used in multiple ways
+        //Method 1: 'Namespace string', 'Callback'
+        KUBE.Uses('/Library/Drawing/Color',function(_Color){
+            //In this context, once Library/Drawing/Color has successfully loaded, the callback will be fired and the requested Namespace will be passed into the callBack as the first argument
+
+            //New Objects themselves are never instantiated and passed in, instead the function definition is, which when called calls the __constructor and returns the new Object/API. This means they must be called to access the API
+           console.log(KUBE.Is(_Color(),true));
+        });
+
+        //Method 2: 'Array', 'Callback'
+        KUBE.Uses(['/Library/DOM/DomJack','/Library/Drawing/Color'],function(_DomJack,_Color){
+            //Like passed in an individual string, this results in multiple casted arguments being passed into the Callback
+            console.log(KUBE.Is(_DomJack('div'),true));
+            console.log(KUBE.Is(_Color(),true));
+        });
+
+        //Method 3: 'Object','Callback
+
+        //First we create an Object with Alias:Namespace
+        var myAliasObj = {
+            'DomJack':'/Library/DOM/DomJack',
+            'Color':'/Library/Drawing/Color'
+        };
+
+        //We pass it into Uses
+        KUBE.Uses(myAliasObj,function(_castedObj){
+            //When they are loaded, we have a casted object, where the alias Keys are now bound to the function definition
+            console.log(KUBE.Is(_castedObj.Color(),true));
+            console.log(KUBE.Is(_castedObj.DomJack('div'),true));
+        });
+
+        //KUBE.Uses does not require a callback. It also returns a promise with .then() which can be used as well
+        var loadPromise = KUBE.Uses(myAliasObj);
+        loadPromise.then(fireSomething);
+        loadPromise.then(fireSomething2);
+
+        //This model can be nice for organization at times
+        function fireSomething(_castedObj){
+            console.log(KUBE.Is(_castedObj.Color(),true));
+            console.log(KUBE.Is(_castedObj.DomJack('div'),true));
+        }
+
+        function fireSomething2(_castedObj){
+            console.log(KUBE.Is(_castedObj.Color(),true));
+            console.log(KUBE.Is(_castedObj.DomJack('div'),true));
+
+            //Now we'll look at KUBE.Class
+            //It is possible that it can be awkward to pass the initial castedObject around (as if we are writing a function/method outside of scope, we may want to pass in other variables
+
+            //We'll call a function that takes in a string color
+            noAccess('red');
+        }
+
+        function noAccess(_stringColor){
+            //We can be confident in here that we have access to KUBE.Color so we can access the definition much in the same was Uses works
+
+            //1. By String
+            var Color = KUBE.Class('/Library/Drawing/Color');
+            console.log(KUBE.Is(Color(),true));
+
+            //2. By Array
+            var classArray = KUBE.Class(['/Library/Drawing/Color']);
+            console.log(KUBE.Is(classArray[0](),true));
+
+            //3. By casted Object
+            var castedObj = KUBE.Class(myAliasObj);
+            console.log(KUBE.Is(castedObj.Color(),true));
+
+            //And of course in this context Color works properly, but we didn't require the KUBE function definitions to be passed in
+            console.log(Color().Format(_stringColor,'rgb',true));
+            console.log(Color().Format(_stringColor,'hsl',true));
+            console.log(Color().Format(_stringColor,'#',true));
+        }
+
+
+    </script>
+
+</head>
+<body>
+Example outputs to console.
+</body>
+</html>
