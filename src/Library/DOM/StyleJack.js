@@ -525,6 +525,7 @@
 			'RemoveListener':Events.RemoveListener,
 			'ClearEvent':Events.Clear,
 			'GetStyleObj':GetStyleObj,
+            'GetSelectorText':GetSelectorText,
 			//'Plugin':Plugin,
 			
 			//Our Property List
@@ -607,6 +608,10 @@
 		function GetStyleObj(){
 			return _styleObj;
 		}
+
+        function GetSelectorText(){
+            return _styleObj.selectorText;
+        }
 				
 		//Hard named functions for optimization. Originally was calling Plugins for each one of these. Decided this was better.
 		function Animation(){	

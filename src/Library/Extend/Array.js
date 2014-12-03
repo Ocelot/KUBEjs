@@ -20,6 +20,7 @@
 		ExtendAPI.Load('array','sum',Sum);
 		ExtendAPI.Load('array','rand',Rand);
 		ExtendAPI.Load('array','args',Args);
+        ExtendAPI.Load('array','in',In);
 		KUBE.EmitState('/Library/Extend/Array');
 		KUBE.console.log('/Library/Extend/Array Loaded');
 	}
@@ -105,6 +106,17 @@
 		}
 		return $return;
 	}
+
+    function In(_check){
+        var $return = false;
+        for(var i=0;i<this.length;i++){
+            if(this[i] === _check){
+                $return = true;
+                break;
+            }
+        }
+        return $return;
+    }
 
 	/* Direct copy from the object.copy */
 	function copy(_obj){

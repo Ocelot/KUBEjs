@@ -127,7 +127,7 @@
             DJ(document.body).Style().Margin(0).Padding(0).Font().Family('Arial').Size(14).api.Box().Sizing('border-box');
 
             //Let's do a really basic set chain (we are using INTs here which will be auto translated to px strings)
-            BoxClass.Margin(10).Width(100).Height(100).Position('relative').Border('1px solid black');
+            BoxClass.Margin(10).Width(100).Height(100).Position('relative').Border('1px solid black').Cursor('pointer');
 
             //Let's go to a Level 2 API to set our background color
             BoxClass.Background().Color('red');
@@ -248,7 +248,7 @@
                 updateRow('Background.Color',BoxClass.Background().Color('$'),JSON.stringify(BoxClass.Background().Color()));
                 updateRow('Border',BoxClass.Border('$'),JSON.stringify(BoxClass.Border().Get()));
             });
-            
+
             //Turn off auto select
             Box.On('mousedown',function(){
                 return false;
@@ -258,7 +258,7 @@
                 return false;
             });
 
-            Body.Prepend('div').SetInner('Click Me:').Style().Margin(10);
+            Body.Prepend('div').SetInner('Click The Box:').Style().Margin(10);
             Body.Append(PropTable);
 
         }

@@ -16,8 +16,7 @@
         //  -value  = namespace of KUBE Class
         var uses = {
             'DJ':'/Library/DOM/DomJack',
-            'SJ':'/Library/DOM/StyleJack',
-            'ToC':'/KUBEjs/Examples/TableOfContents'
+            'SJ':'/Library/DOM/StyleJack'
         };
 
         //Request dependancy resolution. Returns a promise (var p.then(callback)) which can be used instead of the callback
@@ -30,57 +29,30 @@
         }
 
         function domLoaded($K){
-            var TableContainer;
-            var ExampleToC = $K.ToC('KUBEjs: Examples/Demo');
-            if(KUBE.Is(ExampleToC,true) === 'TableOfContents'){
-                loadCoreBasicIndex(ExampleToC);
-//                loadExtendIndex(ExampleToC);
-//                loadDomJackIndex(ExampleToC);
-//                loadStyleJackIndex(ExampleToC);
-//                loadUIIndex(ExampleToC);
-//                loadAjaxIndex(ExampleToC);
+            var DJ = $K.DJ;
+            var Contents = DJ('div');
+            var Level1 = Contents.Append('ol');
+            Level1.Append('li').Append('a').SetAttribute('href','helloWorld.html').SetInner('Hello World');
 
-                TableContainer = $K.DJ('div');
-                ExampleToC.RenderToContainer(TableContainer);
-                $K.DJ(document.body).Append(TableContainer);
-            }
+            var Core = Level1.Append('li');
+            Core.Append('div').SetInner('Core');
+            Core = Core.Append('ol');
+            Core.Append('li').Append('a').SetAttribute('href','Core/1_kubeIs.html').SetInner('KUBE.Is()');
+            Core.Append('li').Append('a').SetAttribute('href','Core/2_events.html').SetInner('KUBE.Events()');
+
+            var DOM = Level1.Append('li');
+            DOM.Append('div').SetInner('DOM');
+            DOM = DOM.Append('ol');
+            DOM.Append('li').Append('a').SetAttribute('href','DOM/1_winJack.html').SetInner('WinDocJack: Basic DOM Abstraction')
+            DOM.Append('li').Append('a').SetAttribute('href','DOM/2_domJack.html').SetInner('DomJack: Node Management & Relationship Management')
+            DOM.Append('li').Append('a').SetAttribute('href','DOM/3_styleJack.html').SetInner('StyleJack: StyleSheet Abstraction & Level 1 API')
+            DOM.Append('li').Append('a').SetAttribute('href','DOM/4_domJack.html').SetInner('DomJack: Events & Classes & Styles')
+
+//            debugger;
+        //.Url('').SetInner('Hello World');
+
+            DJ(document.body).Append(Contents);
         }
-
-        function loadCoreBasicIndex(_ToC){
-            var Core;
-            Core = _ToC.CreateNewIndex('Basic Core: Starting KUBEjs');
-        }
-//
-//        function loadExtendIndex(_ToC){
-//            var Extend;
-//            Extend = _ToC.CreateNewIndex('Extending Native Types in KUBEjs');
-//        }
-//
-//        function loadDomJackIndex(_ToC){
-//            var DomJack;
-//            DomJack = _ToC.CreateNewIndex('DomJack: DOM Abstraction');
-//        }
-//
-//        function loadStyleJackIndex(_ToC){
-//            var StyleJack;
-//            StyleJack = _ToC.CreateNewIndex('StyleJack: Working with CSS');
-//        }
-//
-//        function loadUIIndex(_ToC){
-//            var UI;
-//            UI = _ToC.CreateNewIndex('Building UI in KUBEjs');
-//        }
-//
-//        function loadAjaxIndex(_ToC){
-//            var Ajax;
-//            Ajax = _ToC.CreateNewIndex('Ajax: Client/Server in KUBEjs');
-//        }
-
-
-
-
-
-
 
     </script>
 </head>
