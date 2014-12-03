@@ -1,5 +1,0 @@
-WinDocJack
-==========
-
-
-WinDocJack

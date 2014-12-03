@@ -1,7 +1,3 @@
-.. KUBEjs documentation master file, created by
-   sphinx-quickstart on Mon Dec  1 11:19:18 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
 
 Welcome to KUBEjs's documentation!
 ==================================
@@ -10,6 +6,11 @@ Contents:
 
 .. toctree::
 
-   API/index
-   Guides/index
-   Todos/index
+   KUBEjs/DOM/index
+   KUBEjs/Drawing/index
+   KUBEjs/Extend/index
+   KUBEjs/FontAwesome/index
+   KUBEjs/Highlight/index
+   KUBEjs/Tools/index
+   KUBEjs/UI/index
+   KUBEjs/Todos/index
