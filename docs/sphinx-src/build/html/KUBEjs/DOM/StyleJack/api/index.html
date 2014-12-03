@@ -209,11 +209,17 @@ It doesn&#8217;t check for http, so data URIs work as well.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>_stretch</strong> (<em>String</em>) &#8211; The</li>
+<li><strong>_stretch</strong> (<em>String</em>) &#8211; <p>The stretch value that your font-face implements.</p>
+<p><strong>Permissible Values</strong>: &#8220;normal&#8221;,&#8221;condensed&#8221;,&#8221;ultra-condensed&#8221;,&#8221;extra-condensed&#8221;,&#8221;semi-condensed&#8221;,&#8221;expanded&#8221;,&#8221;ultra-expanded&#8221;,&#8221;extra-expanded&#8221;,&#8221;semi-expanded&#8221;</p>
+</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="xref js js-class docutils literal"><span class="pre">StyleJackFontFaceAPI()</span></code></p>
+<tr class="field-even field"><th class="field-name" colspan="2">Throws console.log:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">Logs a message if you try to set an invalid value</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="xref js js-class docutils literal"><span class="pre">StyleJackFontFaceAPI()</span></code></p>
 </td>
 </tr>
 </tbody>
@@ -227,7 +233,19 @@ It doesn&#8217;t check for http, so data URIs work as well.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref js js-class docutils literal"><span class="pre">StyleJackFontFaceAPI()</span></code></td>
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_style</strong> (<em>String</em>) &#8211; <p>The font style that this font-face implements.</p>
+<p><strong>Permissible Values</strong>: &#8220;normal&#8221;,&#8221;italic&#8221;,&#8221;oblique&#8221;</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Throws console.log:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">Logs a message if you try to set an invalid value</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="xref js js-class docutils literal"><span class="pre">StyleJackFontFaceAPI()</span></code></p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -237,6 +255,26 @@ It doesn&#8217;t check for http, so data URIs work as well.</li>
 <dt id="StyleJackFontFaceAPI.UnicodeRange">
 <code class="descclassname">StyleJackFontFaceAPI.</code><code class="descname">UnicodeRange</code><span class="sig-paren">(</span><em>_unicodeRange</em><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackFontFaceAPI.UnicodeRange" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_unicodeRange</strong> (<em>String</em>) &#8211; The unicode range that you want to use from the font file.
+This allows you to only import specific characters from a font into this custom font-family</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Throws console.log:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">Logs a message if you try to set an invalid value</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">This doesn&#8217;t actually validate invalid values yet.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -253,7 +291,19 @@ It doesn&#8217;t check for http, so data URIs work as well.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref js js-class docutils literal"><span class="pre">StyleJackFontFaceAPI()</span></code></td>
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_weight</strong> (<em>String/Number</em>) &#8211; <p>The font-weight for this font-family. This allows you to actually define what the weight of this &#64;font-face is</p>
+<p><strong>Permissible values</strong>: &#8220;normal&#8221;, &#8220;bold&#8221;, &#8220;lighter&#8221;, &#8220;bolder&#8221;, 100, 200, 300, 400, 500, 600, 700, 800, 900</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Throws console.log:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">Logs a message if you try to set an invalid value</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="xref js js-class docutils literal"><span class="pre">StyleJackFontFaceAPI()</span></code></p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -318,7 +368,7 @@ to create a new keyframe</div></blockquote>
 </table>
 </dd></dl>
 
-<div class="admonition-todo admonition" id="index-0">
+<div class="admonition-todo admonition" id="index-1">
 <p class="first admonition-title">Todo</p>
 <p>StyleJack Method Implementation. These methods require implementation still.</p>
 <blockquote>

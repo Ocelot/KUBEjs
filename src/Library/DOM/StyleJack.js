@@ -432,9 +432,10 @@
         }
 
         function UnicodeRange(_unicodeRange){
-            console.KUBE().todo('Validate Font Face Unicode Range');
-            fontProperties.unicodeRange = _unicodeRange;
-            initFontRuleIfNeeded();
+            if(validateUnicodeRange(_unicodeRange)){
+                fontProperties.unicodeRange = _unicodeRange;
+                initFontRuleIfNeeded();
+            }
             return $API;
         }
 
@@ -450,7 +451,7 @@
         }
 
         function normalizeSrc(_src){
-            $return = _src;
+            var $return = _src;
             //Check if it starts with url, if it doesn't, wrap it
             if(_src.KUBE().trim().substr(0,4).toLowerCase() !== "url("){
                 $return = "url('" + _src + "')";
@@ -459,7 +460,7 @@
         }
 
         function validateWeight(_weight){
-            var validOptions = ["normal","bold","100","200","300","400","500","600","700","800","900"];
+            var validOptions = ["normal","bold","lighter","bolder","100","200","300","400","500","600","700","800","900"];
             return (validOptions.indexOf((""+_weight).toLowerCase()) > -1); //String cast is intentional
         }
 
@@ -471,6 +472,21 @@
         function validateStretch(_stretch){
             var validOptions = ["normal","condensed","ultra-condensed","extra-condensed","semi-condensed","expanded","ultra-expanded","extra-expanded","semi-expanded"];
             return (validOptions.indexOf((""+_stretch).toLowerCase()) > -1);
+        }
+
+        function validateUnicodeRange(_unicodeRange){
+            var $return = true;
+            var unicodeRanges = _unicodeRange.split(",");
+                unicodeRanges.KUBE().each(validate);
+
+            function validate(_range){
+                var testRegex = /u\+[0-9a-f?]{1,6}(-[0-9a-f]{1,6})?/i;
+                if(!testRegex.test(_range)){
+                    $return = false;
+                    this.break();
+                }
+            }
+            return $return;
         }
 
         function initFontRuleIfNeeded(){

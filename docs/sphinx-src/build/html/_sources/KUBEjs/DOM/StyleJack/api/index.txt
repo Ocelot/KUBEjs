@@ -38,19 +38,43 @@ StyleJack FontFace API
 .. js:function:: StyleJackFontFaceAPI.Stretch(_stretch)
 
     :param String _stretch:
-        The 
+        The stretch value that your font-face implements.
+
+        **Permissible Values**: "normal","condensed","ultra-condensed","extra-condensed","semi-condensed","expanded","ultra-expanded","extra-expanded","semi-expanded"
+    :throws `console.log`: Logs a message if you try to set an invalid value
 
     :returns: :js:class:`StyleJackFontFaceAPI`
 
 .. js:function:: StyleJackFontFaceAPI.Style(_style)
 
+    :param String _style:
+        The font style that this font-face implements.
+
+        **Permissible Values**: "normal","italic","oblique"
+
+    :throws `console.log`: Logs a message if you try to set an invalid value
     :returns: :js:class:`StyleJackFontFaceAPI`
 
 .. js:function:: StyleJackFontFaceAPI.UnicodeRange(_unicodeRange)
 
+    :param String _unicodeRange:
+        The unicode range that you want to use from the font file.
+        This allows you to only import specific characters from a font into this custom font-family
+
+    :throws `console.log`: Logs a message if you try to set an invalid value
+
+    .. todo:: This doesn't actually validate invalid values yet.
+
     :returns: :js:class:`StyleJackFontFaceAPI`
 
 .. js:function:: StyleJackFontFaceAPI.Weight(_weight)
+
+    :param String/Number _weight:
+        The font-weight for this font-family. This allows you to actually define what the weight of this @font-face is
+
+        **Permissible values**: "normal", "bold", "lighter", "bolder", 100, 200, 300, 400, 500, 600, 700, 800, 900
+
+    :throws `console.log`: Logs a message if you try to set an invalid value
 
     :returns: :js:class:`StyleJackFontFaceAPI`
 
