@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KUBEjs Core: Loading</title>
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <!-- KUBE Loading -->
+    <script type="text/javascript">
+
+        /*
+         * KUBE Files/Libraries/Indexes/Classes whatever use KUBE as a sort of holding space. They run in a limited, space and load their definitions into KUBE, which is then used by KUBE for instantiating new class objects
+         * We will look at how that works here. The core methods for this are
+         *
+         *  -LoadFactory
+         *  -LoadFunction
+         *  -LoadSingleton
+         *  -LoadSingletonFactory
+         *
+         */
+
+        //We always recommend ONE class/namespace per file, and then to register a proper index (see KUBE Core: Index) but in this case we will do multiples to show examples of each methodology and what it produces
+        //The proper folder structure for this would be
+        // -/Examples/KUBE/Core/ExampleFactory.js
+        // -/Examples/KUBE/Core/ExampleSingleton.js
+        // -/Examples/KUBE/Core/ExampleSingletonFactory.js
+        // -/Examples/KUBE/Core/ExampleFactory.js
+
+
+        //Let's write a new KUBE Factory object
+        //First we tightly scope it
+        (function(KUBE){
+            "use strict"; //We recommend using use strict
+
+            //KUBE.Is(Obj,true) will return the actual prototype of an object. We have a methodology for making this useful in KUBE. First step is this:
+            ExampleFactory.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
+
+            //Now we're going to call KUBE.LoadFactory which takes in the unique namespace, the function definition, and a dependancies array
+            KUBE.LoadFactory('/KUBE/Examples/Core/ExampleFactory',ExampleFactory,['/Library/Extend/Object']);
+
+            //Technically if we don't want to rely on hoisting, we should be doing this in different order, but KUBE heavily relies on hoisting and we prefer it for readability
+
+            //It is worth nothing we could add arguments to this (constructor arguments essentially, and when called from KUBE.Class arguments are appropriately passed in
+            function ExampleFactory(){
+                //We can declare vars here that will be scoped to our instantiation
+                var log = [];
+
+                //We declare an API object, this uses the /Library/Extend/Object extension to access KUBE().create (see Extend examples for full details)
+                //This object will also be automatically extended by KUBE when it's instantiated to have Events bound to it
+                var $API = {
+                    'Add':Add,
+                    'Log':Log
+                }.KUBE().create(ExampleFactory.prototype); //This makes our API object, build with the Prototype established above. Even when we extend this, it will return the prototype name when cast toString
+
+                //And return it
+                return $API;
+
+                function Add(_msg){
+                    log.push(_msg);
+
+                    //Now at this point in time, our $API reference has been extended with the KUBE.Events scope. So we can safely do this
+                    $API.Emit('newLog');
+                }
+
+                function Log(){
+                    console.log(log);
+                }
+
+                //We can also declare private methods safely within our scope if we wanted
+            }
+        }(KUBE));
+
+        //Let's pretend we're in a different file and Write a Singleton
+        //Many of the concepts are the same so we won't re-comment everything
+        (function(KUBE){
+            "use strict";
+            ExampleSingleton.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
+
+            //Load Singleton here
+            KUBE.LoadSingleton('/KUBE/Examples/Core/ExampleSingleton',ExampleSingleton,['/Library/Extend/Object']);
+
+            //Singleton and Singleton factories do not accept constructor arguments
+            function ExampleSingleton(){
+                var log = [];
+                var $API = {
+                    'Add':Add,
+                    'Log':Log
+                }.KUBE().create(ExampleSingleton.prototype);
+                return $API;
+
+                function Add(_msg){
+                    log.push(_msg);
+                    $API.Emit('newLog');
+                }
+
+                function Log(){
+                    console.log(log);
+                }
+            }
+        }(KUBE));
+
+        //Let's pretend we're in a different file and Write a SingletonFactory
+        (function(KUBE){
+            "use strict";
+            ExampleSingletonFactory.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
+
+            //Load SingletonFactory here
+            KUBE.LoadSingletonFactory('/KUBE/Examples/Core/ExampleSingletonFactory',ExampleSingletonFactory,['/Library/Extend/Object']);
+
+            function ExampleSingletonFactory(){
+                var log = [];
+                var $API = {
+                    'Add':Add,
+                    'Log':Log
+                }.KUBE().create(ExampleSingletonFactory.prototype);
+                return $API;
+
+                function Add(_msg){
+                    log.push(_msg);
+                    $API.Emit('newLog');
+                }
+
+                function Log(){
+                    console.log(log);
+                }
+            }
+        }(KUBE));
+
+
+        //And finally, let's write a function we want accessible from the KUBE Space
+        (function(KUBE){
+            "use strict";
+
+            //We do not need the prototype (because it does not return an object)
+            KUBE.LoadFunction('/KUBE/Examples/Core/exampleFunction',exampleFunction);
+
+            //And we can treat it just like a function
+            function exampleFunction(_msg){
+                console.log(_msg);
+            }
+        }(KUBE));
+    </script>
+
+    <script>
+        //Now let's pretend we're in a seperate file and see how all of this works
+
+        //Now this is a bit awkward, theoretically Namespaces are supposed to use Indexes, and be one per file, to handle deferred loading properly for the sake of this example though things get odd
+        //The process in this case is we want to just check for '/Library/Extend/Object' (because our other classes require that to be loaded as well) then we will assume that our examples have loaded
+        var uses = [
+            '/Library/Extend/Object'
+        ];
+
+        KUBE.Uses(uses,function(){
+            //We won't worry about them being passed in here, we'll just access them directly from KUBE.Class
+
+            //So let's look at how our factory works
+            var ExampleFactory = KUBE.Class('/KUBE/Examples/Core/ExampleFactory');
+
+            //Worth noting if Factory Class accepted constructor arguments, we would pass them in here
+            var Log1 = ExampleFactory();
+            var Log2 = ExampleFactory();
+
+            if(Log1 !== Log2){
+                console.log('Our Log objects have different scopes');
+                Log1.Add('Our log1 is... '+KUBE.Is(Log1,true));
+                Log2.Add('Our log2 is... '+KUBE.Is(Log2,true));
+            }
+
+            Log1.Add('a message in log 1');
+            Log2.Add('a message in log 2');
+            Log1.Add('another message in 1');
+            Log2.Add('another message in 2');
+
+            //Call their log method
+            Log1.Log();
+            Log2.Log();
+
+            //Let's look at the singleton behavior
+            var ExampleSingleton = KUBE.Class('/KUBE/Examples/Core/ExampleSingleton');
+            var SLog1 = ExampleSingleton();
+            var SLog2 = ExampleSingleton();
+
+            if(SLog1 === SLog2){
+                console.log('Our SLog objects are actually the same reference');
+                SLog1.Add('Our SLog1 is... '+KUBE.Is(SLog1,true));
+                SLog2.Add('Our SLog2 is... '+KUBE.Is(SLog2,true));
+            }
+
+            SLog1.Add('a message added to SLog1');
+            SLog2.Add('a message added to SLog2');
+            SLog1.Log(); //Calling SLog2 would obviously result in the log being dumped again
+
+            //Let's look at the singletonFactory behavior
+            var ExampleSingletonFactory = KUBE.Class('/KUBE/Examples/Core/ExampleSingletonFactory');
+            var SFLog1 = ExampleSingletonFactory('log1');
+            var SFLog2 = ExampleSingletonFactory('log2');
+            var SFLog3 = ExampleSingletonFactory('log1');
+            var SFLog4 = ExampleSingletonFactory('log2');
+
+            if(SFLog1 !== SFLog2){
+                console.log('SFLog1 is not the same reference as SFLog2');
+            }
+
+            if(SFLog1 === SFLog3){
+                console.log('But SFLot 1 is the same reference as SFLog3');
+            }
+
+            SFLog1.Add('Added to SFLog1');
+            SFLog2.Add('Added to SFlog2');
+            SFLog3.Log(); //Call our SFLog3 log (which is the same as calling SFLog1.Log())
+            SFLog4.Add('Added to SFLog4');
+            SFLog2.Log(); //Call our SFLog2 log (which is the same as calling SFLog4.Log())
+
+            //And finally let's look at function
+            var exampleFunction = KUBE.Class('/KUBE/Examples/Core/exampleFunction');
+            exampleFunction('Log stuff from our function');
+        });
+    </script>
+
+</head>
+<body>
+Example outputs to console:
+</body>
+</html>
