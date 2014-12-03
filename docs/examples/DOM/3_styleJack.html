@@ -127,7 +127,7 @@
             DJ(document.body).Style().Margin(0).Padding(0).Font().Family('Arial').Size(14).api.Box().Sizing('border-box');
 
             //Let's do a really basic set chain (we are using INTs here which will be auto translated to px strings)
-            BoxClass.Margin(10).Width(100).Height(100).Position('relative').Border('1px solid black');
+            BoxClass.Margin(10).Width(100).Height(100).Position('relative').Border('1px solid black').Cursor('pointer');
 
             //Let's go to a Level 2 API to set our background color
             BoxClass.Background().Color('red');
@@ -140,6 +140,13 @@
 
             //We'll append it to our Body
             Body.Append(Box);
+
+            //And we can clean up our wayward rules as well. Let's attach it to a button below our box
+            var Button = Body.Append('input');
+            Button.Type('button').Value('Click to Delete Box Class');
+            Button.On('click',function(){
+                BoxClass.Delete();
+            });
 
 
             //Great, we drew a box, let's do something a bit more interesting
@@ -209,7 +216,7 @@
                     case 'height': rowIndex = 2; break;
                     case 'border': rowIndex = 3; break;
                     case 'margin': rowIndex = 4; break;
-                    case 'background.color': rowIndex = 5; break;
+                    case 'backgroundColor': rowIndex = 5; break;
                 }
 
                 Row = PropTable.GetChild(rowIndex);
@@ -251,7 +258,7 @@
                 return false;
             });
 
-            Body.Prepend('div').SetInner('Click Me:').Style().Margin(10);
+            Body.Prepend('div').SetInner('Click The Box:').Style().Margin(10);
             Body.Append(PropTable);
 
         }

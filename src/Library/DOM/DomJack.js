@@ -36,7 +36,11 @@
 		'enter':13,
 		'shift':16,
 		'ctrl':17,
-		'alt':18
+		'alt':18,
+        'left':37,
+        'up':38,
+        'right':39,
+        'down':40
 	};
 	
 	function cleanCache(){
@@ -635,7 +639,7 @@
 			keyArray = /[+|:]([^+]*)/.KUBE().matchAll(_event);
 			keyArray.KUBE().each(function(_matchArray){
 				if(_matchArray[1].length === 1){
-					tempArray.push(_matchArray[1].charCodeAt(0));
+					tempArray.push(_matchArray[1].toUpperCase().charCodeAt(0));
 				}
 				else{
 					tempArray.push(wordToKeyCodeMap[_matchArray[1].toLowerCase()]);

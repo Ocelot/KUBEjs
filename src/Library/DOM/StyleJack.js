@@ -525,6 +525,7 @@
 			'RemoveListener':Events.RemoveListener,
 			'ClearEvent':Events.Clear,
 			'GetStyleObj':GetStyleObj,
+            'GetSelectorText':GetSelectorText,
 			//'Plugin':Plugin,
 			
 			//Our Property List
@@ -586,8 +587,15 @@
 		
 		//Core methods
 		function Delete(){
-			//Boom
-            //debugger;
+            if(KUBE.Is(_styleObj,true) === 'CSSStyleRule' && _styleObj.parentStyleSheet){
+                var rules = _styleObj.parentStyleSheet.cssRules;
+                for(var i=0;i<rules.length;i++){
+                    if(rules[i] === _styleObj){
+                        _styleObj.parentStyleSheet.deleteRule(i);
+                        $API.Emit('delete');
+                    }
+                }
+            }
 		}
 		
 		function getArgsArray(_arguments){
@@ -600,6 +608,10 @@
 		function GetStyleObj(){
 			return _styleObj;
 		}
+
+        function GetSelectorText(){
+            return _styleObj.selectorText;
+        }
 				
 		//Hard named functions for optimization. Originally was calling Plugins for each one of these. Decided this was better.
 		function Animation(){	
@@ -2950,18 +2962,10 @@
 			try{
 				_styleObj.style[_property] = _newSet;
 				if(_styleObj.style[_property] === current){
-                    //debugger;
-					//I think I failed but am not sure...
-                    //I changed this from a debugger because it was annoying.
-                    // If you changed something to the same value, it failed.  This seems better.  -- Dustin
-//					KUBE.console.log('Set potentially failed.', {
-//                            'Property': _property,
-//                            'Before': current,
-//                            'After': _styleObj.style[_property],
-//                            'Attempted New Value': _newSet
-//                    });
+                    //This is a weird state. It happens sometimes because StyleSheets are a bit insane
 				}
 				else{
+                    _API.Emit('change',{'property':_property,'oldValue':current,'newValue':_newSet});
 					$return = true;
 				}
 			}
