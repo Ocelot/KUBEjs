@@ -18,20 +18,21 @@
 		ExtendAPI.Load('array','each',Each);
 		ExtendAPI.Load('array','copy',Copy);
 		ExtendAPI.Load('array','sum',Sum);
-		ExtendAPI.Load('array','rand',Rand);
+		ExtendAPI.Load('array','randIndexValue',RandomIndexValue);
 		ExtendAPI.Load('array','args',Args);
-        ExtendAPI.Load('array','in',In);
 		KUBE.EmitState('/Library/Extend/Array');
 		KUBE.console.log('/Library/Extend/Array Loaded');
 	}
 	
 	/* Declare functions here */
 	function Args(_argObj){
-		return (KUBE.Is(_argObj,true) === 'Arguments' ? Array.prototype.slice.call(_argObj) : []);
+        var argArray = this;
+		argArray = (KUBE.Is(_argObj,true) === 'Arguments' ? Array.prototype.slice.call(_argObj) : []);
+        return argArray;
 	}
 	
 	function Copy(){
-		var target = (KUBE.Is(arguments[arguments.length-1]) === 'boolean' ? {} : this);
+		var target = (KUBE.Is(arguments[arguments.length-1]) === 'boolean' ? [] : this);
 		return copy(target);
 	}
 
@@ -88,41 +89,17 @@
 		}
 		return $return;
 	}
-	
-	function Rand(){
-		var $return,min,max;
-		$return = 0;
-		if(KUBE.Is(this[0]) === 'number' && KUBE.Is(this[1]) !== 'number'){
-			min = 0;
-			max = this[0];
-		}
-		else if(KUBE.Is(this[0]) === 'number' && KUBE.Is(this[1]) === 'number'){
-			min = this[0];
-			max = this[1];
-		}
-		
-		if(max){
-			$return = Math.floor((Math.random()*max)+(min || 0));
-		}
-		return $return;
-	}
 
-    function In(_check){
-        var $return = false;
-        for(var i=0;i<this.length;i++){
-            if(this[i] === _check){
-                $return = true;
-                break;
-            }
-        }
-        return $return;
+    function RandomIndexValue(){
+        var randIndex = Math.floor((Math.random() * (this.length-1)) + 0);
+        return (this.length ? this[randIndex] : undefined);
     }
 
-	/* Direct copy from the object.copy */
+	/* Direct copy from the object.copy: note, this hasn't been well tested. May have ze bugz */
 	function copy(_obj){
 		var copier = {'object':copyObject,'array':copyArray,'date':copyDate,'regExp':copyRegExp},
 			circleCache = {'array':[],'object':[]},
-			$return = copyObject(_obj);
+			$return = copyArray(_obj);
 
 		circleCache = null;
 		return $return;

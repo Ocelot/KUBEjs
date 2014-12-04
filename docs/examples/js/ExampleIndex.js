@@ -21,9 +21,7 @@
 
     //And then we set which classes our available in our Index (it will expect file names to match class names
     ExampleIndex.SetIndex([
-        'IndexTest',
-        'TableOfContents',
-        'TableIndex'
+        'Logger'
     ]);
 
     //Now we add our Index object back to the KUBE AutoLoader

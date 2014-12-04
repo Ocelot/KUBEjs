@@ -229,7 +229,7 @@
                 var newColor,returnColors = [];
                 while(returnColors.length != 5){
                     newColor = Color().GetRandomWebColor();
-                    if(!returnColors.KUBE().in(newColor)){
+                    if(returnColors.indexOf(newColor) === -1){
                         returnColors.push(newColor);
                     }
                 }
