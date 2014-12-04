@@ -24,17 +24,79 @@
             //Let's quickly look at each one
 
             //JoinCallback: Establish our array
-//            var example1 = ['a','b','c','d'];
-//
-//            //We have 2 arguments, a callback, and an optional join string
-//            var x = example1.KUBE().joinCallback(function(_val){
-//                //Now in here, we get access to each value
-//
-//                console.log(_val);
-//                return (_val === 'a' ? '' : _val.toUpperCase());
-//            });
-//
-//            console.log(x);
+            var example1 = [10,20,5,'a',17.54];
+
+            //We have 2 arguments, a callback, and an optional join string
+            var fReturn = example1.KUBE().joinCallback(function(_val){
+                //Now in here, we get access to each value, by default the 'join' paramater will be ','
+                //Whatever we return is what will be added to the join. This allows for some simple nice normalization when you need to build a string. For example
+                return (KUBE.Is(_val) === 'number' ? Math.round(_val)+"px" : "0px");
+            });
+
+            //Then we look at our return string: 10px,20px,5px,0px,18px
+            console.log(fReturn);
+
+            //Each: Establish a array
+            var example2 = ['a','b',0,'c',2,'z',15,/^\./g,'x','z',3,6,23]
+
+            //Each takes a callback function, and then an optional useOriginal boolean, and preserveIndex boolean. By default useOriginal is false, and default preserveIndex is false
+            //Let's look at a few examples of this
+            //1. Callback only: passes 3 arguments into the callback the _value of the array, and the _index it will loop through the array automatically and the entire _array reference itself
+            example2.KUBE().each(function(_val,_index,_array){
+                console.log(KUBE.Is(_val)); //Let's dump each value to console
+
+                //We can also stop the loop with a special internal break method
+                if(_index > 7){
+                    this.break();
+                }
+            });
+
+            //2. useOriginal === false, preserveIndex === false
+            var newArray = example2.KUBE().each(function(_val){
+                return (KUBE.Is(_val) === 'number' ? _val : undefined); //So check to see if the value is a number, and build a new array with the numbers only
+            });
+
+            //We will see 2 arrays, the first which is the original, the 2nd which is a newArray containing only the number values
+            console.log(example2,newArray);
+
+            //3. useOriginal === false, preserveIndex === true
+            var newArray = example2.KUBE().each(function(_val){
+                return (KUBE.Is(_val) === 'number' ? _val : undefined); //So check to see if the value is a number, and build a new array with the numbers only
+            },false,true);
+
+            //We will see 2 arrays as before, but now the index of each returned key will be preserved, undefined will be assigned to non returned indices
+            console.log(example2,newArray);
+
+            //useOriginal === true
+            example2.KUBE().each(function(_val){
+                return (KUBE.Is(_val) === 'string' ? _val : String(_val)); //In this case we will cast the entire original array to strings
+            },true);
+
+            //In this context, a new array is never created, so preserveIndex is forced to true, undefined will result in the original value being restored, otherwise any return value will replace the original
+            console.log(example2);
+
+            //Copy: Establish an array
+            var example3 = [1,2,3,4,5];
+
+            //Copy is fairly self explanatory. Create a new copy of the array
+            var newArrayRef = example3.KUBE().copy();
+
+            //Change a value for sake of example
+            newArrayRef[2] = 'SEVENTEEN';
+
+            //As you would expect, we have 2 different arrays
+            console.log(example3,newArrayRef);
+
+            //Deep Copy: It is worth noting that Copy 'should' perform a deep copy of the Array, this includes creating copies of all sub objects / sub arrays, even to the point of recreating circular references... wut? really?
+            var tempObj = {'key':"yes"};
+            var example4 = [tempObj,2,'a'];
+
+            var newArrayRef = example4.KUBE().copy();
+            tempObj.key = 'no'; //This will update it on the first array (because it's stored by reference, but not on the copied array)
+            newArrayRef[1] = 'SEVENTEEN'; //And likewise, this will update the new array copy, but leave the first untouched
+            console.log(example4,newArrayRef);
+
+            
 
         });
     </script>

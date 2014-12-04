@@ -31,7 +31,7 @@
 	}
 	
 	function Copy(){
-		var target = (KUBE.Is(arguments[arguments.length-1]) === 'boolean' ? {} : this);
+		var target = (KUBE.Is(arguments[arguments.length-1]) === 'boolean' ? [] : this);
 		return copy(target);
 	}
 
@@ -118,11 +118,11 @@
         return $return;
     }
 
-	/* Direct copy from the object.copy */
+	/* Direct copy from the object.copy: note, this hasn't been well tested. May have ze bugz */
 	function copy(_obj){
 		var copier = {'object':copyObject,'array':copyArray,'date':copyDate,'regExp':copyRegExp},
 			circleCache = {'array':[],'object':[]},
-			$return = copyObject(_obj);
+			$return = copyArray(_obj);
 
 		circleCache = null;
 		return $return;
