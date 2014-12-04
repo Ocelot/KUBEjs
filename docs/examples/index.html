@@ -16,7 +16,8 @@
         //  -value  = namespace of KUBE Class
         var uses = {
             'DJ':'/Library/DOM/DomJack',
-            'SJ':'/Library/DOM/StyleJack'
+            'SJ':'/Library/DOM/StyleJack',
+            'XM':'/Library/Extend/Math'
         };
 
         //Request dependancy resolution. Returns a promise (var p.then(callback)) which can be used instead of the callback
@@ -53,13 +54,10 @@
             DOM.Append('li').Append('a').SetAttribute('href','DOM/4_domJack.html').SetInner('DomJack: Events & Classes & Styles')
 
             var Extend = Level1.Append('li');
-            Extend.Append('div').SetInner('Extend APIs');
+            Extend.Append('div').SetInner('Native Extend APIs');
             Extend = Extend.Append('ol');
             Extend.Append('li').Append('a').SetAttribute('href','Extend/1_array.html').SetInner('Array');
-
-
-//            debugger;
-        //.Url('').SetInner('Hello World');
+            Extend.Append('li').Append('a').SetAttribute('href','Extend/2_date.html').SetInner('Date');
 
             DJ(document.body).Append(Contents);
         }

@@ -55,8 +55,8 @@
 			"h":h,	//Time: 01-12 (hours)
 			"H":H,	//Time: 00-23 (hours)
 			"i":i,	//Time: 00-59 (minutes)
-			"s":s,	//Time: 00-59 (seconds)
-		}
+			"s":s	//Time: 00-59 (seconds)
+		};
 		
 		$return = '';
 		for(var charCount=0;charCount<_formatString.length;charCount++){
@@ -72,7 +72,7 @@
 	
 	function d(_DateObj){
 		var $return = _DateObj.getDate();
-		return ($return.length === 1 ? "0"+String($return) : $return);
+		return (String($return).length === 1 ? "0"+$return : $return);
 	}
 	
 	function D(_DateObj,_strings){
@@ -119,7 +119,7 @@
 	
 	function m(_DateObj){
 		var $return = _DateObj.getMonth()+1;
-		return ($return.length === 1 ? "0"+String($return) : $return);	
+		return (String($return).length === 1 ? "0"+$return : $return);
 	}
 	
 	function M(_DateObj,_strings){
@@ -168,20 +168,22 @@
 	
 	function h(_DateObj){
 		var $return = g(_DateObj);
-		return ($return.length === 1 ? "0"+String($return) : $return);		
+		return (String($return).length === 1 ? "0"+$return : $return);
 	}
 	
 	function H(_DateObj){
 		var $return = _DateObj.getHours();
-		return ($return.length === 1 ? "0"+String($return) : $return);				
+		return (String($return).length === 1 ? "0"+$return : $return);
 	}
 	
 	function i(_DateObj){
-		return _DateObj.getMinutes();
+		var $return =  _DateObj.getMinutes();
+        return (String($return).length === 1 ? "0"+$return : $return);
 	}
 	
 	function s(_DateObj){
-		return _DateObj.getSeconds();
+		var $return = _DateObj.getSeconds();
+        return (String($return).length === 1 ? "0"+$return : $return);
 	}
 	
 	function getMSThisYear(_DateObj){
