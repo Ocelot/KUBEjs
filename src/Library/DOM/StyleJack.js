@@ -246,7 +246,7 @@
 					//$return = searchForRule(_type,_initData);
 				}
 				catch(E){
-					KUBE.console.log('failz');
+                    KUBE.console.log('CSSStyleRule failed to create, Trying again');
 					throw E;
 				}
 			}
@@ -263,7 +263,7 @@
 					$return = searchForRule(_type,_initData,_prefix);
 				}
 				catch(E){
-					KUBE.console.log('failz');
+					KUBE.console.log('CSSKeyframesRule failed to create, Trying again');
 					if(!_prefix){
 						$return = initCSSKeyframesRule(_styleSheet,_type,_initData,prefix);
 					}
@@ -479,7 +479,7 @@
             if(KUBE.Is(_unicodeRange) !== "string"){
                 return false;
             }
-            
+
             var unicodeRanges = _unicodeRange.split(",");
                 unicodeRanges.KUBE().each(validate);
 
@@ -546,8 +546,7 @@
 			'ClearEvent':Events.Clear,
 			'GetStyleObj':GetStyleObj,
             'GetSelectorText':GetSelectorText,
-			//'Plugin':Plugin,
-			
+
 			//Our Property List
 //			'Animation' : Animation,
 			'Appearance' : Appearance,
@@ -837,28 +836,7 @@
 		function ZIndex(){
 			return ZIndexHandler.apply(undefined,getArgsArray(arguments));
 		}
-						
-		//Plugin handling		
-		//Can add plugins like this: Plugin('Width',WidthHandler);
-        //I tested out plugins and they don't work.  They only get bound to the styleJack that Plugin is called on.
-        // Maybe this is intentional, but is unexpected.
-		function Plugin(_name,_f){
-			if(validatePlugin(_name,_f)){
-				$API[_name] = function(){
-					debugger;
-					var args = Array.prototype.slice.call(arguments);
-					args.unshift($API); //1
-					args.unshift(_styleObj); //0
-					
-					_f.apply(undefined,args);
-				};
-			}
-            KUBE.console.log($API);
-		}
-		
-		function validatePlugin(_name,_f){
-			return (KUBE.Is(_name) === 'string' && !$API[_name] && !$API[_name] && KUBE.Is(_f) === 'function' ? true : false);
-		}
+
 	} //END OF CSSStyleRule
 	
 	

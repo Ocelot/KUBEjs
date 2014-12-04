@@ -362,7 +362,7 @@ to create a new keyframe</div></blockquote>
 <div class="admonition-todo admonition" id="index-0">
 <p class="first admonition-title">Todo</p>
 <p>StyleJack Method Implementation. These methods require implementation still.</p>
-<blockquote>
+<blockquote class="last">
 <div><dl class="function">
 <dt id="StyleJackCSSKeyFrameAPI.Clear">
 <code class="descclassname">StyleJackCSSKeyFrameAPI.</code><code class="descname">Clear</code><span class="sig-paren">(</span><em>_index</em><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackCSSKeyFrameAPI.Clear" title="Permalink to this definition">¶</a></dt>
@@ -373,8 +373,8 @@ to create a new keyframe</div></blockquote>
 <code class="descclassname">StyleJackCSSKeyFrameAPI.</code><code class="descname">Each</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackCSSKeyFrameAPI.Each" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<p>Event Methods as well do nothing (Events are never emitted)</p>
 </div></blockquote>
-<p class="last">Event Methods as well do nothing (Events are never emitted)</p>
 </div>
 </div>
 <div class="section" id="id1">
@@ -383,7 +383,14 @@ to create a new keyframe</div></blockquote>
 a new StyleJack with a Node/StyleRule</p>
 <p>You cannot instantiate this manually, as it&#8217;s the return value from StyleJack</p>
 <p>The String &#8220;$&#8221; Is a special value that you can pass into all of the StyleJackAPI methods to get the raw value back. Else, StyleJack will
-attempt to parse the value (if applicable) to a programatically usable value (eg: String(&#8220;16px&#8221;) =&gt; Number(16)</p>
+attempt to parse the value from px to a programatically usable value (eg: String(&#8220;16px&#8221;) =&gt; Number(16).
+If the value is in any other format (eg: em, pt, cm) it will be returned as a String.</p>
+<blockquote>
+<div><div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">Possibly in the case of non-px values, we could return an object consisting of value and unit.</p>
+</div>
+</div></blockquote>
 <p>StyleJack is a fairly fluid API. For most contexts, if you are setting a value, you will receive the relevant API back.
 This means that if you&#8217;re on the level 1 API (StyleJackAPI), you will receive the StyleJack API back to allow chaining.
 If you are on a level 2 API (StyleJackBackgroundAPI), you will receive that API back. The property .api will allow you
@@ -396,11 +403,13 @@ to return to the level 1 API</p>
 <dl class="function">
 <dt id="StyleJackAPI.Delete">
 <code class="descclassname">StyleJackAPI.</code><code class="descname">Delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Delete" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><blockquote>
+<div>Deletes the current style rule from the stylesheet.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><cite>void</cite></td>
 </tr>
 </tbody>
 </table>
@@ -409,11 +418,13 @@ to return to the level 1 API</p>
 <dl class="function">
 <dt id="StyleJackAPI.GetStyleObj">
 <code class="descclassname">StyleJackAPI.</code><code class="descname">GetStyleObj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.GetStyleObj" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><blockquote>
+<div>Returns the CSSStyleRule that this current StyleJack represents</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="xref js js-class docutils literal"><span class="pre">CSSStyleRule()</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -422,7 +433,9 @@ to return to the level 1 API</p>
 <dl class="function">
 <dt id="StyleJackAPI.Appearance">
 <code class="descclassname">StyleJackAPI.</code><code class="descname">Appearance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Appearance" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><blockquote>
+<div>Used for getting/setting the appearance property.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -430,6 +443,11 @@ to return to the level 1 API</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<p class="last">Appearance property has some flaws. It&#8217;s prefixed everywhere, and the values are prefixed as well
+We might need to re-assess it and possibly remove it from StyleJack for the time being.</p>
+</div>
 </dd></dl>
 
 <dl class="function">

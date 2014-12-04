@@ -112,7 +112,7 @@ StyleJack CSSKeyFrame API
         .. js:function:: StyleJackCSSKeyFrameAPI.Clear(_index)
         .. js:function:: StyleJackCSSKeyFrameAPI.Each()
 
-    Event Methods as well do nothing (Events are never emitted)
+        Event Methods as well do nothing (Events are never emitted)
 
 
 
@@ -125,7 +125,11 @@ a new StyleJack with a Node/StyleRule
 You cannot instantiate this manually, as it's the return value from StyleJack
 
 The String "$" Is a special value that you can pass into all of the StyleJackAPI methods to get the raw value back. Else, StyleJack will
-attempt to parse the value (if applicable) to a programatically usable value (eg: String("16px") => Number(16)
+attempt to parse the value from px to a programatically usable value (eg: String("16px") => Number(16).
+If the value is in any other format (eg: em, pt, cm) it will be returned as a String.
+
+    .. todo::
+        Possibly in the case of non-px values, we could return an object consisting of value and unit.
 
 StyleJack is a fairly fluid API. For most contexts, if you are setting a value, you will receive the relevant API back.
 This means that if you're on the level 1 API (StyleJackAPI), you will receive the StyleJack API back to allow chaining.
@@ -137,15 +141,27 @@ to return to the level 1 API
 
 .. js:function:: StyleJackAPI.Delete()
 
-   :returns:  :js:class:`StyleJackAPI`
+        Deletes the current style rule from the stylesheet.
+
+   :returns:  `void`
 
 .. js:function:: StyleJackAPI.GetStyleObj()
 
-   :returns:  :js:class:`StyleJackAPI`
+        Returns the CSSStyleRule that this current StyleJack represents
+
+   :returns:  :js:class:`CSSStyleRule`
 
 .. js:function:: StyleJackAPI.Appearance()
 
+        Used for getting/setting the appearance property.
+
    :returns:  :js:class:`StyleJackAPI`
+
+   .. todo::
+        Appearance property has some flaws. It's prefixed everywhere, and the values are prefixed as well
+        We might need to re-assess it and possibly remove it from StyleJack for the time being.
+
+
 
 .. js:function:: StyleJackAPI.BackfaceVisibility()
 
