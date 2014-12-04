@@ -1,5 +1,5 @@
-StyleJack API
-=============
+StyleJack
+=========
 
 .. js:class:: StyleJack(context)
 
@@ -124,17 +124,24 @@ a new StyleJack with a Node/StyleRule
 
 You cannot instantiate this manually, as it's the return value from StyleJack
 
-The String "$" Is a special value that you can pass into all of the StyleJackAPI methods to get the raw value back. Else, StyleJack will
-attempt to parse the value from px to a programatically usable value (eg: String("16px") => Number(16).
-If the value is in any other format (eg: em, pt, cm) it will be returned as a String.
-
-    .. todo::
-        Possibly in the case of non-px values, we could return an object consisting of value and unit.
 
 StyleJack is a fairly fluid API. For most contexts, if you are setting a value, you will receive the relevant API back.
 This means that if you're on the level 1 API (StyleJackAPI), you will receive the StyleJack API back to allow chaining.
 If you are on a level 2 API (StyleJackBackgroundAPI), you will receive that API back. The property .api will allow you
 to return to the level 1 API
+
+    .. note::
+        The `String` "$" Is a special value that you can pass into all of the StyleJackAPI methods to get the raw value back. Else, StyleJack will
+        attempt to parse the value from px to a programatically usable value (eg: String("16px") => Number(16).
+        If the value is in any other format (eg: em, pt, cm) it will be returned as a String.
+
+        This is convenient in the cases where the Style returns a Level 2 API (ex: Background), as you can simply call::
+
+            KUBE.Class('/Library/DOM/StyleJack')(document.body).Background('$');
+
+        instead of::
+
+            KUBE.Class('/Library/DOM/StyleJack')(document.body).Background().Get();
 
 .. js:class:: StyleJackAPI
 
@@ -151,7 +158,7 @@ to return to the level 1 API
 
    :returns:  :js:class:`CSSStyleRule`
 
-.. js:function:: StyleJackAPI.Appearance()
+.. js:function:: StyleJackAPI.Appearance([_value])
 
         Used for getting/setting the appearance property.
 
@@ -161,13 +168,17 @@ to return to the level 1 API
         Appearance property has some flaws. It's prefixed everywhere, and the values are prefixed as well
         We might need to re-assess it and possibly remove it from StyleJack for the time being.
 
+.. js:function:: StyleJackAPI.BackfaceVisibility([_value])
 
+        :param String _value: If no value passed in, returns the current value. Else, attempts to set the value to the property
 
-.. js:function:: StyleJackAPI.BackfaceVisibility()
+        Used for setting Backface Visibility
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns:  :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.Background()
+.. js:function:: StyleJackAPI.Background([_value])
+
+        :param String _value: If no value passed in, returns `StyleJackBackgroundAPI`. Else, attempts to set the value to the property
 
    :returns: :js:class:`StyleJackBackgroundAPI`
 

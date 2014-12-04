@@ -9,13 +9,13 @@
 
 //TODO: THIS HAS SOME CONCEPTUAL FLAWS! REWRITE!!!!!!!!!!!!!
 //TODO: CHANGE THIS TO A FACTORY. SINGLETONS CAUSE PROBLEMS. REMEMBER UPLOAD EVENTS
-
 (function(KUBE){
 	KUBE.LoadSingletonFactory('/Library/DOM/Ajax', Ajax,['/Library/Extend/Object']);
-	
+
 	/* Currently this is an ugly piece of code and required refactoring and cleanup */
 	Ajax.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function Ajax(){
+        throw 'f';
 		var interrupt = false;
 		var processing = false;
 		var currentRequest;

@@ -77,6 +77,8 @@ exclude_patterns = []
 # documents.
 #default_role = None
 
+highlight_language= 'js'
+
 # If true, '()' will be appended to :func: etc. cross-reference text.
 #add_function_parentheses = True
 
