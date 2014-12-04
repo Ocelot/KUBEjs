@@ -63,8 +63,6 @@ StyleJack FontFace API
 
     :throws `console.log`: Logs a message if you try to set an invalid value
 
-    .. todo:: This doesn't actually validate invalid values yet.
-
     :returns: :js:class:`StyleJackFontFaceAPI`
 
 .. js:function:: StyleJackFontFaceAPI.Weight(_weight)

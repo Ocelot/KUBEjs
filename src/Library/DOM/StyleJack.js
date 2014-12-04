@@ -476,6 +476,10 @@
 
         function validateUnicodeRange(_unicodeRange){
             var $return = true;
+            if(KUBE.Is(_unicodeRange) !== "string"){
+                return false;
+            }
+            
             var unicodeRanges = _unicodeRange.split(",");
                 unicodeRanges.KUBE().each(validate);
 
