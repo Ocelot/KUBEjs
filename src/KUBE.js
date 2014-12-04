@@ -172,6 +172,7 @@
 			'SetAsLoaded':SetAsLoaded,
 			'Extend':Extend,
 			'Events':Events,
+            'Promise':Promise,
 			'Config':Config,
             'Class':Class
 		};
@@ -314,10 +315,116 @@
 			return (type === 'object' ? KUBEEvents(_initObj) : (type === 'undefined' ? KUBEEvents({}) : _initObj));
 		}
 
+        function Promise(){
+            return new KUBEPromise();
+        }
+
 		function Config(){
 			return config;
 		}
 	}
+
+    function KUBEPromise(){
+        var resolveQ,state,fulfillmentArgs;
+        resolveQ = [];
+        state = 'pending';
+
+        var $promiseAPI = {
+            'Then':Then,
+            'Catch':Catch
+        };
+
+        //Ignore race and all for now
+        var $resolverAPI = {
+            'Resolve':Resolve,
+            'Reject':Reject
+        };
+
+        return {
+            'promise':$promiseAPI,
+            'resolver':$resolverAPI
+        };
+
+        function Then(_resolveCallback,_rejectCallback){
+            resolveQ.push([_resolveCallback,_rejectCallback]);
+            if(state === 'resolved'){
+                state = 'pending';
+                Resolve();
+            }
+            else if(state === 'rejected'){
+                state = 'pending';
+                Reject();
+            }
+            return $promiseAPI;
+        }
+
+        function Catch(_rejectCallback){
+            if(state === 'resolved' || state === 'rejected'){
+                if(state === 'rejected'){
+                    state = 'pending';
+                    resolveQ.push([undefined,_rejectCallback]);
+                    Reject();
+                }
+            }
+            else{
+                resolveQ.push([undefined,_rejectCallback]);
+            }
+            return $promiseAPI;
+        }
+
+        function Resolve(){
+            var resolveArray;
+            if(resolveQ.length){
+                fulfillmentArgs = Array.prototype.slice.call(arguments);
+                resolveArray = resolveQ.shift();
+                if(KUBE.Is(resolveArray[0]) === 'function'){
+                    try{
+                        resolveArray[0].apply($resolverAPI,fulfillmentArgs);
+                    }
+                    catch(Error){
+                        Reject.apply(this,fulfillmentArgs);
+                    }
+                }
+                else{
+                    Resolve.apply(this,fulfillmentArgs);
+                }
+            }
+            else{
+                state = 'resolved';
+            }
+        }
+
+        function Reject(){
+            var resolveArray;
+            if(resolveQ.length){
+                fulfillmentArgs = Array.prototype.slice.call(arguments);
+                resolveArray = resolveQ.shift();
+                if(KUBE.Is(resolveArray[1]) === 'function'){
+                    try{
+                        resolveArray[1].apply($resolverAPI,fulfillmentArgs);
+                    }
+                    catch(Error){
+                        Reject.apply(this,fulfillmentArgs);
+                    }
+                }
+                else{
+                    Reject.apply(this,fulfillmentArgs);
+                }
+            }
+            else{
+                state = 'rejected';
+            }
+        }
+
+        //Implement these later
+        function All(){
+            //I can theoretically use controlFlow
+        }
+
+        function Race(){
+
+        }
+    }
 
 	/* KUBE Events */
 	function KUBEEvents(obj){
@@ -1326,7 +1433,3 @@ KUBE.AutoLoad().LoadAutoIndex('/Library/Extend',KUBE.Config().autoLoadPath+'/Ind
 KUBE.AutoLoad().LoadAutoIndex('/Library/Tools',KUBE.Config().autoLoadPath+'/Indexes/ToolsIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/UI',KUBE.Config().autoLoadPath+'/Indexes/UIIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/FontAwesome',KUBE.Config().autoLoadPath+'/Indexes/FontAwesome.js');
-
-
-//KUBEjs utilities will autoload out of the Library subdirectory.
-//External classes will need to use KUBE.AutoLoad({ClassName:FilePath})

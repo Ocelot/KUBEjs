@@ -54,7 +54,8 @@
     }
 
     function Random(_min,_max){
-        return Math.floor((Math.random() * _max) + _min);
+        var $return = Math.round((Math.random() * _max) + _min);
+        return ($return > _max ? _max : $return);
     }
 
 }(KUBE));
