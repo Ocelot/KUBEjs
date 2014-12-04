@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>KUBEjs: Add Namespace Index</title>
+    <title>KUBEjs Core: Add Namespace Index</title>
     <!-- Include KUBE.js -->
     <script src="../../../src/KUBE.js"></script>
 
@@ -22,7 +22,7 @@
 
             //And then we set which classes our available in our Index (it will expect file names to match class names
             ExampleIndex.SetIndex([
-                'IndexTest'
+                'Logger'
             ]);
 
             //Now we add our Index object back to the KUBE AutoLoader
@@ -33,25 +33,17 @@
 
     <!-- Now let's try our index -->
     <script>
-        KUBE.Uses({'Test':'/KUBEjs/Examples/IndexTest'}).then(function($K){
-            //This will be an IndexTest object
-            var Test1 = $K.Test('My First Message');
+        KUBE.Uses('/KUBEjs/Examples/Logger').then(function(_Logger){
+            var Log1 = _Logger(); //New logger
 
-            //This will be a new IndexTest object
-            var Test2 = $K.Test('My Second Message');
-
-            //We will just alert them appropriately (see docs/examples/js/IndexTest.js for API)
-            Test1.Alert();
-            Test2.Alert();
-
-            //Let's see exactly what the Object is
-            alert(KUBE.Is(Test1,true));
-
+            //We have access to its API
+            Log1.Add('This is a test of adding a namespace index');
+            Log1.Log();
         });
     </script>
 
 </head>
 <body>
-
+Example outputs to console.
 </body>
 </html>
