@@ -331,13 +331,17 @@
 
         var $promiseAPI = {
             'Then':Then,
-            'Catch':Catch
+            'then': Then,
+            'Catch':Catch,
+            'catch': Catch
         };
 
         //Ignore race and all for now
         var $resolverAPI = {
             'Resolve':Resolve,
-            'Reject':Reject
+            'resolve': Resolve,
+            'Reject':Reject,
+            'reject': Reject
         };
 
         return {
@@ -404,6 +408,8 @@
                         resolveArray[1].apply($resolverAPI,fulfillmentArgs);
                     }
                     catch(Error){
+                        var error = fulfillmentArgs
+                        error.unshift(Error);
                         Reject.apply(this,fulfillmentArgs);
                     }
                 }

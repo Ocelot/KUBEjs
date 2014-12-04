@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title></title>
+    <script src="../../../src/KUBE.js"></script>
+
+    <script type="text/javascript">
+
+        function ECMAAjax(url,request,method,headers,username,password){
+            var req = new XMLHttpRequest();
+            headers = (KUBE.Is(headers) === "object" ?  headers : {});
+            return new Promise(function(resolve,reject){
+                req.open(method || "GET", url, true,username,password);
+
+                Object.keys(headers).forEach(function(k){
+                    req.setRequestHeader(k, headers[k]);
+                });
+
+                req.onreadystatechange = function(e){
+                    if(req.readyState !== 4){
+                        return;
+                    }
+
+                    if([200,304].indexOf(req.status) < 0){
+                        reject(new Error('Server responded with status of ' + req.status));
+                    }
+                    else{
+                        resolve(e.target.response);
+                    }
+                }
+
+                req.send(request || undefined);
+            });
+
+        }
+
+        function KUBEAjax(url,request,method,headers,username,password) {
+            var req = new XMLHttpRequest();
+            var P = KUBE.Promise();
+            P.resolver.resolve();
+            headers = (KUBE.Is(headers) === "object" ? headers : {});
+            return P.promise.then(function () {
+                reject = this.reject;
+                resolve = this.resolve;
+                req.open(method || "GET", url, true, username, password);
+
+                Object.keys(headers).forEach(function(k){
+                    req.setRequestHeader(k, headers[k]);
+                });
+
+
+                req.onreadystatechange = function (e) {
+                    if (req.readyState !== 4) {
+                        return;
+                    }
+
+                    if ([200, 304].indexOf(req.status) < 0) {
+                        reject(new Error('Server responded with status of ' + req.status));
+                    }
+                    else {
+                        resolve(e.target.response);
+                    }
+                }
+
+                req.send(request || undefined);
+            });
+        }
+        ECMAAjax('http://localhost:63342/Programming/KUBEjs/docs/examples/Core/1_kube.html').then(function(data){
+            var j = document.createElement('div');
+            j.innerHTML = data;
+            j.style.border = '5px solid red';
+            document.body.appendChild(j);
+        },function(){console.log(arguments)});
+
+
+        KUBEAjax('http://localhost:63342/Programming/KUBEjs/docs/examples/Core/1_kube.html').then(function(data){
+            var j = document.createElement('div');
+            j.innerHTML = data;
+            j.style.border = '5px solid #3dff3d';
+            document.body.appendChild(j);
+        },function(){console.log(arguments)});
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
