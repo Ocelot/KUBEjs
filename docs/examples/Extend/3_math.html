@@ -9,22 +9,28 @@
 
         /*
          *  Current API reference for /Library/Extend/Math
-         *      -promise
+         *      -scaleAspectRatio
+         *      -random
          */
 
         //Ensuring the Extend/Math library is loaded, is as simple as any other namespace
-        KUBE.Uses(['/Library/Extend/DomJack','/Library/Extend/Function'],function(_DJ){
+        KUBE.Uses('/Library/Extend/Math',function(){
 
-            function test(_var1,_var2){
+            //ScaleAspectRatio takes in 5 args
+            // _currentWidth,_currentHeight,_targetWidth,_targetHeight, _fit
+            //It will take in dimensions, and based on a target box, will return the new width/height maintaining the original aspect ratio, but fitting within the target dimensions
+            console.log(Math.KUBE().scaleAspectRatio(5000,5000,300,400));
 
-            }
+            //If _fit is set to false, it will scale down until a side matches the target width/height (I think?)
+            console.log(Math.KUBE().scaleAspectRatio(3000,4000,400,300,false));
 
-            test.KUBE().promise('a','b')
-
+            //Random is _min, _max and does what you'd expect
+            console.log(Math.KUBE().random(3242,213123123));
         });
     </script>
 
 </head>
 <body>
+Example outputs to console
 </body>
 </html>

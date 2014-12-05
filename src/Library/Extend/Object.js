@@ -23,11 +23,29 @@
 		ExtendAPI.Load('object','each',Each);
 		ExtendAPI.Load('object','duckType',DuckType);
 		ExtendAPI.Load('object','isEmpty',IsEmpty);
+        ExtendAPI.Load('object','toJSON',toJSON);
+        ExtendAPI.Load('object','fromJSON',fromJSON);
 		KUBE.EmitState('/Library/Extend/Object');
 		KUBE.console.log('/Library/Extend/Object Loaded');
 	}
 	
 	/* Declare functions */
+    function toJSON(){
+        return JSON.stringify(this);
+    }
+
+    function fromJSON(_jsonString){
+        var $this = this;
+        var temp;
+        temp = JSON.parse(_jsonString);
+        for(var prop in temp){
+            if(temp.hasOwnProperty(prop)){
+                $this[prop] = temp[prop];
+            }
+        }
+        return $this;
+    }
+
 	function Each(_f,_useOriginal){
 		var prop,$return,eachBreak,eachDelete;
 		$return = (!_useOriginal ? {} : this);
