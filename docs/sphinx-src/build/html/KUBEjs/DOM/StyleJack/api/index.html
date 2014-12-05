@@ -59,6 +59,10 @@
         
         
             <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../Core/index.html">Core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../Core/Promises/promises.html">Promises</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">DOM</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../Ajax/ajax.html">Ajax</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../DomJack/domjack.html">DomJack</a></li>
@@ -410,8 +414,7 @@ If the value is in any other format (eg: em, pt, cm) it will be returned as a St
 <dl class="function">
 <dt id="StyleJackAPI.Delete">
 <code class="descclassname">StyleJackAPI.</code><code class="descname">Delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Delete" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Deletes the current style rule from the stylesheet.</div></blockquote>
+<dd><p>Deletes the current style rule from the stylesheet.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -425,8 +428,7 @@ If the value is in any other format (eg: em, pt, cm) it will be returned as a St
 <dl class="function">
 <dt id="StyleJackAPI.GetStyleObj">
 <code class="descclassname">StyleJackAPI.</code><code class="descname">GetStyleObj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.GetStyleObj" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Returns the CSSStyleRule that this current StyleJack represents</div></blockquote>
+<dd><p>Returns the CSSStyleRule that this current StyleJack represents</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -441,15 +443,16 @@ If the value is in any other format (eg: em, pt, cm) it will be returned as a St
 <dt id="StyleJackAPI.Appearance">
 <code class="descclassname">StyleJackAPI.</code><code class="descname">Appearance</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Appearance" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div>Used for getting/setting the appearance property.</div></blockquote>
+<div><p>Used for getting/setting the appearance property.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
 <div class="admonition-todo admonition" id="index-1">
 <p class="first admonition-title">Todo</p>
 <p class="last">Appearance property has some flaws. It&#8217;s prefixed everywhere, and the values are prefixed as well
@@ -460,536 +463,19 @@ We might need to re-assess it and possibly remove it from StyleJack for the time
 <dl class="function">
 <dt id="StyleJackAPI.BackfaceVisibility">
 <code class="descclassname">StyleJackAPI.</code><code class="descname">BackfaceVisibility</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.BackfaceVisibility" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param String _value:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">If no value passed in, returns the current value. Else, attempts to set the value to the property</td>
-</tr>
-</tbody>
-</table>
-<p>Used for setting Backface Visibility</p>
-</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Background">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Background</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Background" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param String _value:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">If no value passed in, returns <cite>StyleJackBackgroundAPI</cite>. Else, attempts to set the value to the property</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Border">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Border</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Border" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Bottom">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Bottom</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Bottom" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Box">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Box</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Box" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.CaptionSide">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">CaptionSide</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.CaptionSide" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Clip">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Clip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Clip" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Color">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Color</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Color" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Content">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Content</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Content" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Cursor">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Cursor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Cursor" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Direction">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Direction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Direction" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Display">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Display</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Display" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.EmptyCells">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">EmptyCells</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.EmptyCells" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Float">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Float</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Float" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Font">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Font</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Font" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Height">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Height</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Height" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Left">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Left</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Left" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.LetterSpacing">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">LetterSpacing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.LetterSpacing" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.LineHeight">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">LineHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.LineHeight" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Margin">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Margin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Margin" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.MinHeight">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">MinHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MinHeight" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.MinWidth">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">MinWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MinWidth" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.MaxHeight">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">MaxHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MaxHeight" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.MaxWidth">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">MaxWidth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MaxWidth" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Opacity">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Opacity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Opacity" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Outline">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Outline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Outline" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Overflow">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Overflow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Overflow" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Padding">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Padding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Padding" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Position">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Position</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Position" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Resize">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Resize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Resize" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Right">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Right</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Right" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.TableLayout">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">TableLayout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.TableLayout" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Text">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Text" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Top">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Top</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Top" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Transform">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Transform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Transform" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Transition">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Transition</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Transition" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.VerticalAlign">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">VerticalAlign</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.VerticalAlign" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Visibility">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Visibility</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Visibility" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="StyleJackAPI.Width">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">Width</code><span class="sig-paren">(</span><em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Width" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>width</strong> (<em>mixed</em>) &#8211; <p>Width Value</p>
-<blockquote>
-<div>Used for</div></blockquote>
+<li><strong>_value</strong> (<em>String</em>) &#8211; <blockquote>
+<div>If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a> Or Number</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -1002,13 +488,780 @@ We might need to re-assess it and possibly remove it from StyleJack for the time
 </dd></dl>
 
 <dl class="function">
-<dt id="StyleJackAPI.WhiteSpace">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">WhiteSpace</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WhiteSpace" title="Permalink to this definition">¶</a></dt>
+<dt id="StyleJackAPI.Background">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Background</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Background" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns <cite>StyleJackBackgroundAPI</cite>. Any value other than &#8220;$&#8221; attempts to set the passed value to the property
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBackgroundAPI" title="StyleJackBackgroundAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBackgroundAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Border">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Border</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Border" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Bottom">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Bottom</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Bottom" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Box">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Box</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Box" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.CaptionSide">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">CaptionSide</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.CaptionSide" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Clip">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Clip</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Clip" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Color">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Color</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Color" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Content">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Content</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Content" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Cursor">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Cursor</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Cursor" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Direction">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Direction</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Direction" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Display">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Display</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Display" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.EmptyCells">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">EmptyCells</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.EmptyCells" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Float">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Float</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Float" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Font">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Font</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Font" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Height">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Height</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Height" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Left">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Left</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Left" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.LetterSpacing">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">LetterSpacing</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.LetterSpacing" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.LineHeight">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">LineHeight</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.LineHeight" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Margin">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Margin</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Margin" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.MinHeight">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">MinHeight</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MinHeight" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.MinWidth">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">MinWidth</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MinWidth" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.MaxHeight">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">MaxHeight</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MaxHeight" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.MaxWidth">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">MaxWidth</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.MaxWidth" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Opacity">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Opacity</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Opacity" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Outline">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Outline</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Outline" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Overflow">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Overflow</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Overflow" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Padding">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Padding</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Padding" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Position">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Position</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Position" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Resize">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Resize</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Resize" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Right">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Right</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Right" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.TableLayout">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">TableLayout</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.TableLayout" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Text">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Text</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Text" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Top">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Top</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Top" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Transform">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Transform</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Transform" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Transition">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Transition</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Transition" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.VerticalAlign">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">VerticalAlign</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.VerticalAlign" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Visibility">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Visibility</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Visibility" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.Width">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">Width</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.Width" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a> Or Number</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackAPI.WhiteSpace">
+<code class="descclassname">StyleJackAPI.</code><code class="descname">WhiteSpace</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WhiteSpace" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1016,12 +1269,19 @@ We might need to re-assess it and possibly remove it from StyleJack for the time
 
 <dl class="function">
 <dt id="StyleJackAPI.WordSpacing">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">WordSpacing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WordSpacing" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">StyleJackAPI.</code><code class="descname">WordSpacing</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WordSpacing" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1029,12 +1289,19 @@ We might need to re-assess it and possibly remove it from StyleJack for the time
 
 <dl class="function">
 <dt id="StyleJackAPI.WordBreak">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">WordBreak</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WordBreak" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">StyleJackAPI.</code><code class="descname">WordBreak</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WordBreak" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1042,12 +1309,19 @@ We might need to re-assess it and possibly remove it from StyleJack for the time
 
 <dl class="function">
 <dt id="StyleJackAPI.WordWrap">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">WordWrap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WordWrap" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">StyleJackAPI.</code><code class="descname">WordWrap</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.WordWrap" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1055,12 +1329,19 @@ We might need to re-assess it and possibly remove it from StyleJack for the time
 
 <dl class="function">
 <dt id="StyleJackAPI.ZIndex">
-<code class="descclassname">StyleJackAPI.</code><code class="descname">ZIndex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.ZIndex" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">StyleJackAPI.</code><code class="descname">ZIndex</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackAPI.ZIndex" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></p>
+</td>
 </tr>
 </tbody>
 </table>

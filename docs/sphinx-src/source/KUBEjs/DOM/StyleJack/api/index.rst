@@ -148,21 +148,21 @@ to return to the level 1 API
 
 .. js:function:: StyleJackAPI.Delete()
 
-        Deletes the current style rule from the stylesheet.
+    Deletes the current style rule from the stylesheet.
 
-   :returns:  `void`
+    :returns: `void`
 
 .. js:function:: StyleJackAPI.GetStyleObj()
 
-        Returns the CSSStyleRule that this current StyleJack represents
+    Returns the CSSStyleRule that this current StyleJack represents
 
-   :returns:  :js:class:`CSSStyleRule`
+    :returns: :js:class:`CSSStyleRule`
 
 .. js:function:: StyleJackAPI.Appearance([_value])
 
-        Used for getting/setting the appearance property.
+    Used for getting/setting the appearance property.
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
    .. todo::
         Appearance property has some flaws. It's prefixed everywhere, and the values are prefixed as well
@@ -170,189 +170,359 @@ to return to the level 1 API
 
 .. js:function:: StyleJackAPI.BackfaceVisibility([_value])
 
-        :param String _value: If no value passed in, returns the current value. Else, attempts to set the value to the property
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-        Used for setting Backface Visibility
-
-    :returns:  :js:class:`StyleJackAPI`
+     :returns: :js:class:`StyleJackAPI`
 
 .. js:function:: StyleJackAPI.Background([_value])
 
-        :param String _value: If no value passed in, returns `StyleJackBackgroundAPI`. Else, attempts to set the value to the property
+    :param String _value:
+        If no value passed in, returns `StyleJackBackgroundAPI`. Any value other than "$" attempts to set the passed value to the property
+        "$" as a value returns the raw value of the property
 
-   :returns: :js:class:`StyleJackBackgroundAPI`
+    :returns: :js:class:`StyleJackBackgroundAPI`
 
-.. js:function:: StyleJackAPI.Border()
+.. js:function:: StyleJackAPI.Border([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.Bottom()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.Bottom([_value])
 
-.. js:function:: StyleJackAPI.Box()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.CaptionSide()
+.. js:function:: StyleJackAPI.Box([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.Clip()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.CaptionSide([_value])
 
-.. js:function:: StyleJackAPI.Color()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.Content()
+.. js:function:: StyleJackAPI.Clip([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.Cursor()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.Color([_value])
 
-.. js:function:: StyleJackAPI.Direction()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.Display()
+.. js:function:: StyleJackAPI.Content([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.EmptyCells()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.Cursor([_value])
 
-.. js:function:: StyleJackAPI.Float()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.Font()
+.. js:function:: StyleJackAPI.Direction([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.Height()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.Display([_value])
 
-.. js:function:: StyleJackAPI.Left()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.LetterSpacing()
+.. js:function:: StyleJackAPI.EmptyCells([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.LineHeight()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.Float([_value])
 
-.. js:function:: StyleJackAPI.Margin()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.MinHeight()
+.. js:function:: StyleJackAPI.Font([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.MinWidth()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.Height([_value])
 
-.. js:function:: StyleJackAPI.MaxHeight()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.MaxWidth()
+.. js:function:: StyleJackAPI.Left([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.Opacity()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.LetterSpacing([_value])
 
-.. js:function:: StyleJackAPI.Outline()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.Overflow()
+.. js:function:: StyleJackAPI.LineHeight([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.Padding()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.Margin([_value])
 
-.. js:function:: StyleJackAPI.Position()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.Resize()
+.. js:function:: StyleJackAPI.MinHeight([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.Right()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.MinWidth([_value])
 
-.. js:function:: StyleJackAPI.TableLayout()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.Text()
+.. js:function:: StyleJackAPI.MaxHeight([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.Top()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.MaxWidth([_value])
 
-.. js:function:: StyleJackAPI.Transform()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.Transition()
+.. js:function:: StyleJackAPI.Opacity([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.VerticalAlign()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.Outline([_value])
 
-.. js:function:: StyleJackAPI.Visibility()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.Width(width)
+.. js:function:: StyleJackAPI.Overflow([_value])
 
-   :param mixed width: Width Value
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-        Used for
+    :returns: :js:class:`StyleJackAPI`
 
-       :returns:  :js:class:`StyleJackAPI` Or Number
+.. js:function:: StyleJackAPI.Padding([_value])
 
-.. js:function:: StyleJackAPI.WhiteSpace()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.WordSpacing()
+.. js:function:: StyleJackAPI.Position([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-.. js:function:: StyleJackAPI.WordBreak()
+    :returns: :js:class:`StyleJackAPI`
 
-   :returns:  :js:class:`StyleJackAPI`
+.. js:function:: StyleJackAPI.Resize([_value])
 
-.. js:function:: StyleJackAPI.WordWrap()
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns:  :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackAPI`
 
-.. js:function:: StyleJackAPI.ZIndex()
+.. js:function:: StyleJackAPI.Right([_value])
 
-   :returns:  :js:class:`StyleJackAPI`
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.TableLayout([_value])
+
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.Text([_value])
+
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.Top([_value])
+
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.Transform([_value])
+
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.Transition([_value])
+
+    :param String _value:
+    	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.VerticalAlign([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.Visibility([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.Width([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+
+    :returns: :js:class:`StyleJackAPI` Or Number
+
+.. js:function:: StyleJackAPI.WhiteSpace([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.WordSpacing([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.WordBreak([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.WordWrap([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackAPI`
+
+.. js:function:: StyleJackAPI.ZIndex([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackAPI`
 
 StyleJack Background API
 ^^^^^^^^^^^^^^^^^^^^^^^^

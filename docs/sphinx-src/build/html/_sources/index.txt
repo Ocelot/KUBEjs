@@ -6,6 +6,7 @@ Contents:
 
 .. toctree::
 
+   KUBEjs/Core/index
    KUBEjs/DOM/index
    KUBEjs/Drawing/index
    KUBEjs/Extend/index
