@@ -66,7 +66,13 @@
             j.innerHTML = data;
             j.style.border = '15px solid red';
             document.body.appendChild(j);
-        },function(){console.log(arguments)});
+        },function(resolve,reject,error){
+            var j = document.createElement('div');
+            j.innerHTML = "Request failed :(";
+            j.style.border = '15px solid #3dff4d';
+            document.body.appendChild(j);
+            resolve();
+        });
 
 
         KUBEAjax('<URL>').then(function(resolve,reject,data){
@@ -80,8 +86,6 @@
             j.style.border = '15px solid #3dff4d';
             document.body.appendChild(j);
             resolve();
-        }).then(function(resolve,reject){
-            console.log('xxx');
         });
 
     </script>
