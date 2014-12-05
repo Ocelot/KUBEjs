@@ -1,10 +1,10 @@
-Example
-=======
+Promises
+========
 
 
 
 .. toctree::
-:maxdepth: 3
+    :maxdepth: 3
 
-        API Guides <guides/index>
-        API Reference <api/index>
+    API Guides <guides/index>
+    API Reference <api/index>
