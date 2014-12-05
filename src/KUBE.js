@@ -315,8 +315,8 @@
 			return (type === 'object' ? KUBEEvents(_initObj) : (type === 'undefined' ? KUBEEvents({}) : _initObj));
 		}
 
-        function Promise(){
-            return new KUBEPromise();
+        function Promise(_callback){
+            return new KUBEPromise(_callback);
         }
 
 		function Config(){
@@ -324,8 +324,8 @@
 		}
 	}
 
-    function KUBEPromise(){
-        var resolveQ,state,fulfillmentArgs;
+    function KUBEPromise(_callback){
+        var resolveQ,state,fulfillmentArgs,$return;
         resolveQ = [];
         state = 'pending';
 
@@ -344,10 +344,19 @@
             'reject': Reject
         };
 
-        return {
-            'promise':$promiseAPI,
-            'resolver':$resolverAPI
-        };
+        if(KUBE.Is(_callback) === "function"){
+            state = "resolved";
+            $return = Then(_callback);
+
+        }
+        else{
+            $return = {
+                'promise':$promiseAPI,
+                'resolver':$resolverAPI
+            };
+        }
+
+        return $return;
 
         function Then(_resolveCallback,_rejectCallback){
             resolveQ.push([_resolveCallback,_rejectCallback]);
@@ -382,11 +391,12 @@
                 fulfillmentArgs = Array.prototype.slice.call(arguments);
                 resolveArray = resolveQ.shift();
                 if(KUBE.Is(resolveArray[0]) === 'function'){
+                    fulfillmentArgs.unshift($resolverAPI.resolve,$resolverAPI.reject);
                     try{
-                        resolveArray[0].apply($resolverAPI,fulfillmentArgs);
+                        resolveArray[0].apply(undefined,fulfillmentArgs);
                     }
                     catch(Error){
-                        Reject.apply(this,fulfillmentArgs);
+                        Reject.apply(this,Error);
                     }
                 }
                 else{
@@ -404,12 +414,11 @@
                 fulfillmentArgs = Array.prototype.slice.call(arguments);
                 resolveArray = resolveQ.shift();
                 if(KUBE.Is(resolveArray[1]) === 'function'){
+                    fulfillmentArgs.unshift($resolverAPI.resolve,$resolverAPI.reject);
                     try{
-                        resolveArray[1].apply($resolverAPI,fulfillmentArgs);
+                        resolveArray[1].apply(undefined,fulfillmentArgs);
                     }
                     catch(Error){
-                        var error = fulfillmentArgs
-                        error.unshift(Error);
                         Reject.apply(this,fulfillmentArgs);
                     }
                 }
