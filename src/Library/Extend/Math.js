@@ -23,9 +23,9 @@
     /* Declare functions */
 
     //Pretty sure there's a better way to do this but I'm an idiot
-    function ScaleAspectRatio(_currentWidth,_currentHeight,_targetWidth,_targetHeight,_minimum){
+    function ScaleAspectRatio(_currentWidth,_currentHeight,_targetWidth,_targetHeight,_fit){
         var $return,cW,cH,alg,factor;
-        _minimum = _minimum || false;
+        _fit = (_fit === false ? false : true)
 
         $return = {
             'width':0,
@@ -36,7 +36,7 @@
         alg = (cW > cH ? 0 : 1);
 
         //Reverse the alg if minimum has been set
-        if(_minimum){
+        if(_fit){
             alg = (alg ? 0 : 1);
         }
 
