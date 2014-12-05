@@ -36,12 +36,8 @@
 
         function KUBEAjax(url,request,method,headers,username,password) {
             var req = new XMLHttpRequest();
-            var P = KUBE.Promise();
-            P.resolver.resolve();
             headers = (KUBE.Is(headers) === "object" ? headers : {});
-            return P.promise.then(function () {
-                reject = this.reject;
-                resolve = this.resolve;
+            return KUBE.Promise(function (resolve,reject) {
                 req.open(method || "GET", url, true, username, password);
 
                 Object.keys(headers).forEach(function(k){
@@ -65,20 +61,28 @@
                 req.send(request || undefined);
             });
         }
-        ECMAAjax('http://localhost:63342/Programming/KUBEjs/docs/examples/Core/1_kube.html').then(function(data){
+        ECMAAjax('<URL>').then(function(data){
             var j = document.createElement('div');
             j.innerHTML = data;
-            j.style.border = '5px solid red';
+            j.style.border = '15px solid red';
             document.body.appendChild(j);
         },function(){console.log(arguments)});
 
 
-        KUBEAjax('http://localhost:63342/Programming/KUBEjs/docs/examples/Core/1_kube.html').then(function(data){
+        KUBEAjax('<URL>').then(function(resolve,reject,data){
             var j = document.createElement('div');
             j.innerHTML = data;
-            j.style.border = '5px solid #3dff3d';
+            j.style.border = '15px solid #3dff4d';
             document.body.appendChild(j);
-        },function(){console.log(arguments)});
+        },function(resolve,reject,error){
+            var j = document.createElement('div');
+            j.innerHTML = "Request failed :(";
+            j.style.border = '15px solid #3dff4d';
+            document.body.appendChild(j);
+            resolve();
+        }).then(function(resolve,reject){
+            console.log('xxx');
+        });
 
     </script>
 </head>
