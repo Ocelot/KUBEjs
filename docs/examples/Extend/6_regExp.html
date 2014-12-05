@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KUBEjs Extend Library: Regular Expression</title>
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <script type="text/javascript">
+
+        /*
+         *  Current API reference for /Library/Extend/RegExp
+         *      -matchAll
+         *      -matchAndReplace
+         *      -replaceCallback
+         */
+
+        //Ensuring the Extend/RegExp library is loaded, is as simple as any other namespace
+        KUBE.Uses('/Library/Extend/RegExp',function(){
+            //matchAll: build a regEx, pass in a string, and get an array of arrays (first index match, additional indexes submatches)
+            var matches = / (s[^ ]*)/.KUBE().matchAll('this is a string with words that start with s');
+
+            //Returns an index 3 array of all matches, preceded by a space that start with s. Because we use a submatch to get rid of the space, the second index of each match array is the submatch
+            console.log(matches);
+
+            //matchAndReplace: build a regEx to match, pass in replacement for the match, as well as the string to search, return an array of [newString,matchArray]. MatchArray is in the same style as matchAll
+            var matchAndReplace = /hate/.KUBE().matchAndReplace('I really hate regex because I hate teh stringz','love'); //Optional 3rd arg of limit
+            console.log(matchAndReplace);
+
+            
+
+        });
+    </script>
+
+</head>
+<body>
+Example outputs to console
+</body>
+</html>

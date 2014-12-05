@@ -30,12 +30,16 @@
         }
 
         function domLoaded($K){
+            $K.SJ('.lvl1').Position('relative').Margin(10);
+            $K.SJ('ol').Font().Family(['Helvetica','Arial']);
+
             var DJ = $K.DJ;
             var Contents = DJ('div');
             var Level1 = Contents.Append('ol');
-            Level1.Append('li').Append('a').SetAttribute('href','helloWorld.html').SetInner('Hello World');
+            var HelloWorld = Level1.Append('li').AddClass('.lvl1');
+            HelloWorld.Append('a').SetAttribute('href','helloWorld.html').SetInner('Hello World');
 
-            var Core = Level1.Append('li');
+            var Core = Level1.Append('li').AddClass('.lvl1');
             Core.Append('div').SetInner('Core');
             Core = Core.Append('ol');
             Core.Append('li').Append('a').SetAttribute('href','Core/1_kube.html').SetInner('KUBE: Config & Uses & Class');
@@ -45,7 +49,7 @@
             Core.Append('li').Append('a').SetAttribute('href','Core/5_autoIndex.html').SetInner('KUBE: Add Namespace Index');
             Core.Append('li').Append('a').SetAttribute('href','Core/6_extend.html').SetInner('KUBE.Extend()');
 
-            var DOM = Level1.Append('li');
+            var DOM = Level1.Append('li').AddClass('.lvl1');
             DOM.Append('div').SetInner('DOM');
             DOM = DOM.Append('ol');
             DOM.Append('li').Append('a').SetAttribute('href','DOM/1_winJack.html').SetInner('WinDocJack: Basic DOM Abstraction')
@@ -53,7 +57,7 @@
             DOM.Append('li').Append('a').SetAttribute('href','DOM/3_styleJack.html').SetInner('StyleJack: StyleSheet Abstraction & Level 1 API')
             DOM.Append('li').Append('a').SetAttribute('href','DOM/4_domJack.html').SetInner('DomJack: Events & Classes & Styles')
 
-            var Extend = Level1.Append('li');
+            var Extend = Level1.Append('li').AddClass('.lvl1');
             Extend.Append('div').SetInner('Native Extend APIs');
             Extend = Extend.Append('ol');
             Extend.Append('li').Append('a').SetAttribute('href','Extend/1_array.html').SetInner('Array');
@@ -61,6 +65,12 @@
             Extend.Append('li').Append('a').SetAttribute('href','Extend/3_math.html').SetInner('Math');
             Extend.Append('li').Append('a').SetAttribute('href','Extend/4_number.html').SetInner('Number');
             Extend.Append('li').Append('a').SetAttribute('href','Extend/5_object.html').SetInner('Object');
+            Extend.Append('li').Append('a').SetAttribute('href','Extend/6_regExp.html').SetInner('Regular Expressions');
+            Extend.Append('li').Append('a').SetAttribute('href','Extend/7_string.html').SetInner('String');
+
+            var UI = Level1.Append('li').AddClass('.lvl1');
+            UI.Append('div').SetInner('KUBE User Interface');
+            UI = UI.Append('ol');
 
             DJ(document.body).Append(Contents);
         }
