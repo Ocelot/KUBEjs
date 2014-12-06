@@ -10,111 +10,6 @@ StyleJack
 
        :returns: :js:class:`StyleJackAPI` or :js:class:`StyleJackFontFaceAPI` or :js:class:`StyleJackCSSKeyFrameAPI`
 
-StyleJack FontFace API
-^^^^^^^^^^^^^^^^^^^^^^
-
-.. js:class::StyleJackFontFaceAPI
-
-    The FontFace API will always return the API. It's not designed to be used as a getter, only for creating
-    font-face rules entirely in JavaScript.  The rule will get initialized into the Stylesheet once both Family and Src
-    are set.  You do not have to call any method to "commit" the rule into the Stylesheet.
-
-.. js:function:: StyleJackFontFaceAPI.Family(_family)
-
-    :param String _family:
-        The name of the font family that you're registering. This can be any string, and provides the name
-        that you access your font-face with (in a font-family in CSS or Font().Family() in StyleJack)
-
-    :returns: :js:class:`StyleJackFontFaceAPI`
-
-.. js:function:: StyleJackFontFaceAPI.Src(_src)
-
-    :param String _src:
-        The src of your font. This can be pre-formatted as url('') or the straight string.
-        It doesn't check for http, so data URIs work as well.
-
-    :returns: :js:class:`StyleJackFontFaceAPI`
-
-.. js:function:: StyleJackFontFaceAPI.Stretch(_stretch)
-
-    :param String _stretch:
-        The stretch value that your font-face implements.
-
-        **Permissible Values**: "normal","condensed","ultra-condensed","extra-condensed","semi-condensed","expanded","ultra-expanded","extra-expanded","semi-expanded"
-    :throws `console.log`: Logs a message if you try to set an invalid value
-
-    :returns: :js:class:`StyleJackFontFaceAPI`
-
-.. js:function:: StyleJackFontFaceAPI.Style(_style)
-
-    :param String _style:
-        The font style that this font-face implements.
-
-        **Permissible Values**: "normal","italic","oblique"
-
-    :throws `console.log`: Logs a message if you try to set an invalid value
-    :returns: :js:class:`StyleJackFontFaceAPI`
-
-.. js:function:: StyleJackFontFaceAPI.UnicodeRange(_unicodeRange)
-
-    :param String _unicodeRange:
-        The unicode range that you want to use from the font file.
-        This allows you to only import specific characters from a font into this custom font-family
-
-    :throws `console.log`: Logs a message if you try to set an invalid value
-
-    :returns: :js:class:`StyleJackFontFaceAPI`
-
-.. js:function:: StyleJackFontFaceAPI.Weight(_weight)
-
-    :param String/Number _weight:
-        The font-weight for this font-family. This allows you to actually define what the weight of this @font-face is
-
-        **Permissible values**: "normal", "bold", "lighter", "bolder", 100, 200, 300, 400, 500, 600, 700, 800, 900
-
-    :throws `console.log`: Logs a message if you try to set an invalid value
-
-    :returns: :js:class:`StyleJackFontFaceAPI`
-
-
-
-StyleJack CSSKeyFrame API
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. js:class::StyleJackCSSKeyFrameAPI
-
-.. js:function:: StyleJackCSSKeyFrameAPI.Index(_index)
-
-    This is for inserting a new Keyframe at the given index. This returns the Stylejack
-    representing the given index. Indexes should be 0-100 as they're percentages along the animations duration.
-
-    :param Number _index:
-            The percentage (0-100) of the animation where you want
-            to create a new keyframe
-
-        :returns: :js:class:`StyleJackAPI`
-
-
-.. js:function:: StyleJackCSSKeyFrameAPI.Delete()
-
-    Deletes the Keyframe rule entirely.
-
-    :returns: `Boolean` Represents success/failure of removing the given keyframe rule.
-
-.. js:function:: StyleJackCSSKeyFrameAPI.Debug()
-
-    :returns: `CSSKeyFramesRule` Returns the raw DOM CSSKeyFramesRule object for debugging
-
-.. todo::
-
-    StyleJack Method Implementation. These methods require implementation still.
-
-        .. js:function:: StyleJackCSSKeyFrameAPI.Clear(_index)
-        .. js:function:: StyleJackCSSKeyFrameAPI.Each()
-
-        Event Methods as well do nothing (Events are never emitted)
-
-
 
 StyleJack API
 ^^^^^^^^^^^^^
@@ -190,7 +85,7 @@ to return to the level 1 API
         If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
         "$" as a value returns the raw value of the property
 
-    :returns: :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackBorderAPI`
 
 .. js:function:: StyleJackAPI.Bottom([_value])
 
@@ -206,7 +101,7 @@ to return to the level 1 API
     	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
         "$" as a value returns the raw value of the property
 
-    :returns: :js:class:`StyleJackAPI`
+    :returns: :js:class:`StyleJackBoxAPI`
 
 .. js:function:: StyleJackAPI.CaptionSide([_value])
 
@@ -261,6 +156,8 @@ to return to the level 1 API
     :param String _value:
     	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
         "$" as a value returns the raw value of the property
+
+        *
 
     :returns: :js:class:`StyleJackAPI`
 
@@ -529,47 +426,383 @@ StyleJack Background API
 
 .. js:class:: StyleJackBackgroundAPI
 
-.. js:function:: StyleJackBackgroundAPI.Set()
+.. js:function:: StyleJackBackgroundAPI.Set([_value])
 
-    :returns: Object
-
-.. js:function:: StyleJackBackgroundAPI.Get()
+    :param String _value:
+        Equivalent to calling Set on the level 1 API. Only difference is that '$' is not a valid input value,
+        as set will always return  :js:class:`StyleJackBackground`
 
     :returns: :js:class:`StyleJackBackgroundAPI`
 
-.. js:function:: StyleJackBackgroundAPI.Color()
+.. js:function:: StyleJackBackgroundAPI.Get()
+
+        The object that's returned has both numerical and string keys.  The object returned looks like: ::
+
+            {
+                0:color,1:position,2:size,3:repeat,4:origin,5:clip,6:attachment,7:image,
+                'color':color, 'position':position, 'size':size, 'repeat':repeat,
+                'origin':origin,'clip':clip, 'attachment':attachment, 'image':image
+            };
+
+    :returns: `Object`
+
+.. js:function:: StyleJackBackgroundAPI.Color([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
     :returns: :js:class:`StyleJackBackgroundAPI`
 
 .. js:function:: StyleJackBackgroundAPI.Attachment()
 
+    :param String _value:
+            If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
     :returns: :js:class:`StyleJackBackgroundAPI`
 
 .. js:function:: StyleJackBackgroundAPI.Image()
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
     :returns: :js:class:`StyleJackBackgroundAPI`
 
 .. js:function:: StyleJackBackgroundAPI.Position()
 
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
     :returns: :js:class:`StyleJackBackgroundAPI`
 
 .. js:function:: StyleJackBackgroundAPI.Repeat()
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
     :returns: :js:class:`StyleJackBackgroundAPI`
 
 .. js:function:: StyleJackBackgroundAPI.Clip()
 
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
     :returns: :js:class:`StyleJackBackgroundAPI`
 
 .. js:function:: StyleJackBackgroundAPI.Origin()
 
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
     :returns: :js:class:`StyleJackBackgroundAPI`
 
 .. js:function:: StyleJackBackgroundAPI.Size()
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
     :returns: :js:class:`StyleJackBackgroundAPI`
 
 .. js:attribute:: StyleJackBackgroundAPI.api
 
     :returns: :js:class:`StyleJackAPI`
+
+StyleJack Border API
+^^^^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackBorderAPI
+
+.. js:function:: StyleJackBorderAPI.Get()
+
+        The object that's returned has both numerical and string keys. ::
+
+            { 0:width, 1:style, 2:color, 'width':width, 'style':style, 'color':color,'length':3 };
+
+
+
+    :returns: `Object`
+
+.. js:function:: StyleJackBorderAPI.Set([_value])
+
+    :param String/Object/Array _value:
+            Any value attempts to set the passed value to the property.
+
+            .. note:: _value can be in the form of an object, with the keys "width","style" and "color". It can be also in an array,
+                with index 0 being width, index 1 being style and index 2 being color
+
+    :returns: :js:class:`StyleJackBorderAPI`
+
+.. js:function:: StyleJackBorderAPI.Top([_value])
+
+    :param String/Object/Array _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property.
+
+        .. note:: _value can be in the form of an object, with the keys "width","style" and "color". It can be also in an array,
+            with index 0 being width, index 1 being style and index 2 being color
+
+
+    :returns: :js:class:`StyleJackBorderAPI`
+
+.. js:function:: StyleJackBorderAPI.Right([_value])
+
+    :param String/Object/Array _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property.
+
+        .. note:: _value can be in the form of an object, with the keys "width","style" and "color". It can be also in an array,
+            with index 0 being width, index 1 being style and index 2 being color
+
+    :returns: :js:class:`StyleJackBorderAPI`
+
+.. js:function:: StyleJackBorderAPI.Bottom([_value])
+
+    :param String/Object/Array _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property.
+
+        .. note:: _value can be in the form of an object, with the keys "width","style" and "color". It can be also in an array,
+            with index 0 being width, index 1 being style and index 2 being color
+
+    :returns: :js:class:`StyleJackBorderAPI`
+
+.. js:function:: StyleJackBorderAPI.Left([_value])
+
+    :param String/Object/Array _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property.
+
+        .. note:: _value can be in the form of an object, with the keys "width","style" and "color". It can be also in an array,
+            with index 0 being width, index 1 being style and index 2 being color
+
+    :returns: :js:class:`StyleJackBorderAPI`
+
+.. js:function:: StyleJackBorderAPI.Radius()
+
+    Returns the Border Radius API for manipulating the Border Radius property
+
+    :returns: :js:class:`StyleJackBorderRadiusAPI`
+
+StyleJack Border Radius API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackBorderRadiusAPI
+
+.. js:function:: StyleJackBorderRadiusAPI.Set([_value])
+
+    :param String _value:
+            	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+                "$" as a value returns the raw value of the property
+
+       :returns: :js:class:`StyleJackBorderRadiusAPI`
+
+.. js:function:: StyleJackBorderRadiusAPI.Get()
+
+    The object that's returned has both numerical and string keys. ::
+
+        {
+            0:topLeft, 1:topRight, 2:bottomRight, 3:bottomLeft,
+            'topLeft':topLeft, 'topRight':topRight, 'bottomRight':bottomRight,
+            'bottomLeft':bottomLeft
+        }
+
+   :returns: `Object`
+
+.. js:function:: StyleJackBorderRadiusAPI.TopLeft([_value])
+
+    :param String _value:
+        	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+   :returns: :js:class:`StyleJackBorderRadiusAPI`
+
+.. js:function:: StyleJackBorderRadiusAPI.TopRight([_value])
+
+    :param String _value:
+        	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+   :returns: :js:class:`StyleJackBorderRadiusAPI`
+
+.. js:function:: StyleJackBorderRadiusAPI.BottomRight([_value])
+
+    :param String _value:
+        	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+   :returns: :js:class:`StyleJackBorderRadiusAPI`
+
+.. js:function:: StyleJackBorderRadiusAPI.BottomLeft([_value])
+
+    :param String _value:
+        	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+   :returns: :js:class:`StyleJackBorderRadiusAPI`
+
+.. js:attr:: StyleJackBorderRadiusAPI.api
+
+   :returns: :js:class:`StyleJackAPI`
+
+StyleJack Box API
+^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackBoxAPI
+
+StyleJack Font API
+^^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackFontAPI
+
+StyleJack Margin API
+^^^^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackMarginAPI
+
+StyleJack Outline API
+^^^^^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackOutlineAPI
+
+StyleJack OverFlow API
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackOverflowAPI
+
+StyleJack Padding API
+^^^^^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackPaddingAPI
+
+StyleJack Text API
+^^^^^^^^^^^^^^^^^^
+
+.. js:class::StyleJackTextAPI
+
+StyleJack Text Shadow API
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackTextShadowAPI
+
+StyleJack Transform API
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackTransformAPI
+
+StyleJack Transition API
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackTransitionAPI
+
+
+StyleJack FontFace API
+^^^^^^^^^^^^^^^^^^^^^^
+
+    The FontFace API will always return the API. It's not designed to be used as a getter, only for creating
+    font-face rules entirely in JavaScript.  The rule will get initialized into the Stylesheet once both Family and Src
+    are set.  You do not have to call any method to "commit" the rule into the Stylesheet.
+
+.. js:class::StyleJackFontFaceAPI
+
+.. js:function:: StyleJackFontFaceAPI.Family(_family)
+
+    :param String _family:
+            The name of the font family that you're registering. This can be any string, and provides the name
+            that you access your font-face with (in a font-family in CSS or Font().Family() in StyleJack)
+
+        :returns: :js:class:`StyleJackFontFaceAPI`
+
+.. js:function:: StyleJackFontFaceAPI.Src(_src)
+
+    :param String _src:
+            The src of your font. This can be pre-formatted as url('') or the straight string.
+            It doesn't check for http, so data URIs work as well.
+
+        :returns: :js:class:`StyleJackFontFaceAPI`
+
+.. js:function:: StyleJackFontFaceAPI.Stretch(_stretch)
+
+    :param String _stretch:
+            The stretch value that your font-face implements.
+
+            **Permissible Values**: "normal","condensed","ultra-condensed","extra-condensed","semi-condensed","expanded","ultra-expanded","extra-expanded","semi-expanded"
+    :throws `console.log`: Logs a message if you try to set an invalid value
+
+        :returns: :js:class:`StyleJackFontFaceAPI`
+
+.. js:function:: StyleJackFontFaceAPI.Style(_style)
+
+    :param String _style:
+            The font style that this font-face implements.
+
+            **Permissible Values**: "normal","italic","oblique"
+
+    :throws `console.log`: Logs a message if you try to set an invalid value
+        :returns: :js:class:`StyleJackFontFaceAPI`
+
+.. js:function:: StyleJackFontFaceAPI.UnicodeRange(_unicodeRange)
+
+    :param String _unicodeRange:
+            The unicode range that you want to use from the font file.
+            This allows you to only import specific characters from a font into this custom font-family
+
+        :throws `console.log`: Logs a message if you try to set an invalid value
+
+        :returns: :js:class:`StyleJackFontFaceAPI`
+
+.. js:function:: StyleJackFontFaceAPI.Weight(_weight)
+
+    :param String/Number _weight:
+            The font-weight for this font-family. This allows you to actually define what the weight of this @font-face is
+
+            **Permissible values**: "normal", "bold", "lighter", "bolder", 100, 200, 300, 400, 500, 600, 700, 800, 900
+
+    :throws `console.log`: Logs a message if you try to set an invalid value
+
+        :returns: :js:class:`StyleJackFontFaceAPI`
+
+
+
+StyleJack CSSKeyFrame API
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. js:class::StyleJackCSSKeyFrameAPI
+
+.. js:function:: StyleJackCSSKeyFrameAPI.Index(_index)
+
+    This is for inserting a new Keyframe at the given index. This returns the Stylejack
+    representing the given index. Indexes should be 0-100 as they're percentages along the animations duration.
+
+    :param Number _index:
+                The percentage (0-100) of the animation where you want
+                to create a new keyframe
+
+            :returns: :js:class:`StyleJackAPI`
+
+
+.. js:function:: StyleJackCSSKeyFrameAPI.Delete()
+
+    Deletes the Keyframe rule entirely.
+
+    :returns: `Boolean` Represents success/failure of removing the given keyframe rule.
+
+.. js:function:: StyleJackCSSKeyFrameAPI.Debug()
+
+    :returns: `CSSKeyFramesRule` Returns the raw DOM CSSKeyFramesRule object for debugging
+
+.. todo::
+
+    StyleJack Method Implementation. These methods require implementation still.
+
+        .. js:function:: StyleJackCSSKeyFrameAPI.Clear(_index)
+.. js:function:: StyleJackCSSKeyFrameAPI.Each()
+
+        Event Methods as well do nothing (Events are never emitted)
+
 
