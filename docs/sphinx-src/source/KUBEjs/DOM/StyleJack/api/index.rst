@@ -111,6 +111,14 @@ to return to the level 1 API
 
     :returns: :js:class:`StyleJackAPI`
 
+.. js:function:: StyleJackAPI.Clear([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackAPI`
+
 .. js:function:: StyleJackAPI.Clip([_value])
 
     :param String _value:
@@ -157,7 +165,6 @@ to return to the level 1 API
     	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
         "$" as a value returns the raw value of the property
 
-        *
 
     :returns: :js:class:`StyleJackAPI`
 
@@ -597,54 +604,54 @@ StyleJack Border Radius API
 .. js:function:: StyleJackBorderRadiusAPI.Set([_value])
 
     :param String _value:
-            	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
-                "$" as a value returns the raw value of the property
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-       :returns: :js:class:`StyleJackBorderRadiusAPI`
+    :returns: :js:class:`StyleJackBorderRadiusAPI`
 
 .. js:function:: StyleJackBorderRadiusAPI.Get()
 
-    The object that's returned has both numerical and string keys. ::
+        The object that's returned has both numerical and string keys. ::
 
-        {
-            0:topLeft, 1:topRight, 2:bottomRight, 3:bottomLeft,
-            'topLeft':topLeft, 'topRight':topRight, 'bottomRight':bottomRight,
-            'bottomLeft':bottomLeft
-        }
+            {
+                0:topLeft, 1:topRight, 2:bottomRight, 3:bottomLeft,
+                'topLeft':topLeft, 'topRight':topRight, 'bottomRight':bottomRight,
+                'bottomLeft':bottomLeft
+            }
 
    :returns: `Object`
 
 .. js:function:: StyleJackBorderRadiusAPI.TopLeft([_value])
 
     :param String _value:
-        	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
-            "$" as a value returns the raw value of the property
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns: :js:class:`StyleJackBorderRadiusAPI`
+    :returns: :js:class:`StyleJackBorderRadiusAPI`
 
 .. js:function:: StyleJackBorderRadiusAPI.TopRight([_value])
 
     :param String _value:
-        	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
-            "$" as a value returns the raw value of the property
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns: :js:class:`StyleJackBorderRadiusAPI`
+    :returns: :js:class:`StyleJackBorderRadiusAPI`
 
 .. js:function:: StyleJackBorderRadiusAPI.BottomRight([_value])
 
     :param String _value:
-        	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
-            "$" as a value returns the raw value of the property
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns: :js:class:`StyleJackBorderRadiusAPI`
+    :returns: :js:class:`StyleJackBorderRadiusAPI`
 
 .. js:function:: StyleJackBorderRadiusAPI.BottomLeft([_value])
 
     :param String _value:
-        	If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
-            "$" as a value returns the raw value of the property
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
 
-   :returns: :js:class:`StyleJackBorderRadiusAPI`
+    :returns: :js:class:`StyleJackBorderRadiusAPI`
 
 .. js:attr:: StyleJackBorderRadiusAPI.api
 
@@ -683,7 +690,8 @@ StyleJack Padding API
 StyleJack Text API
 ^^^^^^^^^^^^^^^^^^
 
-.. js:class::StyleJackTextAPI
+.. js:class:: StyleJackTextAPI
+
 
 StyleJack Text Shadow API
 ^^^^^^^^^^^^^^^^^^^^^^^^^
