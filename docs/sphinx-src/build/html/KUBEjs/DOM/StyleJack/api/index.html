@@ -1674,6 +1674,19 @@ with index 0 being width, index 1 being style and index 2 being color</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="StyleJackBorderRadiusAPI.api">
+<code class="descclassname">StyleJackBorderRadiusAPI.</code><code class="descname">api</code><a class="headerlink" href="#StyleJackBorderRadiusAPI.api" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="stylejack-box-api">
 <h2>StyleJack Box API<a class="headerlink" href="#stylejack-box-api" title="Permalink to this headline">¶</a></h2>
@@ -1681,6 +1694,445 @@ with index 0 being width, index 1 being style and index 2 being color</p>
 <dt id="StyleJackBoxAPI">
 <em class="property">class </em><code class="descname">StyleJackBoxAPI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxAPI" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxAPI.Align">
+<code class="descclassname">StyleJackBoxAPI.</code><code class="descname">Align</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxAPI.Align" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxAPI" title="StyleJackBoxAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxAPI.Direction">
+<code class="descclassname">StyleJackBoxAPI.</code><code class="descname">Direction</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxAPI.Direction" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxAPI" title="StyleJackBoxAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxAPI.Flex">
+<code class="descclassname">StyleJackBoxAPI.</code><code class="descname">Flex</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxAPI.Flex" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxAPI" title="StyleJackBoxAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxAPI.FlexGroup">
+<code class="descclassname">StyleJackBoxAPI.</code><code class="descname">FlexGroup</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxAPI.FlexGroup" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxAPI" title="StyleJackBoxAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxAPI.Lines">
+<code class="descclassname">StyleJackBoxAPI.</code><code class="descname">Lines</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxAPI.Lines" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxAPI" title="StyleJackBoxAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxAPI.OrdinalGroup">
+<code class="descclassname">StyleJackBoxAPI.</code><code class="descname">OrdinalGroup</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxAPI.OrdinalGroup" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxAPI" title="StyleJackBoxAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxAPI.Orient">
+<code class="descclassname">StyleJackBoxAPI.</code><code class="descname">Orient</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxAPI.Orient" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxAPI" title="StyleJackBoxAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxAPI.Pack">
+<code class="descclassname">StyleJackBoxAPI.</code><code class="descname">Pack</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxAPI.Pack" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxAPI" title="StyleJackBoxAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxAPI.Sizing">
+<code class="descclassname">StyleJackBoxAPI.</code><code class="descname">Sizing</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxAPI.Sizing" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxAPI" title="StyleJackBoxAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxAPI.Shadow">
+<code class="descclassname">StyleJackBoxAPI.</code><code class="descname">Shadow</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxAPI.Shadow" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxShadowAPI" title="StyleJackBoxShadowAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxShadowAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="StyleJackBoxAPI.api">
+<code class="descclassname">StyleJackBoxAPI.</code><code class="descname">api</code><a class="headerlink" href="#StyleJackBoxAPI.api" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#StyleJackAPI" title="StyleJackAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackAPI()</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="stylejack-box-shadow-api">
+<h2>StyleJack Box Shadow API<a class="headerlink" href="#stylejack-box-shadow-api" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="StyleJackBoxShadowAPI">
+<em class="property">class </em><code class="descname">StyleJackBoxShadowAPI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxShadowAPI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxShadowAPI.Get">
+<code class="descclassname">StyleJackBoxShadowAPI.</code><code class="descname">Get</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxShadowAPI.Get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxShadowAPI.Set">
+<code class="descclassname">StyleJackBoxShadowAPI.</code><code class="descname">Set</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxShadowAPI.Set" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxShadowAPI.Horizontal">
+<code class="descclassname">StyleJackBoxShadowAPI.</code><code class="descname">Horizontal</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxShadowAPI.Horizontal" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxShadowAPI" title="StyleJackBoxShadowAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxShadowAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxShadowAPI.Vertical">
+<code class="descclassname">StyleJackBoxShadowAPI.</code><code class="descname">Vertical</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxShadowAPI.Vertical" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxShadowAPI" title="StyleJackBoxShadowAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxShadowAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxShadowAPI.H">
+<code class="descclassname">StyleJackBoxShadowAPI.</code><code class="descname">H</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxShadowAPI.H" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; <p>If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</p>
+<p>An alias for Horizontal</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxShadowAPI" title="StyleJackBoxShadowAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxShadowAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxShadowAPI.V">
+<code class="descclassname">StyleJackBoxShadowAPI.</code><code class="descname">V</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxShadowAPI.V" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; <p>If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</p>
+<p>An alias for Vertical</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxShadowAPI" title="StyleJackBoxShadowAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxShadowAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxShadowAPI.Blur">
+<code class="descclassname">StyleJackBoxShadowAPI.</code><code class="descname">Blur</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxShadowAPI.Blur" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxShadowAPI" title="StyleJackBoxShadowAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxShadowAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxShadowAPI.Spread">
+<code class="descclassname">StyleJackBoxShadowAPI.</code><code class="descname">Spread</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxShadowAPI.Spread" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxShadowAPI" title="StyleJackBoxShadowAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxShadowAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxShadowAPI.Color">
+<code class="descclassname">StyleJackBoxShadowAPI.</code><code class="descname">Color</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxShadowAPI.Color" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxShadowAPI" title="StyleJackBoxShadowAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxShadowAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="StyleJackBoxShadowAPI.Inset">
+<code class="descclassname">StyleJackBoxShadowAPI.</code><code class="descname">Inset</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#StyleJackBoxShadowAPI.Inset" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxShadowAPI" title="StyleJackBoxShadowAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxShadowAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">StyleJackBoxShadowAPI.</code><code class="descname">Horizontal</code><span class="sig-paren">(</span><span class="optional">[</span><em>_value</em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>_value</strong> (<em>String</em>) &#8211; If no value passed in, returns the current value. Any value other than &#8220;$&#8221;, attempts to set the passed value to the property.
+&#8220;$&#8221; as a value returns the raw value of the property</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#StyleJackBoxShadowAPI" title="StyleJackBoxShadowAPI"><code class="xref js js-class docutils literal"><span class="pre">StyleJackBoxShadowAPI()</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 <div class="section" id="stylejack-font-api">

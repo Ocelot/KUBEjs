@@ -653,7 +653,7 @@ StyleJack Border Radius API
 
     :returns: :js:class:`StyleJackBorderRadiusAPI`
 
-.. js:attr:: StyleJackBorderRadiusAPI.api
+.. js:attribute:: StyleJackBorderRadiusAPI.api
 
    :returns: :js:class:`StyleJackAPI`
 
@@ -661,6 +661,185 @@ StyleJack Box API
 ^^^^^^^^^^^^^^^^^
 
 .. js:class:: StyleJackBoxAPI
+
+.. js:function:: StyleJackBoxAPI.Align([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxAPI`
+
+.. js:function:: StyleJackBoxAPI.Direction([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxAPI`
+
+.. js:function:: StyleJackBoxAPI.Flex([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxAPI`
+
+.. js:function:: StyleJackBoxAPI.FlexGroup([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxAPI`
+
+.. js:function:: StyleJackBoxAPI.Lines([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxAPI`
+
+.. js:function:: StyleJackBoxAPI.OrdinalGroup([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxAPI`
+
+.. js:function:: StyleJackBoxAPI.Orient([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxAPI`
+
+.. js:function:: StyleJackBoxAPI.Pack([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxAPI`
+
+.. js:function:: StyleJackBoxAPI.Sizing([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxAPI`
+
+.. js:function:: StyleJackBoxAPI.Shadow([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxShadowAPI`
+
+.. js:attribute:: StyleJackBoxAPI.api
+
+    :returns: :js:class:`StyleJackAPI`
+
+
+
+StyleJack Box Shadow API
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. js:class:: StyleJackBoxShadowAPI
+
+.. js:function:: StyleJackBoxShadowAPI.Get([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+.. js:function:: StyleJackBoxShadowAPI.Set([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+.. js:function:: StyleJackBoxShadowAPI.Horizontal([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxShadowAPI`
+
+.. js:function:: StyleJackBoxShadowAPI.Vertical([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxShadowAPI`
+
+.. js:function:: StyleJackBoxShadowAPI.H([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+        An alias for Horizontal
+
+    :returns: :js:class:`StyleJackBoxShadowAPI`
+
+.. js:function:: StyleJackBoxShadowAPI.V([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+        An alias for Vertical
+
+    :returns: :js:class:`StyleJackBoxShadowAPI`
+
+.. js:function:: StyleJackBoxShadowAPI.Blur([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxShadowAPI`
+
+.. js:function:: StyleJackBoxShadowAPI.Spread([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxShadowAPI`
+
+.. js:function:: StyleJackBoxShadowAPI.Color([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxShadowAPI`
+
+.. js:function:: StyleJackBoxShadowAPI.Inset([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxShadowAPI`
+
+.. js:function:: StyleJackBoxShadowAPI.Horizontal([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackBoxShadowAPI`
 
 StyleJack Font API
 ^^^^^^^^^^^^^^^^^^
