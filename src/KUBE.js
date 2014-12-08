@@ -534,12 +534,8 @@
 				fireArray = stateCache[_state].f;
 				for(i=0;i<fireArray.length;i++){
 					if(KUBE.Is(fireArray[i]) === 'function'){
-						try{
-							fireArray[i]();
-						}
-						catch(E){
-							throw E; //This should probably be attached to a Debug flag...
-						}
+                        //TODO: At one point I had a catch here, and it just caught everything. Not sure why?
+                        fireArray[i]();
 					}
 				}
 				stateCache[_state].f = [];
@@ -1443,6 +1439,7 @@
 
 KUBE.AutoLoad().LoadAutoIndex('/Library/Test',KUBE.Config().autoLoadPath+'/Indexes/TestIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/DOM',KUBE.Config().autoLoadPath+'/Indexes/DOMIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/Ajax',KUBE.Config().autoLoadPath+'/Indexes/AjaxIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/Drawing',KUBE.Config().autoLoadPath+'/Indexes/DrawingIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/Extend',KUBE.Config().autoLoadPath+'/Indexes/ExtendIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/Tools',KUBE.Config().autoLoadPath+'/Indexes/ToolsIndex.js');
