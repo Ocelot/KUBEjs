@@ -11,7 +11,6 @@
     DOMIndex.SetNamespace('/Library/DOM');
     DOMIndex.SetBaseURL(KUBE.Config().autoLoadPath+'Library/DOM');
     DOMIndex.SetIndex([
-        'Ajax',
         'DomJack',
         'Dragger',
         'FeatureDetect',

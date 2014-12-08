@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KUBEjs Extend Library: String</title>
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <script type="text/javascript">
+
+        /*
+         *  Current API reference for /Library/Extend/String
+         *      -trim
+         *      -trimChar
+         *      -ucFirst
+         *      -stripNonNumeric
+         *      -b64Encode
+         *      -b64Decode
+         *      -format
+         */
+
+        //Ensuring the Extend/String library is loaded, is as simple as any other namespace
+        KUBE.Uses('/Library/Extend/String',function(){
+            //String has a few polyfills, as well as a few additional functions
+
+            //trim: this is a polyfill for trim (obvs) if String.trim() exists, it will call that, if not, it polyfills it
+            console.log('    phrase in the middle of spaces  '.KUBE().trim());
+
+            //trimChar: this should take a character in and trim it from beginning and end of the string. Right now this looks like it needs to be rewritten
+            console.log('something ending in a comma,'.KUBE().trimChar(','));
+
+            //b64Encode: this is a polyfill for window.btoa() if btoa exists, will use that instead
+            var string = 'a lazy brown fox jumped over an alphabet';
+            var encodedString = string.KUBE().b64Encode();
+            console.log(string,encodedString);
+
+            //b64Decode: obviously the counterpart to the above
+            console.log(encodedString,encodedString.KUBE().b64Decode());
+
+            //ucFirst: strings make us lazy
+            console.log('i should start with a capital!'.KUBE().ucFirst());
+
+            //stripNonNumeric: again, laziness gives us a convenience method to remove everything but numbers
+            console.log('sakdjh 123kjh 123kjhDas dio1238,asd,2!!33u'.KUBE().stripNonNumeric());
+
+            //format: lazy mans sprintf only for %@
+            console.log('mad libs: %@ took a %@'.KUBE().format('Dustin','Walk'));
+
+            //format also allows for index control
+            console.log('mad libs: %@2 took a %@1'.KUBE().format('Dustin','Walk'));
+        });
+    </script>
+
+</head>
+<body>
+Example outputs to console
+</body>
+</html>

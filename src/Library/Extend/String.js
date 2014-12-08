@@ -62,18 +62,50 @@
 	}
 
     function B64Encode(){
-        return Base64.encode(this);
+        return (KUBE.Is(window.btoa) === 'function' ? window.btoa(this) : Base64.encode(this));
     }
 
     function B64Decode(){
-        return Base64.decode(this);
+        return (KUBE.Is(window.atob) === 'function' ? window.atob(this) : Base64.decode(this));
     }
 	
 	function UpperCaseFirst(){
 		return this.charAt(0).toUpperCase()+this.substr(1);
 	}
     function StripNonNumeric(){
-        return parseInt(/[^0-9]{1}/.KUBE().matchAndReplace(this)[0]);
+        return parseInt(matchAndReplace(/[^0-9]{1}/,this)[0]);
+    }
+
+    //Grabbed this from Extend/RegExp (stripNonNumeric was relying on this, which it shouldn't)
+    function matchAndReplace(_regEx,_string,_replace,_limit){
+        var i,x,count,tArray,$matches,$newString;
+        $matches = [];
+        $newString = '';
+
+        _replace = (KUBE.Is(_replace) === 'string' ? _replace : '');
+        if(KUBE.Is(_string) === 'string'){
+            count = 0;
+            while(_string && _regEx.exec(_string)){
+                x = _regEx.exec(_string);
+                if(x[0] !== ''){
+                    tArray = [];
+                    for(i=0;i<x.length;i++){
+                        tArray.push(x[i]);
+                    }
+                    $matches.push(tArray);
+                }
+                $newString = $newString+_string.substr(0,x['index'])+_replace;
+                _string = _string.substr(x['index']+x[0].length);
+                count++;
+                if(count >= _limit){
+                    break;
+                }
+            }
+            if(_string){
+                $newString = $newString+_string;
+            }
+        }
+        return [$newString,$matches];
     }
 	
 	function Debugger(){
