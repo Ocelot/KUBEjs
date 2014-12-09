@@ -324,51 +324,30 @@
 		}
 	}
 
+    KUBEPromise.prototype.toString = function(){ return '[object Promise]' };
     function KUBEPromise(_callback){
-        var resolveQ,state,fulfillmentArgs,$return;
+        var resolveQ,state,fulfillmentArgs;
         resolveQ = [];
-        state = 'pending';
+        state = 'resolved';
 
-        var $promiseAPI = {
-            'Then':Then,
-            'then': Then,
-            'Catch':Catch,
-            'catch': Catch
-        };
-
-        //Ignore race and all for now
-        var $resolverAPI = {
-            'Resolve':Resolve,
-            'resolve': Resolve,
-            'Reject':Reject,
-            'reject': Reject
-        };
-
-        if(KUBE.Is(_callback) === "function"){
-            state = "resolved";
-            $return = Then(_callback);
-
-        }
-        else{
-            $return = {
-                'promise':$promiseAPI,
-                'resolver':$resolverAPI
-            };
-        }
-
-        return $return;
+        var $PromiseAPI = Object.create(KUBEPromise.prototype);
+        $PromiseAPI.Then = Then;
+        $PromiseAPI.then = Then;
+        $PromiseAPI.Catch = Catch;
+        $PromiseAPI.catch = Catch;
+        return Then(_callback);
 
         function Then(_resolveCallback,_rejectCallback){
             resolveQ.push([_resolveCallback,_rejectCallback]);
             if(state === 'resolved'){
                 state = 'pending';
-                Resolve();
+                Resolve.apply(undefined,fulfillmentArgs);
             }
             else if(state === 'rejected'){
                 state = 'pending';
-                Reject();
+                Reject.apply(undefined,fulfillmentArgs);
             }
-            return $promiseAPI;
+            return $PromiseAPI;
         }
 
         function Catch(_rejectCallback){
@@ -376,22 +355,22 @@
                 if(state === 'rejected'){
                     state = 'pending';
                     resolveQ.push([undefined,_rejectCallback]);
-                    Reject();
+                    Reject.apply(undefined,fulfillmentArgs);
                 }
             }
             else{
                 resolveQ.push([undefined,_rejectCallback]);
             }
-            return $promiseAPI;
+            return $PromiseAPI;
         }
 
         function Resolve(){
             var resolveArray;
+            fulfillmentArgs = Array.prototype.slice.call(arguments);
             if(resolveQ.length){
-                fulfillmentArgs = Array.prototype.slice.call(arguments);
                 resolveArray = resolveQ.shift();
                 if(KUBE.Is(resolveArray[0]) === 'function'){
-                    fulfillmentArgs.unshift($resolverAPI.resolve,$resolverAPI.reject);
+                    fulfillmentArgs.unshift(Resolve,Reject);
                     try{
                         resolveArray[0].apply(undefined,fulfillmentArgs);
                     }
@@ -410,11 +389,11 @@
 
         function Reject(){
             var resolveArray;
+            fulfillmentArgs = Array.prototype.slice.call(arguments);
             if(resolveQ.length){
-                fulfillmentArgs = Array.prototype.slice.call(arguments);
                 resolveArray = resolveQ.shift();
                 if(KUBE.Is(resolveArray[1]) === 'function'){
-                    fulfillmentArgs.unshift($resolverAPI.resolve,$resolverAPI.reject);
+                    fulfillmentArgs.unshift(Resolve,Reject);
                     try{
                         resolveArray[1].apply(undefined,fulfillmentArgs);
                     }
@@ -433,7 +412,7 @@
 
         //Implement these later
         function All(){
-            //I can theoretically use controlFlow
+
         }
 
         function Race(){

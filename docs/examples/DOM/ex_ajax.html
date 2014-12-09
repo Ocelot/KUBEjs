@@ -8,101 +8,113 @@
         var uses = {
             'Client':'/Library/Ajax/Client',
             'Request':'/Library/Ajax/Request',
-            'Response':'/Library/Ajax/Response'
+            'Response':'/Library/Ajax/Response',
+            'XM':'/Library/Extend/Math'
         };
 
         KUBE.Uses(uses,function($K){
+            //startFunctionServerTest($K);
+            startRemoteServerTest($K);
+        });
+
+        function startRemoteServerTest($K){
             var Request = $K.Request();
             var Client = $K.Client();
 
+            //Set up our Client and a dummy Request
+            Client.SetTarget('../Tests/PHP/test.php');
             Request.AddHeader('X-Test','Test');
             Request.AddData('key','val');
 
-            Client.SendRequest(Request);
-        });
+            testRemoteRequest(Client,Request);
+        }
 
-//        function ECMAAjax(url,request,method,headers,username,password){
-//            var req = new XMLHttpRequest();
-//            headers = (KUBE.Is(headers) === "object" ?  headers : {});
-//            return new Promise(function(resolve,reject){
-//                req.open(method || "GET", url, true,username,password);
-//
-//                Object.keys(headers).forEach(function(k){
-//                    req.setRequestHeader(k, headers[k]);
-//                });
-//
-//                req.onreadystatechange = function(e){
-//                    if(req.readyState !== 4){
-//                        return;
-//                    }
-//
-//                    if([200,304].indexOf(req.status) < 0){
-//                        reject(new Error('Server responded with status of ' + req.status));
-//                    }
-//                    else{
-//                        resolve(e.target.response);
-//                    }
-//                }
-//
-//                req.send(request || undefined);
-//            });
-//
-//        }
-//
-//        function KUBEAjax(url,request,method,headers,username,password) {
-//            var req = new XMLHttpRequest();
-//            headers = (KUBE.Is(headers) === "object" ? headers : {});
-//            return KUBE.Promise(function (resolve,reject) {
-//                req.open(method || "GET", url, true, username, password);
-//
-//                Object.keys(headers).forEach(function(k){
-//                    req.setRequestHeader(k, headers[k]);
-//                });
-//
-//
-//                req.onreadystatechange = function (e) {
-//                    if (req.readyState !== 4) {
-//                        return;
-//                    }
-//
-//                    if ([200, 304].indexOf(req.status) < 0) {
-//                        reject(new Error('Server responded with status of ' + req.status));
-//                    }
-//                    else {
-//                        resolve(e.target.response);
-//                    }
-//                }
-//
-//                req.send(request || undefined);
-//            });
-//        }
-//        ECMAAjax('<URL>').then(function(data){
-//            var j = document.createElement('div');
-//            j.innerHTML = data;
-//            j.style.border = '15px solid red';
-//            document.body.appendChild(j);
-//        },function(resolve,reject,error){
-//            var j = document.createElement('div');
-//            j.innerHTML = "Request failed :(";
-//            j.style.border = '15px solid #3dff4d';
-//            document.body.appendChild(j);
-//            resolve();
-//        });
-//
-//
-//        KUBEAjax('<URL>').then(function(resolve,reject,data){
-//            var j = document.createElement('div');
-//            j.innerHTML = data;
-//            j.style.border = '15px solid #3dff4d';
-//            document.body.appendChild(j);
-//        },function(resolve,reject,error){
-//            var j = document.createElement('div');
-//            j.innerHTML = "Request failed :(";
-//            j.style.border = '15px solid #3dff4d';
-//            document.body.appendChild(j);
-//            resolve();
-//        });
+        function testRemoteRequest(Client,Request){
+            //Use a Client that has already been set up to send a Request Object
+            var TestRequest = Client.SendRequest(Request);
+            TestRequest.Then(function(_resolve,_reject,_Response){
+                console.log(_Response.GetData());
+            });
+            TestRequest.Catch(function(_resolve,_reject,_err){
+                console.log(_err.msg);
+            });
 
+//            //Throw it again because madness
+//            setTimeout(function(){
+//                testRequest(Client,Request);
+//            },Math.KUBE().random(100,5000));
+        }
+
+
+        function startFunctionServerTest($K){
+            //Assign them (both are factories)
+            var Request = $K.Request();
+            var Client = $K.Client();
+
+            //Set up our Client and a dummy Request
+            Client.SetTarget(chaosServer);
+            Request.AddHeader('X-Test','Test');
+            Request.AddData('key','val');
+
+            testFunctionRequest(Client,Request);
+        }
+
+        function testFunctionRequest(Client,Request){
+            //Use a Client that has already been set up to send a Request Object
+            var TestRequest = Client.SendRequest(Request);
+            TestRequest.Then(function(_resolve,_reject,_Response){
+                console.log(_Response.GetData());
+            });
+            TestRequest.Catch(function(_resolve,_reject,_err){
+                console.log(_err.msg);
+            });
+
+            //Throw it again because madness
+//            setTimeout(function(){
+//                testRequest(Client,Request);
+//            },Math.KUBE().random(100,5000));
+        }
+
+        function chaosServer(_Request){
+            if(KUBE.Is(_Request,true) === 'Request'){
+                var chaosFuncs = [nothing,successfulResponse,rejectedRequest];
+                return chaosFuncs[Math.KUBE().random(0,2)](_Request);
+            }
+        }
+
+        function nothing(_Request){
+            console.log(getId()+': Chaos server returning false');
+            return false;
+        }
+
+        function successfulResponse(_Request){
+            //Return a promise, wait a random amount of time to return the Response
+            return KUBE.Promise(function(_resolve){
+                var msgId = getId();
+                console.log(msgId+': Chaos server returning valid response');
+                setTimeout(function(){
+                    var Response = KUBE.Class('/Library/Ajax/Response')();
+                    Response.SetData(msgId+': Successful response!');
+                    _resolve(Response);
+                },Math.KUBE().random(250,5000));
+            });
+        }
+
+        function rejectedRequest(_Request){
+            //Return a promise, wait a random amount of time to Reject
+            return KUBE.Promise(function(_resolve,_reject){
+                var msgId = getId();
+                console.log(msgId+': Chaos server rejecting the request: because... monkeys');
+                setTimeout(function(){
+                    _reject({'msg':msgId+': monkeys','data':'large monkeys'});
+                },Math.KUBE().random(250,5000));
+            });
+        }
+
+        var id = 0;
+        function getId(){
+            return id++;
+        }
     </script>
 </head>
 <body>
