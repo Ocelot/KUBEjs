@@ -7,6 +7,7 @@
     <script type="text/javascript">
         var uses = {
             'Client':'/Library/Ajax/Client',
+            'Request': '/Library/Ajax/Request',
             'Response':'/Library/Ajax/Response',
             'XM':'/Library/Extend/Math'
         };
@@ -21,11 +22,13 @@
             //Can also create a request by using /Library/Ajax/Request and getting it that way
             //but Client also contains a Request factory.
             var Request = Client.CreateRequest();
+            //Request = KUBE.Class('/Library/Ajax/Request')();
 
             //Set up our Client and a dummy Request
             Client.SetTarget('http://localhost:10999');
             Request.AddHeader('X-Test','Test');
             Request.AddData('key','val');
+            Request.SetMethod('PUT');
 
             testRemoteRequest(Client,Request);
         }
