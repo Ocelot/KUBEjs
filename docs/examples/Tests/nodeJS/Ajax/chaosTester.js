@@ -16,21 +16,28 @@ server.on('request',function(request,response){
     });
 
     chaosFunctions.push(function(){
+        var d = "";
         //Yes, I'm intentionally breaking CORS.
         response.setHeader("Access-Control-Allow-Headers", request.headers['access-control-request-headers']);
         response.setHeader('Access-Control-Allow-Origin','*');
         response.setHeader('Access-Control-Allow-Methods',request.method);
         response.statusCode = 500;
-        response.write(createOutput());
+
+        request.on('data',function(chunk){
+            d += chunk.toString();
+        });
+
+        response.write(createOutput(d));
         response.end();
     });
 
     chaosFunctions.push(function(){
         var d = "";
-        //Yes, I'm intentionally breaking CORS for this specific example.
+        //Yes, I'm intentionally breaking CORS.
         response.setHeader("Access-Control-Allow-Headers", request.headers['access-control-request-headers']);
         response.setHeader('Access-Control-Allow-Origin','*');
         response.setHeader('Access-Control-Allow-Methods',request.method);
+        response.statusCode = 200;
 
         request.on('data',function(chunk){
             d += chunk.toString();
@@ -45,6 +52,11 @@ server.on('request',function(request,response){
     });
 
     randomFunction = Math.floor(Math.random() * 3);
+
+
+    if(request.method === "OPTIONS"){
+        randomFunction = 2; //For the CORS check, return a valid response every time;
+    }
 
     console.log('EXECUTING: ' + randomFunction)
 
