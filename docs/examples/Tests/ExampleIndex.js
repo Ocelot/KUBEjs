@@ -17,7 +17,7 @@
     ExampleIndex.SetNamespace('/KUBEjs/Examples');
 
     //Our baseURL tells which directory to load files from (KUBE.Config().autoLoadPath will point to the KUBEjs/src)
-    ExampleIndex.SetBaseURL(KUBE.Config().autoLoadPath+'/../../docs/examples/js');
+    ExampleIndex.SetBaseURL(KUBE.Config().autoLoadPath+'/../../docs/examples/Tests');
 
     //And then we set which classes our available in our Index (it will expect file names to match class names
     ExampleIndex.SetIndex([
