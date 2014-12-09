@@ -8,7 +8,7 @@
  */
 
 (function(KUBE){
-    KUBE.LoadFactory('/Library/Ajax/Client', Client,['/Library/Extend/Object','/Library/Extend/RegExp','/Library/Extend/Array','/Library/Ajax/Request','/Library/Ajax/Response']);
+    KUBE.LoadFactory('/Library/Ajax/Client', Client,['/Library/Ajax/Request','/Library/Ajax/Response','/Library/Extend/Object','/Library/Extend/RegExp','/Library/Extend/Array']);
 
     Client.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
     function Client(_target,_timeout,_freezeDelay) {
