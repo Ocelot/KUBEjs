@@ -365,7 +365,7 @@
         }
 
         function Resolve(){
-            var resolveArray;
+            var resolveArray, ee;
             fulfillmentArgs = Array.prototype.slice.call(arguments);
             if(resolveQ.length){
                 resolveArray = resolveQ.shift();
@@ -374,8 +374,14 @@
                     try{
                         resolveArray[0].apply(undefined,fulfillmentArgs);
                     }
-                    catch(Error){
-                        Reject(Error);
+                    catch(err){
+                        ee = err;
+                        if(KUBE.Is(err, true) !== "Error"){
+                            ee = new Error("Check data property for more info");
+                            ee.data = err
+                        }
+
+                        Reject(ee);
                     }
                 }
                 else{
