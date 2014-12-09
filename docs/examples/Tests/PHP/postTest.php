@@ -8,6 +8,9 @@
  * file that was distributed with this source code.
  */
 
+include('handler.php');
+
+
 function Dump($a){
     ob_start();
     (!empty($a) ? print_r($a) : var_dump($a));
