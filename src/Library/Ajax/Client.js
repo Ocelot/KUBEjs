@@ -114,7 +114,17 @@
                     Response.SetResponseType(_XHR.responseType);
                     Response.SetHeaders(parseRequestHeaders(_XHR.getAllResponseHeaders()));
                     Response.SetData(_XHR.response);
-                    _resolve(Response);
+
+                    if(Response.GetStatusCode()){
+                        _resolve(Response);
+                    }
+                    else{
+                        //CORS. Fail as if network error
+                        _reject({
+                            'msg':'Timeout limit reached. Rejecting Request. Cancelling Promise',
+                            'data': _Request
+                        });
+                    }
                 }
             }
         }
