@@ -755,15 +755,21 @@ StyleJack Box Shadow API
 
 .. js:function:: StyleJackBoxShadowAPI.Get([_value])
 
-    :param String _value:
-        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
-        "$" as a value returns the raw value of the property
+     The object that's returned has both numerical and string keys. ::
+
+            {
+                'horizontal':horizontal, 'vertical':vertical, 'blur':blur,
+                'color':color,'inset': inset
+            }
+
+    :returns: `Object`
 
 .. js:function:: StyleJackBoxShadowAPI.Set([_value])
 
-    :param String _value:
-        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
-        "$" as a value returns the raw value of the property
+    Any value attempts to set the passed value to the property.
+
+    .. note:: _value can be in the form of an object, with the keys "width","style" and "color". It can be also in an array,
+        with index 0 being width, index 1 being style and index 2 being color
 
 .. js:function:: StyleJackBoxShadowAPI.Horizontal([_value])
 
