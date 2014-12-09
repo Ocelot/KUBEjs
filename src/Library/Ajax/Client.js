@@ -23,7 +23,8 @@
             "SetTimeout":SetTimeout,
             "SetFreezeDelay":SetFreezeDelay,
             "SetAuth":SetAuth,
-            "SendRequest":SendRequest
+            "SendRequest":SendRequest,
+            "CreateRequest":CreateRequest
         }.KUBE().create(Client.prototype);
         return $API;
 
@@ -75,6 +76,10 @@
                     }
                 });
             }
+        }
+
+        function CreateRequest(){
+            return KUBE.Class('/Library/Ajax/Request');
         }
 
         //Send Remotely (XHR)
