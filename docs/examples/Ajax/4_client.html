@@ -60,7 +60,7 @@
                 //Our Request can only be rejected by the Client. So this should happen in the event of a timeout, or interrupt, etc.
                 //_err should be an object with _err.message and _err.data. The msg should be evaluated to decide what to do, the _err.data contains the original Request, this allows for a new Request to be made if appropriate
                 ResponsePromise.Catch(function(_resolve,_reject,_err){
-                    logClientError(_err.message,counterId);
+                    logClientError(_err.data.message,counterId);
                 });
             }
 
@@ -84,7 +84,7 @@
                 });
 
                 ResponsePromise.Catch(function(_resolve,_reject,_err){
-                    logClientError(_err.msg,counterId);
+                    logClientError(_err.data.message,counterId);
                 });
             }
 
@@ -108,7 +108,7 @@
                 });
 
                 ResponsePromise.Catch(function(_resolve,_reject,_err){
-                    logClientError(_err.msg,counterId);
+                    logClientError(_err.data.message,counterId);
                 });
             }
 
@@ -126,7 +126,7 @@
                 });
 
                 ResponsePromise.Catch(function(_resolve,_reject,_err){
-                    logClientError(_err.msg,counterId);
+                    logClientError(_err.data.message,counterId);
                 });
             }
 

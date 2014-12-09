@@ -97,7 +97,7 @@
             timeoutId = setTimeout(function(){
                 timedOut = true;
                 _reject({
-                    'msg':'Timeout limit reached. Rejecting Request. Cancelling Promise',
+                    'message':'Timeout limit reached. Rejecting Request. Cancelling Promise',
                     'data':_Request
                 });
             },timeoutDelay);
@@ -121,7 +121,7 @@
                     else{
                         //CORS. Fail as if network error
                         _reject({
-                            'msg':'Timeout limit reached. Rejecting Request. Cancelling Promise',
+                            'message':'Timeout limit reached. Rejecting Request. Cancelling Promise',
                             'data': _Request
                         });
                     }
@@ -231,7 +231,7 @@
             timedOut = false;
             if(KUBE.Is(ResponsePromise,true) !== 'Promise'){
                 _reject({
-                    'msg':'Client target function did not return promise object. Could not resolve Request',
+                    'message':'Client target function did not return promise object. Could not resolve Request',
                     'data':''
                 });
             }
@@ -240,7 +240,7 @@
                 var timeoutId = setTimeout(function(){
                     timedOut = true;
                     _reject({
-                        'msg':'Timeout limit reached. Rejecting Request. Cancelling Promise',
+                        'message':'Timeout limit reached. Rejecting Request. Cancelling Promise',
                         'data':''
                     });
                 },timeoutDelay);
@@ -256,7 +256,7 @@
                         else{
                             clearTimeout(timeoutId);
                             _reject({
-                                'msg':'Client target function did not return Response object. Could not resolve Request',
+                                'message':'Client target function did not return Response object. Could not resolve Request',
                                 'data':''
                             });
                             _targetResolve();
@@ -270,7 +270,7 @@
                 ResponsePromise.Catch(function(_targetResolve,_targetReject,_err){
                     if(!timedOut){
                         _reject({
-                            'msg':_err.msg+' (Client target rejected request)',
+                            'message':_err.message+' (Client target rejected request)',
                             'data':_err
                         });
                         _targetResolve();
