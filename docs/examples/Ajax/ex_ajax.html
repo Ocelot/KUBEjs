@@ -7,7 +7,6 @@
     <script type="text/javascript">
         var uses = {
             'Client':'/Library/Ajax/Client',
-            'Request':'/Library/Ajax/Request',
             'Response':'/Library/Ajax/Response',
             'XM':'/Library/Extend/Math'
         };
@@ -18,8 +17,9 @@
         });
 
         function startRemoteServerTest($K){
-            var Request = $K.Request();
+            //var Request = $K.Request();
             var Client = $K.Client();
+            Request = Client.CreateRequest();
 
             //Set up our Client and a dummy Request
             Client.SetTarget('../Tests/PHP/test.php');
