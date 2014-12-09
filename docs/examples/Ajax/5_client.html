@@ -1,10 +1,147 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+<head>
+<title>KUBE Ajax: Implementing a Remote Client</title>
+<!-- Include KUBE.js -->
+<script src="../../../src/KUBE.js"></script>
+
+<!-- Client: Implementing a Client with Local Target -->
+<script type="text/javascript">
+//Load some KUBE Classes in
+var uses = {
+    "DJ":'/Library/DOM/DomJack',
+    "SJ":"/Library/DOM/StyleJack",
+    "Client":"/Library/Ajax/Client",
+    "Color":"/Library/Drawing/Color",
+    "XD":"/Library/Extend/Date"
+};
+
+KUBE.Uses(uses,loaded);
+function loaded($K){
+    $K.DJ().Ready(domReady);
+}
+
+function domReady(){
+    var $K = KUBE.Class(uses);
+
+    //While Client is generally used for communication with Remote Targets, it's quite happy to be used as a proxy for ASync communication to a Local Target
+
+    //Create a new Client
+    var Client = $K.Client();
+
+    //In this case, we set a callback as our localServer
+    Client.SetTarget(localServer);
+    Client.SetTimeout(1000); //Set this low so we can show what happens when timing out locally etc
+
+    //We will set up some requests
+    var PostRequest = Client.CreateRequest();
+    PostRequest.AddHeader('X-Test-Type','post');
+    PostRequest.AddData('postKey','postVal');
+
+    var GetRequest = Client.CreateRequest();
+    GetRequest.SetMethod('GET');
+    GetRequest.AddHeader('X-Test-Type','get');
+    GetRequest.AddData('getKey','getVal');
+
+    var PutRequest = Client.CreateRequest();
+    PutRequest.SetMethod('PUT');
+    PutRequest.AddHeader('X-Test-Type','put');
+    PutRequest.AddData('rawKey','rawVal');
+
+    var Chaos = Client.CreateRequest();
+    Chaos.AddData('chaos','bringer');
+
+    //We increase the chances of Chaos
+    var requestArray = [PostRequest,GetRequest,PutRequest,Chaos,Chaos];
+
+    //Now we wil randomly fire off different Requests
+    setInterval(function(){
+        var Promise = Client.SendRequest(requestArray[Math.KUBE().random(0,4)]);
+        Promise.Then(function(_resolve,_reject,_Response){
+            console.log(_Response.GetData());
+        });
+
+        Promise.Catch(function(_resolve,_reject,_err){
+            console.log(_err.msg);
+        });
+    },1000);
+}
+
+function localServer(_Request){
+    //Our local server will recieve the entire Request Object. It is not modified by the Client. This despite the Method, the data is still a raw object.
+    //This MUST return a KUBE.Promise() otherwise, the Request will be immediately rejected
+    return KUBE.Promise(function(_resolve,_reject){
+        //In our executor, we are expected to do whatever we are required to do, and eventually either _resolve, or _reject the initial Request
+
+        //When we Resolve we must pass back a valid Response Object, or the Client will automatically respond to the initiator by Rejecting
+        var Response = KUBE.Class('/Library/Ajax/Response')();
+        switch(_Request.GetHeader('X-Test-Type')){
+            case 'post':
+                //While it's a faux Response Object, the initiator does not have to know that which means we can still return Status Codes, headers, etc
+                Response.SetStatusCode(200);
+                Response.SetStatusText('OK');
+
+                //For the most part, Responses are unprocessed data. If you knew you are confident in the initiator, it might be safe to return an Object or something else
+                Response.SetData({'returnData':'something important','type':'post'}.KUBE().toJSON());
+
+                //Now we're happy, so let's resolve
+                _resolve(Response);
+                break;
+
+            case 'get':
+                Response.SetStatusCode(200);
+                Response.SetStatusText('OK');
+                Response.SetData({'returnData':'something important','type':'get'}.KUBE().toJSON());
+                _resolve(Response);
+                break;
+
+            case 'put':
+                Response.SetStatusCode(200);
+                Response.SetStatusText('OK');
+                Response.SetData({'returnData':'something important','type':'put'}.KUBE().toJSON());
+                _resolve(Response);
+                break;
+
+            default: //Chaos
+                //In this case we're going to do a few other things
+                switch(Math.KUBE().random(1,3)){
+                    case 1:
+                        //Wait for over the timeout limit before attempting to send a Response
+                        setTimeout(function(){
+                            Response.SetStatusCode(200);
+                            Response.SetStatusText('OK');
+                            Response.SetData({'returnData':'long request'}.KUBE().toJSON());
+                            _resolve(Response);
+                        },2000);
+                        break;
+
+                    case 2:
+                        //Give an error code back immediately
+                        Response.SetStatusCode(500);
+                        Response.SetStatusText('Internal Server Error'); //This probably isn't the best idea
+                        Response.SetData({'returnData':'server error'}.KUBE().toJSON());
+                        _resolve(Response);
+                        break;
+
+                    case 3:
+                        //Reject the request
+                        //It is important that unlike Error codes, which result in appropriate Responses that must be handled by the initiator, Rejecting inside a Local Server is equivalent to the Client rejecting the initial Request
+                        _reject({
+                            'msg':'This is actually a local server rejection',
+                            'data':_Request
+                        });
+                        break;
+                }
+                break;
+        }
+
+    });
+}
+
+
+</script>
 </head>
 <body>
-
+Example outputs to console
 </body>
 </html>
