@@ -8,14 +8,32 @@ if(/^--port=/.test(process.argv[2])){
 
 var server = http.createServer();
 server.on('request',function(request,response){
+    var d = "";
     //Yes, I'm intentionally breaking CORS for this specific example.
     response.setHeader("Access-Control-Allow-Headers", request.headers['access-control-request-headers']);
     response.setHeader('Access-Control-Allow-Origin','*');
-    response.setHeader('Access-Control-Allow-Methods','POST,PUT,GET');
-    response.write('hi');
-    setTimeout(function(){
+    response.setHeader('Access-Control-Allow-Methods',request.method);
+    response.write(createOutput(d));
+    request.on('data',function(chunk){
+        d += chunk.toString();
+    });
+
+    request.on('end',function(){
+        response.write(createOutput(d));
         response.end();
-    },500);
+    })
+
+
+    function createOutput(data){
+        var out = {};
+        out['headers'] = request.headers;
+        out['requestMethod'] = request.method;
+        if(data){
+            out['receivedData'] = data;
+        }
+        return JSON.stringify(out);
+    }
+
 
 
 });

@@ -28,6 +28,7 @@
             Client.SetTarget('http://localhost:10999');
             Request.AddHeader('X-Test','Test');
             Request.AddData('key','val');
+            Request.SetMethod('POST');
 
             testRemoteRequest(Client,Request);
         }
