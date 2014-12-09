@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KUBE Ajax: Implementing a Remote Client</title>
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <!-- Client: Implementing a Client with Remote Target -->
+    <script type="text/javascript">
+        //Load some KUBE Classes in
+        var uses = {
+            "DJ":'/Library/DOM/DomJack',
+            "SJ":"/Library/DOM/StyleJack",
+            "Client":"/Library/Ajax/Client"
+        };
+
+        KUBE.Uses(uses,loaded);
+        function loaded($K){
+            $K.DJ().Ready(domReady);
+        }
+
+        function domReady(){
+            var $K,DJ,SJ,Client;
+            $K = KUBE.Class(uses);
+            DJ = $K.DJ;
+            SJ = $K.SJ;
+            Client = $K.Client();
+
+            //Okay, so set up a form to set our Target
+            var Form = DJ(document.body).Append('form');
+
+            //Add an option
+            var TargetSelect = Form.Append('select').Name('targetSelect');
+            TargetSelect.AddOption('--','');
+            TargetSelect.AddOption('NodeJS','node');
+            TargetSelect.AddOption('PHP','php');
+            TargetSelect.On('change',function(){
+                switch(this.Value()){
+                    case 'node':break;
+                    case 'php': Client.SetTarget('../Tests/PHP/postTest.php'); break;
+
+                }
+            });
+
+
+
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -8,12 +8,10 @@
  * file that was distributed with this source code.
  */
 
-function Dump($a){
-    ob_start();
-    (!empty($a) ? print_r($a) : var_dump($a));
-    $dump = ob_get_clean();
-    echo "<pre>$dump</pre>";
-    exit;
-}
+include('Response.php');
 
-Dump([$_SERVER,$_POST,$_GET]);
+$Response = new Response();
+$Response->SetBody(json_encode([Data::RequestHeaders(),$_POST],JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));
+$Response->SetMimeType('json');
+$Response->SetResponseCode(200);
+$Response->Output();

@@ -1416,7 +1416,8 @@
 					'AddOptions':function(_options){ return AddOptions(_DomJackAPI,_options); },
 					'AddOption':function(_label,_value){ return AddOption(_DomJackAPI,_label,_value); },
 					'AddOptionGroup': function(_label){ return AddOptionGroup(_DomJackAPI,_label); },
-					'Select':function(_value){ return Select(_DomJackAPI,_value); }
+					'Select':function(_value){ return Select(_DomJackAPI,_value); },
+                    'Value':function(_value){ return Value(_DomJackAPI,_value); }
 				});
 				break;
 				
