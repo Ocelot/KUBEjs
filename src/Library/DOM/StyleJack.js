@@ -1460,7 +1460,7 @@
                 'Spread':function(_val){ return fastShadowGetSet('spread',_val); },
                 'Color':function(_val){ return fastShadowGetSet('color',_val); },
                 'Inset': function(_val){ return fastShadowGetSet('inset',(_val ? 'inset' : '')); },
-                'Get':function(){ return getShadow(); },
+                'Get':function(){ return getShadowValues(); },
                 'Set':function(_val){ return setShadow(undefined,_val); },
                 'api':_API
             };
