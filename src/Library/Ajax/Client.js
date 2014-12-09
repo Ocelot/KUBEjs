@@ -79,7 +79,7 @@
         }
 
         function CreateRequest(){
-            return KUBE.Class('/Library/Ajax/Request');
+            return KUBE.Class('/Library/Ajax/Request')();
         }
 
         //Send Remotely (XHR)
