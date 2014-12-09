@@ -375,7 +375,7 @@
                         resolveArray[0].apply(undefined,fulfillmentArgs);
                     }
                     catch(Error){
-                        Reject.apply(this,Error);
+                        Reject(Error);
                     }
                 }
                 else{

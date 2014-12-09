@@ -55,7 +55,9 @@
 			"h":h,	//Time: 01-12 (hours)
 			"H":H,	//Time: 00-23 (hours)
 			"i":i,	//Time: 00-59 (minutes)
-			"s":s	//Time: 00-59 (seconds)
+			"s":s,	//Time: 00-59 (seconds)
+            "x":x,  //Time: 0-999 (milliseconds)
+            "X":X   //Time: 000-999 (milliseconds)
 		};
 		
 		$return = '';
@@ -185,7 +187,20 @@
 		var $return = _DateObj.getSeconds();
         return (String($return).length === 1 ? "0"+$return : $return);
 	}
-	
+
+    function x(_DateObj){
+        return _DateObj.getMilliseconds();
+    }
+
+    function X(_DateObj){
+        var ms = _DateObj.getMilliseconds();
+        switch(String(ms).length){
+            case 1: ms = "00"+ms; break;
+            case 2: ms = "0"+ms; break;
+        }
+        return ms;
+    }
+
 	function getMSThisYear(_DateObj){
 		var stupid = new Date();
 		stupid.setHours(0);

@@ -15,6 +15,7 @@
     function Response() {
         var $API,data,headers,responseType,statusCode,statusText;
         headers = {};
+        data = '';
         $API = {
             "GetData":GetData,
             "GetHeaders":GetHeaders,

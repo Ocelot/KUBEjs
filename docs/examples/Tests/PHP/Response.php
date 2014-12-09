@@ -42,6 +42,7 @@ class Response{
         $this->outputHeaders();
         echo $this->body;
         ob_end_flush();
+        exit;
     }
 
     private function outputHeaders(){
@@ -155,7 +156,6 @@ class Data{
             if(substr($key, 0, 5) == "HTTP_"){
                 $h = str_replace('_', '', substr($key, 5));
                 $h = str_replace(' ', '-', strtolower($key));
-                unset($_SERVER[$key]);
                 $return[$h] = $val;
             }
         }

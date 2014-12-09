@@ -150,7 +150,7 @@
 
                 case 'get':
                     sendData = prepXHRForData(_XHR,_Request.GetData(),_Request.GetMethod());
-                    _XHR.open('get', target+sendData, true);
+                    _XHR.open('get', target+"?"+sendData, true);
                     break;
             }
 
