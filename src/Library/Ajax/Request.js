@@ -21,6 +21,7 @@
 
         $API = {
             "GetHeaders":GetHeaders,
+            "GetHeader":GetHeader,
             "GetMethod":GetMethod,
             "GetData":GetData,
             "GetResponseType":GetResponseType,
@@ -35,6 +36,10 @@
         //Get
         function GetHeaders(){
             return customHeaders;
+        }
+
+        function GetHeader(_key){
+            return customHeaders[_key];
         }
 
         function GetMethod(){

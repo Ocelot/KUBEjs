@@ -185,6 +185,7 @@
 			var $return;
 			if(_val === undefined){ return 'undefined'; }
 			if(_val === null){ return 'null'; }
+            if(_val instanceof Error){ return 'Error' };
 			
 			$return = nativeTable[Object.prototype.toString.call(_val)];
 			if(!_objType){
@@ -194,7 +195,7 @@
 			if($return !== 'object' && $return){
 				return $return;
 			}
-			
+
 			return (_val.toString ? _val.toString() : Object.prototype.toString.call(_val)).match(/\[object ([^\]]*)\]/)[1];
 		}
 		

@@ -26,7 +26,11 @@
             var matchAndReplace = /hate/.KUBE().matchAndReplace('I really hate regex because I hate teh stringz','love'); //Optional 3rd arg of limit
             console.log(matchAndReplace);
 
-            
+            //replaceCallback: use a regex for matches, call callback on match, replace match with return value
+            var replaceCallback = /hate|love/.KUBE().replaceCallback('I really hate regex because I love teh stringz',function(_matchArray){
+                return (_matchArray[0] === 'hate' ? 'love' : 'hate');
+            });
+            console.log(replaceCallback);
 
         });
     </script>
