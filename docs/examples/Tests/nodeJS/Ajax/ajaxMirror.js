@@ -10,6 +10,7 @@ if(/^--port=/.test(process.argv[2])){
 var server = http.createServer();
 
 server.on('request',function(request,response){
+    response.setHeader('Access-Control-Allow-Origin','*');
     response.write('hi');
     setTimeout(function(){
         response.end();
