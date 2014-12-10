@@ -55,16 +55,20 @@
 
 		//Special event handling
 		function Ready(_callback){
-			if(KUBE.Is(_callback) === 'function'){
-				if(document.readyState === 'complete'){
-					ready = true;
-					_callback();
-				}
-				else{
-					initReady();
-					Events.Once('ready',_callback);
-				}
-			}
+            var Promise = KUBE.Promise(function(_resolve,_reject){
+                if(document.readyState === 'complete'){
+                    _resolve();
+                }
+                else{
+                    initReady();
+                    Events.Once('ready',_resolve);
+                }
+            });
+
+            if(KUBE.Is(_callback) === 'function'){
+                Promise.then(_callback);
+            }
+            return Promise;
 		}
 
 		function Style(){
