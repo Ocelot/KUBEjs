@@ -20,7 +20,7 @@ server.on('request',function(request,response){
         //Yes, I'm intentionally breaking CORS.
         response.setHeader("Access-Control-Allow-Headers", request.headers['access-control-request-headers']);
         response.setHeader('Access-Control-Allow-Origin','*');
-        response.setHeader('Access-Control-Allow-Methods',request.method);
+        response.setHeader('Access-Control-Allow-Methods',request.headers['access-control-request-method']);
         response.statusCode = 500;
 
         request.on('data',function(chunk){
@@ -36,7 +36,7 @@ server.on('request',function(request,response){
         //Yes, I'm intentionally breaking CORS.
         response.setHeader("Access-Control-Allow-Headers", request.headers['access-control-request-headers']);
         response.setHeader('Access-Control-Allow-Origin','*');
-        response.setHeader('Access-Control-Allow-Methods',request.method);
+        response.setHeader('Access-Control-Allow-Methods',request.headers['access-control-request-method']);
         response.statusCode = 200;
 
         request.on('data',function(chunk){
