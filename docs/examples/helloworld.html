@@ -6,26 +6,30 @@
     <script src="../../src/KUBE.js"></script>
     <script type="text/javascript">
 
-        //Set up a key:value object
-        //  -key    = alias
-        //  -value  = namespace of KUBE Class
-        var uses = {
-            'DJ':'/Library/DOM/DomJack'
-        };
+        //Request dependancy resolution
+        KUBE.Uses(['/Library/DOM/DomJack','/Library/Drawing/Color'],function(_DJ,_Color){
+            var Color = _Color();
+            //DomJack is a DOMAbstraction. Ready handle DOMContentLoaded
+            _DJ().Ready(function(){
+                //It's safe assign the Body to a var
+                var Body = _DJ(document.body);
 
-        //Request dependancy resolution. Returns a promise (var p.then(callback)) which can be used instead of the callback
-        KUBE.Uses(uses,resolved);
+                //Set our hello world
+                Body.SetInner('Hello World');
 
-        //When the dependancies resolve, receives an object that matches initial uses object
-        function resolved($K){
-            //$K.DJ == /Library/DOM/DomJack (Dom Abstraction)
-            $K.DJ().Ready(function(){ domLoaded($K) }); //Let's pass our initial uses object in
-        }
+                //For fun, if you press shift+r it will randomize the background color and just r will reset it to white
+                Body.On('key:shift+r',randomColor);
+                Body.On('key:r',white);
 
-        function domLoaded($K){
-            var Body = $K.DJ(document.body);
-            Body.SetInner('Hello World');
-        }
+                function randomColor(){
+                    Body.Style().Background().Color(Color.GetRandomWebColor());
+                }
+
+                function white(){
+                    Body.Style().Background().Color('white');
+                }
+            });
+        });
     </script>
 </head>
 <body>
