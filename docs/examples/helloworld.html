@@ -5,29 +5,17 @@
     <!-- Include KUBE.js -->
     <script src="../../src/KUBE.js"></script>
     <script type="text/javascript">
-
         //Request dependancy resolution
-        KUBE.Uses(['/Library/DOM/DomJack','/Library/Drawing/Color'],function(_DJ,_Color){
-            var Color = _Color();
-            //DomJack is a DOMAbstraction. Ready handle DOMContentLoaded
-            _DJ().Ready(function(){
-                //It's safe assign the Body to a var
-                var Body = _DJ(document.body);
+        KUBE.Uses('/Library/DOM/DomJack',function(_DJ){
 
-                //Set our hello world
-                Body.SetInner('Hello World');
+            //_DJ() calls WinDocJack which has Ready() which is a DomContentLoaded function. Takes a callback or returns a promise
+            var ReadyPromise = _DJ().Ready();
 
-                //For fun, if you press shift+r it will randomize the background color and just r will reset it to white
-                Body.On('key:shift+r',randomColor);
-                Body.On('key:r',white);
+            //We'll use the promise because we like promises
+            ReadyPromise.Then(function(){
 
-                function randomColor(){
-                    Body.Style().Background().Color(Color.GetRandomWebColor());
-                }
-
-                function white(){
-                    Body.Style().Background().Color('white');
-                }
+                //Safe because DOM is ready. Grab the body, set its contents
+                _DJ(document.body).SetInner('Hello World');
             });
         });
     </script>

@@ -194,7 +194,7 @@
 			
 			//Mapping
 			'SetMapId':SetMapId,
-			'MapData':MapData,
+			'MapData':MapData
 		};
 
 		//Init and return our API
@@ -1456,6 +1456,12 @@
 					'Src':function(_src){ return Src(_DomJackAPI,_src); }
 				});
 				break;
+
+            case 'a':
+                typeAPI.KUBE().merge({
+                    'Href':function(_href){ return Href(_DomJackAPI,_href); }
+                });
+                break;
 		}
 
 		if(GetForm(_DomJackAPI)){
@@ -1514,10 +1520,17 @@
 			_DJ.On('submit',_callback);
 		}
 		else{
-			_DJ.GetNode().submit();
+            _DJ.Emit('submit');
+
+            //Who would've guessed...
+            var event = document.createEvent('HTMLEvents');
+            event.initEvent('submit',true,true);
+            if(!_DJ.GetNode().dispatchEvent(event)){
+                _DJ.GetNode().submit();
+            }
 		}
 	}
-	
+
 	function SubmitForm(_DJ){
 		var Form = GetForm(_DJ);
 		if(KUBE.Is(Form) === 'object' && Form.Submit){
@@ -1550,7 +1563,7 @@
 		var i,DomNode,$return = [];
 		DomNode = _DJ.GetNode();
 		for(i=0;i<DomNode.length;i++){
-			$return.push(DJ(DomNode[i]));
+			$return.push(DomJack(DomNode[i]));
 		}
 		return $return;
 	}
@@ -1687,5 +1700,21 @@
         }
 		return _DJ;
 	}
+
+    function Href(_DJ,_href){
+        var DomNode = _DJ.GetNode();
+        if(_href === undefined){
+            _DJ = _DJ.GetAttribute('href');
+        }
+        else{
+            if(DomNode.href !== undefined){
+                DomNode.href = _href;
+            }
+            else{
+                _DJ.SetAttribute('href',_href);
+            }
+        }
+        return _DJ;
+    }
 	
 }(KUBE));
