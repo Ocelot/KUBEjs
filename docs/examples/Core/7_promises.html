@@ -26,48 +26,53 @@
         });
 
         //2
-        Promise.then(function(_resolve,_reject,_data){
+        Promise.then(function(_data){
             //Then also returns a Promise Obj
+            //To resolve, simply return a value (in this case, as we are creating a new async action, we must create a new promise to return)
+            //To reject, throw an error (or reject with an error in the case of returning a new promise);
             console.log(_data);
-            setTimeout(function(){
-                var E = new Error('we then reject after a half second');
-                _reject(E); //If data passed into reject is not an Error object, it is attached to an error object inside of client
+            //If we need to do another asynchronous task, we must return (resolve with) a new promise.
+            return KUBE.Promise(function(_resolve,_reject){
+                setTimeout(function(){
+                    var E = new Error('we then reject after a half second');
+                    _reject(E); //If data passed into reject is not an Error object, it is attached to an error object inside of client
+                },500);
             });
         });
 
         //3
-        Promise.catch(function(_resolve,_reject,_Error){
+        Promise.catch(function(_Error){
             //Catch also returns a Promise Obj
             console.log(_Error.message);
-            _resolve('we can continue the chain even in a rejection');
+            //We can resolve the error (or throw the error) to continue this chain as well.
+            return 'we can continue the chain even in a rejection';
         });
 
         //4
         //Then will accept a resolve/reject callback as first/second arg. In this case, only one of the functions will be called, before the chain moves on
         Promise.then(
-            function(_resolve,_reject,_data){
+            function(_data){
                 console.log(_data);
-
                 //Also if an error is throw inside of the promise chain, it automatically calls the next rejection
-                throw Error('This is an error being thrown');
+                throw new Error('This is an error being thrown');
             },
-            function(_resolve,_reject,_Error){
+            function(_Error){
                 //This won't be called because we resolved 3
             }
         );
 
-        Promise.catch(function(_resolve,_reject,_Error){
+        Promise.catch(function(_Error){
             console.log(_Error.message);
             console.log('We will resolve now but put a delay between this and even binding the next then');
-            _resolve('We resolved');
+            return 'We resolved';
         });
 
         //5
         //Even though a chain is resolved, this puts it in a state ready to fire. This means an additional 'then' will automatically get fired and start the chain up again
         setTimeout(function(){
-            Promise.then(function(_resolve,_reject){
+            Promise.then(function(){
                 console.log('The chain has been started again');
-                _resolve(); //Finish it again
+                return true;
             });
         },2000);
     </script>

@@ -470,7 +470,7 @@
         function resolve(_value){
             var then;
             try{
-                if(_value === this){ throw new TypeError('A promise cannot be resolved with itself.') }
+                if(_value !== undefined && _value === this){ throw new TypeError('A promise cannot be resolved with itself.') }
                 if(_value && (KUBE.Is(_value) === "object" || KUBE.Is(_value) === "function")){
                     then = _value.then;
                     if(KUBE.Is(then) === 'function'){
