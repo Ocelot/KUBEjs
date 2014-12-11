@@ -1417,7 +1417,8 @@
 					'AddOption':function(_label,_value){ return AddOption(_DomJackAPI,_label,_value); },
 					'AddOptionGroup': function(_label){ return AddOptionGroup(_DomJackAPI,_label); },
 					'Select':function(_value){ return Select(_DomJackAPI,_value); },
-                    'Value':function(_value){ return Value(_DomJackAPI,_value); }
+                    'Value':function(_value){ return Value(_DomJackAPI,_value); },
+                    'FindSelected':function(){ return FindSelected(_DomJackAPI); }
 				});
 				break;
 				
@@ -1520,12 +1521,9 @@
 			_DJ.On('submit',_callback);
 		}
 		else{
-            _DJ.Emit('submit');
-
-            //Who would've guessed...
             var event = document.createEvent('HTMLEvents');
             event.initEvent('submit',true,true);
-            if(!_DJ.GetNode().dispatchEvent(event)){
+            if(_DJ.GetNode().dispatchEvent(event)){
                 _DJ.GetNode().submit();
             }
 		}
@@ -1605,10 +1603,8 @@
 	function AddOptions(_DJ,_options){
 		switch(KUBE.Is(_options)){
 			case 'array':
-				_options.KUBE().each(function(_obj){
-					if(KUBE.Is(_obj) === 'object' && _obj.text !== undefined && _obj.value !== undefined){
-						AddOption(_DJ,_obj.text,_obj.value);
-					}
+				_options.KUBE().each(function(_label){
+                    AddOption(_DJ,_label,_label);
 				});
 				break;
 				
@@ -1633,7 +1629,7 @@
 	}
 	
 	function AddOptionGroup(_DJ,_label){
-		var OG = DJ('optgroup');
+		var OG = DomJack('optgroup');
 		_DJ.Append(OG);
 		OG.Label(_label);
 		return OG;
@@ -1661,27 +1657,92 @@
 	}
 	
 	function Select(_DJ,_value){
-		var $return = false;
-		_DJ.GetChildren().KUBE().each(function(_Child){
-			if(_Child.GetType() === 'option'){
-				if(_Child.Value() === _value){
-					_Child.Selected(true);
-					$return = _Child;
-				}
-				else{
-					_Child.Selected(false);
-				}
-			}
-		});
-		return $return;
+		return findOptionToSelect(_DJ,_value);
+        function findOptionToSelect(_DJ,_value){
+            var $return = false;
+            _DJ.GetChildren().KUBE().each(function(_Child){
+                switch(_Child.GetType()){
+                    case 'option':
+                        if(_Child.Value() === _value){
+                            _Child.Selected(true);
+                            $return = _Child;
+                        }
+                        break;
+
+                    case 'optgroup':
+                        $return = findOptionToSelect(_Child,_value);
+                        break;
+                }
+                if($return){
+                    this.break();
+                }
+            });
+            return $return;
+        }
+
 	}
 	
 	function Selected(_DJ,_bool){
-		return (KUBE.Is(_bool) === 'boolean' ? _DJ.SetAttribute('selected',_bool) : _DJ.GetAttribute('selected'));		
+        var currentStatus = _DJ.GetAttribute('selected');
+        if(KUBE.Is(_bool) === 'boolean'){
+            if(currentStatus !== _bool){
+                _DJ.SetAttribute('selected',_bool);
+                findSelect(_DJ).Emit('change');
+            }
+            return _DJ;
+        }
+        else{
+            return currentStatus;
+        }
+
+        function findSelect(_DJ){
+            var Parent = _DJ.GetParent();
+            return (Parent.GetType() === 'select' || !Parent ? Parent : findSelect(Parent));
+        }
 	}
+
+    function FindSelected(_DJ){
+        return findSelectedOption(_DJ);
+        function findSelectedOption(_DJ){
+            var selected = false;
+            var children = _DJ.GetChildren();
+            children.KUBE().each(function(_ChildDJ){
+                switch(_ChildDJ.GetType()){
+                    case 'option':
+                        if(_ChildDJ.Selected()){
+                            selected = _ChildDJ;
+                        }
+                        break;
+
+                    case 'optgroup':
+                        selected = findSelectedOption(_DJ);
+                        break;
+                }
+
+                if(selected){
+                    this.break();
+                }
+            });
+            return selected;
+        }
+    }
 	
 	function OnSelect(_DJ,_callback){
-		//Not sure about this one yet, but would be cool
+        if(KUBE.Is(_callback) === 'function'){
+            var SelectParent = findSelect(_DJ);
+            if(SelectParent){
+                SelectParent.On('change',function(){
+                    if(_DJ.Selected()){
+                        _callback(_DJ);
+                    }
+                });
+            }
+        }
+
+        function findSelect(_DJ){
+            var Parent = _DJ.GetParent();
+            return (Parent.GetType() === 'select' || !Parent ? Parent : findSelect(Parent));
+        }
 	}	
 		
 	function Src(_DJ,_src){

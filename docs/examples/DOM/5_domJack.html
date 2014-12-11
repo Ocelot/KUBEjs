@@ -66,37 +66,8 @@ KUBE.Uses(['/Library/DOM/DomJack','/Library/DOM/StyleJack'],function(_DJ,_SJ){
         console.log(Form.Gather());
 
         /*
-         * Submit(): Either binds a callback to the On('submit') event, or if empty, will fire Form.Emit('submit') event
-         *
-         * NOTE: https://html.spec.whatwg.org/multipage/forms.html#form-submission-algorithm
-         *  Submit is strange entity, with what appears to be currently broken browser implementation(?). Theoretically, if a form
-         *  method is not set, the submit event should be fired, and is cancellable. If method is set then it should by default
-         *  perform the submission (not cancellable?).
-         *
-         *  In practice this is not how browsers implement it. Instead they force a 'GET' method on forms by default. Because
-         *  this is default, unsetting the method results in a method being set anyways (GET), which in turn should mean that
-         *  the form never fires a submit event, and always results in uncancellable submisison.
-         *
-         *  Of course, this isn't the reality either. Instead what browsers seem to do is fire the 'submit' event regardless of
-         *  if method is set, BUT ONLY if the user initiates the submission. If this happens, the submit event bubbles, and
-         *  if it is cancelled, then HTMLFormElement.submit() is effectively not called.
-         *
-         *  Thing is, calling HTMLFormElement.submit() programmatically does not result in the submit event being fired, which
-         *  results in it being non cancellable. So for this reason, we assume that user input will result in the the submit
-         *  event being fired, which we allow binding and cancellation to.
-         *
-         *  Our Form.Submit() call in turn, fires the event, which is cancellable. The difference is at the end of our our
-         *  Form.Submit() being called, we do not call HTMLFormElement.submit(). Instead if you want to force the submission
-         *  of a form, you must call Form.HardSubmit() which is equivalent to programmatically calling HTMLFormElement.submit()
-         *  which does not result in an event being fired, therefore will ignore anything listening for it, and instead force
-         *  the form to be submitted to its action.
-         *
-         *  It is likely that this is a bug with the browser implementation of the form submission algorithm. To be fair
-         *  forms have always defaulted to GET, and changing this behavior could have a significant damaging impact on
-         *  legacy forms that did not set an explicit method, and instead used the default assumption of GET.
-         *
+         * Submit(): Either binds a callback to the On('submit') event, or if empty, will mimic user submission (fire 'submit' event, if not cancelled, submit the form)
          */
-
 
         var Submit = Form.Append('input').Type('submit').Value('Submit');
         Form.Submit(function(){
@@ -129,8 +100,9 @@ KUBE.Uses(['/Library/DOM/DomJack','/Library/DOM/StyleJack'],function(_DJ,_SJ){
         //  -Name
         //  -Value
         //  -Select
+        //  -FindSelected
         //  -AddOptions
-        //  -AddOption (this actually does return the Option DomJack object
+        //  -AddOption (this actually does return the Option DomJack object)
         //  -AddOptionGroup
 
         //Let's create a select element
@@ -139,8 +111,9 @@ KUBE.Uses(['/Library/DOM/DomJack','/Library/DOM/StyleJack'],function(_DJ,_SJ){
         //Let's set it up so it will return data
         Select.Name('selectField');
 
-        //Let's add HTMLOptionElement nodes
+        //Let's add 2 HTMLOptionElement nodes
         var Option = Select.AddOption('the visible data','the value');
+        var Option2 = Select.AddOption('Another Option','another option');
 
         //The Option API includes:
         //  -Text
@@ -148,12 +121,19 @@ KUBE.Uses(['/Library/DOM/DomJack','/Library/DOM/StyleJack'],function(_DJ,_SJ){
         //  -Selected
         //  -OnSelect
 
+        //Selected: takes a boolean, true or false, to set its selected state (if the state changes, the change event is fired)
+        Option.Selected(false);
+
+        //OnSelect: takes a callback that gets fired when the option is selected
+        Option2.OnSelect(function(){
+            Form.Submit();
+        });
+
         //Or multiple options as an array
         Select.AddOptions(['Value and Data','Are the Same']);
 
         //Or multiple options as an object
         Select.AddOptions({'the visible data2':'the actual value2'});
-
 
         //Or we can add an OptionGroup (label). This actually returns the optionGroup element (as DomJack)
         var OptionGroup = Select.AddOptionGroup('Our Group');
@@ -162,10 +142,34 @@ KUBE.Uses(['/Library/DOM/DomJack','/Library/DOM/StyleJack'],function(_DJ,_SJ){
         //  -Label (change the label)
         //  -AddOptions (identical to above)
         //  -AddOption (identical to above)
-        OptionGroup.AddOption('Option Group Item 1','option group item 1');
+        OptionGroup.AddOption('Option Group Item 1','option group item 1').Selected(true); //We'll auto select this
 
+        //We'll insert our Select Field before our Submit button
+        Select.InsertBefore(Submit);
 
+        //Select() takes a value and will automatically search the options and select by value
+        Select.Select('Value and Data');
 
+        //FindSelected() will search for the currently selected option and return it
+        Select.On('change',function(){
+            console.log('selected option',Select.FindSelected());
+        });
+
+        //Let's create a textarea
+        var TextArea = _DJ('textarea');
+
+        //Textarea API includes:
+        //  -Name
+        TextArea.Name('aTextArea');
+
+        //Otherwise you use SetInner to fill its contents
+        TextArea.SetInner('this is some text');
+
+        //Technically TextArea.GetAttribute('value') will return its innerContents, but as will GetInner
+        console.log(TextArea.GetAttribute('value'));
+        console.log(TextArea.GetInner());
+
+        TextArea.InsertBefore(Submit);
     }
 });
 
