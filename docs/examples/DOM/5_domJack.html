@@ -170,6 +170,28 @@ KUBE.Uses(['/Library/DOM/DomJack','/Library/DOM/StyleJack'],function(_DJ,_SJ){
         console.log(TextArea.GetInner());
 
         TextArea.InsertBefore(Submit);
+
+        //Finally, we also have some additional Form mutations that happen
+        //Every element inside of a Form Tree automatically gets the following:
+        //  -GetForm
+        //  -SubmitForm
+
+        //So for example
+        var Box = _DJ('div');
+        Box.Style().Position('relative').Width(100).Height(35).Background().Color('red').api.LineHeight(35);
+        Box.SetInner('click me');
+        Box.On('click',function(){
+            //We can get our Form DJ if we want
+            var TheForm = Box.GetForm();
+            if(TheForm === Form){
+                console.log('Got my form');
+            }
+
+            //And likewise we can submit from any element
+            Box.SubmitForm();
+        });
+
+        Box.InsertBefore(Submit);
     }
 });
 
