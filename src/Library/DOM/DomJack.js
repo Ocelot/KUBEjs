@@ -194,7 +194,7 @@
 			
 			//Mapping
 			'SetMapId':SetMapId,
-			'MapData':MapData,
+			'MapData':MapData
 		};
 
 		//Init and return our API
@@ -1397,7 +1397,6 @@
 					'Name':function(_name){ return Name(_DomJackAPI,_name); },
 					'Gather':function(_recurse){ return Gather(_DomJackAPI,_recurse); },
 					'Submit':function(_callback){ return Submit(_DomJackAPI,_callback); },
-                    'HardSubmit':function(){ return HardSubmit(_DomJackAPI); },
 					'GetFields':function(){ return GetFields(_DomJackAPI); }
 				});
 				Method(_DomJackAPI,'post');
@@ -1522,13 +1521,16 @@
 		}
 		else{
             _DJ.Emit('submit');
+
+            //Who would've guessed...
+            var event = document.createEvent('HTMLEvents');
+            event.initEvent('submit',true,true);
+            if(!_DJ.GetNode().dispatchEvent(event)){
+                _DJ.GetNode().submit();
+            }
 		}
 	}
 
-    function HardSubmit(_DJ){
-        _DJ.GetNode().submit();
-    }
-	
 	function SubmitForm(_DJ){
 		var Form = GetForm(_DJ);
 		if(KUBE.Is(Form) === 'object' && Form.Submit){
