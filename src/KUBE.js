@@ -406,13 +406,6 @@
             "configurable": false
         });
 
-        Object.defineProperty(this,"[[DEBUG]]",{
-            "value": resolveQ,
-            "writable": false,
-            "enumerable": false,
-            "configurable": false
-        });
-
         if(_callback){
             executeResolve(_callback,resolve,reject)
         }
