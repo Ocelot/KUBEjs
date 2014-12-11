@@ -317,7 +317,7 @@
 		}
 
         function Promise(_callback){
-            return new KUBEPromise(_callback);
+            return (KUBE.Is(_callback) === "function" ? new KUBEPromise(_callback) : new KUBEPromise);
         }
 
 		function Config(){
@@ -325,107 +325,211 @@
 		}
 	}
 
+
     KUBEPromise.prototype.toString = function(){ return '[object Promise]' };
+    KUBEPromise.prototype.resolve = function(value){
+        return new KUBEPromise(function(resolve,reject){resolve(value)});
+    };
+    KUBEPromise.prototype.reject = function(value){
+        return new KUBEPromise(function(resolve,reject){reject(value)});
+    };
+
+    KUBEPromise.prototype.resolve = function(value){
+        return new KUBEPromise(function(resolve,reject){resolve(value)});
+    };
+
+    KUBEPromise.prototype.all = function(promises){
+
+        var accumulator = [];
+        var ready = (new KUBEPromise).resolve(null);
+
+        promises.KUBE().each(function(promise){
+            ready = ready.then(function(){
+                return promise;
+            });
+            ready.then(function(value){
+                accumulator.push(value);
+            });
+        });
+        return ready.then(function(){ return accumulator});
+
+    };
+
+    KUBEPromise.prototype.race = function(promises){
+        return new KUBEPromise(function(_res,_rej){
+           promises.KUBE().each(function(promise){
+               promise.then(function(val){
+                   KUBE.Promise().resolve(val).then(_res,_rej);
+               });
+           })
+        });
+    };
+
+
     function KUBEPromise(_callback){
-        var resolveQ,state,fulfillmentArgs;
+        var stateEnum = {};
+        stateEnum.PENDING = 0;
+        stateEnum.RESOLVED = 1;
+        stateEnum.REJECTED = 2;
+        stateEnum[0] = "pending";
+        stateEnum[1] = "resolved";
+        stateEnum[2] = "rejected";
+
+        var resolveQ,state,reason,promiseValue,self;
+        if(KUBE.Is(this) !== 'object'){
+            throw new TypeError("KUBEPromise must be constructed with new");
+        }
+        if(KUBE.Is(_callback) !== "function" && KUBE.Is(_callback) !== "undefined" ){
+            throw new TypeError("KUBEPromise must be initialized with an initial executor function");
+        }
+        self = this; //Can't pass this promise into itself as a then, gotta have a way to test it.
         resolveQ = [];
-        state = 'resolved';
+        state = 0;
+        reason = "";
 
-        var $PromiseAPI = Object.create(KUBEPromise.prototype);
-        $PromiseAPI.Then = Then;
-        $PromiseAPI.then = Then;
-        $PromiseAPI.Catch = Catch;
-        $PromiseAPI.catch = Catch;
-        return Then(_callback);
+        Object.defineProperty(this,"[[PromiseStatus]]",{
+            "value": stateEnum[state],
+            "writable": false,
+            "enumerable": false,
+            "configurable": false
+        });
+        Object.defineProperty(this,"[[PromiseReason]]",{
+            "value": reason,
+            "writable": false,
+            "enumerable": false,
+            "configurable": false
+        });
+        Object.defineProperty(this,"[[PromiseValue]]",{
+            "value": promiseValue,
+            "writable": false,
+            "enumerable": false,
+            "configurable": false
+        });
 
-        function Then(_resolveCallback,_rejectCallback){
-            resolveQ.push([_resolveCallback,_rejectCallback]);
-            if(state === 'resolved'){
-                state = 'pending';
-                Resolve.apply(undefined,fulfillmentArgs);
-            }
-            else if(state === 'rejected'){
-                state = 'pending';
-                Reject.apply(undefined,fulfillmentArgs);
-            }
-            return $PromiseAPI;
+        Object.defineProperty(this,"[[DEBUG]]",{
+            "value": resolveQ,
+            "writable": false,
+            "enumerable": false,
+            "configurable": false
+        });
+
+        if(_callback){
+            executeResolve(_callback,resolve,reject)
         }
 
-        function Catch(_rejectCallback){
-            if(state === 'resolved' || state === 'rejected'){
-                if(state === 'rejected'){
-                    state = 'pending';
-                    resolveQ.push([undefined,_rejectCallback]);
-                    Reject.apply(undefined,fulfillmentArgs);
-                }
-            }
-            else{
-                resolveQ.push([undefined,_rejectCallback]);
-            }
-            return $PromiseAPI;
+
+
+        this.then = this.Then = function(_resolveCallback,_rejectCallback){
+            return new self.constructor(function(resolve,reject){
+                manage(new deferredObj(_resolveCallback,_rejectCallback,resolve,reject));
+            })
         }
 
-        function Resolve(){
-            var resolveArray, ee;
-            fulfillmentArgs = Array.prototype.slice.call(arguments);
-            if(resolveQ.length){
-                resolveArray = resolveQ.shift();
-                if(KUBE.Is(resolveArray[0]) === 'function'){
-                    fulfillmentArgs.unshift(Resolve,Reject);
-                    try{
-                        resolveArray[0].apply(undefined,fulfillmentArgs);
-                    }
-                    catch(err){
-                        ee = err;
-                        if(KUBE.Is(err, true) !== "Error"){
-                            ee = new Error("Check data property for more info");
-                            ee.data = err
-                        }
-
-                        Reject(ee);
-                    }
-                }
-                else{
-                    Resolve.apply(this,fulfillmentArgs);
-                }
-            }
-            else{
-                state = 'resolved';
-            }
+        this.catch = this.Catch = function(onRejected){
+            return this.then(null, onRejected);
         }
 
-        function Reject(){
-            var resolveArray;
-            fulfillmentArgs = Array.prototype.slice.call(arguments);
-            if(resolveQ.length){
-                resolveArray = resolveQ.shift();
-                if(KUBE.Is(resolveArray[1]) === 'function'){
-                    fulfillmentArgs.unshift(Resolve,Reject);
-                    try{
-                        resolveArray[1].apply(undefined,fulfillmentArgs);
-                    }
-                    catch(Error){
-                        Reject.apply(this,fulfillmentArgs);
-                    }
+        function deferredObj(onResolve,onReject,resolve,reject){
+            this.onResolve = (KUBE.Is(onResolve) === "function" ? onResolve : null);
+            this.onReject = (KUBE.Is(onReject) === "function" ? onReject : null);
+            this.resolve = (KUBE.Is(resolve) === "function" ? resolve : null);
+            this.reject = (KUBE.Is(reject) === "function" ? reject : null);
+        }
+
+
+        function manage(deferred){
+            if(state === stateEnum.PENDING){
+                resolveQ.push(deferred);
+                return;
+            }
+            (function(){
+                var promiseThenable,newVal;
+                if(state === stateEnum.RESOLVED){
+                    promiseThenable = deferred.onResolve
                 }
                 else{
-                    Reject.apply(this,fulfillmentArgs);
+                    promiseThenable = deferred.onReject
                 }
+
+                if(promiseThenable === null){
+                    if(state === stateEnum.RESOLVED){
+                        deferred.resolve(promiseValue);
+                    }
+                    else{
+                        deferred.reject(promiseValue);
+                    }
+                    return;
+                }
+
+                try{
+                    newVal = promiseThenable(promiseValue);
+                }
+                catch(e){
+                    deferred.reject(e);
+                    return;
+                }
+                deferred.resolve(newVal);
+
+            })()
+
+        }
+
+        function resolve(_value){
+            var then;
+            try{
+                if(_value === this){ throw new TypeError('A promise cannot be resolved with itself.') }
+                if(_value && (KUBE.Is(_value) === "object" || KUBE.Is(_value) === "function")){
+                    then = _value.then;
+                    if(KUBE.Is(then) === 'function'){
+                        executeResolve(then.bind(_value),resolve,reject);
+                        return;
+                    }
+                }
+                state = stateEnum.RESOLVED;
+                promiseValue = _value;
+                loopOverResolveQ();
             }
-            else{
-                state = 'rejected';
+            catch(e){
+                reject(e);
             }
         }
 
-        //Implement these later
-        function All(){
-
+        function reject(_value){
+            state = stateEnum.REJECTED;
+            promiseValue = _value;
+            loopOverResolveQ();
+            resolveQ = [];
         }
 
-        function Race(){
+        function loopOverResolveQ(){
+            resolveQ.KUBE().each(function(deferred){
+                manage(deferred);
+            });
+        }
 
+
+        function executeResolve(executor,onResolve,onReject){
+            var resolvedOrRejected = false;
+            try{
+                executor(function(value){
+                    if(resolvedOrRejected){return;}
+                    resolvedOrRejected = true;
+                    onResolve(value);
+                },
+                function(reason){
+                    if(resolvedOrRejected){return;}
+                    resolvedOrRejected = true;
+                    onReject(reason);
+                })
+            }
+            catch(e){
+                if(resolvedOrRejected){return;}
+                resolvedOrRejected = true;
+                onReject(e);
+            }
         }
     }
+
 
 	/* KUBE Events */
 	function KUBEEvents(obj){
