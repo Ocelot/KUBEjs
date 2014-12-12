@@ -113,7 +113,7 @@ KUBE.Uses(['/Library/DOM/DomJack','/Library/DOM/StyleJack'],function(_DJ,_SJ){
 
         //Let's add 2 HTMLOptionElement nodes
         var Option = Select.AddOption('the visible data','the value');
-        var Option2 = Select.AddOption('Another Option','another option');
+        var Option2 = Select.AddOption('Select me to submit','select me to submit');
 
         //The Option API includes:
         //  -Text
@@ -178,8 +178,8 @@ KUBE.Uses(['/Library/DOM/DomJack','/Library/DOM/StyleJack'],function(_DJ,_SJ){
 
         //So for example
         var Box = _DJ('div');
-        Box.Style().Position('relative').Width(100).Height(35).Background().Color('red').api.LineHeight(35);
-        Box.SetInner('click me');
+        Box.Style().Position('relative').Width(150).Height(35).Background().Color('red').api.LineHeight(35);
+        Box.SetInner('click me to submit');
         Box.On('click',function(){
             //We can get our Form DJ if we want
             var TheForm = Box.GetForm();
@@ -187,7 +187,7 @@ KUBE.Uses(['/Library/DOM/DomJack','/Library/DOM/StyleJack'],function(_DJ,_SJ){
                 console.log('Got my form');
             }
 
-            //And likewise we can submit from any element
+            //Or we can use any element we have access to initiate a submission process
             Box.SubmitForm();
         });
 
