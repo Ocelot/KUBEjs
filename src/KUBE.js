@@ -348,37 +348,40 @@
         state = 0;
         reason = "";
 
-        Object.defineProperty(this,"[[PromiseStatus]]",{
-            "value": stateEnum[state],
-            "writable": false,
-            "enumerable": false,
-            "configurable": false
-        });
-        Object.defineProperty(this,"[[PromiseReason]]",{
-            "value": reason,
-            "writable": false,
-            "enumerable": false,
-            "configurable": false
-        });
-        Object.defineProperty(this,"[[PromiseValue]]",{
-            "value": promiseValue,
-            "writable": false,
-            "enumerable": false,
-            "configurable": false
-        });
-
         if(_callback){
+            //If an executor is passed in, then this object is a Promise.
+            //Else, we don't want to bind promise-like methods, as it's just an intermediatary to access the prototype methods
+
+            Object.defineProperty(this,"[[PromiseStatus]]",{
+                "value": stateEnum[state],
+                "writable": false,
+                "enumerable": false,
+                "configurable": false
+            });
+            Object.defineProperty(this,"[[PromiseReason]]",{
+                "value": reason,
+                "writable": false,
+                "enumerable": false,
+                "configurable": false
+            });
+            Object.defineProperty(this,"[[PromiseValue]]",{
+                "value": promiseValue,
+                "writable": false,
+                "enumerable": false,
+                "configurable": false
+            });
+
             executeResolve(_callback,resolve,reject)
-        }
 
-        this.then = this.Then = function(_resolveCallback,_rejectCallback){
-            return new self.constructor(function(resolve,reject){
-                manage(new deferredObj(_resolveCallback,_rejectCallback,resolve,reject));
-            })
-        }
+            this.then = this.Then = function(_resolveCallback,_rejectCallback){
+                return new self.constructor(function(resolve,reject){
+                    manage(new deferredObj(_resolveCallback,_rejectCallback,resolve,reject));
+                })
+            }
 
-        this.catch = this.Catch = function(onRejected){
-            return this.then(null, onRejected);
+            this.catch = this.Catch = function(onRejected){
+                return this.then(null, onRejected);
+            }
         }
 
         function deferredObj(onResolve,onReject,resolve,reject){

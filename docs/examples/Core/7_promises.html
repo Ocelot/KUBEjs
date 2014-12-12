@@ -15,10 +15,19 @@
          *  API includes: (lowercase is how it is traditionally done, upper case is the KUBE style for public methods)
          *      -then/Then
          *      -catch/Catch
+         *
+         *  The API also includes some other standard promise methods like:
+         *      -resolve
+         *      -reject
+         *      -all
+         *      -race
+         *
+         *  These methods should not be called with an executor function (aka: KUBE.Promise().resolve
+         *
          */
 
         //1
-        var Promise = KUBE.Promise(function(_resolve,_reject){
+        var KPromise = KUBE.Promise(function(_resolve,_reject){
            //Do async stuff. When done, call _resolve to fire the next resolution callback, or _reject to fire the next reject callback
             setTimeout(function(){
                 _resolve('we initially resolve after a half second')
@@ -26,7 +35,7 @@
         });
 
         //2
-        Promise.then(function(_data){
+        KPromise.then(function(_data){
             //Then also returns a Promise Obj
             //To resolve, simply return a value (in this case, as we are creating a new async action, we must create a new promise to return)
             //To reject, throw an error (or reject with an error in the case of returning a new promise);
@@ -41,7 +50,7 @@
         });
 
         //3
-        Promise.catch(function(_Error){
+        KPromise.catch(function(_Error){
             //Catch also returns a Promise Obj
             console.log(_Error.message);
             //We can resolve the error (or throw the error) to continue this chain as well.
@@ -50,7 +59,7 @@
 
         //4
         //Then will accept a resolve/reject callback as first/second arg. In this case, only one of the functions will be called, before the chain moves on
-        Promise.then(
+        KPromise.then(
             function(_data){
                 console.log(_data);
                 //Also if an error is throw inside of the promise chain, it automatically calls the next rejection
@@ -61,7 +70,7 @@
             }
         );
 
-        Promise.catch(function(_Error){
+        KPromise.catch(function(_Error){
             console.log(_Error.message);
             console.log('We will resolve now but put a delay between this and even binding the next then');
             return 'We resolved';
@@ -70,7 +79,7 @@
         //5
         //Even though a chain is resolved, this puts it in a state ready to fire. This means an additional 'then' will automatically get fired and start the chain up again
         setTimeout(function(){
-            Promise.then(function(){
+            KPromise.then(function(){
                 console.log('The chain has been started again');
                 return true;
             });
