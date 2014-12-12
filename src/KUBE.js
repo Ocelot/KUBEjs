@@ -327,45 +327,6 @@
 
 
     KUBEPromise.prototype.toString = function(){ return '[object Promise]' };
-    KUBEPromise.prototype.resolve = function(value){
-        return new KUBEPromise(function(resolve,reject){resolve(value)});
-    };
-    KUBEPromise.prototype.reject = function(value){
-        return new KUBEPromise(function(resolve,reject){reject(value)});
-    };
-
-    KUBEPromise.prototype.resolve = function(value){
-        return new KUBEPromise(function(resolve,reject){resolve(value)});
-    };
-
-    KUBEPromise.prototype.all = function(promises){
-
-        var accumulator = [];
-        var ready = (new KUBEPromise).resolve(null);
-
-        promises.KUBE().each(function(promise){
-            ready = ready.then(function(){
-                return promise;
-            });
-            ready.then(function(value){
-                accumulator.push(value);
-            });
-        });
-        return ready.then(function(){ return accumulator});
-
-    };
-
-    KUBEPromise.prototype.race = function(promises){
-        return new KUBEPromise(function(_res,_rej){
-           promises.KUBE().each(function(promise){
-               promise.then(function(val){
-                   KUBE.Promise().resolve(val).then(_res,_rej);
-               });
-           })
-        });
-    };
-
-
     function KUBEPromise(_callback){
         var stateEnum = {};
         stateEnum.PENDING = 0;
@@ -409,8 +370,6 @@
         if(_callback){
             executeResolve(_callback,resolve,reject)
         }
-
-
 
         this.then = this.Then = function(_resolveCallback,_rejectCallback){
             return new self.constructor(function(resolve,reject){
@@ -522,6 +481,44 @@
             }
         }
     }
+
+    KUBEPromise.prototype.resolve = function(value){
+        return new KUBEPromise(function(resolve,reject){resolve(value)});
+    };
+    KUBEPromise.prototype.reject = function(value){
+        return new KUBEPromise(function(resolve,reject){reject(value)});
+    };
+
+    KUBEPromise.prototype.resolve = function(value){
+        return new KUBEPromise(function(resolve,reject){resolve(value)});
+    };
+
+    KUBEPromise.prototype.all = function(promises){
+
+        var accumulator = [];
+        var ready = (new KUBEPromise).resolve(null);
+
+        promises.KUBE().each(function(promise){
+            ready = ready.then(function(){
+                return promise;
+            });
+            ready.then(function(value){
+                accumulator.push(value);
+            });
+        });
+        return ready.then(function(){ return accumulator});
+
+    };
+
+    KUBEPromise.prototype.race = function(promises){
+        return new KUBEPromise(function(_res,_rej){
+            promises.KUBE().each(function(promise){
+                promise.then(function(val){
+                    KUBE.Promise().resolve(val).then(_res,_rej);
+                });
+            })
+        });
+    };
 
 
 	/* KUBE Events */
