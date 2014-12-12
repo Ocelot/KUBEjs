@@ -325,6 +325,51 @@
 		}
 	}
 
+    KUBEPromise.prototype.resolve = function(value){
+        if(this.hasCallback){
+            throw new Error('Invalid use of resolve on a Promise object with an executor function');
+        }
+        return new KUBEPromise(function(resolve,reject){resolve(value)});
+    };
+    KUBEPromise.prototype.reject = function(value){
+        if(this.hasCallback){
+            throw new Error('Invalid use of reject on a Promise object with an executor function');
+        }
+        return new KUBEPromise(function(resolve,reject){reject(value)});
+    };
+
+    KUBEPromise.prototype.all = function(promises){
+        if(this.hasCallback){
+            throw new Error('Invalid use of all on a Promise object with an executor function');
+        }
+        var accumulator = [];
+        var ready = (new KUBEPromise).resolve(null);
+
+        promises.KUBE().each(function(promise){
+            ready = ready.then(function(){
+                return promise;
+            });
+            ready.then(function(value){
+                accumulator.push(value);
+            });
+        });
+        return ready.then(function(){ return accumulator});
+
+    };
+
+    KUBEPromise.prototype.race = function(promises){
+        if(this.hasCallback){
+            throw new Error('Invalid use of race on a Promise object with an executor function');
+        }
+        return new KUBEPromise(function(_res,_rej){
+            promises.KUBE().each(function(promise){
+                promise.then(function(val){
+                    KUBE.Promise().resolve(val).then(_res,_rej);
+                });
+            })
+        });
+    };
+
 
     KUBEPromise.prototype.toString = function(){ return '[object Promise]' };
     function KUBEPromise(_callback){
@@ -351,6 +396,13 @@
         if(_callback){
             //If an executor is passed in, then this object is a Promise.
             //Else, we don't want to bind promise-like methods, as it's just an intermediatary to access the prototype methods
+
+            Object.defineProperty(this,"hasCallback",{
+                "value": true,
+                "writable": false,
+                "enumerable": false,
+                "configurable": false
+            });
 
             Object.defineProperty(this,"[[PromiseStatus]]",{
                 "value": stateEnum[state],
@@ -486,45 +538,6 @@
             }
         }
     }
-
-    KUBEPromise.prototype.resolve = function(value){
-        return new KUBEPromise(function(resolve,reject){resolve(value)});
-    };
-    KUBEPromise.prototype.reject = function(value){
-        return new KUBEPromise(function(resolve,reject){reject(value)});
-    };
-
-    KUBEPromise.prototype.resolve = function(value){
-        return new KUBEPromise(function(resolve,reject){resolve(value)});
-    };
-
-    KUBEPromise.prototype.all = function(promises){
-
-        var accumulator = [];
-        var ready = (new KUBEPromise).resolve(null);
-
-        promises.KUBE().each(function(promise){
-            ready = ready.then(function(){
-                return promise;
-            });
-            ready.then(function(value){
-                accumulator.push(value);
-            });
-        });
-        return ready.then(function(){ return accumulator});
-
-    };
-
-    KUBEPromise.prototype.race = function(promises){
-        return new KUBEPromise(function(_res,_rej){
-            promises.KUBE().each(function(promise){
-                promise.then(function(val){
-                    KUBE.Promise().resolve(val).then(_res,_rej);
-                });
-            })
-        });
-    };
-
 
 	/* KUBE Events */
 	function KUBEEvents(obj){
