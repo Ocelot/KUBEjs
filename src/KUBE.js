@@ -495,9 +495,11 @@
         }
 
         function loopOverResolveQ(){
-            resolveQ.KUBE().each(function(deferred){
-                manage(deferred);
-            });
+            //I'm not using KUBE.each in this context because ArrayExtend isn't loaded.
+            var rQ = resolveQ; //Done to attempt to proactively prevent a potential async problem with undefined indexes
+            for(var i = 0; i < rQ.length; i++){
+                manage(rQ[i]);
+            }
         }
 
 

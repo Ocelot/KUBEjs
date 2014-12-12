@@ -16,6 +16,7 @@
 		ExtendAPI = KUBE.Extend();
 		ExtendAPI.Load('array','joinCallback',JoinCallback);
 		ExtendAPI.Load('array','each',Each);
+        ExtendAPI.Load('array','reverseEach',ReverseEach);
 		ExtendAPI.Load('array','copy',Copy);
 		ExtendAPI.Load('array','sum',Sum);
 		ExtendAPI.Load('array','randIndexValue',RandomIndexValue);
@@ -79,6 +80,37 @@
 			eachBreak = true;
 		}
 	}
+
+    function ReverseEach(_f,_useOriginal,_preserveIndex){
+        var eVal,eachBreak,i,$return; //= (_useOriginal ? [] : this);
+        $return = (!_useOriginal ? [] : this);
+
+        if(this.length && KUBE.Is(_f) === 'function'){
+            eachBreak = false;
+            for(i = this.length - 1; i>=0; --i){
+                eVal = _f.call({'break':_break},this[i],i,this);
+                if(!_useOriginal){
+                    if(_preserveIndex){
+                        $return[i] = eVal;
+                    }
+                    else if(eVal !== undefined){
+                        $return.push(eVal);
+                    }
+                }
+                else{
+                    $return[i] = (eVal !== undefined ? eVal : this[i]);
+                }
+                if(eachBreak){
+                    break;
+                }
+            }
+        }
+        return $return;
+
+        function _break(){
+            eachBreak = true;
+        }
+    }
 	
 	function Sum(){
 		var i,$return = 0;

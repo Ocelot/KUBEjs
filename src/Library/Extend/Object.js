@@ -21,6 +21,7 @@
 		ExtendAPI.Load('object','compare',Compare);
 		ExtendAPI.Load('object','create',Create);
 		ExtendAPI.Load('object','each',Each);
+        ExtendAPI.Load('object','reverseEach',ReverseEach);
 		ExtendAPI.Load('object','duckType',DuckType);
 		ExtendAPI.Load('object','isEmpty',IsEmpty);
         ExtendAPI.Load('object','toJSON',toJSON);
@@ -75,7 +76,40 @@
 		}
 	}
 
-	function Merge(){
+    function ReverseEach(_f,_useOriginal){
+        var prop, i,$return,eachBreak,eachDelete;
+        $return = (!_useOriginal ? {} : this);
+        var keys = Object.keys(this);
+        keys.reverse();
+        if(KUBE.Is(_f) === 'function'){
+            for(i = 0; i < keys.length; i++){
+                prop = keys[i];
+                eachDelete = false;
+                if(this.hasOwnProperty(prop)){
+                    $return[prop] = _f.call({'break':_break,'delete':_delete},prop,this[prop]);
+                    if(eachDelete){
+                        delete $return[prop];
+                    }
+                    if(eachBreak){
+                        break;
+                    }
+                }
+            }
+        }
+        return $return;
+
+        function _break(){
+            eachBreak = true;
+        }
+
+        function _delete(){
+            eachDelete = true;
+        }
+    }
+
+
+
+    function Merge(){
 		var i,$target;
 		$target = (KUBE.Is(arguments[arguments.length-1]) === 'boolean' ? {} : this);
 	
