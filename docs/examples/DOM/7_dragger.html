@@ -1,10 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+<head>
+    <title>KUBEjs Dragger: Drag & Drop</title>
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <!-- WinDocJack: Basic Usage -->
+    <script type="text/javascript">
+
+        //Let's use WinDocJack && DomJack && StyleJack
+        var uses = {
+            'Dragger':'/Library/DOM/Dragger',
+            'DJ':'/Library/DOM/DomJack'
+        };
+
+        //Load our dependencies
+        KUBE.Uses(uses,winJackExample);
+
+        function winJackExample($K){
+            /*
+             * The Window and Document objects are the highest level of DOM abstraction in the browser, which WinDocJack provides an abstraction to.
+             * Instead of combining them with DomJack, we provided a shortcut through DomJack to return WDJack, which is when DomJack is called without any arguments
+             *  ie. var WinDocJack = DomJack();
+             *
+             * Of course we can also call it directly, which we will do here to show the WDJack specific API
+             */
+
+            //Call it from our KUBE Classes Object
+            var WinDocJack = $K.WJ();
+            
+        }
+
+    </script>
 </head>
 <body>
-
+Example outputs to console.
 </body>
 </html>
