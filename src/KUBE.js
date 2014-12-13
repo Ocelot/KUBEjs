@@ -325,6 +325,51 @@
 		}
 	}
 
+    KUBEPromise.prototype.resolve = function(value){
+        if(this.hasCallback){
+            throw new Error('Invalid use of resolve on a Promise object with an executor function');
+        }
+        return new KUBEPromise(function(resolve,reject){resolve(value)});
+    };
+    KUBEPromise.prototype.reject = function(value){
+        if(this.hasCallback){
+            throw new Error('Invalid use of reject on a Promise object with an executor function');
+        }
+        return new KUBEPromise(function(resolve,reject){reject(value)});
+    };
+
+    KUBEPromise.prototype.all = function(promises){
+        if(this.hasCallback){
+            throw new Error('Invalid use of all on a Promise object with an executor function');
+        }
+        var accumulator = [];
+        var ready = (new KUBEPromise).resolve(null);
+
+        promises.KUBE().each(function(promise){
+            ready = ready.then(function(){
+                return promise;
+            });
+            ready.then(function(value){
+                accumulator.push(value);
+            });
+        });
+        return ready.then(function(){ return accumulator});
+
+    };
+
+    KUBEPromise.prototype.race = function(promises){
+        if(this.hasCallback){
+            throw new Error('Invalid use of race on a Promise object with an executor function');
+        }
+        return new KUBEPromise(function(_res,_rej){
+            promises.KUBE().each(function(promise){
+                promise.then(function(val){
+                    KUBE.Promise().resolve(val).then(_res,_rej);
+                });
+            })
+        });
+    };
+
 
     KUBEPromise.prototype.toString = function(){ return '[object Promise]' };
     function KUBEPromise(_callback){
@@ -348,37 +393,47 @@
         state = 0;
         reason = "";
 
-        Object.defineProperty(this,"[[PromiseStatus]]",{
-            "value": stateEnum[state],
-            "writable": false,
-            "enumerable": false,
-            "configurable": false
-        });
-        Object.defineProperty(this,"[[PromiseReason]]",{
-            "value": reason,
-            "writable": false,
-            "enumerable": false,
-            "configurable": false
-        });
-        Object.defineProperty(this,"[[PromiseValue]]",{
-            "value": promiseValue,
-            "writable": false,
-            "enumerable": false,
-            "configurable": false
-        });
-
         if(_callback){
+            //If an executor is passed in, then this object is a Promise.
+            //Else, we don't want to bind promise-like methods, as it's just an intermediatary to access the prototype methods
+
+            Object.defineProperty(this,"hasCallback",{
+                "value": true,
+                "writable": false,
+                "enumerable": false,
+                "configurable": false
+            });
+
+            Object.defineProperty(this,"[[PromiseStatus]]",{
+                "value": stateEnum[state],
+                "writable": false,
+                "enumerable": false,
+                "configurable": false
+            });
+            Object.defineProperty(this,"[[PromiseReason]]",{
+                "value": reason,
+                "writable": false,
+                "enumerable": false,
+                "configurable": false
+            });
+            Object.defineProperty(this,"[[PromiseValue]]",{
+                "value": promiseValue,
+                "writable": false,
+                "enumerable": false,
+                "configurable": false
+            });
+
             executeResolve(_callback,resolve,reject)
-        }
 
-        this.then = this.Then = function(_resolveCallback,_rejectCallback){
-            return new self.constructor(function(resolve,reject){
-                manage(new deferredObj(_resolveCallback,_rejectCallback,resolve,reject));
-            })
-        }
+            this.then = this.Then = function(_resolveCallback,_rejectCallback){
+                return new self.constructor(function(resolve,reject){
+                    manage(new deferredObj(_resolveCallback,_rejectCallback,resolve,reject));
+                })
+            }
 
-        this.catch = this.Catch = function(onRejected){
-            return this.then(null, onRejected);
+            this.catch = this.Catch = function(onRejected){
+                return this.then(null, onRejected);
+            }
         }
 
         function deferredObj(onResolve,onReject,resolve,reject){
@@ -454,9 +509,11 @@
         }
 
         function loopOverResolveQ(){
-            resolveQ.KUBE().each(function(deferred){
-                manage(deferred);
-            });
+            //I'm not using KUBE.each in this context because ArrayExtend isn't loaded.
+            var rQ = resolveQ; //Done to attempt to proactively prevent a potential async problem with undefined indexes
+            for(var i = 0; i < rQ.length; i++){
+                manage(rQ[i]);
+            }
         }
 
 
@@ -481,45 +538,6 @@
             }
         }
     }
-
-    KUBEPromise.prototype.resolve = function(value){
-        return new KUBEPromise(function(resolve,reject){resolve(value)});
-    };
-    KUBEPromise.prototype.reject = function(value){
-        return new KUBEPromise(function(resolve,reject){reject(value)});
-    };
-
-    KUBEPromise.prototype.resolve = function(value){
-        return new KUBEPromise(function(resolve,reject){resolve(value)});
-    };
-
-    KUBEPromise.prototype.all = function(promises){
-
-        var accumulator = [];
-        var ready = (new KUBEPromise).resolve(null);
-
-        promises.KUBE().each(function(promise){
-            ready = ready.then(function(){
-                return promise;
-            });
-            ready.then(function(value){
-                accumulator.push(value);
-            });
-        });
-        return ready.then(function(){ return accumulator});
-
-    };
-
-    KUBEPromise.prototype.race = function(promises){
-        return new KUBEPromise(function(_res,_rej){
-            promises.KUBE().each(function(promise){
-                promise.then(function(val){
-                    KUBE.Promise().resolve(val).then(_res,_rej);
-                });
-            })
-        });
-    };
-
 
 	/* KUBE Events */
 	function KUBEEvents(obj){
