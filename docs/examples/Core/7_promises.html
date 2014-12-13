@@ -22,7 +22,8 @@
          *      -all
          *      -race
          *
-         *  These methods should not be called with an executor function (aka: KUBE.Promise().resolve.
+         *  These methods can not be called with an executor function (aka: KUBE.Promise(function(res,rej){res(3)}).resolve(12)
+         *  If this is attempted, an error will be thrown.
          *
          */
 

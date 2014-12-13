@@ -13,7 +13,6 @@ server.on('request',function(request,response){
     response.setHeader("Access-Control-Allow-Headers", request.headers['access-control-request-headers']);
     response.setHeader('Access-Control-Allow-Origin','*');
     response.setHeader('Access-Control-Allow-Methods',request.headers['access-control-request-method']);
-    response.write(createOutput(d));
     request.on('data',function(chunk){
         d += chunk.toString();
     });

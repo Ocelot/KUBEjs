@@ -2,9 +2,85 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>KUBEjs Select</title>
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <!-- DomJack: Select -->
+    <script type="text/javascript">
+        //Use DomJack
+        KUBE.Uses(['/Library/DOM/Select','/Library/Drawing/Color','/Library/DOM/StyleJack'],function(_$,Color,_SJ){
+            /* KUBE.Select uses Sizzle internally. Sizzle is an implementation of querySelector.
+            
+            KUBE.Select takes in a CSS selector as a string and returns an array of DomJacks containing each found node.
+
+            The returned array contains several methods, these are:
+                - Each
+                - AddClass
+                - RemoveClass
+
+            Each() loops through the set of DomJacks and allows you to apply a function to each DomJack
+            It functions similarly to [].KUBE().each() with a few key differences
+                - The argument passed is simply the index of the current element in the set
+                - The "this" object applied to the callback function represents the current DomJack
+                - returning false from the callback function will "break" the loop.
+
+            AddClass and RemoveClass are simple convenience methods that will call AddClass or RemoveClass
+            on each DomJack in the set.
+
+            */
+            //DomJack always returns an Array. You'll need to use array de-referencing inline if you expect/care about the first one.
+            //This can be dangerous as if no matches are found, you'll get "undefined is not a function" as an error.
+
+            //We've searched the DOM for elements matching button and chosen the first one we found.
+            _$('.button')[0].On('click',function(){
+                _$('.example2').Each(function(){
+                    this.Style().Background().Color(getRandomColors(1)[0]);
+                })
+                _$('#example').Each(function(){
+                    var fn = (Math.random() < 0.5 ? "toUpperCase" : "toLowerCase");
+                    this.SetInner(this.GetInner()[fn]());
+                })
+            })
+
+            //this is showing how ToggleClass can be used. AddClass/RemoveClass work similarly as well.
+
+            _$('.classButton')[0].On('click',function(){
+                _$('.example2').ToggleClass('testclass');
+            })
+
+
+            /* UTIl AND SETUP FOR DEMO */
+
+            _SJ('.example2').Padding([10]);
+
+            _SJ('.testclass').Font().Family(['Chalkboard','Comic Sans MS']);
+
+            function getRandomColors(_num){
+                _num = (KUBE.Is(_num) === 'number' ? _num : 5);
+                var newColor,returnColors = [];
+                while(returnColors.length != _num){
+                    newColor = Color().GetRandomWebColor();
+                    if(returnColors.indexOf(newColor) === -1){
+                        returnColors.push(newColor);
+                    }
+                }
+                return returnColors;
+            }
+        });
+    </script>
 </head>
 <body>
+<button class="button">Click here!</button>
+<button class="classButton">Toggle Class!</button>
+<div id="example">This is an example div</div>
+
+<div class="example2">This is a bunch of example divs with the same class</div>
+<div class="example2">This is a bunch of example divs with the same class</div>
+<div class="example2">This is a bunch of example divs with the same class</div>
+<div class="example2">This is a bunch of example divs with the same class</div>
+<div class="example2">This is a bunch of example divs with the same class</div>
+
 
 </body>
 </html>

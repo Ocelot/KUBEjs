@@ -1912,6 +1912,7 @@
 		DJs.Each = Each;
         DJs.AddClass = AddClass;
         DJs.RemoveClass = RemoveClass;
+        DJs.ToggleClass = ToggleClass;
 		return DJs;
 		
 		function DJSizzle(_array){
@@ -1935,6 +1936,12 @@
 				}
 			}
 		}
+
+        function ToggleClass($class){
+            Each(function(v,k){
+                this.ToggleClass($class);
+            })
+        }
 
         function AddClass($class){
             Each(function(v,k){
