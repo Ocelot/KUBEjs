@@ -529,12 +529,14 @@
                     if(resolvedOrRejected){return;}
                     resolvedOrRejected = true;
                     onReject(reason);
+                    KUBE.console.error("Promise has been rejected", reason);
                 })
             }
             catch(e){
                 if(resolvedOrRejected){return;}
                 resolvedOrRejected = true;
                 onReject(e);
+                KUBE.console.error("Promise has been rejected", e);
             }
         }
     }
