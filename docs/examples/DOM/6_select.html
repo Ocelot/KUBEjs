@@ -34,23 +34,30 @@
 
             //We've searched the DOM for elements matching button and chosen the first one we found.
             _$('.button')[0].On('click',function(){
+                //On click of our button, we want to find all elements that match the selector.
+                //Each is generally safe as if there's 0 matches, we won't have the risk of "undefined is not a function"
+                //That said, each is not always the best choice for some
                 _$('.example2').Each(function(){
+                    //Then we want to apply a function to each DomJack found from our selector.
+                    //This one is randomizing a background color.
                     this.Style().Background().Color(getRandomColors(1)[0]);
                 })
+
+                //Just another selector inside of our on click, just doing something fun with the text.
                 _$('#example').Each(function(){
+
                     var fn = (Math.random() < 0.5 ? "toUpperCase" : "toLowerCase");
                     this.SetInner(this.GetInner()[fn]());
                 })
             })
 
             //this is showing how ToggleClass can be used. AddClass/RemoveClass work similarly as well.
-
             _$('.classButton')[0].On('click',function(){
                 _$('.example2').ToggleClass('testclass');
             })
 
 
-            /* UTIl AND SETUP FOR DEMO */
+            /* UTIl AND SETUP FOR EXAMPLE */
 
             _SJ('.example2').Padding([10]);
 
