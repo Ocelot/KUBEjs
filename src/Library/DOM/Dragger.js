@@ -1,6 +1,3 @@
-/**
- * Created by anyuzer on 2014-06-16.
- */
 /*
  * This file is part of the KUBEjs package
  *
@@ -26,7 +23,6 @@
             'AddHandle':AddHandle,
             'RemoveHandle':RemoveHandle,
             'ClearHandles':ClearHandles,
-            'SetDrop':SetDrop,
             'SetDragOver':SetDragOver,
             'SetDragStart':SetDragStart,
             'SetDragEnd':SetDragEnd,
@@ -35,12 +31,6 @@
         return $API;
 
         //API Methods
-        function SetDrop(_f){
-            if(KUBE.Is(_f) === 'function'){
-                drop = _f;
-            }
-        }
-
         function SetDragOver(_f){
             if(KUBE.Is(_f) === 'function'){
                 dragOver = _f;
@@ -160,13 +150,6 @@
                 dragEnd(LastHandle);
             }
             deactivateTargets();
-        }
-
-        function dropWrapper(_DJ){
-            if(drop){
-                dragEndWrapper();
-                drop(LastHandle,_DJ,getDropData(LastHandle),getTargetData(_DJ));
-            }
         }
 
         function dragOverWrapper(_DJ){
