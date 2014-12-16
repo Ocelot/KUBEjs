@@ -9,7 +9,7 @@
 (function(KUBE){
 	"use strict";
 	var UIAutoLoader = KUBE.Class('Loader')();
-	KUBE.LoadSingleton('/Library/UI/UI',UI,['/Library/DOM/Ajax','/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Drawing/Spinner','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date']);
+	KUBE.LoadSingleton('/Library/UI/UI',UI,['/Library/Ajax/Client','/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Drawing/Spinner','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date']);
 
 	UI.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function UI(){
