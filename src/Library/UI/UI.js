@@ -8,15 +8,16 @@
  */
 (function(KUBE){
 	"use strict";
-	var UIAutoLoader = KUBE.Class('Loader')();
-	KUBE.LoadSingleton('/Library/UI/UI',UI,['/Library/Ajax/Client','/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Drawing/Spinner','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date']);
+	KUBE.LoadFactory('/Library/UI/UI',UI,['/Library/Ajax/Client','/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Drawing/Spinner','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date']);
 
 	UI.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
-	function UI(){
-		var loadedViews,instances,$uiAPI;
-		
+	function UI(_DomJack){
+        if(KUBE.Is(_DomJack,true) !== 'DomJack'){
+            throw new Error('Failed to initialize User Interface, constructor must be a valid DomJack object');
+        }
+        var loadedViews,$uiAPI,UIAutoLoader,Root;
+        UIAutoLoader = KUBE.Class('Loader')();
 		loadedViews = {};
-		instances = {};
 		$uiAPI = {
 			'Load':Load,
             'AutoLoad':AutoLoad,
@@ -27,8 +28,13 @@
 		
 		KUBE.Events($uiAPI);
 		UIAutoLoader.SetEmitter($uiAPI);
-		
 		Load('Root',RootView);
+        Root = initView(undefined,'Root','Root','Root',{'View':_DomJack,'UILoader':UIAutoLoader});
+        Root.Once('delete',function(){
+            throw new Error('The Root Node of the UI was deleted. This is an irrecoverable UI state.');
+            Root = undefined;
+        });
+        $uiAPI.Root = Root;
 		return $uiAPI;
 		
 		//View Loading
@@ -58,8 +64,8 @@
 		}
 		
 		//View Creation
-		function CreateRoot(_name,_createId,_data){
-			if(!instances[_name]){
+		function CreateRoot(_createId,_data){
+			if(!Root){
 				instances[_name] = initView(undefined,'Root','Root',_createId,_data);
 				instances[_name].Once('delete',function(){
 					delete instances[_name];
@@ -448,7 +454,9 @@
 	
 	//This is the RootView
 	function RootView(CoreView,id,data){
-		var View,SJ,DJ,Spin,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [],resizePause, blackout, spinner;
+		var View,UILoader,SJ,DJ,Spin,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [],resizePause, blackout, spinner;
+        View = data.View;
+        UILoader = data.UILoader;
 
         deleteQ = [];
 		SJ = KUBE.Class('/Library/DOM/StyleJack');
@@ -684,15 +692,14 @@
 
         function processIndexes(indexObj){
             if(indexObj.namespace && indexObj.indexURL){
-                KUBE.Class('/Library/UI/UI')().AutoLoad().LoadAutoIndex(indexObj.namespace,indexObj.indexURL);
+                UILoader.LoadAutoIndex(indexObj.namespace,indexObj.indexURL);
             }
-
         }
 
 		//This allows for autoloading of UI components
 		function autoLoad(_autoLoadInstructions){
 			if(KUBE.Is(_autoLoadInstructions) === 'object'){
-                KUBE.Class('/Library/UI/UI')().AutoLoad().LoadAutoIndex(_autoLoadInstructions.namespace,_autoLoadInstructions.indexURL);
+                UILoader.LoadAutoIndex(_autoLoadInstructions.namespace,_autoLoadInstructions.indexURL);
 			}
 		}
 
@@ -704,24 +711,14 @@
 		
 		//For the view
 		function create(){
-			if(!View){
-				initRootView();
-				initRootStyle();
-				CoreView.EmitState('drawFinish');
-			}
+            //Possibly wait for Ready to occur?
+            DJ().Ready(function(){
+                assignDimensions();
+                initRootStyle();
+                CoreView.EmitState('drawFinish');
+            });
 		}
-		
-		function initRootView(){
-			if(KUBE.Is(id) === 'string'){
-				View = DJ('#'+id);
-			}
-			else{
-				View = DJ(document.body);
-				id = 'body';
-			}
-			assignDimensions();
-		}
-		
+
 		function initRootStyle(){
             var rootId = (id == 'body') ? 'body' : '#' + id;
 			SJ('*').Margin(0).Padding(0);//.Box().Sizing('border-box');
