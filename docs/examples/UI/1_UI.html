@@ -26,10 +26,12 @@
         });
 
         function uiExample($K){
-            var DJ = $K.DJ;
-            var SJ = $K.SJ;
-            var Client = $K.Client();
-            var AmazingApp = $K.UI(DJ(document.body));
+            $K.UI($K.DJ(document.body));
+
+//            var DJ = $K.DJ;
+//            var SJ = $K.SJ;
+//            var Client = $K.Client();
+//            var AmazingApp = $K.UI(DJ(document.body));
 
             /*
              * UI Has the following base API:
@@ -41,8 +43,8 @@
              */
 
             //UI uses KUBE.Class('Loader') to get a raw AutoLoad Object (as used by the KUBE Library itself) and then
-            console.dir(AmazingApp);
-            debugger;
+//            console.dir(AmazingApp);
+//            debugger;
 
         }
 
