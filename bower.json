@@ -1,6 +1,6 @@
 {
     "name" : "KUBEjs",
-    "description": "Javascript library for DOM manipulation, along with other tools and utilities. REWRITE THIS TEXT",
+    "description": "Javascript library for DOM manipulation, along with other tools and utilities.",
     "licence": "BSD-3-Clause",
     "authors": [
         {"name": "Red Scotch Software", "email": "kube+js@redscotch.com","homepage": "http://www.redscotch.com"}
