@@ -1,10 +1,55 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+<head>
+    <title>KUBEjs UI: Basic Overview</title>
+    <!-- Include KUBE.js -->
+    <script src="../../../src/KUBE.js"></script>
+
+    <!-- UI: Basic Overview -->
+    <script type="text/javascript">
+
+        //Load in a few libraries including dragger
+        var uses = {
+            'UI':'/Library/UI/UI',
+            'DJ':'/Library/DOM/DomJack',
+            'SJ':'/Library/DOM/StyleJack',
+            'Client':'/Library/Ajax/Client',
+            'XA':'/Library/Extend/Array',
+            'XM':'/Library/Extend/Math'
+        };
+
+        //Load our dependencies, get the DOM ready
+        KUBE.Uses(uses,function($K){
+            $K.DJ().Ready(function(){
+                uiExample($K);
+            });
+        });
+
+        function uiExample($K){
+            $K.UI($K.DJ(document.body));
+
+//            var DJ = $K.DJ;
+//            var SJ = $K.SJ;
+//            var Client = $K.Client();
+//            var AmazingApp = $K.UI(DJ(document.body));
+
+            /*
+             * UI Has the following base API:
+             *  -Load
+             *  -AutoLoad
+             *  -Uses
+             *  -CreateRoot
+             *  -Create
+             */
+
+            //UI uses KUBE.Class('Loader') to get a raw AutoLoad Object (as used by the KUBE Library itself) and then
+//            console.dir(AmazingApp);
+//            debugger;
+
+        }
+
+    </script>
 </head>
 <body>
-<!-- TODO: This example -->
 </body>
 </html>

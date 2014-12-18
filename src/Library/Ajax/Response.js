@@ -12,7 +12,7 @@
 
     /* Currently this is an ugly piece of code and required refactoring and cleanup */
     Response.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
-    function Response() {
+    function Response(_OriginRequest) {
         var $API,data,headers,responseType,statusCode,statusText;
         headers = {};
         data = '';
@@ -23,6 +23,7 @@
             "GetResponseType":GetResponseType,
             "GetStatusCode":GetStatusCode,
             "GetStatusText":GetStatusText,
+            "GetOriginRequest":GetOriginRequest,
             "SetData":SetData,
             "SetResponseType":SetResponseType,
             "SetHeaders":SetHeaders,
@@ -55,6 +56,10 @@
 
         function GetStatusText(){
             return statusText;
+        }
+
+        function GetOriginRequest(){
+            return _OriginRequest;
         }
 
         //Set

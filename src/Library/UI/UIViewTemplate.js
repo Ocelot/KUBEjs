@@ -8,8 +8,8 @@
  */
 (function(KUBE){
 	"use strict";
-	KUBE.Uses(['/Library/UI/UI','/Library/DOM/DomJack','/Library/Extend/Object']).then(function(_UI){
-		_UI().Load('NewView',NewView);
+	KUBE.Uses(['/Library/UI/Loader','/Library/DOM/DomJack','/Library/Extend/Object']).then(function(_Loader){
+		_Loader().Load('NewView',NewView);
 	});
 	
 	function NewView(CoreView,id,data,numChildren){
