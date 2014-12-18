@@ -16,7 +16,8 @@
         'ThemeManager',
         'UI',
         'QuickFlow',
-        'Loader'
+        'Loader',
+        'Instructions'
     ]);
 
     KUBE.AutoLoad().AddIndex(UIIndex);

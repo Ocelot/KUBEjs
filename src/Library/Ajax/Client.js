@@ -108,7 +108,7 @@
                     clearTimeout(timeoutId);
 
                     //Parse it into a proper Response Object here...
-                    var Response = KUBE.Class('/Library/Ajax/Response')();
+                    var Response = KUBE.Class('/Library/Ajax/Response')(_Request);
                     Response.SetStatusCode(_XHR.status);
                     Response.SetStatusText(_XHR.statusText);
                     Response.SetResponseType(_XHR.responseType);

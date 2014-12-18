@@ -15,13 +15,16 @@
         if(KUBE.Is(_DomJack,true) !== 'DomJack'){
             throw new Error('Failed to initialize User Interface, constructor must be a valid DomJack object');
         }
-        var Root,Client,RequestTemplate,$API,UILoader;
+        var Root,Client,RequestTemplate,$API,UILoader,requestManager,responseHandler;
         UILoader = KUBE.Class('/Library/UI/Loader')();
 
         //Our API
         $API = {
             'SetClient':SetClient,
-            'SendRequest':SendRequest
+            'SendRequest':SendRequest,
+            'SetRequestManager':SetRequestManager,
+            'SetResponseHandler':SetResponseHandler,
+            'Send':Send
         }.KUBE().create(UI.prototype);
 
         Root = UILoader.Create(undefined,'Root','Root','Root',{
@@ -38,32 +41,54 @@
         return $API;
 
         //Instruction processing
-        function SetClient(){
-
+        function SetClient(_Client){
+            if(KUBE.Is(_Client,true) === 'Client'){
+                Client = _Client;
+            }
+            else{
+                throw new Error('UI Client object must be a valid /Library/Ajax/Client object.');
+            }
         }
 
-        function SendRequest(){
-
+        function SendRequest(_Request){
+            if(KUBE.Is(_Request,true) === 'Request' && Client){
+                Client.SendRequest(_Request).then(handleClientResponse).catch(handleClientError);
+            }
         }
 
-        function Send(_actionObj,_f){
-            //This has the ability to communicate directly with the View that is sending the request, otherwise instructions are processed accordingly
-            //SendHandler.Send(_actionObj,true);
-            //if(KUBE.Is(_f) === 'function'){
-            //    responseCall = _f;
-            //}
+        function SetRequestManager(_managerCallback){
+            if(KUBE.Is(_managerCallback) === 'function'){
+                requestManager = _managerCallback;
+            }
         }
 
-        function SetSendHandler(_Send){
-            //if(KUBE.Is(_Send,true) === 'Ajax'){
-            //    SendHandler = _Send;
-            //    SendHandler.On('response',handleInstructions);
-            //    SendHandler.On('error',handleAjaxError);
-            //}
-            //else{
-            //    throw new Error('Set send handler failed. Not an KUBE Ajax Object?');
-            //}
-            //return CoreView;
+        function SetResponseHandler(_handlerCallback){
+            if(KUBE.Is(_handlerCallback) === 'function'){
+                responseHandler = _handlerCallback;
+            }
+        }
+
+        function Send(_data){
+            if(KUBE.Is(requestManager) === 'function'){
+                SendRequest(requestManager(_data));
+            }
+        }
+
+        //
+        function handleClientResponse(_Response){
+            if(KUBE.Is(responseHandler) === 'function'){
+                var Instructions = responseHandler(_Response);
+                if(KUBE.Is(Instructions) === 'Instructions'){
+                    handleInstructions(Instructions);
+                }
+            }
+            else{
+                throw new Error('UI requires a Response Handler to translate Client Responses to Instructions. No response handler set');
+            }
+        }
+
+        function handleClientError(_Error){
+            throw _Error;
         }
 
         function handleInstructions(_response){

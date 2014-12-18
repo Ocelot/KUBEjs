@@ -8,7 +8,7 @@
  */
 (function(KUBE){
     "use strict";
-    KUBE.LoadSingleton('/Library/UI/Loader',Loader,['/Library/UI/UI','/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Drawing/Spinner','/Library/Extend/Object']);
+    KUBE.LoadSingleton('/Library/UI/Loader',Loader,['/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Drawing/Spinner','/Library/Extend/Object']);
 
     Loader.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
     function Loader(){
