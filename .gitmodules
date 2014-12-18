@@ -1,0 +1,3 @@
+[submodule "KUBEjsSrc"]
+	path = KUBEjsSrc
+	url = https://github.com/RedScotch/KUBEjs.git
