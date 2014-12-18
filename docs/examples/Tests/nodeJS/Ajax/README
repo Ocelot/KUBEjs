@@ -1,6 +1,0 @@
-The files contained in this folder are for use in testing our AJAX library. Some examples may rely on these running.
-
-They are just simple nodeJS scripts. They don't require any external dependancies other than nodeJS.
-
-To run, simply go "node <filename>" and it'll run. The port numbers are coded into the examples, but if there are collisions,
-use --port=<port> as a argument, and modify the example appropriately.
