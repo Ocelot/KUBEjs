@@ -535,7 +535,8 @@
 
         function Send(_actionObj,_f){
             //This has the ability to communicate directly with the View that is sending the request, otherwise instructions are processed accordingly
-            UI.SendRequest(_actionObj,_f);
+            debugger;
+            UI.Send(_actionObj);
         }
 
         function Width(){

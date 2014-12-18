@@ -78,8 +78,8 @@
         function handleClientResponse(_Response){
             if(KUBE.Is(responseHandler) === 'function'){
                 var Instructions = responseHandler(_Response);
-                if(KUBE.Is(Instructions) === 'Instructions'){
-                    handleInstructions(Instructions);
+                if(KUBE.Is(Instructions,true) === 'Instructions'){
+                    handleInstructions(Instructions.Get());
                 }
             }
             else{
@@ -94,21 +94,17 @@
         function handleInstructions(_response){
             var rCall;
             if(KUBE.Is(_response) === 'object'){
-                if(responseCall){
-                    rCall = responseCall;
-                    responseCall = undefined;
-                    try{
-                        rCall(_response.response);
-                    }
-                    catch(E){
-                        //Response call resulted in javascript error. PROGRAM MOAR BETTAR!?
-                        throw E;
-                    }
-                }
-
-                if(_response.autoLoad){
-                    processAutoLoad(_response.autoLoad);
-                }
+                //if(responseCall){
+                //    rCall = responseCall;
+                //    responseCall = undefined;
+                //    try{
+                //        rCall(_response.response);
+                //    }
+                //    catch(E){
+                //        //Response call resulted in javascript error. PROGRAM MOAR BETTAR!?
+                //        throw E;
+                //    }
+                //}
 
                 if(_response.indexes && _response.indexes.length > 0){
                     _response.indexes.KUBE().each(processIndexes);
