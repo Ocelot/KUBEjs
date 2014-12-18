@@ -753,7 +753,7 @@ StyleJack Box Shadow API
 
 .. js:class:: StyleJackBoxShadowAPI
 
-.. js:function:: StyleJackBoxShadowAPI.Get([_value])
+.. js:function:: StyleJackBoxShadowAPI.Get()
 
      The object that's returned has both numerical and string keys. ::
 
@@ -839,43 +839,345 @@ StyleJack Box Shadow API
 
     :returns: :js:class:`StyleJackBoxShadowAPI`
 
-.. js:function:: StyleJackBoxShadowAPI.Horizontal([_value])
+.. js:attribute:: StyleJackBoxShadowAPI.api
 
-    :param String _value:
-        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
-        "$" as a value returns the raw value of the property
-
-    :returns: :js:class:`StyleJackBoxShadowAPI`
+    :returns: :js:class:`StyleJackAPI`
 
 StyleJack Font API
 ^^^^^^^^^^^^^^^^^^
 
 .. js:class:: StyleJackFontAPI
 
+.. js:function:: StyleJackFontAPI.Get([asArray])
+
+    If passed a truthy value, it will return an array with the order of Style, Variant, Weight, Size, Family.
+    else, it'll simply return the string that the font property represents.
+
+    :returns: `Array`/`String`
+
+.. js:function:: StyleJackFontAPI.Set([_value])
+
+    Any value attempts to set the passed value to the property.
+
+    .. note:: _value can be a string, which will attempt to set the font property directly.
+
+            It may also be a 5 element array in the order of Style, Variant, Weight, Size and Family, which will automatically set the various font properties.
+
+    :returns: :js:class:`StyleJackFontAPI`
+
+.. js:function:: StyleJackFontAPI.Family([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackFontAPI`
+
+.. js:function:: StyleJackFontAPI.Size([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackFontAPI`
+
+.. js:function:: StyleJackFontAPI.Style([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackFontAPI`
+
+.. js:function:: StyleJackFontAPI.Variant([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackFontAPI`
+
+.. js:function:: StyleJackFontAPI.Weight([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackFontAPI`
+
+.. js:attribute:: StyleJackFontAPI.api
+
+    :returns: :js:class:`StyleJackAPI`
+
 StyleJack Margin API
 ^^^^^^^^^^^^^^^^^^^^
 
 .. js:class:: StyleJackMarginAPI
+
+.. js:function:: StyleJackMarginAPI.Get()
+
+    :returns: `Object`
+
+.. js:function:: StyleJackMarginAPI.Set([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+
+    .. note:: You can also pass in an array or object as a value. The format for an object simply has "top","right","bottom","left" keys
+            which then sets the according value for that key. Keys may be omitted.  If you use an array, it can be any length between 1 and 4.
+
+            This follows normal CSS behaviour. Where a 1 length array sets all sides to the same value. 2 length array sets top and bottom to same value
+            and left and right to same value.
+
+
+    :returns: :js:class:`StyleJackMarginAPI`
+
+.. js:function:: StyleJackMarginAPI.Top([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackMarginAPI`
+
+.. js:function:: StyleJackMarginAPI.Right([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackMarginAPI`
+
+
+.. js:function:: StyleJackMarginAPI.Bottom([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+        :returns: :js:class:`StyleJackMarginAPI`
+
+.. js:function:: StyleJackMarginAPI.Left([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackMarginAPI`
+
+.. js:function:: StyleJackMarginAPI.Center()
+
+        Automatically sets margin left and right to "auto".
+
+    :returns: :js:class:`StyleJackMarginAPI`
+
+.. js:attribute:: StyleJackMarginAPI.api
+
+    :returns: :js:class:`StyleJackAPI`
+
 
 StyleJack Outline API
 ^^^^^^^^^^^^^^^^^^^^^
 
 .. js:class:: StyleJackOutlineAPI
 
+.. js:function:: StyleJackOutlineAPI.Width([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackMarginAPI`
+
+.. js:function:: StyleJackOutlineAPI.Style([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackMarginAPI`
+
+.. js:function:: StyleJackOutlineAPI.Color([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackMarginAPI`
+
+.. js:function:: StyleJackOutlineAPI.Offset([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackMarginAPI`
+
+.. js:attribute:: StyleJackOutlineAPI.api
+
+    :returns: :js:class:`StyleJackAPI`
+
 StyleJack OverFlow API
 ^^^^^^^^^^^^^^^^^^^^^^
 
 .. js:class:: StyleJackOverflowAPI
+
+.. js:function:: StyleJackOverflowAPI.Get()
+
+    Returns a 2 index array containing the X and Y value of the overflow property
+
+    :returns: `array`
+
+.. js:function:: StyleJackOverflowAPI.Set(_value)
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackOverflowAPI`
+
+.. js:function:: StyleJackOverflowAPI.X(_value)
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackOverflowAPI`
+
+.. js:function:: StyleJackOverflowAPI.Y(_value)
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackOverflowAPI`
+
+.. js:attribute:: StyleJackOverflowAPI.api
+
+    :returns: :js:class:`StyleJackAPI`
 
 StyleJack Padding API
 ^^^^^^^^^^^^^^^^^^^^^
 
 .. js:class:: StyleJackPaddingAPI
 
+.. js:function:: StyleJackPaddingAPI.Get()
+
+    :returns: `Object`
+
+.. js:function:: StyleJackPaddingAPI.Set([_value])
+
+    :param String _value:
+            If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+
+        .. note:: You can also pass in an array or object as a value. The format for an object simply has "top","right","bottom","left" keys
+            which then sets the according value for that key. Keys may be omitted.  If you use an array, it can be any length between 1 and 4.
+
+            This follows normal CSS behaviour. Where a 1 length array sets all sides to the same value. 2 length array sets top and bottom to same value
+            and left and right to same value.
+
+
+    :returns: :js:class:`StyleJackPaddingAPI`
+
+.. js:function:: StyleJackPaddingAPI.Top([_value])
+
+    :param String _value:
+            If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+        :returns: :js:class:`StyleJackPaddingAPI`
+
+.. js:function:: StyleJackPaddingAPI.Right([_value])
+
+    :param String _value:
+            If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+        :returns: :js:class:`StyleJackPaddingAPI`
+
+
+.. js:function:: StyleJackPaddingAPI.Bottom([_value])
+
+    :param String _value:
+            If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+            :returns: :js:class:`StyleJackPaddingAPI`
+
+.. js:function:: StyleJackPaddingAPI.Left([_value])
+
+    :param String _value:
+            If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+        :returns: :js:class:`StyleJackPaddingAPI`
+
+.. js:function:: StyleJackPaddingAPI.Center()
+
+        Automatically sets margin left and right to "auto".
+
+    :returns: :js:class:`StyleJackPaddingAPI`
+
+.. js:attribute:: StyleJackPaddingAPI.api
+
+    :returns: :js:class:`StyleJackAPI`
+
 StyleJack Text API
 ^^^^^^^^^^^^^^^^^^
 
 .. js:class:: StyleJackTextAPI
+
+.. js:function:: StyleJackTextAPI.Align([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTextAPI`
+
+.. js:function:: StyleJackTextAPI.Decoration([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTextAPI`
+
+.. js:function:: StyleJackTextAPI.Indent([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTextAPI`
+
+.. js:function:: StyleJackTextAPI.Overflow([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTextAPI`
+
+.. js:function:: StyleJackTextAPI.Shadow([_value])
+
+    :returns: :js:class:`StyleJackTextAPI`
+
+.. js:function:: StyleJackTextAPI.Transform([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTextAPI`
+
+.. js:attribute:: StyleJackTextAPI.api
+
+    :returns: :js:class:`StyleJackAPI`
 
 
 StyleJack Text Shadow API
@@ -883,16 +1185,244 @@ StyleJack Text Shadow API
 
 .. js:class:: StyleJackTextShadowAPI
 
+.. js:function:: StyleJackTextShadowAPI.Get()
+
+     The object that's returned contains the following string keys. ::
+
+            {
+                'horizontal':horizontal, 'vertical':vertical, 'blur':blur,
+                'color':color
+            }
+
+    :returns: `Object`
+
+.. js:function:: StyleJackTextShadowAPI.Set([_value])
+
+    Any value attempts to set the passed value to the property.
+
+    .. note:: _value can be in the form of an object, with the keys "width","style" and "color". It can be also in an array,
+        with index 0 being width, index 1 being style and index 2 being color
+
+.. js:function:: StyleJackTextShadowAPI.Horizontal([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTextShadowAPI`
+
+.. js:function:: StyleJackTextShadowAPI.Vertical([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTextShadowAPI`
+
+.. js:function:: StyleJackTextShadowAPI.H([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+        An alias for Horizontal
+
+    :returns: :js:class:`StyleJackTextShadowAPI`
+
+.. js:function:: StyleJackTextShadowAPI.V([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+        An alias for Vertical
+
+    :returns: :js:class:`StyleJackTextShadowAPI`
+
+.. js:function:: StyleJackTextShadowAPI.Blur([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTextShadowAPI`
+
+.. js:function:: StyleJackTextShadowAPI.Color([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTextShadowAPI`
+
+.. js:attribute:: StyleJackTextShadowAPI.api
+
+    :returns: :js:class:`StyleJackAPI`
+
 StyleJack Transform API
 ^^^^^^^^^^^^^^^^^^^^^^^
 
+    Supports 2D transforms currently.
+
 .. js:class:: StyleJackTransformAPI
+
+.. js:function:: StyleJackTransformAPI.Matrix([_value])
+
+    :param Array/String _value:
+        If no value or "$" passed in, returns the current value (as an array).  To set, you must pass in a 6 index array
+        containing the matrix you're attempting to set.
+
+    :returns: :js:class:`StyleJackTransformAPI`
+
+.. js:function:: StyleJackTransformAPI.Translate([_value])
+
+    :param Array/String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        If this value is not an Array, nothing will happen.  The value should be a 2 index array, representing x and y
+        "$" as a value returns the raw value of the property.  The values array should be numbers, which will become pixels
+
+    :returns: :js:class:`StyleJackTransformAPI`
+
+.. js:function:: StyleJackTransformAPI.TranslateX([_value])
+
+    :param String/Number _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property.  The value passed in should be an number which will become a pixel offset
+
+    :returns: :js:class:`StyleJackTransformAPI`
+
+.. js:function:: StyleJackTransformAPI.TranslateY([_value])
+
+    :param String/Number _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property. The value passed in should be an number which will become a pixel offset
+
+    :returns: :js:class:`StyleJackTransformAPI`
+
+.. js:function:: StyleJackTransformAPI.Scale([_value])
+
+    :param Array/String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        If this value is not an Array, nothing will happen.  The value should be a 2 index array, representing x and y
+        "$" as a value returns the raw value of the property.  The values array should be numbers, which will become a scale ratio
+
+    :returns: :js:class:`StyleJackTransformAPI`
+
+.. js:function:: StyleJackTransformAPI.ScaleX([_value])
+
+    :param String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property.  The value passed in should be an number
+
+    :returns: :js:class:`StyleJackTransformAPI`
+
+.. js:function:: StyleJackTransformAPI.ScaleY([_value])
+
+    :param String/Number _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property.  The value passed in should be an number
+
+    :returns: :js:class:`StyleJackTransformAPI`
+
+.. js:function:: StyleJackTransformAPI.Rotate([_value])
+
+    :param String/Number _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property.  The value passed in should be an number, which will get converted to degrees
+
+    :returns: :js:class:`StyleJackTransformAPI`
+
+.. js:function:: StyleJackTransformAPI.Skew([_value])
+
+    :param Array/String _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        If this value is not an Array, nothing will happen.  The value should be a 2 index array, representing x and y
+        "$" as a value returns the raw value of the property. The values passed in should be numbers, which will get converted to degrees
+
+    :returns: :js:class:`StyleJackTransformAPI`
+
+.. js:function:: StyleJackTransformAPI.SkewX([_value])
+
+    :param String/Number _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property. The value passed in should be an number, which will get converted to degrees
+
+    :returns: :js:class:`StyleJackTransformAPI`
+
+.. js:function:: StyleJackTransformAPI.SkewY([_value])
+
+    :param String/Number _value:
+        If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+        "$" as a value returns the raw value of the property. The value passed in should be an number, which will get converted to degrees
+
+    :returns: :js:class:`StyleJackTransformAPI`
+
+.. js:attribute:: StyleJackTransformAPI.api
+
+    :returns: :js:class:`StyleJackAPI`
 
 StyleJack Transition API
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. js:class:: StyleJackTransitionAPI
 
+.. js:function:: StyleJackTransitionAPI.Get()
+
+        The object that's returned has both numerical and string keys. ::
+
+            {
+                0:property,1:duration,2:timing,3:delay,
+                'property':property,
+                'duration':duration,
+                'timing':timing,
+                'delay':delay
+            }
+
+    :returns: `Object`
+
+.. js:function:: StyleJackTransitionAPI.Set([_value])
+
+    :param String _value:
+            If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTransitionAPI`
+
+.. js:function:: StyleJackTransitionAPI.Property([_value])
+
+    :param String _value:
+            If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTransitionAPI`
+
+.. js:function:: StyleJackTransitionAPI.Duration([_value])
+
+    :param String _value:
+            If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTransitionAPI`
+
+.. js:function:: StyleJackTransitionAPI.Timing([_value])
+
+    :param String _value:
+            If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTransitionAPI`
+
+.. js:function:: StyleJackTransitionAPI.Delay([_value])
+
+    :param String _value:
+            If no value passed in, returns the current value. Any value other than "$", attempts to set the passed value to the property.
+            "$" as a value returns the raw value of the property
+
+    :returns: :js:class:`StyleJackTransitionAPI`
+
+.. js:function:: StyleJackTransitionAPI.api
+
+    :returns: :js:class:`StyleJackAPI`
 
 StyleJack FontFace API
 ^^^^^^^^^^^^^^^^^^^^^^
