@@ -24,7 +24,8 @@
             'SendRequest':SendRequest,
             'SetRequestManager':SetRequestManager,
             'SetResponseHandler':SetResponseHandler,
-            'Send':Send
+            'Send':Send,
+            'ProcessInstructions':ProcessInstructions
         }.KUBE().create(UI.prototype);
 
         Root = UILoader.Create(undefined,'Root','Root','Root',{
@@ -74,16 +75,18 @@
             }
         }
 
-        //
-        function handleClientResponse(_Response){
-            if(KUBE.Is(responseHandler) === 'function'){
-                var Instructions = responseHandler(_Response);
-                if(KUBE.Is(Instructions,true) === 'Instructions'){
-                    handleInstructions(Instructions.Get());
+        function ProcessInstructions(_InstructionsObj){
+            if(KUBE.Is(_InstructionsObj,true) === 'ViewInstructions'){
+                var FoundView = Root.Find(_InstructionsObj);
+                if(KUBE.Is(FoundView,true) === 'UIView'){
+                    if(_InstructionsObj.GetData()){
+                        FoundView.Update(_InstructionsObj.GetData());
+                    }
+
+                    if(KUBE.Is(_InstructionsObj.GetChildViews()) === 'array'){
+                        FoundView.UpdateChildren(_InstructionsObj.GetChildViews(),_InstructionsObj.GetBehavior());
+                    }
                 }
-            }
-            else{
-                throw new Error('UI requires a Response Handler to translate Client Responses to Instructions. No response handler set');
             }
         }
 
@@ -91,106 +94,15 @@
             throw _Error;
         }
 
-        function handleInstructions(_response){
-            var rCall;
-            if(KUBE.Is(_response) === 'object'){
-                //if(responseCall){
-                //    rCall = responseCall;
-                //    responseCall = undefined;
-                //    try{
-                //        rCall(_response.response);
-                //    }
-                //    catch(E){
-                //        //Response call resulted in javascript error. PROGRAM MOAR BETTAR!?
-                //        throw E;
-                //    }
-                //}
-
-                if(_response.indexes && _response.indexes.length > 0){
-                    _response.indexes.KUBE().each(processIndexes);
-                }
-
-                if(_response.instructions){
-                    switch(KUBE.Is(_response.instructions)){
-                        case 'array':
-                            _response.instructions.KUBE().each(processInstructions);
-                            break;
-
-                        case 'object':
-                            processInstructions(_response.instructions);
-                            break;
-                    }
-                }
+        function handleClientResponse(_Response){
+            if(KUBE.Is(responseHandler) === 'function'){
+                responseHandler(_Response);
+            }
+            else{
+                throw new Error('UI requires a Response Handler to translate Client Responses to Instructions. No response handler set');
             }
         }
 
-        function processInstructions(_instructions){
-            var FoundView;
-            if(KUBE.Is(_instructions) === 'object'){
-                //Autoload?
-                FoundView = Root.Find(_instructions.find);
-                if(FoundView){
-                    if(KUBE.Is(_instructions.data) !== 'null'){
-                        FoundView.Update(_instructions.data);
-                    }
-
-                    if(
-                        FoundView.Parent() !== undefined && KUBE.Is(_instructions.views) === 'array' && _instructions.views.length > 0 ||
-                        FoundView.Parent() !== undefined && KUBE.Is(_instructions.views) === 'array' && _instructions.behavior === 'strict'
-                    ){
-                        FoundView.UpdateChildren(_instructions.views,_instructions.behavior);
-                    }
-                }
-            }
-        }
-
-        function processIndexes(indexObj){
-            if(indexObj.namespace && indexObj.indexURL){
-                UILoader.LoadAutoIndex(indexObj.namespace,indexObj.indexURL);
-            }
-        }
-
-        //This allows for autoloading of UI components
-        function autoLoad(_autoLoadInstructions){
-            if(KUBE.Is(_autoLoadInstructions) === 'object'){
-                UILoader.LoadAutoIndex(_autoLoadInstructions.namespace,_autoLoadInstructions.indexURL);
-            }
-        }
-
-        function processAutoLoad(_autoLoad){
-            if(KUBE.Is(_autoLoad) === 'array'){
-                _autoLoad.KUBE().each(autoLoad);
-            }
-        }
 	}
 
 }(KUBE));
-
-//var instructions = 
-//{
-//	'loadViews':[], //Autoload?
-//	'find':{}, //Find the parent
-//	'behavior':'loose/strict/inherited', //loose/strict (loose creates/updates only, strict creates/updates/removes)
-//	'data': {},
-//	'views':[
-//		{
-//			'type':'xxx',
-//			'id':'xxx',
-//			'data':{},
-//			'behavior':'loose/strict/inherited',
-//			'views':[
-//				
-//			]
-//		}
-//	]
-//};
-//
-//RootView = UI.CreateRoot('Node/Id');
-//FoundView = RootView.Find(find);
-//FoundView.Update(data);
-//FoundView.UpdateChildren(views,behavior);
-
-//
-//var View = UI.Find(find);
-//View.Update(data);
-//View.UpdateChildren(views,behavior);

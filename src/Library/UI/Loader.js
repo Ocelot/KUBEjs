@@ -108,45 +108,47 @@
         }
 
         //Find logic
-        function Find(_comparisonObject){
-            return (KUBE.Is(_comparisonObject) === 'object' ? checkRoot(_comparisonObject) || isSelf(_comparisonObject) || inChildren(_comparisonObject) : false);
+        function Find(_ViewInstructions){
+            if(KUBE.Is(_ViewInstructions,true) === 'ViewInstructions'){
+                return checkRoot(_ViewInstructions) || isSelf(_ViewInstructions) || inChildren(_ViewInstructions);
+            }
         }
 
-        function Check(_comparisonObject){
+        function Check(_ViewInstructions){
             var $return = true;
 
-            if(_comparisonObject.parent && Parent){
-                $return = Parent.Check(_comparisonObject.parent); //Does our parent chain match?
-            }
+            //if(_comparisonObject.parent && Parent){
+            //    $return = Parent.Check(_comparisonObject.parent); //Does our parent chain match?
+            //}
 
-            if($return && _comparisonObject.id && _comparisonObject.id !== Id()){
+            if(_ViewInstructions.GetId() && _ViewInstructions.GetId() !== Id()){
                 $return = false; //Does our Id match
             }
 
-            if($return && _comparisonObject.type && _comparisonObject.type !== Type()){
+            if($return && _ViewInstructions.GetType() && _ViewInstructions.GetType() !== Type()){
                 $return = false; //Does our type match
             }
 
-            if($return && _comparisonObject.name && _comparisonObject.name !== Name()){
+            if($return && _ViewInstructions.GetName() && _ViewInstructions.GetName() !== Name()){
                 $return = false; //Does our viewName (class) match
             }
 
             return $return;
         }
 
-        function checkRoot(_cObj){
-            return (_cObj.name === 'root' ? findRoot($ViewAPI) : false);
+        function checkRoot(_ViewInstructions){
+            return (_ViewInstructions.GetName() === 'Root' ? findRoot($ViewAPI) : false);
         }
 
-        function isSelf(_cObj){
-            return (Check(_cObj) ? $ViewAPI : false);
+        function isSelf(_ViewInstructions){
+            return (Check(_ViewInstructions) ? $ViewAPI : false);
         }
 
-        function inChildren(_cObj){
+        function inChildren(_ViewInstructions){
             var c,$return;
             if(Children.length){
                 for(c=0;c<Children.length;c++){
-                    $return = Children[c].Find(_cObj);
+                    $return = Children[c].Find(_ViewInstructions);
                     if($return){
                         break;
                     }
@@ -216,16 +218,16 @@
             viewNameIncrement = {};
 
             for(vCount = 0;vCount<_views.length;vCount++){
-                if(!viewNameIncrement[_views[vCount].name]){
-                    viewNameIncrement[_views[vCount].name] = 0;
+                if(!viewNameIncrement[_views[vCount].GetName()]){
+                    viewNameIncrement[_views[vCount].GetName()] = 0;
                 }
 
-                skipVar = childMatchUpdate(_views[vCount],_behavior,viewNameIncrement[_views[vCount].name]);
+                skipVar = childMatchUpdate(_views[vCount],_behavior,viewNameIncrement[_views[vCount].GetName()]);
                 if(skipVar === false){
                     createArray.push(_views[vCount]);
                 }
                 else{
-                    viewNameIncrement[_views[vCount].name] = skipVar;
+                    viewNameIncrement[_views[vCount].GetName()] = skipVar;
                 }
             }
 
@@ -244,30 +246,30 @@
         }
 
         function yieldChildren(i,_views,timeoutObj,resolver,choke){
-            var newChild,Child;
+            var NewChild,Child;
             choke = choke || 1;
             resolver = resolver || this;
-            newChild = _views[i];
-            if(KUBE.Is(newChild) === 'object'){
+            NewChild = _views[i];
+            if(KUBE.Is(NewChild,true) === 'ViewInstructions'){
                 try{
-                    Child = createNewChildView(newChild);
+                    Child = createNewChildView(NewChild);
                 }
                 catch(E){
                     if(E.message === 'UI Could not create new view. Has not been loaded' && choke < 50){
-                        KUBE.Class('/Library/UI/Loader')().Uses([newChild.name],function(){
+                        KUBE.Class('/Library/UI/Loader')().Uses([NewChild.GetName()],function(){
                             yieldChildren(i,_views,timeoutObj,resolver,++choke);
                         });
                     }
                     else{
-                        throw new Error(E.message+" :"+newChild.name);
+                        throw new Error(E.message+" :"+NewChild.GetName());
                         (resolver.last() ? resolver.resolve(timeoutObj) : resolver.next());
                     }
                 }
             }
 
             if(Child){
-                if(KUBE.Is(newChild.views) === 'array'){
-                    Child.UpdateChildren(newChild.views);
+                if(KUBE.Is(NewChild.GetChildViews()) === 'array'){
+                    Child.UpdateChildren(NewChild.GetChildViews());
                 }
                 if($ViewAPI.Add(Child,_views.length)){
                     Children.push(Child);
@@ -340,19 +342,18 @@
             }
         }
 
-        function childMatchUpdate(_view,_behavior,_skip){
+        function childMatchUpdate(_ViewInstructions,_behavior,_skip){
             var cObj,cCount,skipCheck,$return;
 
             //Init vars
             _skip = _skip || 0;
             skipCheck = 0;
-            cObj = {'name':_view.name,'id':_view.id,'type':_view.type};
             $return = false;
 
             for(cCount=0;cCount<Children.length;cCount++){
-                if(Children[cCount].Check(cObj)){
-                    if(cObj.id){
-                        updateChildView(Children[cCount],_view.data,_view.views,_behavior);
+                if(Children[cCount].Check(_ViewInstructions)){
+                    if(_ViewInstructions.GetId()){
+                        updateChildView(Children[cCount],_ViewInstructions.GetData(),_ViewInstructions.GetChildViews(),_behavior);
                         $return = _skip;
                         break;
                     }
@@ -361,7 +362,7 @@
                             skipCheck++;
                         }
                         else{
-                            updateChildView(Children[cCount],_view.data,_view.views,_behavior);
+                            updateChildView(Children[cCount],_ViewInstructions.GetData(),_ViewInstructions.GetChildViews(),_behavior);
                             $return = _skip+1;
                             break;
                         }
@@ -371,10 +372,11 @@
             return $return;
         }
 
-        function createNewChildView(viewObject){
+        function createNewChildView(_ViewInstructions){
             //_Parent,_type,_createId,_data
-            var numChildren = (KUBE.Is(viewObject.views) === 'array' && viewObject.views.length ? viewObject.views.length : 0);
-            return KUBE.Class('/Library/UI/Loader')().Create($ViewAPI,viewObject.name,viewObject.type,viewObject.id,viewObject.data,numChildren);
+            var childrenViews = _ViewInstructions.GetChildViews();
+            var numChildren = (KUBE.Is(childrenViews) === 'array' && childrenViews.length ? childrenViews.length : 0);
+            return KUBE.Class('/Library/UI/Loader')().Create($ViewAPI,_ViewInstructions.GetName(),_ViewInstructions.GetType(),_ViewInstructions.GetId(),_ViewInstructions.GetData(),numChildren);
         }
 
         function updateChildView(_ChildView,_data,_views,_behavior){
