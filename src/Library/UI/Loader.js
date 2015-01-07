@@ -54,16 +54,16 @@
         }
 
         //View Instantiation
-        function Create(_Parent,_name,_type,_createId,_data,_children){
-            var $return = (KUBE.Is(loadedViews[_name]) === 'function' ? initView(_Parent,_name,_type,_createId,_data,_children) : undefined);
+        function Create(_Parent,_name,_type,_createId,_children){
+            var $return = (KUBE.Is(loadedViews[_name]) === 'function' ? initView(_Parent,_name,_type,_createId,_children) : undefined);
             if(!$return){
                 throw new Error('UI Could not create new view. Has not been loaded');
             }
             return $return;
         }
 
-        function initView(_Parent,_viewName,_viewType,_createId,_data,_children){
-            return new loadedViews[_viewName](UIView(_Parent,_viewName,_viewType,_createId),_createId,_data,_children);
+        function initView(_Parent,_viewName,_viewType,_createId,_children){
+            return new loadedViews[_viewName](UIView(_Parent,_viewName,_viewType,_createId),_children);
         }
 
     }
@@ -271,15 +271,34 @@
                 if(KUBE.Is(NewChild.GetChildViews()) === 'array'){
                     Child.UpdateChildren(NewChild.GetChildViews());
                 }
-                if($ViewAPI.Add(Child,_views.length)){
-                    Children.push(Child);
-                    Child.Once('delete',function(){
-                        deleteChild(Child);
+
+                var P = $ViewAPI.Add(Child,NewChild.GetData())
+
+                //THIS DID NOT WORK AT ALL
+                //KUBE.Promise().race([P,KUBE.Promise(function(_rej,_res){
+                //    setTimeout(function(){
+                //        console.log('REJECTED BY YIELDCHILDREN IN UI/LOADER');
+                //        Child.Delete();
+                //        _rej();
+                //    },5000);
+                //})]);
+
+                if(KUBE.Is(P,true) === 'Promise'){
+                    P.then(function(){
+                        Children.push(Child);
+                        Child.Once('delete',function(){
+                            deleteChild(Child);
+                        });
+                    },function(_Err){
+                        debugger; //Our Add Promise was rejected along the way. Why?
+                        Child.Delete();
                     });
                 }
                 else{
+                    debugger; //Add must return a promise
                     Child.Delete();
                 }
+
                 (resolver.last() ? resolver.resolve(timeoutObj) : resolver.next());
             }
         }
@@ -438,21 +457,15 @@
 
 
     //This view is created once per new UI and is used at the root Node for the UI object
-    function RootView(CoreView,id,data){
-        var View,UI,SJ,DJ,Spin,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [],resizePause, blackout, spinner;
-
-        if(KUBE.Is(data.UI,true) !== 'UI' || KUBE.Is(data.DomJackRoot,true) !== 'DomJack'){
-            throw new Error('Cannot initialize UI RootView. Required UI Object or DomJack object not properly supplied');
-        }
-
-        View = data.DomJackRoot;
-        UI = data.UI;
+    function RootView(CoreView,numChildren){
+        var View,UI,SJ,DJ,Spin,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [],resizePause, blackout, spinner,data;
 
         SJ = KUBE.Class('/Library/DOM/StyleJack');
         DJ = KUBE.Class('/Library/DOM/DomJack');
         Spin = KUBE.Class('/Library/Drawing/Spinner');
 
         CoreView.KUBE().merge({
+            'Init':Init,
             'Get':Get,
             'Read':Read,
             'Update':Update,
@@ -464,11 +477,23 @@
             'Resize':Resize,
             'CSSClass': CSSClass
         });
-        create();
-        bindResizeEvent();
         return CoreView;
 
         //Public
+        function Init(_data,_allocatedViewWidth,_allocatedViewHeight){
+            data = _data;
+
+            if(KUBE.Is(data.UI,true) !== 'UI' || KUBE.Is(data.DomJackRoot,true) !== 'DomJack'){
+                throw new Error('Cannot initialize UI RootView. Required UI Object or DomJack object not properly supplied');
+            }
+
+            View = data.DomJackRoot;
+            UI = data.UI;
+
+            create();
+            bindResizeEvent();
+        }
+
         function Get(){
             return View;
         }
@@ -526,13 +551,21 @@
             }
         }
 
-        function Add(_NewView){
-            var $return = false;
-            if(KUBE.Is(_NewView,true) === 'UIView'){
-                View.Append(_NewView.Get());
-                $return = true;
+        function Add(_NewView,_initData){
+            return KUBE.Promise(handleAdd);
+
+            function handleAdd(_resolve){
+                if(KUBE.Is(_NewView,true) === 'UIView'){
+                    _NewView.Init(_initData,0,0);
+                    _NewView.OnState('drawFinish',function(){
+                        View.Append(_NewView.Get());
+                        _resolve();
+                    });
+                }
+                else{
+                    throw new Error('Unacceptable View passed into Root');
+                }
             }
-            return $return;
         }
 
         function Send(_actionObj,_f){
@@ -598,7 +631,7 @@
         }
 
         function initRootStyle(){
-            var rootId = (id == 'body') ? 'body' : '#' + id;
+            var rootId = (CoreView.Id() == 'body') ? 'body' : '#' + CoreView.Id();
             SJ('*').Margin(0).Padding(0);//.Box().Sizing('border-box');
             SJ(rootId).Overflow('hidden');//.Set(['hidden','auto']); //This is DD messing around, Probably not the right place.
             SJ('.rootClear').Position('relative').Width('100%').Height(0).Clear('both');

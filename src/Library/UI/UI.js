@@ -28,7 +28,8 @@
             'ProcessInstructions':ProcessInstructions
         }.KUBE().create(UI.prototype);
 
-        Root = UILoader.Create(undefined,'Root','Root','Root',{
+        Root = UILoader.Create(undefined,'Root','Root','Root');
+        Root.Init({
             'UI':$API,
             'DomJackRoot':_DomJack
         });
