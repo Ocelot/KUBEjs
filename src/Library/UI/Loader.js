@@ -482,6 +482,8 @@
         //Public
         function Init(_data,_allocatedViewWidth,_allocatedViewHeight){
             data = _data;
+            width = _allocatedViewHeight;
+            height = _allocatedViewHeight;
 
             if(KUBE.Is(data.UI,true) !== 'UI' || KUBE.Is(data.DomJackRoot,true) !== 'DomJack'){
                 throw new Error('Cannot initialize UI RootView. Required UI Object or DomJack object not properly supplied');
@@ -553,10 +555,9 @@
 
         function Add(_NewView,_initData){
             return KUBE.Promise(handleAdd);
-
             function handleAdd(_resolve){
                 if(KUBE.Is(_NewView,true) === 'UIView'){
-                    _NewView.Init(_initData,0,0);
+                    _NewView.Init(_initData,width,height);
                     _NewView.OnState('drawFinish',function(){
                         View.Append(_NewView.Get());
                         _resolve();

@@ -29,10 +29,13 @@
         }.KUBE().create(UI.prototype);
 
         Root = UILoader.Create(undefined,'Root','Root','Root');
+
+        var rootDimensions = getRootDimensions(_DomJack);
+
         Root.Init({
             'UI':$API,
             'DomJackRoot':_DomJack
-        });
+        },rootDimensions[0],rootDimensions[1]);
 
         Root.Once('delete',function(){
             throw new Error('The Root Node of the UI was deleted. This is an irrecoverable UI state.');
@@ -102,6 +105,14 @@
             else{
                 throw new Error('UI requires a Response Handler to translate Client Responses to Instructions. No response handler set');
             }
+        }
+
+        function getRootDimensions(_RootDJ){
+            //So... what should I do with this? For now, take its width/height if they exist, otherwise go full screen. It is likely this should be more robust in the future to handle a variety of spaces
+            var width,height;
+            width = _RootDJ.Style().Width() || KUBE.Class('/Library/DOM/WinDocJack')().WindowWidth();
+            height = _RootDJ.Style().Height() || KUBE.Class('/Library/DOM/WinDocJack')().WindowHeight();
+            return [width,height];
         }
 
 	}
