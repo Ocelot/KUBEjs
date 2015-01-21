@@ -12,7 +12,6 @@
     DOMIndex.SetBaseURL(KUBE.Config().autoLoadPath+'Library/DOM');
     DOMIndex.SetIndex([
         'DomJack',
-        'Dragger',
         'FeatureDetect',
         'Scroll',
         'Select',
@@ -23,4 +22,16 @@
     ]);
 
     KUBE.AutoLoad().AddIndex(DOMIndex);
+
+    var DraggerIndex = KUBE.AutoLoad().GetNewIndex();
+    DraggerIndex.SetNamespace('/Library/DOM/Dragger');
+    DraggerIndex.SetBaseURL(KUBE.Config().autoLoadPath+'Library/DOM/Dragger');
+    DraggerIndex.SetIndex([
+        'Dragger',
+        'DraggerTarget',
+        'DraggerHandle'
+    ]);
+
+    KUBE.AutoLoad().AddIndex(DraggerIndex);
+
 }(KUBE));
