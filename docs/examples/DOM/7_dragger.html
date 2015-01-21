@@ -10,8 +10,10 @@
 
         //Load in a few libraries including dragger
         var uses = {
-            'Dragger':'/Library/DOM/Dragger',
             'DJ':'/Library/DOM/DomJack',
+            'Dragger':'/Library/DOM/Dragger/Dragger',
+            'DraggerTarget':'/Library/DOM/Dragger/DraggerTarget',
+            'DraggerHandle':'/Library/DOM/Dragger/DraggerHandle',
             'SJ':'/Library/DOM/StyleJack',
             'XA':'/Library/Extend/Array',
             'XM':'/Library/Extend/Math'
@@ -40,9 +42,6 @@
              *  -AddHandle
              *  -RemoveHandle
              *  -ClearHandles
-             *  -SetDragOver
-             *  -SetDragStart
-             *  -SetDragEnd
              *  -Reset
              */
 
@@ -74,47 +73,66 @@
             alphaA.KUBE().each(function(_val){
                 var randomPosition = findRandomSpot();
                 var Handle = Container.Append('div');
+                var h;
                 Handle.AddClass('.handle');
                 Handle.SetInner(_val.toUpperCase());
                 Handle.Style().Left(randomPosition[0]).Top(randomPosition[1]).Background().Color('yellow');
 
+                //Creating a handle object
+                h = $K.DraggerHandle(Handle);
+                h.SetData({'letter':_val});
+
                 //AddHandle: Takes two arguments, a DomJack object, and additional data we want to pass through (the DJ object will also be available on drop)
-                AlphaDragger.AddHandle(Handle,{'letter':_val});
+                AlphaDragger.AddHandle(h);
             });
 
             //And do the same for our numbers
             numA.KUBE().each(function(_val){
                 var randomPosition = findRandomSpot();
                 var Handle = Container.Append('div');
+                var h;
+                var AlphaTarget,NumberTarget;
                 Handle.AddClass('.handle');
                 Handle.SetInner(_val);
                 Handle.Style().Left(randomPosition[0]).Top(randomPosition[1]).Background().Color('aqua');
 
+
+                //Creating a handle object
+                h = $K.DraggerHandle(Handle);
+                h.SetData({'number':_val});
+
                 //AddHandle:
-                NumberDragger.AddHandle(Handle,{'number':_val});
+                NumberDragger.AddHandle(h);
             });
 
             //Now let's set up our targets
 
-            //AddTarget: Takes in 3 arguments, a callback function ('ondrop') the target DomJack and then additional target data
-            AlphaDragger.AddTarget(handleAlphaDrop,AlphaDropTarget,{'type':'alpha'});
-            NumberDragger.AddTarget(handleNumDrop,NumberDropTarget,{'type':'number'});
+            AlphaTarget = $K.DraggerTarget(AlphaDropTarget).SetDrop(handleAlphaDrop).SetData({'type':'alpha'});
+            NumberTarget = $K.DraggerTarget(NumberDropTarget).SetDrop(handleNumDrop).SetData({'type':'number'});
 
-            //Our callback functions received 4 arguments:
-            //  1. HandleDomJack (the DJ being dragged)
-            //  2. TargetDomJack (the DJ that an object is being dropped onto)
-            //  3. optionalHandleData
-            //  4. optionalTargetData
+            //AddTarget: Takes in a DraggerTarget object.
+            AlphaDragger.AddTarget(AlphaTarget);
+            NumberDragger.AddTarget(NumberTarget);
 
-            function handleAlphaDrop(_HandleDomJack,_TargetDomJack,_optionalHandleData,_optionalTargetData){
+            //Our callback functions received 1 arguments:
+            // This argument is an object, with the following properties
+            //  dragged#Object  - The dragged node
+            //  target#Object - The node the dragged node was dropped on (if it has a handler for this Dropper)
+            //  event#MouseEvent
+
+            //Both Dragged/ and target contain "domjack" and "data" as properties.
+            //This was the data that was originally bound when adding targets/handles to the Dragger
+            //The event property is the actual DOM event emitted. Useful mostly for dataTransfer object with drag/drop
+
+            function handleAlphaDrop(_dropData){
                 //This has given us access to everything we need to reject/accept the drop, has allowed us to pass data behind the Drop itself (not attached to the DOM). Let's take the data, append it to our target innerContent, and delete the Handle
-                _TargetDomJack.SetInner(_TargetDomJack.GetInner()+_optionalHandleData.letter);
-                _HandleDomJack.Delete(); //Dragger has listeners set to listen to the 'cleanup' event fired by DomJack when a node is deleted, it will safely clean up references internally once the node has been deleted. This means we do not need to call 'RemoveHandle'
+                _dropData.target.domjack.SetInner(_dropData.target.domjack.GetInner()+_dropData.dragged.data.letter);
+                _dropData.dragged.domjack.Delete(); //Dragger has listeners set to listen to the 'cleanup' event fired by DomJack when a node is deleted, it will safely clean up references internally once the node has been deleted. This means we do not need to call 'RemoveHandle'
             }
 
-            function handleNumDrop(_HandleDomJack,_TargetDomJack,_optionalHandleData,_optionalTargetData) {
-                _TargetDomJack.SetInner(_TargetDomJack.GetInner() + _optionalHandleData.number);
-                _HandleDomJack.Delete();
+            function handleNumDrop(_dropData) {
+                _dropData.target.domjack.SetInner(_dropData.target.domjack.GetInner() + _dropData.dragged.data.number);
+                _dropData.dragged.domjack.Delete();
             }
 
             function findRandomSpot(){
