@@ -42,16 +42,16 @@
                 });
 
                 //These view objects end up with a Prototype of UIView
-                function WindowExample(CoreView,id,data,numChildren){
+                function WindowExample(CoreView,numChildren){
                     var DomView;
                     var DJ = KUBE.Class('/Library/DOM/DomJack');
                     var SJ = KUBE.Class('/Library/DOM/StyleJack');
 
-                    //Required additions to every view
-                    create();
+
 
                     return CoreView.KUBE().merge({
                         'Get':Get,
+                        'Init': Init,
                         'Read':Read,
                         'Update':Update,
                         'Delete':Delete,
@@ -59,6 +59,11 @@
                         'Height':Height,
                         'Resize':Resize
                     });
+
+                    function Init(_data,_allocatedWidth,_allocatedHeight){
+                        //Required additions to every view
+                        create();
+                    }
 
                     function Get(){
                         return DomView;
