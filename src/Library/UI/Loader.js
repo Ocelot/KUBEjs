@@ -395,7 +395,7 @@
             //_Parent,_type,_createId,_data
             var childrenViews = _ViewInstructions.GetChildViews();
             var numChildren = (KUBE.Is(childrenViews) === 'array' && childrenViews.length ? childrenViews.length : 0);
-            return KUBE.Class('/Library/UI/Loader')().Create($ViewAPI,_ViewInstructions.GetName(),_ViewInstructions.GetType(),_ViewInstructions.GetId(),_ViewInstructions.GetData(),numChildren);
+            return KUBE.Class('/Library/UI/Loader')().Create($ViewAPI,_ViewInstructions.GetName(),_ViewInstructions.GetType(),_ViewInstructions.GetId(),numChildren);
         }
 
         function updateChildView(_ChildView,_data,_views,_behavior){
