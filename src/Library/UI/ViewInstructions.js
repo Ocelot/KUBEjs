@@ -30,8 +30,8 @@
             'SetName':SetName,
             'SetId':SetId,
             'SetData':SetData,
-            'AddViewInstructions':AddViewInstructions,
-            'GetChildViews':GetChildViews
+            'AddViewInstructions':AddViewInstructions,            'GetChildViews':GetChildViews
+            'QuickView':QuickView
         }.KUBE().create(ViewInstructions.prototype);
         return $API;
 
@@ -102,6 +102,16 @@
             if(KUBE.Is(_ViewInstructions,true) === 'ViewInstructions'){
                 views.push(_ViewInstructions);
             }
+        }
+
+        function QuickView(_name,_type,_id,_data){
+            var NewView = KUBE.Class('/Library/UI/ViewInstructions')();
+            NewView.SetName(_name);
+            NewView.SetType(_type);
+            NewView.SetId(_id);
+            NewView.SetData(_data);
+            AddViewInstructions(NewView);
+            return NewView;
         }
 
         //Inflate
