@@ -8,8 +8,14 @@
     <!-- UI: Basic Overview -->
     <script type="text/javascript">
 
-        //Load in a few libraries including dragger
+        //Load in a few libraries including
+        // -/Library/UI/Loader (this holds special view Objects for instantiation and creation)
+        // -/Library/UI/UI (this is our UI framework)
+        // -/Library/DOM/DomJack (required to construct a UI object)
+        // -/Library/Ajax/Client (used to set communication routing between UI and elsewhere)
         var uses = {
+            'Loader':'/Library/UI/Loader',
+            'UI':'/Library/UI/UI',
             'DJ':'/Library/DOM/DomJack',
             'Client':'/Library/Ajax/Client'
         };
@@ -23,6 +29,87 @@
 
         function uiExample($K){
             //Example coming
+
+            //Let's build a View (normally this is in a seperate file, loaded by a ViewIndex)
+            (function(KUBE){
+                "use strict";
+
+                //This is pretty standard requirements
+                KUBE.Uses(['/Library/UI/Loader','/Library/DOM/DomJack','/Library/Extend/Object']).then(function(_Loader){
+
+                    //We take the loader and load in our view (namespace, def)
+                    _Loader().Load('/Example/WindowExample',WindowExample);
+                });
+
+                //These view objects end up with a Prototype of UIView
+                function WindowExample(CoreView,numChildren){
+                    var DomView;
+                    var DJ = KUBE.Class('/Library/DOM/DomJack');
+                    var SJ = KUBE.Class('/Library/DOM/StyleJack');
+
+
+
+                    return CoreView.KUBE().merge({
+                        'Get':Get,
+                        'Init': Init,
+                        'Read':Read,
+                        'Update':Update,
+                        'Delete':Delete,
+                        'Width':Width,
+                        'Height':Height,
+                        'Resize':Resize
+                    });
+
+                    function Init(_data,_allocatedWidth,_allocatedHeight){
+                        //Required additions to every view
+                        create();
+                    }
+
+                    function Get(){
+                        return DomView;
+                    }
+
+                    function Read(){
+                        return data;
+                    }
+
+                    function Update(_data){
+                        data = _data;
+                    }
+
+                    function Delete(){
+                        DomView.Delete();
+                        CoreView.Emit('delete');
+                    }
+
+                    function Width(){
+                        return 100; //Return width
+                    }
+
+                    function Height(){
+                        return 0; //Return height
+                    }
+
+                    function Resize(){
+                        //Called by parent, update width/height if necessary
+                    }
+
+                    //Optional
+                    function Add(){
+                        //Wants to add a new view
+                    }
+
+                    //Private
+                    function create(){
+                        //Gets called at initialization, must emitState DrawFinish on CoreView after it is ready to be injected
+                        //We have an opportunity to build out our 
+                        CoreView.EmitState('drawFinish');
+                    }
+                }
+
+            }(KUBE));
+
+
         }
 
     </script>

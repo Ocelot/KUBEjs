@@ -12,6 +12,7 @@
     AjaxIndex.SetBaseURL(KUBE.Config().autoLoadPath+'Library/Ajax');
     AjaxIndex.SetIndex([
         'Client',
+        'Fetch',
         'Request',
         'Response'
     ]);

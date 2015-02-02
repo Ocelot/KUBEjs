@@ -1538,6 +1538,7 @@
 }(window,true));
 
 KUBE.AutoLoad().LoadAutoIndex('/Library/DOM',KUBE.Config().autoLoadPath+'/Indexes/DOMIndex.js');
+KUBE.AutoLoad().LoadAutoIndex('/Library/DOM/Dragger',KUBE.Config().autoLoadPath+'/Indexes/DOMIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/Ajax',KUBE.Config().autoLoadPath+'/Indexes/AjaxIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/Drawing',KUBE.Config().autoLoadPath+'/Indexes/DrawingIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/Extend',KUBE.Config().autoLoadPath+'/Indexes/ExtendIndex.js');

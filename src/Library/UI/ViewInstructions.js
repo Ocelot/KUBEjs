@@ -30,8 +30,7 @@
             'SetName':SetName,
             'SetId':SetId,
             'SetData':SetData,
-            'AddViewInstructions':AddViewInstructions,
-            'GetChildViews':GetChildViews,
+            'AddViewInstructions':AddViewInstructions,            'GetChildViews':GetChildViews
             'QuickView':QuickView
         }.KUBE().create(ViewInstructions.prototype);
         return $API;

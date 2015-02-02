@@ -17,7 +17,7 @@
         'UI',
         'QuickFlow',
         'Loader',
-        'Instructions'
+        'ViewInstructions'
     ]);
 
     KUBE.AutoLoad().AddIndex(UIIndex);
