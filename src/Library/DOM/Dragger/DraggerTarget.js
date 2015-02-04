@@ -21,7 +21,7 @@
             dragLeave,
             dragOver;
         if(KUBE.Is(_DomJack,true) !== "DomJack"){
-            throw new Exception('You must pass a DomJack into  DraggerTarget');
+            throw new Error('You must pass a DomJack into  DraggerTarget');
         }
 
         var $api = {
