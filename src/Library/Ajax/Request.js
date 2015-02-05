@@ -58,6 +58,7 @@
         function SetMethod(_method){
             //TODO: Validate method before setting
             method = _method;
+            return $API;
         }
 
         function SetData(_data){
@@ -65,6 +66,7 @@
             if(KUBE.Is(_data) === 'object'){
                 data = _data;
             }
+            return $API;
         }
 
         function SetResponseType(_type){
@@ -82,15 +84,18 @@
                     throw new Error('An invalid request type was set in Request. Please check Request object for accepted types.');
                     break;
             }
+            return $API;
         }
 
         //Utilities
         function AddData(_key,_val){
             data[_key] = _val;
+            return $API;
         }
 
         function AddHeader(_headerName,_headerData){
             customHeaders[_headerName] = _headerData;
+            return $API;
         }
 
     }
