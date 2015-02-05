@@ -166,6 +166,7 @@
 			//Content management
 			'GetInner':GetInner,				//Get: Get the raw innerHtml contents
 			'SetInner':SetInner,				//Set: Set the innerHtml contents
+            'BuildInner':BuildInner,            //Utility: Take an HTML string with buildKeys, build it into a DOM structure, return an Object reference to the keyed DomJacks
 			'Dump':Dump,						//Utility: Perform a special operation to properly empty the innerHtml contents (clear from memory,etc)
 			
 			//General Information			
@@ -875,6 +876,34 @@
 			return $DomJackAPI;
 			//Removed old hacky implementation of this as well
 		}
+
+        function BuildInner(_html){
+            var $keyObj = {};
+            var Temp = DJ('div');
+            Temp.SetInner(_html);
+            recurseBuild(Temp,$keyObj);
+            Dump();
+            Temp.GetChildren().KUBE().each(function(_MainChild){
+                Append(_MainChild);
+            });
+            Temp.Delete();
+            return $keyObj;
+        }
+
+        function recurseBuild(_DJ,_keyObj){
+            var children = _DJ.GetChildren();
+            children.KUBE().each(function(_Child){
+                if(_Child.GetAttribute('buildKey')){
+                    var buildKey = _Child.GetAttribute('buildKey');
+                    if(_keyObj[buildKey]){
+                        KUBE.console.error('Duplicate buildKey found in Template (DomJack Build Inner). Overwriting initial buildKey');
+                    }
+                    _keyObj[buildKey] = _Child;
+                    _Child.SetAttribute('buildKey',false);
+                    recurseBuild(_Child,_keyObj);
+                }
+            });
+        }
 
 		function Dump(){ 
 			SetInner('');
