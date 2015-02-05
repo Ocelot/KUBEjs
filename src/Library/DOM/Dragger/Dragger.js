@@ -9,7 +9,7 @@
 (function(KUBE){
     "use strict";
     KUBE.LoadSingletonFactory('/Library/DOM/Dragger/Dragger', Dragger,['/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Extend/Object','/Library/Extend/Array']);
-    Dragger.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
+
 
     function Dragger(){
         var $API,handles,targets,Dragging,LastHandle;
@@ -158,7 +158,6 @@
             if(!Dragging){
                 Dragging = _Drag;
                 LastHandle = _Drag;
-                console.log("LAST HANDLE: ", LastHandle);
                 targets.KUBE().each(function(_Target){
                     _Target.DJ.On('drop',generateDropFunction(_Target));
                     _Target.DJ.On('dragOver',generateDragOverFunction(_Target));
@@ -278,6 +277,8 @@
             _target.__events.dragLeave = f;
             return f;
         }
+
+        Dragger.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
 
     }

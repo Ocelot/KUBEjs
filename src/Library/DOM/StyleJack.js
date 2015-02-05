@@ -590,6 +590,7 @@
 			'Top' : Top,
 			'Transform' : Transform,
 			'Transition' : Transition,
+            'UserSelect': UserSelect,
 			'VerticalAlign' : VerticalAlign,
 			'Visibility' : Visibility,
 			'Width' : Width,
@@ -804,7 +805,11 @@
 		function Transition(){
 			return TransitionHandler.apply(undefined,getArgsArray(arguments));
 		}
-		
+
+        function UserSelect(){
+            return UserSelectHandler.apply(undefined,getArgsArray(arguments));
+        }
+
 		function VerticalAlign(){
 			return VerticalAlignHandler.apply(undefined,getArgsArray(arguments));
 		}
@@ -2855,7 +2860,18 @@
 		}
 		
 	}		//TRANSITION:END
-	
+
+    function UserSelectHandler(_styleObj,_API,_val){
+        var $return = _API;
+        if(_val === '$' || _val === undefined){
+            $return = RawStyleGet(_styleObj,'userSelect',true);
+        }
+        else{
+            RawStyleSet(_styleObj,_API,'userSelect',_val,true);
+        }
+        return $return;
+    }
+
 	function VerticalAlignHandler(_styleObj,_API,_vAlign){
 		var $return = _API;
 		if(_vAlign === undefined || _vAlign === '$'){

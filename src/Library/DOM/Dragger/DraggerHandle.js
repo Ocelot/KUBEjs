@@ -1,6 +1,6 @@
 (function(KUBE){
     "use strict";
-    KUBE.LoadFactory('/Library/DOM/Dragger/DraggerHandle', DraggerHandle,['/Library/Extend/Object']);
+    KUBE.LoadFactory('/Library/DOM/Dragger/DraggerHandle', DraggerHandle,['/Library/Extend/Object', '/Library/DOM/DomJack']);
     DraggerHandle.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 
     function DraggerHandle(_DomJack){
@@ -16,7 +16,7 @@
             dragEnd;
 
         if(KUBE.Is(_DomJack,true) !== "DomJack"){
-            throw new Exception('You must pass a DomJack into DraggerTarget');
+            throw new Error('You must pass a DomJack into DraggerHandle');
         }
 
         var $api = {
