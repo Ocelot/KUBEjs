@@ -229,8 +229,10 @@
 
         //Send to a Function Server
         function sendToFunction(_resolve,_reject,_Request){
-            var timedOut,timeoutId,ResponsePromise = target(_Request);
+            var timedOut,timeoutId,ResponsePromise;
             timedOut = false;
+
+            ResponsePromise = target(_Request);
             if(KUBE.Is(ResponsePromise,true) !== 'Promise'){
                 _reject({
                     'message':'Client target function did not return promise object. Could not resolve Request',
@@ -248,13 +250,13 @@
                 },timeoutDelay);
 
 
-                ResponsePromise.Then(function(_targetResolve,_targetReject,_Response){
-                debugger;
+                ResponsePromise.Then(function(_Response){
+
                     if(!timedOut){
                         if(KUBE.Is(_Response,true) === 'Response'){
                             clearTimeout(timeoutId);
                             _resolve(_Response);
-                            _targetResolve();
+                            return;
                         }
                         else{
                             clearTimeout(timeoutId);
@@ -262,24 +264,24 @@
                                 'message':'Client target function did not return Response object. Could not resolve Request',
                                 'data':''
                             });
-                            _targetResolve();
+                            return;
                         }
                     }
                     else{
-                        _targetReject();
+                        throw new Error();
                     }
                 });
 
-                ResponsePromise.Catch(function(_targetResolve,_targetReject,_err){
+                ResponsePromise.Catch(function(_err){
                     if(!timedOut){
                         _reject({
                             'message':_err.message+' (Client target rejected request)',
                             'data':_err
                         });
-                        _targetResolve();
+                        return;
                     }
                     else{
-                        _targetReject();
+                        throw new Error();
                     }
                 });
             }
