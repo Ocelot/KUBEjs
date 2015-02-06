@@ -249,6 +249,7 @@
 
 
                 ResponsePromise.Then(function(_targetResolve,_targetReject,_Response){
+                debugger;
                     if(!timedOut){
                         if(KUBE.Is(_Response,true) === 'Response'){
                             clearTimeout(timeoutId);
