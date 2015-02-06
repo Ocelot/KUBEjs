@@ -900,8 +900,8 @@
                     }
                     _keyObj[buildKey] = _Child;
                     _Child.SetAttribute('buildKey',false);
-                    recurseBuild(_Child,_keyObj);
                 }
+                recurseBuild(_Child,_keyObj);
             });
         }
 
