@@ -2980,6 +2980,7 @@
 				}
 				else{
                     _API.Emit('change',{'property':_property,'oldValue':current,'newValue':_newSet});
+                    _API.Emit('change:'+_property,{'property':_property,'oldValue':current,'newValue':_newSet});
 					$return = true;
 				}
 			}
@@ -2997,7 +2998,7 @@
 		}
 		if($return){
 			//Emit an event, which actually insanely allows people to listen for changes on CSSRules...
-			_API.Emit(_property,_newSet,_prefix);
+			_API.Emit(_property,_newSet,current,_prefix);
 		}
 		return $return;
 	}
