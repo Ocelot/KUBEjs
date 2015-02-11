@@ -240,8 +240,12 @@
 		}
 				
 		function validateAndInitNode(_initVar){
-			var type = KUBE.Is(_initVar);
-			return initByString(_initVar,type) || initByObject(_initVar,type);
+			var type = KUBE.Is(_initVar),$return;
+			$return = initByString(_initVar,type) || initByObject(_initVar,type);
+            if($return === false) {
+                throw new Error('Attempted to initialize a DomJack on an object that is not an HTMLElement');
+            }
+            return $return;
 		}
 		
 		function initByString(_initVar,_type){

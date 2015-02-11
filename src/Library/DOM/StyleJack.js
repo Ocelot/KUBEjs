@@ -21,7 +21,7 @@
 	KUBE.LoadFactory('/Library/DOM/StyleJack',StyleJack,dependancyArray);
 	
 	//If we are Superman, StyleJack is Lex Luthor AND KRYPTONITE
-	var prefix,Convert;
+	var prefix, Convert, DJSJCache = {}, StyleSJCache = {};
 	
 	/*******************************************************************
 	 * StyleJack is our actual KUBE Class it fundamentally acts
@@ -54,20 +54,50 @@
 		}
 		
 		function processObject(_obj){
-			var $return = false;
-			if(KUBE.Is(_obj) === 'object'){
-				$return = assignStyleDeclaration(_obj) || assignStyleDeclaration({'style':_obj});
-			}
+			var $return = false, DJ, DJID;
+            if(KUBE.Is(_obj,true) === "DomJack" && DJSJCache[_obj.CacheId()] !== undefined ){
+                //DomJack caches style internally already. Return that
+                $return = _obj.Style();
+            }
+            else if(KUBE.Is(_obj) === 'object'){
+                //This happens when a DOM Node or Style gets passed in directly.
+                //I don't know when this gets hit.
+                if(inheritsStyleDeclaration(_obj.style)){
+                    //This means it's a DOM Node initially. We just want to return a DomJack.
+                    try{
+                        DJ = KUBE.Class('/Library/DOM/DomJack')(_obj);
+                        DJID = DJ.CacheId();
+                        if(!DJSJCache[DJID]){
+                            DJSJCache[DJID] = assignStyleDeclaration(_obj);
+                        }
+                        $return = DJSJCache[DJID];
+                    }
+                    catch(e){
+                        //This was not a DOMNode but something masquerading as one.
+                        //As below, this doesn't get caching.
+                        $return = assignStyleDeclaration({'style': _obj})
+                    }
+                }
+                else if(inheritsStyleDeclaration(_obj)){
+                    //This means that is directly a CSSStyleDeclaration. We cannot cache this with DomJack.
+                    //There's a weird situation that someone could
+                    //This means that events won't work (right now. we might fix this one day?)
+                    $return = assignStyleDeclaration({'style':_obj});
+                }
+
+            }
 			return $return;
 		}
 
 		function inheritsStyleDeclaration(_obj){
-			return _obj instanceof CSSStyleDeclaration;
+			return (_obj instanceof CSSStyleDeclaration);
 		}
 		
 		function assignStyleDeclaration(_obj){
-			return (inheritsStyleDeclaration(_obj.style) ? new CSSStyleRuleHandler(_obj) : false);
-		}
+            var $return = false;
+			$return =  (inheritsStyleDeclaration(_obj.style) ? new CSSStyleRuleHandler(_obj) : false);
+            return $return;
+        }
 
 		function processString(_string){
 			var $return = false;
@@ -109,13 +139,16 @@
 		}
 		
 		function styleRule(_string){
-			var rule,$return = false;
+			var rule;
 			_string = normalizeRule(_string);
 			rule = searchForRule('CSSStyleRule',_string);
-			if(rule){
-				$return = new CSSStyleRuleHandler(rule);
+			if(rule && StyleSJCache[rule.selectorText] === undefined){
+                StyleSJCache[rule.selectorText] = new CSSStyleRuleHandler(rule);
+                StyleSJCache[rule.selectorText].Once('delete',function(){
+                    delete StyleSJCache[rule.selectorText];
+                });
 			}
-			return $return;
+			return StyleSJCache[rule.selectorText] || false;
 		}
 		
 		function checkPrefix(_string, _check){
@@ -527,18 +560,21 @@
 	 * Our CSSStyleRule Object Handler
 	 *************************************/
 	function CSSStyleRuleHandler(_styleObj){
-		var $API,Events;
+		var $API,Events,DJID;
 		
 		Events = KUBE.Events();
 		
 		if(_styleObj instanceof HTMLElement){
+            DJID = KUBE.Class('/Library/DOM/DomJack')(_styleObj).CacheId();
 			KUBE.Class('/Library/DOM/DomJack')(_styleObj).Once('cleanup',function(){
 				_styleObj = undefined;
+                delete DJSJCache[DJID];
 			});
 		}
 		
 		$API = {
 			'Delete':Delete,
+            'Debug': Debug,
 			'On':Events.On,
 			'Once':Events.Once,
 			'Emit':Events.Emit,
@@ -617,7 +653,14 @@
                 }
             }
 		}
-		
+
+        function Debug(){
+            console.group('STYLEJACK DEBUG');
+            console.log(DJSJCache);
+            console.log(StyleSJCache);
+            console.groupEnd('STYLEJACK DEBUG');
+        }
+
 		function getArgsArray(_arguments){
 			var args = Array.prototype.slice.call(_arguments);
 			args.unshift($API);
@@ -2980,7 +3023,7 @@
 				}
 				else{
                     _API.Emit('change',{'property':_property,'oldValue':current,'newValue':_newSet});
-                    _API.Emit('change:'+_property,{'property':_property,'oldValue':current,'newValue':_newSet});
+                    _API.Emit('change:'+_property.toLowerCase(),{'property':_property,'oldValue':current,'newValue':_newSet});
 					$return = true;
 				}
 			}
@@ -2998,7 +3041,7 @@
 		}
 		if($return){
 			//Emit an event, which actually insanely allows people to listen for changes on CSSRules...
-			_API.Emit(_property,_newSet,current,_prefix);
+			_API.Emit(_property.toLowerCase(),_newSet,current,_prefix);
 		}
 		return $return;
 	}
