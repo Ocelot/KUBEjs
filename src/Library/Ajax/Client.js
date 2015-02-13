@@ -16,7 +16,7 @@
 
 
         auth = {'username':'','password':''};
-        timeoutDelay = (KUBE.Is(_timeout) === 'number' ? _timeout : 10000);
+        timeoutDelay = (KUBE.Is(_timeout) === 'number' ? _timeout : 30000);
         freezeDelay = (KUBE.Is(_freezeDelay) === 'number' ? _freezeDelay : 2500);
         target = (KUBE.Is(_target) === 'function' || KUBE.Is(_target) === 'string' ? _target : undefined);
 
