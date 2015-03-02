@@ -29,8 +29,13 @@
 
         //API Methods
 
-        function AddTarget(DraggerTarget){
+        function AddTarget(DraggerTarget,_acceptFiles){
+
             if(KUBE.Is(DraggerTarget,true) === 'DraggerTarget'){
+                if(_acceptFiles){
+                    initializeFileTarget(DraggerTarget);
+                }
+
                 DraggerTarget.DJ.On('cleanup',function(){
                     RemoveTarget(this)
                 });
@@ -276,6 +281,37 @@
             };
             _target.__events.dragLeave = f;
             return f;
+        }
+
+        function initializeFileTarget(_DraggerTarget){
+            _DraggerTarget.DJ.On('dragover',function(_e){
+                if(_e.dataTransfer && _e.dataTransfer.types.indexOf('Files') >= 0){
+                    _e.dataTransfer.dropEffect = "copy";
+                    return false;
+                }
+            });
+
+            _DraggerTarget.DJ.On('drop',function(_e){
+                if(_e.dataTransfer.files.length){
+                    var droppedItem = {
+                        "domjack": false,
+                        "data": _e.dataTransfer
+                    };
+
+                    var targetItem = {
+                        "domjack": _DraggerTarget.DJ,
+                        "data": _DraggerTarget.data
+                    };
+
+                    var dragData = {
+                        'dragged': droppedItem,
+                        'target': targetItem,
+                        'event': _e
+                    };
+
+                    return _DraggerTarget.drop.call(this,dragData);
+                }
+            });
         }
 
         Dragger.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
