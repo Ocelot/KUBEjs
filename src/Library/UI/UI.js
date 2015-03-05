@@ -57,7 +57,11 @@
 
         function SendRequest(_Request){
             if(KUBE.Is(_Request,true) === 'Request' && Client){
-                Client.SendRequest(_Request).then(handleClientResponse).catch(handleClientError);
+                var ResponsePromise = Client.SendRequest(_Request);
+                ResponsePromise.then(handleClientResponse).catch(handleClientError);
+                return ResponsePromise.then(function(_Response){
+                    return {'code':_Response.GetStatusCode(),'reason':_Response.GetStatusText()};
+                });
             }
         }
 
@@ -75,7 +79,7 @@
 
         function Send(_data){
             if(KUBE.Is(requestManager) === 'function'){
-                SendRequest(requestManager(_data));
+                return SendRequest(requestManager(_data));
             }
         }
 

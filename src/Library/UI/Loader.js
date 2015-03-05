@@ -571,7 +571,7 @@
 
         function Send(_actionObj,_f){
             //This has the ability to communicate directly with the View that is sending the request, otherwise instructions are processed accordingly
-            UI.Send(_actionObj);
+            return UI.Send(_actionObj);
         }
 
         function Width(){

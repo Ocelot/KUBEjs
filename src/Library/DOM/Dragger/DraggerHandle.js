@@ -24,9 +24,8 @@
             'SetData': SetData, 'GetData': GetData,
             'SetDrag': SetDrag, 'GetDrag': GetDrag,
             'SetDragStart': SetDragStart, 'GetDragStart': GetDragStart,
-            'SetDragEnd': SetDragEnd, 'GetDragEnd': GetDragEnd,
+            'SetDragEnd': SetDragEnd, 'GetDragEnd': GetDragEnd
         }.KUBE().create(DraggerHandle.prototype);
-
 
         Object.defineProperty($api,'DJ',{get: GetDomJack});
         Object.defineProperty($api,'data',{get: GetData});
