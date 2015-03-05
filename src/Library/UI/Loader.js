@@ -475,7 +475,9 @@
             'Width':Width,
             'Height':Height,
             'Resize':Resize,
-            'CSSClass': CSSClass
+            'CSSClass': CSSClass,
+            'AddNotification':AddNotification,
+            'CancelNotification':CancelNotification
         });
         return CoreView;
 
@@ -572,6 +574,14 @@
         function Send(_actionObj,_f){
             //This has the ability to communicate directly with the View that is sending the request, otherwise instructions are processed accordingly
             return UI.Send(_actionObj);
+        }
+
+        function AddNotification(_UIView,_callCallback,_receiveCallback,_interval){
+            return UI.AddNotification(_UIView,_callCallback,_receiveCallback,_interval);
+        }
+
+        function CancelNotification(_notifyId){
+            UI.CancelNotification(_notifyId);
         }
 
         function Width(){

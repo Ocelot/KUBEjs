@@ -8,15 +8,19 @@
  */
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFactory('/Library/UI/UI',UI,['/Library/UI/Loader','/Library/Ajax/Client','/Library/DOM/DomJack','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date']);
+	KUBE.LoadFactory('/Library/UI/UI',UI,['/Library/UI/Loader','/Library/Ajax/Client','/Library/DOM/DomJack','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date','/Library/Extend/Math']);
 
 	UI.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function UI(_DomJack){
         if(KUBE.Is(_DomJack,true) !== 'DomJack'){
             throw new Error('Failed to initialize User Interface, constructor must be a valid DomJack object');
         }
-        var Root,Client,RequestTemplate,$API,UILoader,requestManager,responseHandler;
+        var Root,Client,NotifyClient,nRequestManager,nResponseHandler,RequestTemplate,$API,UILoader,requestManager,responseHandler,notifications,lastNRun,nState,nPause,nThreshold;
         UILoader = KUBE.Class('/Library/UI/Loader')();
+        notifications = {};
+        lastNRun = 0;
+        nState = false;
+        nPause = false;
 
         //Our API
         $API = {
@@ -25,7 +29,10 @@
             'SetRequestManager':SetRequestManager,
             'SetResponseHandler':SetResponseHandler,
             'Send':Send,
-            'ProcessInstructions':ProcessInstructions
+            'ProcessInstructions':ProcessInstructions,
+            'SetNotificationClient':SetNotificationClient,
+            'AddNotification':AddNotification,
+            'CancelNotification':CancelNotification
         }.KUBE().create(UI.prototype);
 
         Root = UILoader.Create(undefined,'Root','Root','Root');
@@ -55,6 +62,16 @@
             }
         }
 
+        function SetNotificationClient(_Client,_notifyThreshold){
+            if(KUBE.Is(_Client,true) === 'Client'){
+                nThreshold = _notifyThreshold || 500;
+                NotifyClient = _Client;
+            }
+            else{
+                throw new Error('UI Client object must be a valid /Library/Ajax/Client object.');
+            }
+        }
+
         function SendRequest(_Request){
             if(KUBE.Is(_Request,true) === 'Request' && Client){
                 var ResponsePromise = Client.SendRequest(_Request);
@@ -74,6 +91,40 @@
         function SetResponseHandler(_handlerCallback){
             if(KUBE.Is(_handlerCallback) === 'function'){
                 responseHandler = _handlerCallback;
+            }
+        }
+
+        function AddNotification(_UIView,_callCallback,_receiveCallback,_interval){
+            if(KUBE.Is(NotifyClient,true) !== 'Client'){
+                throw new Error();
+            }
+            if(KUBE.Is(_UIView,true) === 'UIView' && KUBE.Is(_callCallback) === 'function' && KUBE.Is(_receiveCallback) === 'function'){
+                var notifyId = generateNotifyId();
+                _interval = _interval || 1000;
+
+                //I could probably optimize this if it becomes a burden on the system
+                notifications[notifyId] = {
+                    'interval':_interval,
+                    'callCallback':_callCallback,
+                    'receiveCallback':_receiveCallback,
+                    'lastRun':0
+                };
+
+                //I'm fairly sure this will stack and clear properly, but might be worth double checking
+                _UIView.Once('delete',function(){
+                    CancelNotification(notifyId);
+                });
+
+                if(!nState){
+                    nState = setInterval(runNotifications,nThreshold);
+                }
+                return notifyId;
+            }
+        }
+
+        function CancelNotification(_notifyId){
+            if(notifications[_notifyId]){
+                delete notifications[_notifyId];
             }
         }
 
@@ -98,6 +149,7 @@
             }
         }
 
+
         function handleClientError(_Error){
             throw _Error;
         }
@@ -117,6 +169,67 @@
             width = _RootDJ.Style().Width() || KUBE.Class('/Library/DOM/WinDocJack')().WindowWidth();
             height = _RootDJ.Style().Height() || KUBE.Class('/Library/DOM/WinDocJack')().WindowHeight();
             return [width,height];
+        }
+
+        function generateNotifyId(){
+            var id = genId();
+            while(notifications[id]){
+                id = genId();
+            }
+            return id;
+
+            function genId() {
+                var $return = [], index, char;
+                for (var i = 0; i < 52; i++) {
+                    index = Math.floor(Math.random() * 26) + 65;
+                    char = String.fromCharCode(index);
+                    char = (Math.random() > 0.5 ? char.toLowerCase() : char);
+                    $return.push(char);
+                }
+                return $return.join("");
+            }
+        }
+
+        function runNotifications(){
+            //SetInterval will try to run this pretty fast, but we do wait for the server notification to finish, this way we don't stack up weird.
+            // Individual notifications will always execute if the time inbetween their last run and current time is longer than their interval
+            if(!nPause){
+                nPause = true;
+                lastNRun = Date.now();
+                var send = false;
+                var Request = KUBE.Class('/Library/Ajax/Request')();
+                Request.SetMethod('post');
+                Request.SetResponseType('json');
+
+                notifications.KUBE().each(function(_notifyId,_notifyObj){
+                    if(Date.now()-_notifyObj.lastRun > _notifyObj.interval){
+                        _notifyObj.lastRun = Date.now();
+                        var payloadData = _notifyObj.callCallback();
+                        if(payloadData){
+                            Request.AddData(_notifyId,payloadData);
+                            send = true;
+                        }
+                    }
+                });
+
+                if(send){
+                    NotifyClient.SendRequest(Request).then(function(_Response){
+                        if(_Response.GetStatusCode() === 200){
+                            var responseData = _Response.GetData();
+                            responseData.KUBE().each(function(_notifyId,_notification){
+                                //Just making sure it's still around
+                                if(notifications[_notifyId]){
+                                    notifications[_notifyId].receiveCallback(_notification);
+                                }
+                            });
+                        }
+                        nPause = false;
+                    });
+                }
+                else{
+                    nPause = false;
+                }
+            }
         }
 
 	}
