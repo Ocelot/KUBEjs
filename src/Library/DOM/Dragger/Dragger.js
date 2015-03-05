@@ -56,8 +56,8 @@
 
         function ClearTargets(){
             targets.KUBE().each(function(_Target){
-               _Target.DJ.Clear('drop');
-               _Target.DJ.Clear('dragOver');
+                _Target.DJ.Clear('drop');
+                _Target.DJ.Clear('dragOver');
 
             });
             targets = [];
@@ -284,11 +284,23 @@
         }
 
         function initializeFileTarget(_DraggerTarget){
-            _DraggerTarget.DJ.On('dragover',function(_e){
-                if(_e.dataTransfer && _e.dataTransfer.types.indexOf('Files') >= 0){
-                    _e.dataTransfer.dropEffect = "copy";
-                    return false;
-                }
+            _DraggerTarget.DJ.On('dragover',function(_domEvent){
+                var draggedItem = {
+                    "domjack": false,
+                    "data": _domEvent.dataTransfer
+
+                };
+                var targetItem = {
+                    "domjack": _DraggerTarget.DJ,
+                    "data": _DraggerTarget.data
+                };
+
+                var dragData = {
+                    'dragged': draggedItem,
+                    'target': targetItem,
+                    'event': _domEvent
+                };
+                return _DraggerTarget.dragOver.call(this,dragData);
             });
 
             _DraggerTarget.DJ.On('drop',function(_e){
