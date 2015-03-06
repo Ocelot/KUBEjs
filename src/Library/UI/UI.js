@@ -224,6 +224,10 @@
                             });
                         }
                         nPause = false;
+                    }).catch(function(_Err){
+                        setTimeout(function(){
+                            nPause = false;
+                        },5000);
                     });
                 }
                 else{
