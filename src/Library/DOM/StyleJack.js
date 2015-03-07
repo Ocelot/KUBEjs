@@ -1746,7 +1746,8 @@
 			'Set':Set,
 			'Family':Family,
 			'Size':Size,
-			'Style':Style,
+            'Smoothing':Smoothing,
+            'Style':Style,
 			'Variant':Variant,
 			'Weight':Weight,
 			'api':_API
@@ -1836,6 +1837,18 @@
 			}
 			return $return;
 		}
+
+        function Smoothing(_value){
+            KUBE.console.log('warning: font smoothing is a non standard property. Not recommended for production.');
+            var $return = $advancedAPI;
+            if(_value === undefined || _value === '$'){
+                $return = RawStyleGet(_styleObj,'fontSmoothing');
+            }
+            else{
+                RawStyleSet(_styleObj,_API,'fontSmoothing',_value,true);
+            }
+            return $return;
+        }
 		
 		function simpleHandler(_val){
 			var $return = _API;
