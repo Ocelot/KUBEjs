@@ -169,6 +169,10 @@
 
             if(!createStylesheetIfNoneExists()){
                 for(i=0;i<document.styleSheets.length;i++){
+                    if(document.styleSheets[i].href){
+                        //This is a stylesheet that gets linked in from a link element.
+                        continue;
+                    }
                     $return = searchStylesheet(document.styleSheets[i],_type,_matchData,_checkPrefix);
                     if($return){
                         break;
@@ -181,12 +185,12 @@
 		function searchStylesheet(_styleSheet,_type,_matchData,_checkPrefix){
 			var i,rules,$return = false;
 			rules = (KUBE.Is(_styleSheet.cssRules) !== 'undefined' ? _styleSheet.cssRules : _styleSheet.rules);
-			for(i=0; i<rules.length;i++){
-				$return = checkRule(rules[i],_type,_type,_matchData) || checkRule(rules[i],classPrefix(prefix)+_type,_type,_matchData);
-				if($return){
-					break;
-				}
-			}
+            for(i=0; i<rules.length;i++){
+                $return = checkRule(rules[i],_type,_type,_matchData) || checkRule(rules[i],classPrefix(prefix)+_type,_type,_matchData);
+                if($return){
+                    break;
+                }
+            }
 			return $return;
 		}
 
@@ -265,9 +269,21 @@
 		}
 
 		function initRule(_type,_initData){
-			var styleSheet = (!document.styleSheets.length ? initStylesheet() : document.styleSheets[0]);
+			var styleSheet = (!document.styleSheets.length ? initStylesheet() : findValidStyleSheetForRule());
 			return initCSSStyleRule(styleSheet,_type,_initData) || initCSSKeyframesRule(styleSheet,_type,_initData) || false;
 		}
+
+        function findValidStyleSheetForRule(){
+            //We need to exclude stylesheets that are from a <link> stylesheet;
+            for(var i = 0; i <= document.styleSheets.length; i++){
+                var cur = document.styleSheets[i];
+                if(cur.href){
+                    continue;
+                }
+                return cur;
+            }
+            return initStylesheet(); //This should be impossible
+        }
 		
 		function initCSSStyleRule(_styleSheet,_type,_initData){
 			var $return = false;
