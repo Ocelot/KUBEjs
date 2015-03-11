@@ -87,8 +87,12 @@
         //Send Remotely (XHR)
         function sendRemote(_resolve,_reject,_Request){
             var remotePkg;
+
             remotePkg = initXHR(new XMLHttpRequest(),_Request);
             XHRListen(remotePkg.XHR,_resolve,_reject,_Request);
+            if(_Request.GetResponseType()){
+                remotePkg.XHR.responseType = _Request.GetResponseType();
+            }
             remotePkg.XHR.send(remotePkg.sendData);
         }
 
@@ -134,10 +138,6 @@
         function initXHR(_XHR,_Request){
             var sendData;
 
-            //Set up our RequestType
-            if(_Request.GetResponseType()){
-                _XHR.responseType = _Request.GetResponseType();
-            }
 
             switch(_Request.GetMethod().toLowerCase()){
                 case 'post':
