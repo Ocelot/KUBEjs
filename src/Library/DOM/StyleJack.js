@@ -2180,6 +2180,7 @@
 			else{
 				RawStyleSet(_styleObj,_API,'overflowY',_y);
 			}
+            return $return;
 		}
 		
 		function Get(_array){
