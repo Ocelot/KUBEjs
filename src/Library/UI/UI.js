@@ -116,7 +116,9 @@
                 });
 
                 if(!nState){
-                    nState = setInterval(runNotifications,nThreshold);
+                    nState = setInterval(function(){
+                        requestAnimationFrame(runNotifications);
+                    },nThreshold);
                 }
                 return notifyId;
             }
