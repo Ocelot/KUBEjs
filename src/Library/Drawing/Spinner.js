@@ -72,16 +72,11 @@
         //TODO: ADD EVENTS TO CONTROL STATE AS WELL
 
         function Play(){
-            if(spinJack && !spinJack.IsDetached()){
-                if(playState){
-                    return; //I'm already playing!
-                }
-                playState = true;
-                _nextFrame();
+            if(playState){
+                return; //I'm already playing!
             }
-            else{
-                throw new Error('Cannot play spinner until it is attached to the DOM');
-            }
+            playState = true;
+            _nextFrame();
         }
 
         function Pause(){
