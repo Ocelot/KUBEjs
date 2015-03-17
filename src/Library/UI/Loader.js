@@ -87,7 +87,8 @@
             'Name':Name,
             'Id':Id,
             'DeepRead':DeepRead,
-            'ResizeChildren': ResizeChildren
+            'ResizeChildren': ResizeChildren,
+            'Reset':Reset
         }.KUBE().create(UIView.prototype);
 
         $ViewAPI = KUBE.Events($ViewAPI);
@@ -105,6 +106,16 @@
 
         function Root(){
             return findRoot($ViewAPI);
+        }
+
+        function Reset(){
+            var TempChildren = Children;
+            Children = [];
+            if(KUBE.Is(TempChildren) === 'array'){
+                TempChildren.KUBE().each(function(_Child){
+                    _Child.Delete();
+                });
+            }
         }
 
         //Find logic
@@ -506,8 +517,12 @@
             return {};
         }
 
-        function Update(){
-            return false;
+        function Update(_data){
+            if(KUBE.Is(_data) === 'object'){
+                if(_data.reset){
+                    CoreView.Reset();
+                }
+            }
         }
 
         function Delete(){
