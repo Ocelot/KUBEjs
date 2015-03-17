@@ -72,11 +72,16 @@
         //TODO: ADD EVENTS TO CONTROL STATE AS WELL
 
         function Play(){
-            if(playState){
-                return; //I'm already playing!
+            if(spinJack && !spinJack.IsDetached()){
+                if(playState){
+                    return; //I'm already playing!
+                }
+                playState = true;
+                _nextFrame();
             }
-            playState = true;
-            _nextFrame();
+            else{
+                throw new Error('Cannot play spinner until it is attached to the DOM');
+            }
         }
 
         function Pause(){
@@ -91,7 +96,7 @@
         //TODO: A SETTER THAT TAKES IN AN OBJECT AND CALLS ALL OF THEM, OR AS PART OF INITIAL CALL
 
         function SetRadius(_radius){
-            if(KUBE.Is(radius) === "number"){
+            if(KUBE.Is(_radius) === "number"){
                 options.radius = _radius;
             }
             return $spinAPI;
@@ -104,7 +109,7 @@
             return $spinAPI;
         }
         
-        function SetWidth(width){
+        function SetWidth(_width){
             if(KUBE.Is(_width) === "number"){
                 options.width = _width;
             }
