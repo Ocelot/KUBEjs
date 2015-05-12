@@ -96,31 +96,33 @@
 
         function AddNotification(_UIView,_callCallback,_receiveCallback,_interval){
             if(KUBE.Is(NotifyClient,true) !== 'Client'){
-                throw new Error();
+                //throw new Error();
             }
-            if(KUBE.Is(_UIView,true) === 'UIView' && KUBE.Is(_callCallback) === 'function' && KUBE.Is(_receiveCallback) === 'function'){
-                var notifyId = generateNotifyId();
-                _interval = _interval || 1000;
+            else{
+                if(KUBE.Is(_UIView,true) === 'UIView' && KUBE.Is(_callCallback) === 'function' && KUBE.Is(_receiveCallback) === 'function'){
+                    var notifyId = generateNotifyId();
+                    _interval = _interval || 1000;
 
-                //I could probably optimize this if it becomes a burden on the system
-                notifications[notifyId] = {
-                    'interval':_interval,
-                    'callCallback':_callCallback,
-                    'receiveCallback':_receiveCallback,
-                    'lastRun':0
-                };
+                    //I could probably optimize this if it becomes a burden on the system
+                    notifications[notifyId] = {
+                        'interval':_interval,
+                        'callCallback':_callCallback,
+                        'receiveCallback':_receiveCallback,
+                        'lastRun':0
+                    };
 
-                //I'm fairly sure this will stack and clear properly, but might be worth double checking
-                _UIView.Once('delete',function(){
-                    CancelNotification(notifyId);
-                });
+                    //I'm fairly sure this will stack and clear properly, but might be worth double checking
+                    _UIView.Once('delete',function(){
+                        CancelNotification(notifyId);
+                    });
 
-                if(!nState){
-                    nState = setInterval(function(){
-                        requestAnimationFrame(runNotifications);
-                    },nThreshold);
+                    if(!nState){
+                        nState = setInterval(function(){
+                            requestAnimationFrame(runNotifications);
+                        },nThreshold);
+                    }
+                    return notifyId;
                 }
-                return notifyId;
             }
         }
 
