@@ -483,12 +483,13 @@
             'Delete':Delete,
             'Add':Add,
             'Send':Send,
+            'SendAction':SendAction,
+            'SendSubscription':SendSubscription,
+            'SendUnsubscription':SendUnsubscription,
             'Width':Width,
             'Height':Height,
             'Resize':Resize,
-            'CSSClass': CSSClass,
-            'AddNotification':AddNotification,
-            'CancelNotification':CancelNotification
+            'CSSClass': CSSClass
         });
         return CoreView;
 
@@ -586,18 +587,24 @@
             }
         }
 
-        function Send(_actionObj,_f){
+        function Send(_actionObj,_type){
             //This has the ability to communicate directly with the View that is sending the request, otherwise instructions are processed accordingly
-            return UI.Send(_actionObj);
+            _type = _type || 'action';
+            return UI.Send(_actionObj,_type);
         }
 
-        function AddNotification(_UIView,_callCallback,_receiveCallback,_interval){
-            return UI.AddNotification(_UIView,_callCallback,_receiveCallback,_interval);
+        function SendAction(_actionObj){
+            return UI.SendAction(_actionObj);
         }
 
-        function CancelNotification(_notifyId){
-            UI.CancelNotification(_notifyId);
+        function SendSubscription(){
+
         }
+
+        function SendUnsubscription(){
+
+        }
+
 
         function Width(){
             return width;
