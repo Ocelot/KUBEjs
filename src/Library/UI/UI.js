@@ -16,21 +16,14 @@
             throw new Error('Failed to initialize User Interface, constructor must be a valid DomJack object');
         }
         var Root,Client,NotifyClient,nRequestManager,nResponseHandler,RequestTemplate,$API,UILoader,requestManager,responseHandler,notifications,lastNRun,nState,nPause,nThreshold;
-        var UIPipe; //This is new
+        var UIGroundControl; //This is new
 
         UILoader = KUBE.Class('/Library/UI/Loader')();
-        notifications = {};
-        lastNRun = 0;
-        nState = false;
-        nPause = false;
 
         //Our API
         $API = {
-            'SetPipe':SetPipe,
+            'SetGroundControl':SetGroundControl,
             'Send':Send,
-            'SendAction':SendAction,
-            'SendSubscription':SendSubscription,
-            'SendUnsubscription':SendUnsubscription,
             'ProcessInstructions':ProcessInstructions
         }.KUBE().create(UI.prototype);
 
@@ -52,32 +45,14 @@
         return $API;
 
         //Instruction processing
-        function SetPipe(_UIPipe){
-            if(KUBE.Is(_UIPipe) === 'object' && KUBE.Is(_UIPipe.Send) === 'function'){
-                UIPipe = _UIPipe;
+        function SetGroundControl(_UIGroundControl){
+            if(KUBE.Is(_UIGroundControl) === 'object' && KUBE.Is(_UIGroundControl.Send) === 'function'){
+                UIGroundControl = _UIGroundControl;
             }
         }
 
         function Send(_data,_type){
-            return UIPipe.Send(_data,_type);
-        }
-
-        function SendAction(_data){
-            if(UIPipe){
-                return UIPipe.Send(_data,'action');
-            }
-        }
-
-        function SendSubscription(_data){
-            if(UIPipe){
-                return UIPipe.Send(_data,'subscribe');
-            }
-        }
-
-        function SendUnsubscription(_data){
-            if(UIPipe){
-                return UIPipe.Send(_data,'unsubscribe');
-            }
+            return UIGroundControl.Send(_data,_type);
         }
 
         function ProcessInstructions(_InstructionsObj){
