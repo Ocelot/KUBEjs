@@ -51,8 +51,10 @@
             }
         }
 
-        function Send(_data,_type){
-            return UIGroundControl.Send(_data,_type);
+        function Send(_UIView,_data,_type,_callback){
+            if(UIGroundControl !== undefined){
+                return UIGroundControl.Send(_UIView,_data,_type,_callback);
+            }
         }
 
         function ProcessInstructions(_InstructionsObj){
