@@ -73,7 +73,6 @@
 	KUBE.LoadSingletonFactory('Loader',KUBELoader);
 
 
-	
 	/* Prototype onto native */
     /* Note: define property WILL break in IE8, however because we can set enumerable to false, it shouldn't break jQuery.  6 of one, half dozen of another. */
 	//if(KUBEPrototype){

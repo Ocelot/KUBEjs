@@ -8,7 +8,7 @@
  */
 (function(KUBE){
     "use strict";
-    KUBE.LoadSingleton('/Library/UI/Loader',Loader,['/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Drawing/Spinner','/Library/Extend/Object']);
+    KUBE.LoadSingleton('/Library/UI/Loader',Loader,['/Library/DOM/DomJack','/Library/DOM/StyleJack','/Library/Drawing/Spinner','/Library/Extend/Object','/Library/Extend/Math']);
 
     Loader.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
     function Loader(){
@@ -88,7 +88,8 @@
             'Id':Id,
             'DeepRead':DeepRead,
             'ResizeChildren': ResizeChildren,
-            'Reset':Reset
+            'Reset':Reset,
+            'UUID':UUID
         }.KUBE().create(UIView.prototype);
 
         $ViewAPI = KUBE.Events($ViewAPI);
@@ -145,6 +146,26 @@
             }
 
             return $return;
+        }
+
+        function UUID(_includeDashes){
+            _includeDashes = (_includeDashes === false ? false : true);
+            var r = [
+                Math.KUBE().random(0,65535).toString(16),
+                Math.KUBE().random(0,65535).toString(16),
+                Math.KUBE().random(0,65535).toString(16),
+                Math.KUBE().random(16384,20479).toString(16),
+                Math.KUBE().random(32768,49151).toString(16),
+                Math.KUBE().random(0,65535).toString(16),
+                Math.KUBE().random(0,65535).toString(16),
+                Math.KUBE().random(0,65535).toString(16)
+            ];
+            if(_includeDashes){
+                return (r[0]+r[1]+'-'+r[2]+'-'+r[3]+'-'+r[4]+'-'+r[5]+r[6]+r[7]).toUpperCase();
+            }
+            else{
+                return r.join('').toUpperCase();
+            }
         }
 
         function checkRoot(_ViewInstructions){
@@ -483,9 +504,6 @@
             'Delete':Delete,
             'Add':Add,
             'Send':Send,
-            'SendAction':SendAction,
-            'SendSubscription':SendSubscription,
-            'SendUnsubscription':SendUnsubscription,
             'Width':Width,
             'Height':Height,
             'Resize':Resize,
@@ -587,24 +605,11 @@
             }
         }
 
-        function Send(_actionObj,_type){
+        function Send(_UIView,_actionObj,_type,_callback){
             //This has the ability to communicate directly with the View that is sending the request, otherwise instructions are processed accordingly
             _type = _type || 'action';
-            return UI.Send(_actionObj,_type);
+            return UI.Send(_UIView,_actionObj,_type,_callback);
         }
-
-        function SendAction(_actionObj){
-            return UI.SendAction(_actionObj);
-        }
-
-        function SendSubscription(){
-
-        }
-
-        function SendUnsubscription(){
-
-        }
-
 
         function Width(){
             return width;
