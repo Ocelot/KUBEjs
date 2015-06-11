@@ -113,7 +113,14 @@
             var TempChildren = Children;
             Children = [];
             if(KUBE.Is(TempChildren) === 'array'){
+                var deleteCount = TempChildren.length-1;
                 TempChildren.KUBE().each(function(_Child){
+                    _Child.On('delete',function(){
+                        deleteCount--;
+                        if(!deleteCount){
+                            $ViewAPI.Emit('reset');
+                        }
+                    });
                     _Child.Delete();
                 });
             }
@@ -360,23 +367,38 @@
             Children = [];
             safe = {};
             match = {};
+            var deleteCounter = 0;
 
             for(c=0;c<OldChildren.length;c++){
-                for(v=0;v<_matchArray.length;v++){
-                    if(!safe[v] && !match[c]){
-                        if(OldChildren[c].Check(_matchArray[v])){
-                            safe[v] = true;
-                            match[c] = true;
-                            Children.push(OldChildren[c]);
-                            break;
+                if(!match[c]){
+                    deleteCounter++;
+                    OldChildren[c].On('delete',function(){
+                        deleteCounter--;
+                        if(!deleteCounter){
+                            syncAddChildren();
                         }
-                    }
+                    });
                 }
             }
 
             for(c=0;c<OldChildren.length;c++){
                 if(!match[c]){
                     OldChildren[c].Delete();
+                }
+            }
+
+            function syncAddChildren(){
+                for(c=0;c<OldChildren.length;c++){
+                    for(v=0;v<_matchArray.length;v++){
+                        if(!safe[v] && !match[c]){
+                            if(OldChildren[c].Check(_matchArray[v])){
+                                safe[v] = true;
+                                match[c] = true;
+                                Children.push(OldChildren[c]);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
