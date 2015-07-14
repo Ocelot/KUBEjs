@@ -217,7 +217,7 @@
                         viewResolver.resolve();
                     }
                     else if(KUBE.Is(_views) !== 'array'){
-                        throw new Error('Views must be an array!  Passed in a '+KUBE.Is(_views));
+                        throw new Error('views must be an array!  Passed in a '+KUBE.Is(_views));
                         viewResolver.resolve();
                     }
                     else{

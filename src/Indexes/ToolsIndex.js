@@ -14,7 +14,9 @@
         'Convert',
         'ConvertCheck',
         'Handlebars',
-        'Hash'
+        'Hash',
+        'Index',
+        'KeyVal'
     ]);
 
     KUBE.AutoLoad().AddIndex(ToolsIndex);
