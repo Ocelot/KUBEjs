@@ -967,7 +967,7 @@
 				$return = RawStyleGet(_styleObj,'backgroundColor');
 			}
 			else{
-				RawStyleSet(_styleObj,_API,'backgroundColor', KUBE.Class('/Library/Drawing/Color')().Format(_color,'rgb',true));
+				RawStyleSet(_styleObj,_API,'backgroundColor', (_color === "" ? "" : KUBE.Class('/Library/Drawing/Color')().Format(_color,'rgb',true)));
 			}
 			return $return;			
 		}
