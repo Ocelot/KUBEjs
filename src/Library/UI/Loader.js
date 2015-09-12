@@ -55,15 +55,15 @@
 
         //View Instantiation
         function Create(_name,_Root,_id){
-            var $return = (KUBE.Is(loadedViews[_name]) === 'function' ? initView(_Root,_id) : undefined);
+            var $return = (KUBE.Is(loadedViews[_name]) === 'function' ? initView(_name,_Root,_id) : undefined);
             if(!$return){
                 throw new Error('UI Could not create new view. Has not been loaded');
             }
             return $return;
         }
 
-        function initView(_Root,_id){
-            return new loadedViews[_viewName](_Root,_id);
+        function initView(_viewName,_Root,_id){
+            return KUBE.Events(new loadedViews[_viewName](_Root,_id));
         }
     }
 
@@ -71,21 +71,26 @@
 
     //This view is created once per new UI and is used at the root Node for the UI object
     function RootView(){
-        var View,UI,SJ,DJ,Spin,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [],resizePause, blackout, spinner,data,$RootAPI,viewIndex;
+        var Delegate,View,UI,SJ,DJ,Spin,SendHandler,responseCall,width,height,deleteQ, CSSClassCache = [],resizePause, blackout, spinner,data,$RootAPI,viewIndex,children;
 
         SJ = KUBE.Class('/Library/DOM/StyleJack');
         DJ = KUBE.Class('/Library/DOM/DomJack');
         Spin = KUBE.Class('/Library/Drawing/Spinner');
         viewIndex = {};
+        children = {};
 
         $RootAPI = {
+            'Type':Type,
+            'Name':Name,
+            'Id':Id,
+            'AddViews':AddViews,
             'Init':Init,
             'Get':Get,
             'Read':Read,
             'Update':Update,
             'Delete':Delete,
             'Add':Add,
-            'Send':Send,
+            'Connect':Connect,
             'Width':Width,
             'Height':Height,
             'Resize':Resize,
@@ -94,6 +99,18 @@
         return $RootAPI;
 
         //Public
+        function Type(){
+            return 'Root';
+        }
+
+        function Name(){
+            return 'Root';
+        }
+
+        function Id(){
+            return 'Root';
+        }
+
         function Init(_data,_allocatedViewWidth,_allocatedViewHeight){
             data = _data;
             width = _allocatedViewHeight;
@@ -121,7 +138,7 @@
         function Update(_data){
             if(KUBE.Is(_data) === 'object'){
                 if(_data.reset){
-                    CoreView.Reset();
+                    $RootAPI.Reset();
                 }
             }
         }
@@ -171,82 +188,120 @@
             }
         }
 
-        //Example
-        //var vp = [
-        //    {
-        //        //ID2
-        //        "paid":"window",
-        //        "view":"/RedScotch/KOS/Environment/WindowLayout"
-        //        "aid":"xxx"
-        //    },
-        //    { //FIND THIS BECAUSE TRUE PARENT (root)
-        //        //ID1
-        //        "root":true,
-        //        "pid":"123123132",
-        //        "aid":"window",
-        //        "view":"/RedScotch/KOS/Environment/Window",
-        //        "data":{
-        //            'title':'stupid'
-        //        }
-        //    },
-        //    {
-        //        //ID3
-        //        "paid":"xxx"
-        //        "view":"/RedScotch/FileStache/Cabinet",
-        //        "data":{
-        //            "xxx":"xxx"
-        //        }
-        //    }
-        //];
+        function Add(_NewView,_data){
+            return KUBE.Promise(handleAdd);
+            function handleAdd(_resolve){
+                children[_NewView.Id()] = _NewView;
+                _NewView.Init($RootAPI,_data,width,height);
+                _NewView.OnState('drawFinish',function(){
+                    var Child = _NewView.Get();
+                    Child.Style().Position('absolute').Top(0).Left(0);
+                    View.Append(Child);
+                    _resolve();
+                });
+                _NewView.On('delete',function(){
+                    delete children[_NewView.Id()];
+                });
+            };
+        }
 
         function AddViews(_viewPkg){
             if(KUBE.Is(_viewPkg) === 'array'){
-                var id,temp = {};
-                //First let's go and assign new IDs to everything
-                _viewPkg.KUBE.each(function(_obj){
-                    if(KUBE.Is(_obj) === 'object'){
-                        id = getAvailableId();
-                        var View = KUBE.Class('/Library/UI/Loader')().Create(_obj.view,$RootAPI,id);
-                        temp[id] = {
-                            'view':View,
-                            'root':_obj.root,
-                            'pid':_obj.pid,
-                            'paid':_obj.paid,
-                            'aid':_obj.aid,
-                            'data':_obj.data
-                        };
-                        viewIndex[id] = {'view':View,'id':id,'pid':undefined};
-                        View.On('delete',function(){
-                            delete viewIndex[id];
-                            //Also call delete on any children...
-                        });
-                    }
-                    else{
-                        throw new Error('View packages must be valid data objects: '+KUBE.Is(_obj)+' given');
-                    }
+                var viewPs = [];
+                _viewPkg.KUBE().each(function(_obj){
+                    viewPs.push(KUBE.Class('/Library/UI/Loader')().Uses(_obj.view));
                 });
 
-                //Now call SetParent on each of them...
-                while(temp.KUBE().count()){
-                    temp.KUBE().each(function(_id,_obj){
-
+                return KUBE.Promise().all(viewPs).then(function(){
+                    var id,temp = [];
+                    //First let's go and assign new IDs to everything
+                    _viewPkg.KUBE().each(function(_obj){
+                        if(KUBE.Is(_obj) === 'object'){
+                            id = getAvailableId();
+                            var View = KUBE.Class('/Library/UI/Loader')().Create(_obj.view,$RootAPI,id); //Thinking I might make this return a promise...
+                            temp.push({
+                                'View':View,
+                                'root':_obj.root,
+                                'pid':_obj.pid,
+                                'paid':_obj.paid,
+                                'aid':_obj.aid,
+                                'data':_obj.data,
+                                'linked':(_obj.root === true ? true : false),
+                                'id':id
+                            });
+                            if(_obj.delegate && !Delegate){
+                                Delegate = View;
+                            }
+                            viewIndex[id] = {'view':View,'id':id,'pid':undefined};
+                            View.On('delete',function(){
+                                //Also call delete on any children...
+                                delete viewIndex[id];
+                            });
+                        }
+                        else{
+                            throw new Error('View packages must be valid data objects: '+KUBE.Is(_obj)+' given');
+                        }
                     });
-                }
-            }
 
-            //return KUBE.Promise(handleAdd);
-            //function handleAdd(_resolve){
-            //    if(KUBE.Is(_NewView,true) === 'UIView'){
-            //        _NewView.Init(_initData,width,height);
-            //        _NewView.OnState('drawFinish',function(){
-            //            View.Append(_NewView.Get());
-            //            _resolve();
-            //        });
-            //    }
-            //    else{
-            //        throw new Error('Unacceptable View passed into Root');
-            //    }
-            //}
+                    //If they were promises I can do an All...
+                    //Now link them...
+                    var temp2 = [];
+                    var stop = false;
+                    var linkTarget;
+                    //This is stupid, I can definitely do this more efficiently
+                    var count = 0;
+                    while(!stop){
+                        count++;
+                        stop = true;
+                        for(var i=0;i<temp.length;i++){
+                            if(!temp[i].linked){
+                                stop = false;
+                                linkTarget = temp[i];
+                                break;
+                            }
+                        }
+
+                        if(!stop){
+                            for(var i=0;i<temp.length;i++){
+                                if(linkTarget.paid !== undefined && linkTarget.paid === temp[i].aid){
+                                    temp[i].View.Add(linkTarget.View,linkTarget.data);  //Add the child to the parent
+                                    linkTarget.linked = true;
+                                    break;
+                                }
+                                else if(linkTarget.paid === undefined){
+                                    linkTarget.linked = true;
+                                    linkTarget.root = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(count > 500){
+                            throw new Error('FAILED TO RESOLVE VIEW PACKAGE...');
+                        }
+                    }
+
+                    //Now I just find the roots, and either add them to the root view, or to a PID if it's set...
+                    var returnPs = [];
+                    for(var i=0;i<temp.length;i++){
+                        if(temp[i].root === true){
+                            if(temp[i].pid){
+                                if(viewIndex[temp[i].pid] !== undefined){
+                                    returnPs.push(viewIndex[temp[i].pid].View.Add(temp[i].View,temp[i].data));
+                                }
+                            }
+                            else{
+                                if(Delegate && temp[i].View !== Delegate){
+                                    returnPs.push(Delegate.Add(temp[i].View,temp[i].data));
+                                }
+                                else{
+                                    returnPs.push(Add(temp[i].View,temp[i].data));
+                                }
+                            }
+                        }
+                    }
+                    return KUBE.Promise().all(returnPs).then(function(){ return true; });
+                });
+            }
         }
 
         function getAvailableId(){
@@ -257,10 +312,8 @@
             return id;
         }
 
-        function Send(_UIView,_actionObj,_type,_callback){
-            //This has the ability to communicate directly with the View that is sending the request, otherwise instructions are processed accordingly
-            _type = _type || 'action';
-            return UI.Send(_UIView,_actionObj,_type,_callback);
+        function Connect(_blockAddress,_target){
+            return UI.Connect(_blockAddress,_target);
         }
 
         function Width(){
@@ -275,39 +328,42 @@
             width = DJ().WindowWidth();
             height = DJ().WindowHeight();
             View.Style().Height(height).Width(width);
-            CoreView.ResizeChildren();
+            children.KUBE().each(function(_id,_Child){
+                _Child.Resize(width,height);
+            });
+            //$RootAPI.ResizeChildren();
         }
 
         //Private methods
         function bindResizeEvent(){
-            var spinDJ;
-            spinner = Spin();
-            spinner.Color('#FFF');
-            spinDJ = spinner.Get();
-            spinDJ.Style().Position('fixed').Top('50%').Left('50%').Margin().Top(-53).Left(-53);
-
-            blackout = DJ(document.body).Append('div');
-            blackout.Append(spinDJ);
-            blackout.Detach();
-
-            blackout.Style().Position('fixed');
-            blackout.Style().Top(0).Bottom(0).Left(0).Right(0).Background().Color('rgba(0,0,0,0.9)').api.ZIndex(999);
-            blackout.Style().Padding(10);
+            //var spinDJ;
+            //spinner = Spin();
+            //spinner.Color('#FFF');
+            //spinDJ = spinner.Get();
+            //spinDJ.Style().Position('fixed').Top('50%').Left('50%').Margin().Top(-53).Left(-53);
+            //
+            //blackout = DJ(document.body).Append('div');
+            //blackout.Append(spinDJ);
+            //blackout.Detach();
+            //
+            //blackout.Style().Position('fixed');
+            //blackout.Style().Top(0).Bottom(0).Left(0).Right(0).Background().Color('rgba(0,0,0,0.9)').api.ZIndex(999);
+            //blackout.Style().Padding(10);
             DJ().Window().On('resize',function(){
                 if(resizePause){
                     clearTimeout(resizePause);
                 }
                 else{
                     Resize();
-                    spinner.Play();
-                    DJ(document.body).Append(blackout);
+                    //spinner.Play();
+                    //DJ(document.body).Append(blackout);
                 }
                 resizePause = setTimeout(function(){
-                    CoreView.Resize();
-                    spinner.Pause();
-                    blackout.Detach();
+                    $RootAPI.Resize();
+                    //spinner.Pause();
+                    //blackout.Detach();
                     resizePause = undefined;
-                },1000);
+                },50);
             });
         }
 
@@ -317,12 +373,12 @@
             DJ().Ready(function(){
                 assignDimensions();
                 initRootStyle();
-                CoreView.EmitState('drawFinish');
+                $RootAPI.EmitState('drawFinish');
             });
         }
 
         function initRootStyle(){
-            var rootId = (CoreView.Id() == 'body') ? 'body' : '#' + CoreView.Id();
+            var rootId = ($RootAPI.Id() == 'body') ? 'body' : '#' + $RootAPI.Id();
             SJ('*').Margin(0).Padding(0);//.Box().Sizing('border-box');
             SJ(rootId).Overflow('hidden');//.Set(['hidden','auto']); //This is DD messing around, Probably not the right place.
             SJ('.rootClear').Position('relative').Width('100%').Height(0).Clear('both');
@@ -343,11 +399,53 @@
             height = r.height;
         }
     }
-
 }(KUBE));
 
 
-UIView.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
+
+//Example
+//var vp = [
+//    {
+//        //ID2
+//        "paid":"window",
+//        "view":"/RedScotch/KOS/Environment/WindowLayout"
+//        "aid":"xxx"
+//    },
+//    { //FIND THIS BECAUSE TRUE PARENT (root)
+//        //ID1
+//        "root":true,
+//        "pid":"123123132",
+//        "aid":"window",
+//        "view":"/RedScotch/KOS/Environment/Window",
+//        "data":{
+//            'title':'stupid'
+//        }
+//    },
+//    {
+//        //ID3
+//        "paid":"xxx"
+//        "view":"/RedScotch/FileStache/Cabinet",
+//        "data":{
+//            "xxx":"xxx"
+//        }
+//    }
+//];
+
+//return KUBE.Promise(handleAdd);
+//function handleAdd(_resolve){
+//    if(KUBE.Is(_NewView,true) === 'UIView'){
+//        _NewView.Init(_initData,width,height);
+//        _NewView.OnState('drawFinish',function(){
+//            View.Append(_NewView.Get());
+//            _resolve();
+//        });
+//    }
+//    else{
+//        throw new Error('Unacceptable View passed into Root');
+//    }
+//}
+
+//UIView.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 //    function UIView(_Parent,_viewName,_viewType,_id){
 //        var Children,$ViewAPI,UpdateResolver,CSSClass = null;
 //        Children = [];

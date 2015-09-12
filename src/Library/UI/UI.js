@@ -23,11 +23,11 @@
         //Our API
         $API = {
             'SetGroundControl':SetGroundControl,
-            'Send':Send,
-            'ProcessInstructions':ProcessInstructions
+            'Connect':Connect,
+            'AddViews':AddViews
         }.KUBE().create(UI.prototype);
 
-        Root = UILoader.Create(undefined,'Root','Root','Root');
+        Root = UILoader.Create('Root');
 
         var rootDimensions = getRootDimensions(_DomJack);
 
@@ -46,31 +46,35 @@
 
         //Instruction processing
         function SetGroundControl(_UIGroundControl){
-            if(KUBE.Is(_UIGroundControl) === 'object' && KUBE.Is(_UIGroundControl.Send) === 'function'){
+            if(KUBE.Is(_UIGroundControl) === 'object' && KUBE.Is(_UIGroundControl.Connect) === 'function'){
                 UIGroundControl = _UIGroundControl;
             }
         }
 
-        function Send(_UIView,_data,_type,_callback){
+        function Connect(_blockAddress,_target){
             if(UIGroundControl !== undefined){
-                return UIGroundControl.Send(_UIView,_data,_type,_callback);
+                return UIGroundControl.Connect(_blockAddress,_target);
             }
         }
 
-        function ProcessInstructions(_InstructionsObj){
-            if(KUBE.Is(_InstructionsObj,true) === 'ViewInstructions'){
-                var FoundView = Root.Find(_InstructionsObj);
-                if(KUBE.Is(FoundView,true) === 'UIView'){
-                    if(_InstructionsObj.GetData()){
-                        FoundView.Update(_InstructionsObj.GetData());
-                    }
-
-                    if(KUBE.Is(_InstructionsObj.GetChildViews()) === 'array'){
-                        FoundView.UpdateChildren(_InstructionsObj.GetChildViews(),_InstructionsObj.GetBehavior());
-                    }
-                }
-            }
+        function AddViews(_viewPkg){
+            return Root.AddViews(_viewPkg);
         }
+
+        //function ProcessInstructions(_InstructionsObj){
+        //    if(KUBE.Is(_InstructionsObj,true) === 'ViewInstructions'){
+        //        var FoundView = Root.Find(_InstructionsObj);
+        //        if(KUBE.Is(FoundView,true) === 'UIView'){
+        //            if(_InstructionsObj.GetData()){
+        //                FoundView.Update(_InstructionsObj.GetData());
+        //            }
+        //
+        //            if(KUBE.Is(_InstructionsObj.GetChildViews()) === 'array'){
+        //                FoundView.UpdateChildren(_InstructionsObj.GetChildViews(),_InstructionsObj.GetBehavior());
+        //            }
+        //        }
+        //    }
+        //}
 
         function getRootDimensions(_RootDJ){
             //So... what should I do with this? For now, take its width/height if they exist, otherwise go full screen. It is likely this should be more robust in the future to handle a variety of spaces
