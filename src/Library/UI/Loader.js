@@ -492,12 +492,12 @@
             return $return;
         }
 
-        function ResizeChildren(){
+        function ResizeChildren(width,height){
             var $return = [];
             if(Children.length){
                 Children.KUBE().each(function(_Child){
                     try{
-                        _Child.Resize();
+                        _Child.Resize(width,height);
                     }
                     catch(e){
                         KUBE.console.log(_Child.Name() + ' failed to resize');
@@ -516,7 +516,7 @@
 
         SJ = KUBE.Class('/Library/DOM/StyleJack');
         DJ = KUBE.Class('/Library/DOM/DomJack');
-        Spin = KUBE.Class('/Library/Drawing/Spinner');
+        //Spin = KUBE.Class('/Library/Drawing/Spinner');
 
         CoreView.KUBE().merge({
             'Init':Init,
@@ -536,7 +536,7 @@
         //Public
         function Init(_data,_allocatedViewWidth,_allocatedViewHeight){
             data = _data;
-            width = _allocatedViewHeight;
+            width = _allocatedViewWidth;
             height = _allocatedViewHeight;
 
             if(KUBE.Is(data.UI,true) !== 'UI' || KUBE.Is(data.DomJackRoot,true) !== 'DomJack'){
@@ -645,39 +645,26 @@
             width = DJ().WindowWidth();
             height = DJ().WindowHeight();
             View.Style().Height(height).Width(width);
-            CoreView.ResizeChildren();
+            CoreView.ResizeChildren(width, height);
         }
 
         //Private methods
         function bindResizeEvent(){
-            var spinDJ;
-            spinner = Spin();
-            spinner.Color('#FFF');
-            spinDJ = spinner.Get();
-            spinDJ.Style().Position('fixed').Top('50%').Left('50%').Margin().Top(-53).Left(-53);
-
-            blackout = DJ(document.body).Append('div');
-            blackout.Append(spinDJ);
-            blackout.Detach();
-
-            blackout.Style().Position('fixed');
-            blackout.Style().Top(0).Bottom(0).Left(0).Right(0).Background().Color('rgba(0,0,0,0.9)').api.ZIndex(999);
-            blackout.Style().Padding(10);
+            //var spinDJ;
+            //spinner = Spin();
+            //spinner.Color('#FFF');
+            //spinDJ = spinner.Get();
+            //spinDJ.Style().Position('fixed').Top('50%').Left('50%').Margin().Top(-53).Left(-53);
+            //
+            //blackout = DJ(document.body).Append('div');
+            //blackout.Append(spinDJ);
+            //blackout.Detach();
+            //
+            //blackout.Style().Position('fixed');
+            //blackout.Style().Top(0).Bottom(0).Left(0).Right(0).Background().Color('rgba(0,0,0,0.9)').api.ZIndex(999);
+            //blackout.Style().Padding(10);
             DJ().Window().On('resize',function(){
-                if(resizePause){
-                    clearTimeout(resizePause);
-                }
-                else{
-                    Resize();
-                    spinner.Play();
-                    DJ(document.body).Append(blackout);
-                }
-                resizePause = setTimeout(function(){
-                    CoreView.Resize();
-                    spinner.Pause();
-                    blackout.Detach();
-                    resizePause = undefined;
-                },1000);
+                CoreView.Resize();
             });
         }
 
