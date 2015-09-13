@@ -22,7 +22,7 @@
         ExtendAPI.Load('string','b64Encode',B64Encode);
         ExtendAPI.Load('string','b64Decode',B64Decode);
         ExtendAPI.Load('string','format',Format);
-
+        ExtendAPI.Load('string','multiLine',MultiLine);
 		KUBE.EmitState('/Library/Extend/String');
 		KUBE.console.log('/Library/Extend/String Loaded');
 	}
@@ -121,6 +121,26 @@
             s = formats[index];
             return (s === undefined ? '%@'+index : "" + s);
         });
+    }
+
+
+    //Concept taken from https://github.com/sindresorhus/multiline -- MIT licenced.
+    var MLRegex = /\/\*!?(?:\@preserve)?[ \t]*(?:\r\n|\n)([\s\S]*?)(?:\r\n|\n)[ \t]*\*\//;
+    function MultiLine(func){
+        if(KUBE.Is(func) === "function"){
+            var str = func.toString();
+            var m = MLRegex.exec(str);
+            if(m){
+                return m[1];
+            }
+            else{
+                console.log("Multiline comment missing")
+            }
+        }
+        else{
+            console.log("No function to use MultiLine on");
+        }
+        return "";
     }
 
     //LICENSE CHECK: http://www.webtoolkit.info/javascript-base64.html
