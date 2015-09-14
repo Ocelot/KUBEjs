@@ -305,10 +305,11 @@
         }
 
         function getAvailableId(){
-            var id = KUBE.UUID(true);
-            while(viewIndex[id] !== undefined){
+            var id;
+            do{
                 id = KUBE.UUID(true);
-            }
+            } while(viewIndex[id] !== undefined);
+
             return id;
         }
 

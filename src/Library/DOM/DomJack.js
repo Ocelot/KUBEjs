@@ -882,6 +882,9 @@
 		}
 
         function BuildInner(_html){
+            if(KUBE.Is(_html) === "function"){
+                _html = "".KUBE().multiLine(_html);
+            }
             var $keyObj = {};
             var Temp = DJ('div');
             Temp.SetInner(_html);
