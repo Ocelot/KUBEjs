@@ -1086,15 +1086,16 @@
 			var sizeArray, $return = $backgroundAPI;
 			if(_size === undefined || _size === '$'){
 				$return = RawStyleGet(_styleObj,'backgroundSize');
-				if(_size === undefined){
-					sizeArray = $return.split(' ').KUBE().each(function(_v){ return Convert(_v,'px','number'); });
-					if(sizeArray.length === 2){
-						$return = {0:sizeArray[0],1:sizeArray[1],'width':sizeArray[0],'height':sizeArray[1]};
-					}
+				sizeArray = $return.split(' ').KUBE().each(function(_v){ return Convert(_v,'px','number'); });
+				if(sizeArray.length === 2){
+					$return = {0:sizeArray[0],1:sizeArray[1],'width':sizeArray[0],'height':sizeArray[1]};
 				}
 			}
 			else{
 				sizeArray = Size();
+				if(sizeArray === ""){
+					sizeArray = ['initial','initial'];
+				}
 				switch(KUBE.Is(_size)){
 					case 'array':
 						sizeArray[0] = (_size[0] !== undefined ? _size[0] : sizeArray[0]);
