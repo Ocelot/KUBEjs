@@ -51,9 +51,9 @@
             }
         }
 
-        function Connect(_blockAddress,_target){
+        function Connect(_blockAddress,_target,_targetId){
             if(UIGroundControl !== undefined){
-                return UIGroundControl.Connect(_blockAddress,_target);
+                return UIGroundControl.Connect(_blockAddress,_target,_targetId);
             }
         }
 
