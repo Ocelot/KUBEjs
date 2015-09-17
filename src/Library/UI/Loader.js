@@ -217,26 +217,25 @@
                     //First let's go and assign new IDs to everything
                     _viewPkg.KUBE().each(function(_obj){
                         if(KUBE.Is(_obj) === 'object'){
-                            id = getAvailableId();
-                            var View = KUBE.Class('/Library/UI/Loader')().Create(_obj.view,$RootAPI,id); //Thinking I might make this return a promise...
-                            temp.push({
-                                'View':View,
-                                'root':_obj.root,
-                                'pid':_obj.pid,
-                                'paid':_obj.paid,
-                                'aid':_obj.aid,
-                                'data':_obj.data,
-                                'linked':(_obj.root === true ? true : false),
-                                'id':id
-                            });
-                            if(_obj.delegate && !Delegate){
-                                Delegate = View;
+                            id = _obj.id || getAvailableId();
+                            if(viewIndex[id] === undefined){
+                                var View = KUBE.Class('/Library/UI/Loader')().Create(_obj.view,$RootAPI,id); //Thinking I might make this return a promise...
+                                temp.push({
+                                    'View':View,
+                                    'root':(!_obj.pid ? true : false),
+                                    'pid':_obj.pid,
+                                    'data':_obj.data,
+                                    'id':id
+                                });
+                                if(_obj.delegate && !Delegate){
+                                    Delegate = View;
+                                }
+                                viewIndex[id] = {'view':View,'id':id,'pid':undefined};
+                                View.On('delete',function(){
+                                    //Also call delete on any children...
+                                    delete viewIndex[id];
+                                });
                             }
-                            viewIndex[id] = {'view':View,'id':id,'pid':undefined};
-                            View.On('delete',function(){
-                                //Also call delete on any children...
-                                delete viewIndex[id];
-                            });
                         }
                         else{
                             throw new Error('View packages must be valid data objects: '+KUBE.Is(_obj)+' given');
@@ -245,40 +244,40 @@
 
                     //If they were promises I can do an All...
                     //Now link them...
-                    var temp2 = [];
-                    var stop = false;
-                    var linkTarget;
-                    //This is stupid, I can definitely do this more efficiently
-                    var count = 0;
-                    while(!stop){
-                        count++;
-                        stop = true;
-                        for(var i=0;i<temp.length;i++){
-                            if(!temp[i].linked){
-                                stop = false;
-                                linkTarget = temp[i];
-                                break;
-                            }
-                        }
-
-                        if(!stop){
-                            for(var i=0;i<temp.length;i++){
-                                if(linkTarget.paid !== undefined && linkTarget.paid === temp[i].aid){
-                                    temp[i].View.Add(linkTarget.View,linkTarget.data);  //Add the child to the parent
-                                    linkTarget.linked = true;
-                                    break;
-                                }
-                                else if(linkTarget.paid === undefined){
-                                    linkTarget.linked = true;
-                                    linkTarget.root = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if(count > 500){
-                            throw new Error('FAILED TO RESOLVE VIEW PACKAGE...');
-                        }
-                    }
+                    //var temp2 = [];
+                    //var stop = false;
+                    //var linkTarget;
+                    ////This is stupid, I can definitely do this more efficiently
+                    //var count = 0;
+                    //while(!stop){
+                    //    count++;
+                    //    stop = true;
+                    //    for(var i=0;i<temp.length;i++){
+                    //        if(!temp[i].linked){
+                    //            stop = false;
+                    //            linkTarget = temp[i];
+                    //            break;
+                    //        }
+                    //    }
+                    //
+                    //    if(!stop){
+                    //        for(var i=0;i<temp.length;i++){
+                    //            if(linkTarget.paid !== undefined && linkTarget.paid === temp[i].aid){
+                    //                temp[i].View.Add(linkTarget.View,linkTarget.data);  //Add the child to the parent
+                    //                linkTarget.linked = true;
+                    //                break;
+                    //            }
+                    //            else if(linkTarget.paid === undefined){
+                    //                linkTarget.linked = true;
+                    //                linkTarget.root = true;
+                    //                break;
+                    //            }
+                    //        }
+                    //    }
+                    //    if(count > 500){
+                    //        throw new Error('FAILED TO RESOLVE VIEW PACKAGE...');
+                    //    }
+                    //}
 
                     //Now I just find the roots, and either add them to the root view, or to a PID if it's set...
                     var returnPs = [];
