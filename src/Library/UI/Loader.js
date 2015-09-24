@@ -221,7 +221,7 @@
                             if(viewIndex[id] === undefined){
                                 var View = KUBE.Class('/Library/UI/Loader')().Create(_obj.view,$RootAPI,id); //Thinking I might make this return a promise...
                                 temp.push({
-                                    'View':View,
+                                    'view':View,
                                     'root':(!_obj.pid ? true : false),
                                     'pid':_obj.pid,
                                     'data':_obj.data,
@@ -283,18 +283,16 @@
                     var returnPs = [];
                     for(var i=0;i<temp.length;i++){
                         if(temp[i].root === true){
-                            if(temp[i].pid){
-                                if(viewIndex[temp[i].pid] !== undefined){
-                                    returnPs.push(viewIndex[temp[i].pid].View.Add(temp[i].View,temp[i].data));
-                                }
+                            if(Delegate && temp[i].view !== Delegate){
+                                returnPs.push(Delegate.Add(temp[i].view,temp[i].data));
                             }
                             else{
-                                if(Delegate && temp[i].View !== Delegate){
-                                    returnPs.push(Delegate.Add(temp[i].View,temp[i].data));
-                                }
-                                else{
-                                    returnPs.push(Add(temp[i].View,temp[i].data));
-                                }
+                                returnPs.push(Add(temp[i].view,temp[i].data));
+                            }
+                        }
+                        else{
+                            if(viewIndex[temp[i].pid] !== undefined){
+                                returnPs.push(viewIndex[temp[i].pid].view.Add(temp[i].view,temp[i].data));
                             }
                         }
                     }
@@ -312,8 +310,8 @@
             return id;
         }
 
-        function Connect(_blockAddress,_target){
-            return UI.Connect(_blockAddress,_target);
+        function Connect(_blockAddress,_target,_targetId){
+            return UI.Connect(_blockAddress,_target,_targetId);
         }
 
         function Width(){

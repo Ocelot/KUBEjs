@@ -62,11 +62,11 @@
 	}
 
     function B64Encode(){
-        return (KUBE.Is(window.btoa) === 'function' ? window.btoa(this) : Base64.encode(this));
+        return Base64.encode(this); //(KUBE.Is(window.btoa) === 'function' ? window.btoa(this) : Base64.encode(this));
     }
 
     function B64Decode(){
-        return (KUBE.Is(window.atob) === 'function' ? window.atob(this) : Base64.decode(this));
+        return Base64.decode(this); //(KUBE.Is(window.atob) === 'function' ? window.atob(this) : Base64.decode(this));
     }
 	
 	function UpperCaseFirst(){
