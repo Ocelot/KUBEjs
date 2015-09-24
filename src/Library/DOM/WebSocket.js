@@ -85,6 +85,11 @@
                 "enumerable": true,
                 "configurable": false,
                 "value": Events.On
+            },
+            "Clear":{
+                "enumerable": true,
+                "configurable": false,
+                "value": Events.Clear
             }
         });
 
