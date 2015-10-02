@@ -138,6 +138,26 @@
             WSClient.close(shortCode,reason);
         }
 
+        function Cleanup(){
+            if(WSClient.readyState === WebSocket.OPEN){
+                Close();
+            }
+            else if(WSClient.readyState === WebSocket.CLOSING){
+                setTimeout(Cleanup,5000);
+            }
+            else if(WSClient.readyState === WebSocket.CLOSED){
+                clean();
+            }
+
+            function clean(){
+                Events.Clear('open'); Events.Clear('message'); Events.Clear('close'); Events.Clear('error');
+                Events = undefined;
+                WSClient.onopen = WSClient.onmessage = WSClient.onclose = WSClient.onerror = undefined;
+                WSClient = undefined;
+            }
+
+        }
+
         function validateURL(url){
             //This is a hilarious hack.
             var parser = document.createElement('a');
