@@ -194,13 +194,29 @@
 			return $return;
 		}
 
-        function createStylesheetIfNoneExists(){
-            var $return = false
-            if(document.styleSheets.length == 0){
-                $return = true;
-                document.head.appendChild(document.createElement('style'));
-            }
-            return $return;
+        function createStylesheetIfNoneExists() {
+			var dss = document.styleSheets;
+			if (dss.length == 0) {
+				return create();
+			}
+			else{
+				var stylesheetFound = false;
+				for(var i = 0; i < dss.length; i++){
+					if(!dss[i].href){
+						stylesheetFound = true;
+						break;
+					}
+				}
+				if(!stylesheetFound){
+					return create();
+				}
+				return false;
+			}
+
+			function create(){
+				document.head.appendChild(document.createElement('style'));
+				return true;
+			}
         }
 
 
@@ -275,7 +291,7 @@
 
         function findValidStyleSheetForRule(){
             //We need to exclude stylesheets that are from a <link> stylesheet;
-            for(var i = 0; i <= document.styleSheets.length; i++){
+            for(var i = 0; i < document.styleSheets.length; i++){
                 var cur = document.styleSheets[i];
                 if(cur.href){
                     continue;

@@ -377,7 +377,7 @@
 
         function initRootStyle(){
             var rootId = ($RootAPI.Id() == 'body') ? 'body' : '#' + $RootAPI.Id();
-            SJ('*').Margin(0).Padding(0);//.Box().Sizing('border-box');
+            //SJ('*').Margin(0).Padding(0);//.Box().Sizing('border-box');
             SJ(rootId).Overflow('hidden');//.Set(['hidden','auto']); //This is DD messing around, Probably not the right place.
             SJ('.rootClear').Position('relative').Width('100%').Height(0).Clear('both');
         }
