@@ -1433,7 +1433,8 @@
 					'Name':function(_name){ return Name(_DomJackAPI,_name); },
 					'Gather':function(_recurse){ return Gather(_DomJackAPI,_recurse); },
 					'Submit':function(_callback){ return Submit(_DomJackAPI,_callback); },
-					'GetFields':function(){ return GetFields(_DomJackAPI); }
+					'GetFields':function(){ return GetFields(_DomJackAPI); },
+                    'Reset':function(){ return Reset(_DomJackAPI); }
 				});
 				Method(_DomJackAPI,'post');
 				break;
@@ -1538,6 +1539,10 @@
 		}
 		return (_recurse ? $return.KUBE().merge(findChildForms(_DJ)) : $return);
 	}
+
+    function Reset(_DJ){
+        _DJ.GetNode().reset();
+    }
 	
 	function findChildForms(_N,$return){
 		$return = $return || {};
