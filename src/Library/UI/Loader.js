@@ -113,7 +113,7 @@
 
         function Init(_data,_allocatedViewWidth,_allocatedViewHeight){
             data = _data;
-            width = _allocatedViewHeight;
+            width = _allocatedViewWidth;
             height = _allocatedViewHeight;
 
             if(KUBE.Is(data.UI,true) !== 'UI' || KUBE.Is(data.DomJackRoot,true) !== 'DomJack'){

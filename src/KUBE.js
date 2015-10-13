@@ -1533,8 +1533,14 @@
 		}
 		
 		function fetchScript(_src){
+            _src = _src.toString();
 			var script = document.createElement('script');
 			script.src = _src;
+            script.onerror = function(){
+                this.parentElement.removeChild(this);
+                _src = _src.replace(/(\?.*)/,'');
+                fetchScript(_src + "?t=" + Date.now());
+            };
 			document.head.appendChild(script);
 		}
 
@@ -1566,3 +1572,7 @@ KUBE.AutoLoad().LoadAutoIndex('/Library/Drawing',KUBE.Config().autoLoadPath+'/In
 KUBE.AutoLoad().LoadAutoIndex('/Library/Extend',KUBE.Config().autoLoadPath+'/Indexes/ExtendIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/Tools',KUBE.Config().autoLoadPath+'/Indexes/ToolsIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/UI',KUBE.Config().autoLoadPath+'/Indexes/UIIndex.js');
+
+
+
+
