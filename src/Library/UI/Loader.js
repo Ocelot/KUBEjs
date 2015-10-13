@@ -84,8 +84,10 @@
             'Name':Name,
             'Id':Id,
             'AddViews':AddViews,
+            'Cleanup':Cleanup,
             'Init':Init,
             'Get':Get,
+            'GetViewById':GetViewById,
             'Read':Read,
             'Update':Update,
             'Delete':Delete,
@@ -166,7 +168,6 @@
             _CoreView.Once('delete',function(){
                 var classUse = isClassUsed(genClass);
                 CSSClassCache.splice(classUse.index,1);
-
             });
 
             return genClass;
@@ -205,6 +206,44 @@
             };
         }
 
+        function Cleanup(_keepArray){
+            viewIndex.KUBE().each(function(_id,_View){
+                if(KUBE.Is(_keepArray === 'array') && _keepArray.indexOf(_id) > -1){
+                    //Keep it?
+                }
+                else{
+                    if(_View !== undefined && _View.view !== Delegate){
+                        _View.view.Delete();
+                    }
+                }
+            });
+        }
+
+        function GetViewById(_id){
+            return viewIndex[_id];
+        }
+
+        function addViewToIndex(_id,_obj){
+            var data;
+            var View = KUBE.Class('/Library/UI/Loader')().Create(_obj.view,$RootAPI,_id); //Thinking I might make this return a promise...
+            data = {
+                'view':View,
+                'root':(!_obj.pid ? true : false),
+                'pid':_obj.pid,
+                'data':_obj.data,
+                'id':_id
+            };
+            if(_obj.delegate && !Delegate){
+                Delegate = View;
+            }
+            viewIndex[_id] = {'view':View,'id':_id,'pid':undefined};
+            View.On('delete',function(){
+                //Also call delete on any children...
+                delete viewIndex[_id];
+            });
+            return data;
+        }
+
         function AddViews(_viewPkg){
             if(KUBE.Is(_viewPkg) === 'array'){
                 var viewPs = [];
@@ -213,28 +252,13 @@
                 });
 
                 return KUBE.Promise().all(viewPs).then(function(){
-                    var id,temp = [];
+                    var id,temp=[];
                     //First let's go and assign new IDs to everything
                     _viewPkg.KUBE().each(function(_obj){
                         if(KUBE.Is(_obj) === 'object'){
                             id = _obj.id || getAvailableId();
                             if(viewIndex[id] === undefined){
-                                var View = KUBE.Class('/Library/UI/Loader')().Create(_obj.view,$RootAPI,id); //Thinking I might make this return a promise...
-                                temp.push({
-                                    'view':View,
-                                    'root':(!_obj.pid ? true : false),
-                                    'pid':_obj.pid,
-                                    'data':_obj.data,
-                                    'id':id
-                                });
-                                if(_obj.delegate && !Delegate){
-                                    Delegate = View;
-                                }
-                                viewIndex[id] = {'view':View,'id':id,'pid':undefined};
-                                View.On('delete',function(){
-                                    //Also call delete on any children...
-                                    delete viewIndex[id];
-                                });
+                                temp.push(addViewToIndex(id,_obj));
                             }
                         }
                         else{
