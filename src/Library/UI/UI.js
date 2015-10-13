@@ -24,6 +24,7 @@
         $API = {
             'SetGroundControl':SetGroundControl,
             'Connect':Connect,
+            'BinaryTransmission': BinaryTransmission,
             'AddViews':AddViews
         }.KUBE().create(UI.prototype);
 
@@ -54,6 +55,15 @@
         function Connect(_blockAddress,_target,_targetId){
             if(UIGroundControl !== undefined){
                 return UIGroundControl.Connect(_blockAddress,_target,_targetId);
+            }
+        }
+
+        function BinaryTransmission(_blockAddress,_target,_targetId){
+            if(UIGroundControl !== undefined && KUBE.Is(UIGroundControl.StartBinaryTransmission) === "function"){
+                return UIGroundControl.StartBinaryTransmission(_blockAddress,_target,_targetId);
+            }
+            else{
+                console.log("StartBinaryTransmission is not defined on GroundControl. Doing nothing");
             }
         }
 
