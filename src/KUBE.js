@@ -73,7 +73,6 @@
 	KUBE.LoadSingletonFactory('Loader',KUBELoader);
 
 
-	
 	/* Prototype onto native */
     /* Note: define property WILL break in IE8, however because we can set enumerable to false, it shouldn't break jQuery.  6 of one, half dozen of another. */
 	//if(KUBEPrototype){
@@ -174,7 +173,8 @@
 			'Events':Events,
             'Promise':Promise,
 			'Config':Config,
-            'Class':Class
+            'Class':Class,
+            'UUID': UUID
 		};
 
 		return $KUBEAPI;
@@ -307,6 +307,7 @@
             return $return;
         }
 
+
 		function Extend(){
 			return KUBEExtend();
 		}
@@ -323,6 +324,27 @@
 		function Config(){
 			return config;
 		}
+
+        function UUID(_includeDashes){
+            _includeDashes = (_includeDashes === false ? false : true);
+            var r = [
+                Math.KUBE().random(0,65535).toString(16),
+                Math.KUBE().random(0,65535).toString(16),
+                Math.KUBE().random(0,65535).toString(16),
+                Math.KUBE().random(16384,20479).toString(16),
+                Math.KUBE().random(32768,49151).toString(16),
+                Math.KUBE().random(0,65535).toString(16),
+                Math.KUBE().random(0,65535).toString(16),
+                Math.KUBE().random(0,65535).toString(16)
+            ];
+            if(_includeDashes){
+                return (r[0]+r[1]+'-'+r[2]+'-'+r[3]+'-'+r[4]+'-'+r[5]+r[6]+r[7]).toUpperCase();
+            }
+            else{
+                return r.join('').toUpperCase();
+            }
+        }
+
 	}
 
     KUBEPromise.prototype.resolve = function(value){
@@ -1511,8 +1533,14 @@
 		}
 		
 		function fetchScript(_src){
+            _src = _src.toString();
 			var script = document.createElement('script');
 			script.src = _src;
+            script.onerror = function(){
+                this.parentElement.removeChild(this);
+                _src = _src.replace(/(\?.*)/,'');
+                fetchScript(_src + "?t=" + Date.now());
+            };
 			document.head.appendChild(script);
 		}
 
@@ -1544,3 +1572,7 @@ KUBE.AutoLoad().LoadAutoIndex('/Library/Drawing',KUBE.Config().autoLoadPath+'/In
 KUBE.AutoLoad().LoadAutoIndex('/Library/Extend',KUBE.Config().autoLoadPath+'/Indexes/ExtendIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/Tools',KUBE.Config().autoLoadPath+'/Indexes/ToolsIndex.js');
 KUBE.AutoLoad().LoadAutoIndex('/Library/UI',KUBE.Config().autoLoadPath+'/Indexes/UIIndex.js');
+
+
+
+

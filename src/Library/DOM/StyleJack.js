@@ -21,7 +21,7 @@
 	KUBE.LoadFactory('/Library/DOM/StyleJack',StyleJack,dependancyArray);
 	
 	//If we are Superman, StyleJack is Lex Luthor AND KRYPTONITE
-	var prefix,Convert;
+	var prefix, Convert, DJSJCache = {}, StyleSJCache = {};
 	
 	/*******************************************************************
 	 * StyleJack is our actual KUBE Class it fundamentally acts
@@ -54,20 +54,50 @@
 		}
 		
 		function processObject(_obj){
-			var $return = false;
-			if(KUBE.Is(_obj) === 'object'){
-				$return = assignStyleDeclaration(_obj) || assignStyleDeclaration({'style':_obj});
-			}
+			var $return = false, DJ, DJID;
+            if(KUBE.Is(_obj,true) === "DomJack" && DJSJCache[_obj.CacheId()] !== undefined ){
+                //DomJack caches style internally already. Return that
+                $return = _obj.Style();
+            }
+            else if(KUBE.Is(_obj) === 'object'){
+                //This happens when a DOM Node or Style gets passed in directly.
+                //I don't know when this gets hit.
+                if(inheritsStyleDeclaration(_obj.style)){
+                    //This means it's a DOM Node initially. We just want to return a DomJack.
+                    try{
+                        DJ = KUBE.Class('/Library/DOM/DomJack')(_obj);
+                        DJID = DJ.CacheId();
+                        if(!DJSJCache[DJID]){
+                            DJSJCache[DJID] = assignStyleDeclaration(_obj);
+                        }
+                        $return = DJSJCache[DJID];
+                    }
+                    catch(e){
+                        //This was not a DOMNode but something masquerading as one.
+                        //As below, this doesn't get caching.
+                        $return = assignStyleDeclaration({'style': _obj})
+                    }
+                }
+                else if(inheritsStyleDeclaration(_obj)){
+                    //This means that is directly a CSSStyleDeclaration. We cannot cache this with DomJack.
+                    //There's a weird situation that someone could
+                    //This means that events won't work (right now. we might fix this one day?)
+                    $return = assignStyleDeclaration({'style':_obj});
+                }
+
+            }
 			return $return;
 		}
 
 		function inheritsStyleDeclaration(_obj){
-			return _obj instanceof CSSStyleDeclaration;
+			return (_obj instanceof CSSStyleDeclaration);
 		}
 		
 		function assignStyleDeclaration(_obj){
-			return (inheritsStyleDeclaration(_obj.style) ? new CSSStyleRuleHandler(_obj) : false);
-		}
+            var $return = false;
+			$return =  (inheritsStyleDeclaration(_obj.style) ? new CSSStyleRuleHandler(_obj) : false);
+            return $return;
+        }
 
 		function processString(_string){
 			var $return = false;
@@ -109,13 +139,16 @@
 		}
 		
 		function styleRule(_string){
-			var rule,$return = false;
+			var rule;
 			_string = normalizeRule(_string);
 			rule = searchForRule('CSSStyleRule',_string);
-			if(rule){
-				$return = new CSSStyleRuleHandler(rule);
+			if(rule && StyleSJCache[rule.selectorText] === undefined){
+                StyleSJCache[rule.selectorText] = new CSSStyleRuleHandler(rule);
+                StyleSJCache[rule.selectorText].Once('delete',function(){
+                    delete StyleSJCache[rule.selectorText];
+                });
 			}
-			return $return;
+			return StyleSJCache[rule.selectorText] || false;
 		}
 		
 		function checkPrefix(_string, _check){
@@ -136,6 +169,10 @@
 
             if(!createStylesheetIfNoneExists()){
                 for(i=0;i<document.styleSheets.length;i++){
+                    if(document.styleSheets[i].href){
+                        //This is a stylesheet that gets linked in from a link element.
+                        continue;
+                    }
                     $return = searchStylesheet(document.styleSheets[i],_type,_matchData,_checkPrefix);
                     if($return){
                         break;
@@ -148,22 +185,38 @@
 		function searchStylesheet(_styleSheet,_type,_matchData,_checkPrefix){
 			var i,rules,$return = false;
 			rules = (KUBE.Is(_styleSheet.cssRules) !== 'undefined' ? _styleSheet.cssRules : _styleSheet.rules);
-			for(i=0; i<rules.length;i++){
-				$return = checkRule(rules[i],_type,_type,_matchData) || checkRule(rules[i],classPrefix(prefix)+_type,_type,_matchData);
-				if($return){
-					break;
-				}
-			}
+            for(i=0; i<rules.length;i++){
+                $return = checkRule(rules[i],_type,_type,_matchData) || checkRule(rules[i],classPrefix(prefix)+_type,_type,_matchData);
+                if($return){
+                    break;
+                }
+            }
 			return $return;
 		}
 
-        function createStylesheetIfNoneExists(){
-            var $return = false
-            if(document.styleSheets.length == 0){
-                $return = true;
-                document.head.appendChild(document.createElement('style'));
-            }
-            return $return;
+        function createStylesheetIfNoneExists() {
+			var dss = document.styleSheets;
+			if (dss.length == 0) {
+				return create();
+			}
+			else{
+				var stylesheetFound = false;
+				for(var i = 0; i < dss.length; i++){
+					if(!dss[i].href){
+						stylesheetFound = true;
+						break;
+					}
+				}
+				if(!stylesheetFound){
+					return create();
+				}
+				return false;
+			}
+
+			function create(){
+				document.head.appendChild(document.createElement('style'));
+				return true;
+			}
         }
 
 
@@ -232,9 +285,21 @@
 		}
 
 		function initRule(_type,_initData){
-			var styleSheet = (!document.styleSheets.length ? initStylesheet() : document.styleSheets[0]);
+			var styleSheet = (!document.styleSheets.length ? initStylesheet() : findValidStyleSheetForRule());
 			return initCSSStyleRule(styleSheet,_type,_initData) || initCSSKeyframesRule(styleSheet,_type,_initData) || false;
 		}
+
+        function findValidStyleSheetForRule(){
+            //We need to exclude stylesheets that are from a <link> stylesheet;
+            for(var i = 0; i < document.styleSheets.length; i++){
+                var cur = document.styleSheets[i];
+                if(cur.href){
+                    continue;
+                }
+                return cur;
+            }
+            return initStylesheet(); //This should be impossible
+        }
 		
 		function initCSSStyleRule(_styleSheet,_type,_initData){
 			var $return = false;
@@ -527,18 +592,21 @@
 	 * Our CSSStyleRule Object Handler
 	 *************************************/
 	function CSSStyleRuleHandler(_styleObj){
-		var $API,Events;
+		var $API,Events,DJID;
 		
 		Events = KUBE.Events();
 		
 		if(_styleObj instanceof HTMLElement){
+            DJID = KUBE.Class('/Library/DOM/DomJack')(_styleObj).CacheId();
 			KUBE.Class('/Library/DOM/DomJack')(_styleObj).Once('cleanup',function(){
 				_styleObj = undefined;
+                delete DJSJCache[DJID];
 			});
 		}
 		
 		$API = {
 			'Delete':Delete,
+            'Debug': Debug,
 			'On':Events.On,
 			'Once':Events.Once,
 			'Emit':Events.Emit,
@@ -617,7 +685,14 @@
                 }
             }
 		}
-		
+
+        function Debug(){
+            console.group('STYLEJACK DEBUG');
+            console.log(DJSJCache);
+            console.log(StyleSJCache);
+            console.groupEnd('STYLEJACK DEBUG');
+        }
+
 		function getArgsArray(_arguments){
 			var args = Array.prototype.slice.call(_arguments);
 			args.unshift($API);
@@ -908,7 +983,7 @@
 				$return = RawStyleGet(_styleObj,'backgroundColor');
 			}
 			else{
-				RawStyleSet(_styleObj,_API,'backgroundColor', KUBE.Class('/Library/Drawing/Color')().Format(_color,'rgb',true));
+				RawStyleSet(_styleObj,_API,'backgroundColor', (_color === "" ? "" : KUBE.Class('/Library/Drawing/Color')().Format(_color,'rgb',true)));
 			}
 			return $return;			
 		}
@@ -1027,15 +1102,16 @@
 			var sizeArray, $return = $backgroundAPI;
 			if(_size === undefined || _size === '$'){
 				$return = RawStyleGet(_styleObj,'backgroundSize');
-				if(_size === undefined){
-					sizeArray = $return.split(' ').KUBE().each(function(_v){ return Convert(_v,'px','number'); });
-					if(sizeArray.length === 2){
-						$return = {0:sizeArray[0],1:sizeArray[1],'width':sizeArray[0],'height':sizeArray[1]};
-					}
+				sizeArray = $return.split(' ').KUBE().each(function(_v){ return Convert(_v,'px','number'); });
+				if(sizeArray.length === 2){
+					$return = {0:sizeArray[0],1:sizeArray[1],'width':sizeArray[0],'height':sizeArray[1]};
 				}
 			}
 			else{
 				sizeArray = Size();
+				if(sizeArray === ""){
+					sizeArray = ['initial','initial'];
+				}
 				switch(KUBE.Is(_size)){
 					case 'array':
 						sizeArray[0] = (_size[0] !== undefined ? _size[0] : sizeArray[0]);
@@ -1703,7 +1779,8 @@
 			'Set':Set,
 			'Family':Family,
 			'Size':Size,
-			'Style':Style,
+            'Smoothing':Smoothing,
+            'Style':Style,
 			'Variant':Variant,
 			'Weight':Weight,
 			'api':_API
@@ -1793,6 +1870,18 @@
 			}
 			return $return;
 		}
+
+        function Smoothing(_value){
+            KUBE.console.log('warning: font smoothing is a non standard property. Not recommended for production.');
+            var $return = $advancedAPI;
+            if(_value === undefined || _value === '$'){
+                $return = RawStyleGet(_styleObj,'fontSmoothing');
+            }
+            else{
+                RawStyleSet(_styleObj,_API,'fontSmoothing',_value,true);
+            }
+            return $return;
+        }
 		
 		function simpleHandler(_val){
 			var $return = _API;
@@ -2108,6 +2197,7 @@
 			else{
 				RawStyleSet(_styleObj,_API,'overflowY',_y);
 			}
+            return $return;
 		}
 		
 		function Get(_array){
@@ -2980,6 +3070,7 @@
 				}
 				else{
                     _API.Emit('change',{'property':_property,'oldValue':current,'newValue':_newSet});
+                    _API.Emit('change:'+_property.toLowerCase(),{'property':_property,'oldValue':current,'newValue':_newSet});
 					$return = true;
 				}
 			}
@@ -2997,7 +3088,7 @@
 		}
 		if($return){
 			//Emit an event, which actually insanely allows people to listen for changes on CSSRules...
-			_API.Emit(_property,_newSet,_prefix);
+			_API.Emit(_property.toLowerCase(),_newSet,current,_prefix);
 		}
 		return $return;
 	}

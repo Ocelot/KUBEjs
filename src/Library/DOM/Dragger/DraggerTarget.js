@@ -30,7 +30,7 @@
             'SetDrop': SetDrop, 'GetDrop': GetDrop,
             'SetDragEnter': SetDragEnter, 'GetDragEnter': GetDragEnter,
             'SetDragLeave': SetDragLeave, 'GetDragLeave': GetDragLeave,
-            'SetDragOver': SetDragOver, 'GetDragOver': GetDragOver,
+            'SetDragOver': SetDragOver, 'GetDragOver': GetDragOver
         }.KUBE().create(DraggerTarget.prototype);
 
 
@@ -40,7 +40,6 @@
         Object.defineProperty($api,'dragEnter',{get: GetDragEnter});
         Object.defineProperty($api,'dragLeave',{get: GetDragLeave});
         Object.defineProperty($api,'dragOver',{get: GetDragOver});
-
         Object.defineProperty($api,'__events', {
             "enumerable": false,
             "get": _GetEventFunctionStorage

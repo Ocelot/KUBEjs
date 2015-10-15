@@ -18,7 +18,8 @@
         'StyleJack',
         'TextKing',
         'Velocity',
-        'WinDocJack'
+        'WinDocJack',
+        'WebSocket'
     ]);
 
     KUBE.AutoLoad().AddIndex(DOMIndex);

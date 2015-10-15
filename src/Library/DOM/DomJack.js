@@ -240,8 +240,12 @@
 		}
 				
 		function validateAndInitNode(_initVar){
-			var type = KUBE.Is(_initVar);
-			return initByString(_initVar,type) || initByObject(_initVar,type);
+			var type = KUBE.Is(_initVar),$return;
+			$return = initByString(_initVar,type) || initByObject(_initVar,type);
+            if($return === false) {
+                throw new Error('Attempted to initialize a DomJack on an object that is not an HTMLElement');
+            }
+            return $return;
 		}
 		
 		function initByString(_initVar,_type){
@@ -878,6 +882,9 @@
 		}
 
         function BuildInner(_html){
+            if(KUBE.Is(_html) === "function"){
+                _html = "".KUBE().multiLine(_html);
+            }
             var $keyObj = {};
             var Temp = DJ('div');
             Temp.SetInner(_html);
@@ -1426,7 +1433,8 @@
 					'Name':function(_name){ return Name(_DomJackAPI,_name); },
 					'Gather':function(_recurse){ return Gather(_DomJackAPI,_recurse); },
 					'Submit':function(_callback){ return Submit(_DomJackAPI,_callback); },
-					'GetFields':function(){ return GetFields(_DomJackAPI); }
+					'GetFields':function(){ return GetFields(_DomJackAPI); },
+                    'Reset':function(){ return Reset(_DomJackAPI); }
 				});
 				Method(_DomJackAPI,'post');
 				break;
@@ -1531,6 +1539,10 @@
 		}
 		return (_recurse ? $return.KUBE().merge(findChildForms(_DJ)) : $return);
 	}
+
+    function Reset(_DJ){
+        _DJ.GetNode().reset();
+    }
 	
 	function findChildForms(_N,$return){
 		$return = $return || {};

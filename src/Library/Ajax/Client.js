@@ -16,7 +16,7 @@
 
 
         auth = {'username':'','password':''};
-        timeoutDelay = (KUBE.Is(_timeout) === 'number' ? _timeout : 10000);
+        timeoutDelay = (KUBE.Is(_timeout) === 'number' ? _timeout : 30000);
         freezeDelay = (KUBE.Is(_freezeDelay) === 'number' ? _freezeDelay : 2500);
         target = (KUBE.Is(_target) === 'function' || KUBE.Is(_target) === 'string' ? _target : undefined);
 
@@ -87,8 +87,12 @@
         //Send Remotely (XHR)
         function sendRemote(_resolve,_reject,_Request){
             var remotePkg;
+
             remotePkg = initXHR(new XMLHttpRequest(),_Request);
             XHRListen(remotePkg.XHR,_resolve,_reject,_Request);
+            if(_Request.GetResponseType()){
+                remotePkg.XHR.responseType = _Request.GetResponseType();
+            }
             remotePkg.XHR.send(remotePkg.sendData);
         }
 
@@ -134,10 +138,6 @@
         function initXHR(_XHR,_Request){
             var sendData;
 
-            //Set up our RequestType
-            if(_Request.GetResponseType()){
-                _XHR.responseType = _Request.GetResponseType();
-            }
 
             switch(_Request.GetMethod().toLowerCase()){
                 case 'post':
@@ -229,8 +229,10 @@
 
         //Send to a Function Server
         function sendToFunction(_resolve,_reject,_Request){
-            var timedOut,timeoutId,ResponsePromise = target(_Request);
+            var timedOut,timeoutId,ResponsePromise;
             timedOut = false;
+
+            ResponsePromise = target(_Request);
             if(KUBE.Is(ResponsePromise,true) !== 'Promise'){
                 _reject({
                     'message':'Client target function did not return promise object. Could not resolve Request',
@@ -248,12 +250,13 @@
                 },timeoutDelay);
 
 
-                ResponsePromise.Then(function(_targetResolve,_targetReject,_Response){
+                ResponsePromise.Then(function(_Response){
+
                     if(!timedOut){
                         if(KUBE.Is(_Response,true) === 'Response'){
                             clearTimeout(timeoutId);
                             _resolve(_Response);
-                            _targetResolve();
+                            return;
                         }
                         else{
                             clearTimeout(timeoutId);
@@ -261,24 +264,24 @@
                                 'message':'Client target function did not return Response object. Could not resolve Request',
                                 'data':''
                             });
-                            _targetResolve();
+                            return;
                         }
                     }
                     else{
-                        _targetReject();
+                        throw new Error();
                     }
                 });
 
-                ResponsePromise.Catch(function(_targetResolve,_targetReject,_err){
+                ResponsePromise.Catch(function(_err){
                     if(!timedOut){
                         _reject({
                             'message':_err.message+' (Client target rejected request)',
                             'data':_err
                         });
-                        _targetResolve();
+                        return;
                     }
                     else{
-                        _targetReject();
+                        throw new Error();
                     }
                 });
             }

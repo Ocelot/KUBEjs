@@ -8,27 +8,27 @@
  */
 (function(KUBE){
 	"use strict";
-	KUBE.LoadFactory('/Library/UI/UI',UI,['/Library/UI/Loader','/Library/Ajax/Client','/Library/DOM/DomJack','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date']);
+	KUBE.LoadFactory('/Library/UI/UI',UI,['/Library/UI/Loader','/Library/Ajax/Client','/Library/DOM/DomJack','/Library/Extend/Object','/Library/Extend/Array','/Library/Extend/Date','/Library/Extend/Math']);
 
 	UI.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
 	function UI(_DomJack){
         if(KUBE.Is(_DomJack,true) !== 'DomJack'){
             throw new Error('Failed to initialize User Interface, constructor must be a valid DomJack object');
         }
-        var Root,Client,RequestTemplate,$API,UILoader,requestManager,responseHandler;
+        var Root,Client,NotifyClient,nRequestManager,nResponseHandler,RequestTemplate,$API,UILoader,requestManager,responseHandler,notifications,lastNRun,nState,nPause,nThreshold;
+        var UIGroundControl; //This is new
+
         UILoader = KUBE.Class('/Library/UI/Loader')();
 
         //Our API
         $API = {
-            'SetClient':SetClient,
-            'SendRequest':SendRequest,
-            'SetRequestManager':SetRequestManager,
-            'SetResponseHandler':SetResponseHandler,
-            'Send':Send,
-            'ProcessInstructions':ProcessInstructions
+            'SetGroundControl':SetGroundControl,
+            'Connect':Connect,
+            'BinaryTransmission': BinaryTransmission,
+            'AddViews':AddViews
         }.KUBE().create(UI.prototype);
 
-        Root = UILoader.Create(undefined,'Root','Root','Root');
+        Root = UILoader.Create('Root');
 
         var rootDimensions = getRootDimensions(_DomJack);
 
@@ -46,66 +46,45 @@
         return $API;
 
         //Instruction processing
-        function SetClient(_Client){
-            if(KUBE.Is(_Client,true) === 'Client'){
-                Client = _Client;
+        function SetGroundControl(_UIGroundControl){
+            if(KUBE.Is(_UIGroundControl) === 'object' && KUBE.Is(_UIGroundControl.Connect) === 'function'){
+                UIGroundControl = _UIGroundControl;
+            }
+        }
+
+        function Connect(_blockAddress,_target,_targetId){
+            if(UIGroundControl !== undefined){
+                return UIGroundControl.Connect(_blockAddress,_target,_targetId);
+            }
+        }
+
+        function BinaryTransmission(_blockAddress,_target,_targetId){
+            if(UIGroundControl !== undefined && KUBE.Is(UIGroundControl.StartBinaryTransmission) === "function"){
+                return UIGroundControl.StartBinaryTransmission(_blockAddress,_target,_targetId);
             }
             else{
-                throw new Error('UI Client object must be a valid /Library/Ajax/Client object.');
+                console.log("StartBinaryTransmission is not defined on GroundControl. Doing nothing");
             }
         }
 
-        function SendRequest(_Request){
-            if(KUBE.Is(_Request,true) === 'Request' && Client){
-                Client.SendRequest(_Request).then(handleClientResponse).catch(handleClientError);
-            }
+        function AddViews(_viewPkg){
+            return Root.AddViews(_viewPkg);
         }
 
-        function SetRequestManager(_managerCallback){
-            if(KUBE.Is(_managerCallback) === 'function'){
-                requestManager = _managerCallback;
-            }
-        }
-
-        function SetResponseHandler(_handlerCallback){
-            if(KUBE.Is(_handlerCallback) === 'function'){
-                responseHandler = _handlerCallback;
-            }
-        }
-
-        function Send(_data){
-            if(KUBE.Is(requestManager) === 'function'){
-                SendRequest(requestManager(_data));
-            }
-        }
-
-        function ProcessInstructions(_InstructionsObj){
-            if(KUBE.Is(_InstructionsObj,true) === 'ViewInstructions'){
-                var FoundView = Root.Find(_InstructionsObj);
-                if(KUBE.Is(FoundView,true) === 'UIView'){
-                    if(_InstructionsObj.GetData()){
-                        FoundView.Update(_InstructionsObj.GetData());
-                    }
-
-                    if(KUBE.Is(_InstructionsObj.GetChildViews()) === 'array'){
-                        FoundView.UpdateChildren(_InstructionsObj.GetChildViews(),_InstructionsObj.GetBehavior());
-                    }
-                }
-            }
-        }
-
-        function handleClientError(_Error){
-            throw _Error;
-        }
-
-        function handleClientResponse(_Response){
-            if(KUBE.Is(responseHandler) === 'function'){
-                responseHandler(_Response);
-            }
-            else{
-                throw new Error('UI requires a Response Handler to translate Client Responses to Instructions. No response handler set');
-            }
-        }
+        //function ProcessInstructions(_InstructionsObj){
+        //    if(KUBE.Is(_InstructionsObj,true) === 'ViewInstructions'){
+        //        var FoundView = Root.Find(_InstructionsObj);
+        //        if(KUBE.Is(FoundView,true) === 'UIView'){
+        //            if(_InstructionsObj.GetData()){
+        //                FoundView.Update(_InstructionsObj.GetData());
+        //            }
+        //
+        //            if(KUBE.Is(_InstructionsObj.GetChildViews()) === 'array'){
+        //                FoundView.UpdateChildren(_InstructionsObj.GetChildViews(),_InstructionsObj.GetBehavior());
+        //            }
+        //        }
+        //    }
+        //}
 
         function getRootDimensions(_RootDJ){
             //So... what should I do with this? For now, take its width/height if they exist, otherwise go full screen. It is likely this should be more robust in the future to handle a variety of spaces
@@ -116,5 +95,4 @@
         }
 
 	}
-
 }(KUBE));
