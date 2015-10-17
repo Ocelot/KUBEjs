@@ -165,10 +165,11 @@
 
         function deleteItem(_key,_val){
             if(data[_key] !== undefined){
+                var syncObj = data[_key];
                 delete data[_key];
-                Events.Emit('delete',_key,_val.val,_val.Template,_val.Node);
+                Events.Emit('delete',_key,syncObj.val,syncObj.Template,syncObj.Node);
                 jobs.push(function(){
-                    _syncObj.Node.Delete();
+                    syncObj.Node.Delete();
                 });
             }
         }
