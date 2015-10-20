@@ -1,13 +1,16 @@
+//My experimental attempt at integrating our old QuickFlow into Sync...
+
 (function(KUBE) {
     "use strict";
     /* Load class */
-    KUBE.LoadFactory('/Library/Tools/Sync', Sync,['/Library/DOM/DomJack','/Library/Tools/Hash']);
+    KUBE.LoadFactory('/Library/Tools/SyncFlow', SyncFlow,['/Library/DOM/DomJack','/Library/Tools/Hash','/Library/DOM/StyleJack','/Library/Extend/Object','/Library/Extend/Array']);
 
-    Sync.prototype.toString = function () {
+    SyncFlow.prototype.toString = function () {
         return '[object ' + this.constructor.name + ']'
     };
-    function Sync(_Into,_templateString) {
-        var Events,ParentDJ,template,data,DJ,jobs,serverJobs,Hash;
+    function SyncFlow(_Into,_templateString) {
+        //Original Sync
+        var Events,ParentDJ,TallBlock,template,data,DJ,jobs,serverJobs,Hash;
         data = {};
         jobs = [];
         serverJobs = {
@@ -17,8 +20,18 @@
         };
         DJ = KUBE.Class('/Library/DOM/DomJack');
         Hash = KUBE.Class('/Library/Tools/Hash')();
-
         Events = KUBE.Events();
+
+        //QuickFlow additions
+        var viewableItems,initRowHeight,intoHeight,totalItems,order,reflow,currentPosition,Rows,pauseScroll,inView;
+
+        totalItems = 0;
+        viewableItems = 0;
+        initRowHeight = 0;
+        order = [];
+        reflow = false;
+        Rows = [];
+        inView = [];
 
         if(_Into){
             Into(_Into);
@@ -35,15 +48,104 @@
             "SetSortKeys":SetSortKeys,
             "On": Events.On,
             "Into":Into,
-            "Init":Init,
             "AddNew":AddNew,
             "Sync":Sync,
             "Add":Add,
             "Remove":Remove,
             "Update":Update,
-            "Sort":Sort
+            "Sort":Sort,
+            "Reflow":Reflow
         };
 
+        //QuickFlow
+        function Reflow(){
+            //Get the scrollPosition
+            inView = [];
+            var scrollPos = TallBlock.GetNode().scrollHeight;
+
+            //Find our startIndex
+            var startIndex = calcIndex(scrollPos);
+
+            //How many rows will we populate?
+            var pops = [];
+            var spaceUsed = 0;
+            for(;spaceUsed<(intoHeight+(initRowHeight*5));startIndex++){
+                if(startIndex > order.length-1){
+                    break;
+                }
+                else{
+                    spaceUsed += data[order[startIndex]].height;
+                    pops.push(startIndex);
+                }
+            }
+
+            for(var i=Rows.length;i<pops.length;i++){
+                var NewRow = DJ('div')
+                Rows.push(NewRow);
+                NewRow.Position('absolute');
+            }
+
+            pops.KUBE().each(function(_orderIndex,_index){
+                var N = Rows[_index];
+                var obj = data[order[_orderIndex]];
+                var Template = N.BuildInner(template);
+                inView.push({
+                    'key':_key,
+                    'N':N,
+                    'T':Template
+                });
+                Events.Emit('populate',_key,obj,Template,N);
+                reflowJob(N,_orderIndex);
+            });
+
+            //Move the appropriate 'rows'
+            //Call populate on the appropriate items
+        }
+
+        function reflowJob(_N,_orderIndex){
+            jobs.push(function(){
+                _N.Style().Top(calcPosition(_orderIndex));
+            });
+        }
+
+        function calcIndex(_scrollPos){
+            if(_scrollPos = 0){
+                return 0;
+            }
+            var index,position = 0;
+            order.KUBE().each(function(_key,_index){
+                position += data[_key].height
+                if(position >= _scrollPos){
+                    index = _index;
+                    this.break();
+                }
+            });
+            return index;
+        }
+
+        //I can create a positionCache later. For now just get it moving correctly
+        function calcPosition(_orderIndex){
+            var position = 0;
+            order.KUBE().each(function(_key,_index){
+                position += data[_key].height
+                if(_index == _orderIndex){
+                    this.break();
+                }
+            });
+            return position;
+        }
+
+        function initQF(){
+            if(ParentDJ){
+                viewableItems = Math.ceil(intoHeight/_initRowHeight)+5;
+                ParentDJ.Style().Overflow(['hidden','auto']);
+                TallBlock = ParentDJ.Append('div');
+                TallBlock.Style().Width('100%').Position('relative').Height(intoHeight);
+                ParentDJ.On('scroll',Reflow);
+            }
+        }
+
+        //Sync
         function SetTemplate(_string){
             if(_string && KUBE.Is(_string) === 'string'){
                 template = _string;
@@ -57,17 +159,12 @@
             //Not yet
         }
 
-        function Into(_DJ){
+        function Into(_DJ,_initRowHeight){
             if(KUBE.Is(_DJ,true) === 'DomJack'){
                 ParentDJ = _DJ;
-            }
-        }
-
-        function Init(_obj,_prepend){
-            if(KUBE.Is(_obj) === 'object'){
-                _obj.KUBE().each(function(_key,_val){
-                    addItem(_key,_val,_prepend);
-                });
+                intoHeight = ParentDJ.GetDrawDimensions().height;
+                initRowHeight = _initRowHeight;
+                initQF();
             }
         }
 
@@ -133,24 +230,14 @@
         //For server jobs
         function addItem(_key,_val,_prepend){
             if(data[_key] === undefined){
-                var Node = DJ('div');
-                var Template = Node.BuildInner(template);
                 data[_key] = {
                     'key':_key,
                     'val':_val,
                     'valHash':Hash.DeepHash(_val),
-                    'Template':Template,
-                    'Node':Node
+                    'height':initRowHeight
                 };
-                Events.Emit('new',_key,_val,Template,Node,changeFunc(_key));
-                jobs.push(function(){
-                    if(_prepend){
-                        ParentDJ.Prepend(Node);
-                    }
-                    else{
-                        ParentDJ.Append(Node);
-                    }
-                });
+                order.push(_key);
+                reflow = true;
             }
         }
 
@@ -161,8 +248,11 @@
                     var syncObj = data[_key];
                     syncObj.val = _val;
                     syncObj.valHash = checkHash;
-                    jobs.push(function(){
-                        Events.Emit('update',_key,_val,_syncObj.Template,_syncObj.Node);
+
+                    inView.KUBE().each(function(_key){
+                        if(_obj.key === _key){
+                            reflow = true;
+                        }
                     });
                 };
             }
@@ -217,6 +307,10 @@
                         'new':{}
                     };
                     Events.Emit('submit',sJobs);
+                }
+                if(reflow){
+                    reflow = false;
+                    Reflow();
                 }
                 runJobs();
             });
