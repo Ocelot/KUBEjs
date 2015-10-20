@@ -35,7 +35,6 @@
             "SetSortKeys":SetSortKeys,
             "On": Events.On,
             "Into":Into,
-            "Init":Init,
             "AddNew":AddNew,
             "Sync":Sync,
             "Add":Add,
@@ -60,14 +59,6 @@
         function Into(_DJ){
             if(KUBE.Is(_DJ,true) === 'DomJack'){
                 ParentDJ = _DJ;
-            }
-        }
-
-        function Init(_obj,_prepend){
-            if(KUBE.Is(_obj) === 'object'){
-                _obj.KUBE().each(function(_key,_val){
-                    addItem(_key,_val,_prepend);
-                });
             }
         }
 
