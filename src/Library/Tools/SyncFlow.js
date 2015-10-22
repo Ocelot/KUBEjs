@@ -71,15 +71,25 @@
             var scrollPos = ParentDJ.GetNode().scrollTop;
 
             //Find our startIndex
-            var startIndex = calcIndex(scrollPos);
-            if(startIndex > 2){
-                startIndex = startIndex-2;
-            }
+
 
             //How many rows will we populate?
             var pops = [];
             var spaceUsed = 0;
-            for(;spaceUsed<(intoHeight+(intoHeight*2));startIndex++){
+
+            if(scrollPos-Math.floor(intoHeight/2) < 0){
+                scrollPos = 0;
+            }
+            else{
+                scrollPos -= Math.floor(intoHeight/2);
+            }
+
+            var startIndex = calcIndex(scrollPos);
+            console.log('Scroll Position: '+scrollPos);
+            console.log('Start Index:'+startIndex);
+            console.log('Start Index Position: '+calcPosition(startIndex)+':'+slowCheck(startIndex));
+
+            for(;spaceUsed<(intoHeight*2);startIndex++){
                 if(startIndex > order.length-1){
                     break;
                 }
@@ -92,13 +102,25 @@
             for(var i=Rows.length;i<pops.length;i++){
                 var NewRow = DJ('div');
                 Rows.push(NewRow);
-                NewRow.Style().Position('absolute');
+                NewRow.Style().Position('absolute').Width('100%');
                 TallBlock.Append(NewRow);
             }
 
+            if(Rows.length > pops.length){
+                var totalRows = Rows.length;
+                for(var i=pops.length;i<totalRows;i++){
+                    Rows[i].Delete();
+                }
+                var splices = Rows.length-pops.length;
+                Rows.splice(pops.length,splices);
+            }
+
+
             pops.KUBE().each(function(_orderIndex,_index){
                 var N = Rows[_index];
+                N.Clear();
                 var obj = data[order[_orderIndex]];
+                N.Style().Height(obj.height);
                 var Template = N.BuildInner(template);
                 inView.push({
                     'key':obj.key,
@@ -115,17 +137,35 @@
 
         function reflowJob(_N,_orderIndex){
             jobs.push(function(){
-                _N.Style().Transform().TranslateY(calcPosition(_orderIndex));
+                var calcd = calcPosition(_orderIndex)
+                console.log(_orderIndex+":"+calcd);
+                //_N.Style().Top(calcd);
+                _N.Style().Transform().TranslateY(calcd);
             });
+        }
+
+        function slowCheck(_index){
+            var position = 0;
+            order.KUBE().each(function(_key){
+                if(_key < _index){
+                    position += data[_key].height;
+                }
+                else{
+                    this.break();
+                }
+            });
+            return position;
         }
 
         function findPosition(_startIndex,_position,_scrollPos){
             while(true){
                 _startIndex++;
                 if(data[order[_startIndex]] !== undefined){
-                    _position += data[order[_startIndex]].height;
                     if(_position >= _scrollPos){
-                        return _startIndex;
+                        return _startIndex-1;
+                    }
+                    else{
+                        _position += data[order[_startIndex]].height;
                     }
                 }
                 else{
@@ -139,10 +179,13 @@
                 return 0;
             }
 
+            var calcIndexOps = 0;
+
             var indexPointer = 0;
             var position = 0;
             var checkPosition = 0;
             for(var i=0;i<positionCache.x10000.length;i++){
+                calcIndexOps++;
                 checkPosition += positionCache.x10000[i];
                 if(checkPosition > _scrollPos){
                     checkPosition = position;
@@ -156,6 +199,7 @@
 
             indexPointer *= 10;
             for(var i=0;i<positionCache.x1000.length;i++){
+                calcIndexOps++;
                 checkPosition += positionCache.x1000[i];
                 if(checkPosition > _scrollPos){
                     checkPosition = position;
@@ -169,6 +213,7 @@
 
             indexPointer *= 10;
             for(var i=0;i<positionCache.x100.length;i++){
+                calcIndexOps++;
                 checkPosition += positionCache.x100[i];
                 if(checkPosition > _scrollPos){
                     checkPosition = position;
@@ -182,6 +227,7 @@
 
             indexPointer *= 10;
             for(var i=0;i<positionCache.x10.length;i++){
+                calcIndexOps++;
                 checkPosition += positionCache.x10[i];
                 if(checkPosition > _scrollPos){
                     checkPosition = position;
@@ -193,7 +239,10 @@
                 }
             }
 
+            //THIS IS WHERE WE ARE FAILING SOME HOW...
+            debugger;
             indexPointer *= 10;
+            //console.log('calcIndexOpts: '+calcIndexOps);
             return findPosition(indexPointer,position,_scrollPos);
         }
 
@@ -222,11 +271,11 @@
             }
 
             for(var i=posIndex;i<_orderIndex;i++){
-                position += data[order[_orderIndex]].height;
+                position += data[order[i]].height;
                 ops++;
             }
 
-            console.log('OPS Required to Calculate Position: '+ops);
+            //console.log('OPS Required to Calculate Position: '+ops);
             return Math.floor(position);
         }
 
@@ -245,6 +294,13 @@
                 "x100":0,
                 "x1000":0,
                 "x10000":0
+            };
+
+            positionCache = {
+                'x10':[],
+                'x100':[],
+                'x1000':[],
+                'x10000':[]
             };
 
             order.KUBE().each(function(_key,_index){
@@ -379,11 +435,24 @@
                     'key':_key,
                     'data':_val,
                     'dataHash':Hash.DeepHash(_val),
-                    'height':initRowHeight
+                    'height':initRowHeight,
+                    'reflow':function(){
+                        reflowItem(_key);
+                    }
                 };
                 Events.Emit('calcHeight',data[_key]);
                 order.push(_key);
             }
+        }
+
+        function reflowItem(_key){
+            var index = order.indexOf(_key);
+            var obj = data[_key];
+
+            //Reflow the positionCaches (lazy for now)
+            cachePositions();
+            recalcScroll();
+            Reflow();
         }
 
         function updateItem(_key,_val){
