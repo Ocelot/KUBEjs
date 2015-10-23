@@ -240,7 +240,7 @@
             }
 
             //THIS IS WHERE WE ARE FAILING SOME HOW...
-            debugger;
+            //debugger;
             indexPointer *= 10;
             //console.log('calcIndexOpts: '+calcIndexOps);
             return findPosition(indexPointer,position,_scrollPos);
@@ -275,7 +275,7 @@
                 ops++;
             }
 
-            //console.log('OPS Required to Calculate Position: '+ops);
+            console.log('OPS Required to Calculate Position: '+ops);
             return Math.floor(position);
         }
 
