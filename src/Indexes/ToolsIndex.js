@@ -18,7 +18,8 @@
         'Index',
         'KeyVal',
         'Sync',
-        'SyncFlow'
+        'SyncFlow',
+        'SyncFlow2'
     ]);
 
     KUBE.AutoLoad().AddIndex(ToolsIndex);
