@@ -23,7 +23,7 @@
         Events = KUBE.Events();
 
         //QuickFlow additions
-        var viewableItems,initRowHeight,intoHeight,totalItems,order,reflow,currentPosition,Rows,pauseScroll,inView,positionCache,rangeStart,rangeEnd;
+        var viewableItems,initRowHeight,intoHeight,totalItems,order,reflow,currentPosition,Rows,pauseScroll,inView,positionCache,rangeStart,rangeEnd,totalHeight;
 
         totalItems = 0;
         viewableItems = 0;
@@ -76,12 +76,10 @@
             var pops = [];
             var spaceUsed = 0;
 
-            //What I would need to do is calculate to a 'close' item (exactly) set the Pusher height, populate X rows, and then, at a certain threshold, do it again?
-            var closest = calcClosest(scrollPos);
-            var closestIndex = closest[0];
-            var closestPosition = closest[1];
+            if(scrollPos < intoHeight/2){
+                closestIndex = 0;
+                closestPosition = 0;
 
-            if(intoHeight > closestPosition){
                 Pusher.Style().Height(0);
 
                 var rows = 0;
@@ -92,6 +90,7 @@
                 while(height < (intoHeight*2) && order[index] !== undefined){
                     pops.push(index);
                     height += data[order[index]].height;
+                    inView.push(index);
                     index++;
                 }
 
@@ -108,119 +107,59 @@
                 }
 
                 pops.KUBE().each(function(_orderIndex,_index){
-                    var N = Rows[_index];
-                    N.Clear();
+                    var R = Rows[_index].R;
+                    var T = Rows[_index].T;
                     var obj = data[order[_orderIndex]];
-                    N.Style().Height(obj.height);
-                    var Template = N.BuildInner(template);
-                    inView.push({
-                        'key':obj.key,
-                        'N':N,
-                        'T':Template
-                    });
-                    Events.Emit('populate',obj,Template,N);
-                    reflowJob(N,_orderIndex);
+                    R.Clear(undefined,true);
+                    R.Style().Height(obj.height);
+                    Events.Emit('populate',obj,T,R);
                 });
             }
             else{
-                //The actual hard stuff
+                var pushPosition = scrollPos-Math.floor(intoHeight/2);
+                var closest = calcClosest(pushPosition);
+                var closestIndex = closest[0];
+                var closestPosition = closest[1];
 
+                Pusher.Style().Height(closestPosition);
 
-                debugger;
+                var index = closestIndex;
+                var height = 0;
+                while(height < intoHeight+(Math.ceil(intoHeight/2)) && order[index] !== undefined){
+                    pops.push(index);
+                    height += data[order[index]].height;
+                    inView.push(index);
+                    index++;
+                }
+
+                for(var i=0;i<Rows.length;i++){
+                    if(i < pops.length){
+                        if(Rows[i].R.IsDetached()){
+                            TallBlock.Append(Rows[i].R);
+                        }
+                    }
+                    else if(i >= pops.length){
+                        if(!Rows[i].R.IsDetached()){
+                            Rows[i].R.Detach();
+                        }
+                    }
+                }
+
+                pops.KUBE().each(function(_orderIndex,_index){
+                    var R = Rows[_index].R;
+                    var T = Rows[_index].T;
+                    var obj = data[order[_orderIndex]];
+                    R.Clear(undefined,true);
+                    R.Style().Height(obj.height);
+                    Events.Emit('populate',obj,T,R);
+                });
             }
 
-
-            ////This is wrong. I would need to calculate the closest
-            //
-            //
-            //if(scrollPos-Math.floor(intoHeight/2) < 0){
-            //    scrollPos = 0;
-            //    Pusher.Style().Height(0);
-            //}
-            //else{
-            //    scrollPos -= Math.floor(intoHeight/2);
-            //    Pusher.Style().Height(scrollPos);
-            //}
-            //
-            //
-            //
-            //
-            //
-            //var startIndex = calcIndex(scrollPos);
-            //console.log('Scroll Position: '+scrollPos);
-            //console.log('Start Index:'+startIndex);
-            //console.log('Start Index Position: '+calcPosition(startIndex)+':'+slowCheck(startIndex));
-            //
-            //for(;spaceUsed<(intoHeight*2);startIndex++){
-            //    if(startIndex > order.length-1){
-            //        break;
-            //    }
-            //    else{
-            //        spaceUsed += data[order[startIndex]].height;
-            //        pops.push(startIndex);
-            //    }
-            //}
-            //
-            //for(var i=Rows.length;i<pops.length;i++){
-            //    var NewRow = DJ('div');
-            //    Rows.push(NewRow);
-            //    NewRow.Style().Position('relative').Width('100%');
-            //    TallBlock.Append(NewRow);
-            //}
-            //
-            //if(Rows.length > pops.length){
-            //    var totalRows = Rows.length;
-            //    for(var i=pops.length;i<totalRows;i++){
-            //        Rows[i].Delete();
-            //    }
-            //    var splices = Rows.length-pops.length;
-            //    Rows.splice(pops.length,splices);
-            //}
-            //
-            //
-            //pops.KUBE().each(function(_orderIndex,_index){
-            //    var N = Rows[_index];
-            //    N.Clear();
-            //    var obj = data[order[_orderIndex]];
-            //    N.Style().Height(obj.height);
-            //    var Template = N.BuildInner(template);
-            //    inView.push({
-            //        'key':obj.key,
-            //        'N':N,
-            //        'T':Template
-            //    });
-            //    Events.Emit('populate',obj,Template,N);
-            //    reflowJob(N,_orderIndex);
-            //});
-            //
-            ////Move the appropriate 'rows'
-            ////Call populate on the appropriate items
+            //We use inView for Sync
         }
 
         function calcClosest(_scrollPos){
             return calcIndex(_scrollPos);
-        }
-
-        function reflowJob(_N,_orderIndex){
-            jobs.push(function(){
-                var calcd = calcPosition(_orderIndex)
-                console.log(_orderIndex+":"+calcd);
-                //_N.Style().Top(calcd);
-                //_N.Style().Transform().TranslateY(calcd);
-            });
-        }
-
-        function slowCheck(_index){
-            var position = 0;
-            order.KUBE().each(function(_key){
-                if(_key < _index){
-                    position += data[_key].height;
-                }
-                else{
-                    this.break();
-                }
-            });
-            return position;
         }
 
         function findPosition(_startIndex,_position,_scrollPos){
@@ -228,7 +167,7 @@
                 _startIndex++;
                 if(data[order[_startIndex]] !== undefined){
                     if(_position >= _scrollPos){
-                        return [_startIndex,_position];
+                        return [_startIndex-1,_position];
                     }
                     else{
                         _position += data[order[_startIndex]].height;
@@ -312,44 +251,12 @@
             return findPosition(indexPointer,position,_scrollPos);
         }
 
-        //I can create a positionCache later. For now just get it moving correctly
-        function calcPosition(_orderIndex){
-            var position = 0;
-            var subIndex = _orderIndex;
-            var posIndex = 0;
-            var pointer = 0;
-            var ops = 0;
-
-            for(pointer=0;subIndex>=10000;pointer++,subIndex-=10000,posIndex+=10000,ops++){
-                position += positionCache.x10000[pointer];
-            }
-
-            for(pointer=pointer*10;subIndex>=1000;pointer++,subIndex-=1000,posIndex+=1000,ops++){
-                position += positionCache.x1000[pointer];
-            }
-
-            for(pointer=pointer*10;subIndex>=100;pointer++,subIndex-=100,posIndex+=100,ops++){
-                position += positionCache.x100[pointer];
-            }
-
-            for(pointer=pointer*10;subIndex>=10;pointer++,subIndex-=10,posIndex+=10,ops++){
-                position += positionCache.x10[pointer];
-            }
-
-            for(var i=posIndex;i<_orderIndex;i++){
-                position += data[order[i]].height;
-                ops++;
-            }
-
-            //console.log('OPS Required to Calculate Position: '+ops);
-            return Math.floor(position);
-        }
-
         function recalcScroll(){
             var boxHeight = 0;
             data.KUBE().each(function(_key,_obj){
                 boxHeight += _obj.height;
             });
+            totalHeight = boxHeight;
             TallBlock.Style().Height(boxHeight);
         }
 
