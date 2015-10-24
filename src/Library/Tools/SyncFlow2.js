@@ -99,7 +99,10 @@
                     for(var newRows = Rows.length-1;newRows<pops.length;newRows++){
                         var R = DJ('div');
                         R.Style().Position('relative').Width('100%');
-                        Rows.push(R);
+                        Rows.push({
+                            'R':R,
+                            'T': R.BuildInner(template)
+                        });
                         TallBlock.Append(R);
                     }
                 }
@@ -121,7 +124,7 @@
             }
             else{
                 //The actual hard stuff
-                
+
 
                 debugger;
             }
