@@ -698,10 +698,15 @@
             Events.EmitState.apply($DomJackAPI,args);
         }
 		
-		function Clear(_event){
+		function Clear(_event,_recursive){
 			_event = (_event === undefined ? undefined : translateEvent(_event));
 			Events.Clear(_event);
 			cleanListeners(_event);
+            if(_recursive === true){
+                GetChildren().KUBE().each(function(_Child){
+                    _Child.Clear(_event,true);
+                });
+            }
 		}
 		
 		function RemoveListener(_event,_callback){
