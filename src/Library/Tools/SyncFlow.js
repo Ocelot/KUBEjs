@@ -9,29 +9,27 @@
         return '[object ' + this.constructor.name + ']'
     };
     function SyncFlow(_Into,_templateString) {
-        //Original Sync
-        var Events,ParentDJ,TallBlock,template,data,DJ,jobs,serverJobs,Hash;
-        data = {};
+        var DJ,Hash,Events,Pusher,TallBlock,ParentDJ,template,data,jobs,serverJobs,intoHeight,order,reflow,Rows,inView,positionCache,totalHeight,runTrigger;
+
+        //All of our Defaults
+        DJ = KUBE.Class('/Library/DOM/DomJack');
+        Hash = KUBE.Class('/Library/Tools/Hash')();
+        Events = KUBE.Events();
+
+        reflow = false;
+        runTrigger = false;
+
         jobs = [];
+        order = [];
+        Rows = [];
+        inView = [];
+        data = {};
+
         serverJobs = {
             'delete':[],
             'update':{},
             'new':{}
         };
-        DJ = KUBE.Class('/Library/DOM/DomJack');
-        Hash = KUBE.Class('/Library/Tools/Hash')();
-        Events = KUBE.Events();
-
-        //QuickFlow additions
-        var viewableItems,initRowHeight,intoHeight,totalItems,order,reflow,currentPosition,Rows,pauseScroll,inView,positionCache;
-
-        totalItems = 0;
-        viewableItems = 0;
-        initRowHeight = 0;
-        order = [];
-        reflow = false;
-        Rows = [];
-        inView = [];
 
         positionCache = {
             'x10':[],
@@ -40,6 +38,7 @@
             'x10000':[]
         };
 
+        //Initialize constructor vars
         if(_Into){
             Into(_Into);
         }
@@ -66,228 +65,349 @@
 
         //QuickFlow
         function Reflow(){
-            //Get the scrollPosition
+            var scrollPos,pops,spaceUsed,rows,height,index,newRows,R,T;
+
             inView = [];
-            var scrollPos = ParentDJ.GetNode().scrollTop;
+            scrollPos = ParentDJ.GetNode().scrollTop;
+            pops = [];
+            height = 0;
 
-            //Find our startIndex
+            if(scrollPos < intoHeight/2){
+                rows = 0;
+                index = 0;
+                Pusher.Style().Height(0);
 
+                while(height < (intoHeight*2) && order[index] !== undefined){
+                    pops.push(index);
+                    inView.push(order[index]);
+                    height += data[order[index]].height;
+                    index++;
+                }
 
-            //How many rows will we populate?
-            var pops = [];
-            var spaceUsed = 0;
+                if(Rows.length < pops.length){
+                    for(newRows = Rows.length-1;newRows<pops.length;newRows++){
+                        R = DJ('div');
+                        R.Style().Position('relative').Width('100%');
+                        Rows.push({
+                            'R':R,
+                            'T': R.BuildInner(template)
+                        });
+                        TallBlock.Append(R);
+                    }
+                }
 
-            if(scrollPos-Math.floor(intoHeight/2) < 0){
-                scrollPos = 0;
+                for(var i=0;i<Rows.length;i++){
+                    if(i < pops.length){
+                        if(Rows[i].R.IsDetached()){
+                            TallBlock.Append(Rows[i].R);
+                        }
+                    }
+                    else if(i >= pops.length){
+                        if(!Rows[i].R.IsDetached()){
+                            Rows[i].R.Detach();
+                        }
+                    }
+                }
             }
             else{
-                scrollPos -= Math.floor(intoHeight/2);
-            }
+                //Closest 0:index 1:position
+                var closest = calcIndex(scrollPos-Math.floor(intoHeight/2));
 
-            var startIndex = calcIndex(scrollPos);
-            console.log('Scroll Position: '+scrollPos);
-            console.log('Start Index:'+startIndex);
-            console.log('Start Index Position: '+calcPosition(startIndex)+':'+slowCheck(startIndex));
+                index = closest[0];
+                while(height < intoHeight*2 && order[index] !== undefined){
+                    pops.push(index);
+                    inView.push(order[index]);
+                    height += data[order[index]].height;
+                    index++;
+                }
 
-            for(;spaceUsed<(intoHeight*2);startIndex++){
-                if(startIndex > order.length-1){
-                    break;
+                if(height+closest[1] > totalHeight){
+                    Pusher.Style().Height(height-totalHeight);
                 }
                 else{
-                    spaceUsed += data[order[startIndex]].height;
-                    pops.push(startIndex);
+                    Pusher.Style().Height(closest[1]);
+                }
+
+                for(var i=0;i<Rows.length;i++){
+                    if(i < pops.length){
+                        if(Rows[i].R.IsDetached()){
+                            TallBlock.Append(Rows[i].R);
+                        }
+                    }
+                    else if(i >= pops.length){
+                        if(!Rows[i].R.IsDetached()){
+                            Rows[i].R.Detach();
+                        }
+                    }
                 }
             }
-
-            for(var i=Rows.length;i<pops.length;i++){
-                var NewRow = DJ('div');
-                Rows.push(NewRow);
-                NewRow.Style().Position('absolute').Width('100%');
-                TallBlock.Append(NewRow);
-            }
-
-            if(Rows.length > pops.length){
-                var totalRows = Rows.length;
-                for(var i=pops.length;i<totalRows;i++){
-                    Rows[i].Delete();
-                }
-                var splices = Rows.length-pops.length;
-                Rows.splice(pops.length,splices);
-            }
-
 
             pops.KUBE().each(function(_orderIndex,_index){
-                var N = Rows[_index];
-                N.Clear();
-                var obj = data[order[_orderIndex]];
-                N.Style().Height(obj.height);
-                var Template = N.BuildInner(template);
-                inView.push({
-                    'key':obj.key,
-                    'N':N,
-                    'T':Template
-                });
-                Events.Emit('populate',obj,Template,N);
-                reflowJob(N,_orderIndex);
+                var obj,R,T;
+                obj = data[order[_orderIndex]];
+
+                R = Rows[_index].R;
+                T = Rows[_index].T;
+                R.Clear(undefined,true);
+                R.Style().Height(obj.height);
+
+                Events.Emit('populate',obj,T,R);
             });
 
-            //Move the appropriate 'rows'
-            //Call populate on the appropriate items
-        }
-
-        function reflowJob(_N,_orderIndex){
-            jobs.push(function(){
-                var calcd = calcPosition(_orderIndex)
-                console.log(_orderIndex+":"+calcd);
-                //_N.Style().Top(calcd);
-                _N.Style().Transform().TranslateY(calcd);
-            });
-        }
-
-        function slowCheck(_index){
-            var position = 0;
-            order.KUBE().each(function(_key){
-                if(_key < _index){
-                    position += data[_key].height;
-                }
-                else{
-                    this.break();
-                }
-            });
-            return position;
-        }
-
-        function findPosition(_startIndex,_position,_scrollPos){
-            while(true){
-                _startIndex++;
-                if(data[order[_startIndex]] !== undefined){
-                    if(_position >= _scrollPos){
-                        return _startIndex-1;
-                    }
-                    else{
-                        _position += data[order[_startIndex]].height;
-                    }
-                }
-                else{
-                    return false;
-                }
-            }
-        }
-
-        function calcIndex(_scrollPos){
-            if(_scrollPos === 0){
-                return 0;
-            }
-
-            var calcIndexOps = 0;
-
-            var indexPointer = 0;
-            var position = 0;
-            var checkPosition = 0;
-            for(var i=0;i<positionCache.x10000.length;i++){
-                calcIndexOps++;
-                checkPosition += positionCache.x10000[i];
-                if(checkPosition > _scrollPos){
-                    checkPosition = position;
-                    break;
-                }
-                else{
-                    position = checkPosition;
-                    indexPointer++;
-                }
-            }
-
-            indexPointer *= 10;
-            for(var i=0;i<positionCache.x1000.length;i++){
-                calcIndexOps++;
-                checkPosition += positionCache.x1000[i];
-                if(checkPosition > _scrollPos){
-                    checkPosition = position;
-                    break;
-                }
-                else{
-                    position = checkPosition;
-                    indexPointer++;
-                }
-            }
-
-            indexPointer *= 10;
-            for(var i=0;i<positionCache.x100.length;i++){
-                calcIndexOps++;
-                checkPosition += positionCache.x100[i];
-                if(checkPosition > _scrollPos){
-                    checkPosition = position;
-                    break;
-                }
-                else{
-                    position = checkPosition;
-                    indexPointer++;
-                }
-            }
-
-            indexPointer *= 10;
-            for(var i=0;i<positionCache.x10.length;i++){
-                calcIndexOps++;
-                checkPosition += positionCache.x10[i];
-                if(checkPosition > _scrollPos){
-                    checkPosition = position;
-                    break;
-                }
-                else{
-                    position = checkPosition;
-                    indexPointer++;
-                }
-            }
-
-            //THIS IS WHERE WE ARE FAILING SOME HOW...
-            //debugger;
-            indexPointer *= 10;
-            //console.log('calcIndexOpts: '+calcIndexOps);
-            return findPosition(indexPointer,position,_scrollPos);
-        }
-
-        //I can create a positionCache later. For now just get it moving correctly
-        function calcPosition(_orderIndex){
-            var position = 0;
-            var subIndex = _orderIndex;
-            var posIndex = 0;
-            var pointer = 0;
-            var ops = 0;
-
-            for(pointer=0;subIndex>=10000;pointer++,subIndex-=10000,posIndex+=10000,ops++){
-                position += positionCache.x10000[pointer];
-            }
-
-            for(pointer=pointer*10;subIndex>=1000;pointer++,subIndex-=1000,posIndex+=1000,ops++){
-                position += positionCache.x1000[pointer];
-            }
-
-            for(pointer=pointer*10;subIndex>=100;pointer++,subIndex-=100,posIndex+=100,ops++){
-                position += positionCache.x100[pointer];
-            }
-
-            for(pointer=pointer*10;subIndex>=10;pointer++,subIndex-=10,posIndex+=10,ops++){
-                position += positionCache.x10[pointer];
-            }
-
-            for(var i=posIndex;i<_orderIndex;i++){
-                position += data[order[i]].height;
-                ops++;
-            }
-
-            console.log('OPS Required to Calculate Position: '+ops);
-            return Math.floor(position);
-        }
-
-        function recalcScroll(){
-            var boxHeight = 0;
-            data.KUBE().each(function(_key,_obj){
-                boxHeight += _obj.height;
-            });
-            TallBlock.Style().Height(boxHeight);
+            //We use inView for Sync
         }
 
         //This is silly, but temporary as I work through understanding how stable this is (isn't) and opportunities for optimization
+
+        function initQF(){
+            if(ParentDJ){
+                ParentDJ.Style().Overflow(['hidden','auto']);
+                TallBlock = ParentDJ.Append('div');
+                TallBlock.Style().Width('100%').Position('relative').Height(intoHeight);
+                Pusher = TallBlock.Append('div');
+                Pusher.Style().Width('100%').Height(0).Position('relative');
+                ParentDJ.GetNode().style.webkitOverflowScrolling = 'touch';
+                ParentDJ.On('scroll',Reflow);
+            }
+        }
+
+        //Sync
+        function SetTemplate(_string){
+            if(_string && KUBE.Is(_string) === 'string'){
+                template = _string;
+            }
+            else if(KUBE.Is(_string) === 'function'){
+                template = ''.KUBE().multiLine(_string);
+            }
+        }
+
+        function SetSortKeys(_obj){
+            //Not yet
+        }
+
+        function Into(_DJ){
+            if(KUBE.Is(_DJ,true) === 'DomJack'){
+                ParentDJ = _DJ;
+                intoHeight = ParentDJ.GetDrawDimensions().height;
+                initQF();
+            }
+        }
+
+        function AddNew(_key,_dataObj,_prepend){
+            if(data[_key] === undefined){
+                serverJobs.new[_key] = _dataObj;
+                var obj = {};
+                obj[_key] = _dataObj;
+                Add(obj,_prepend);
+            }
+        }
+
+        function Sync(_obj,_prepend){
+            //First we call Updates
+            _obj.KUBE().each(function(_key,_val){
+                if(data[_key] !== undefined){
+                    updateItem(_key,_val);
+                }
+            });
+
+            //Then Deletes
+            data.KUBE().each(function(_key,_syncObj){
+                if(_obj[_key] === undefined){
+                    deleteItem(_key,_syncObj);
+                }
+            });
+
+            //Add Adds
+            _obj.KUBE().each(function(_key,_val){
+                if(data[_key] === undefined){
+                    addItem(_key,_val,_prepend);
+                }
+            });
+
+            syncOrder();
+            cachePositions();
+            recalcScroll();
+            reflow = true;
+            triggerJobs();
+        }
+
+        function Add(_obj,_prepend){
+            _obj.KUBE().each(function(_key,_val){
+                addItem(_key,_val,_prepend);
+            });
+
+            cachePositions();
+            recalcScroll();
+            reflow = true;
+            triggerJobs();
+        }
+
+        function Remove(_obj){
+            //We only remove items that are not in this object (this tends to be what you actually want to do, though may seem odd at first)
+            data.KUBE().each(function(_key,_val){
+                if(_obj[_key] === undefined){
+                    deleteItem(_key,_val);
+                }
+            });
+
+            syncOrder();
+            cachePositions();
+            recalcScroll();
+            reflow = true;
+            triggerJobs();
+        }
+
+        function Update(_obj){
+            //We look for items that have changed, and we update them
+            _obj.KUBE().each(function(_key,_val){
+                updateItem(_key,_val);
+            });
+            triggerJobs();
+        }
+
+        function Sort(_obj){
+            //Not yet
+        }
+
+        //For server jobs
+        function addItem(_key,_val,_prepend){
+            if(data[_key] === undefined){
+                data[_key] = {
+                    'key':_key,
+                    'data':_val,
+                    'dataHash':Hash.DeepHash(_val),
+                    'height':0,
+                    'reflow':function(){
+                        reflowItem(_key);
+                    }
+                };
+                Events.Emit('calcHeight',data[_key]);
+
+                if(_prepend){
+                    order.unshift(_key);
+                }
+                else{
+                    order.push(_key);
+                }
+            }
+        }
+
+        function reflowItem(_key){
+            var index = order.indexOf(_key);
+            var obj = data[_key];
+
+            //This is the next order of optimization.
+            updatePositionCache(index);
+            recalcScroll();
+            Reflow();
+        }
+
+        function syncOrder(){
+            if(order.length !== data.KUBE().count()){
+                var tempOrder = {};
+                data.KUBE().each(function(_key,_val){
+                    tempOrder[order.indexOf(_key)] = _key;
+                });
+                order = [];
+                tempOrder.KUBE().each(function(_oldOrder,_key){
+                    order.push(_key);
+                });
+            }
+        }
+
+        function updateItem(_key,_val){
+            if(data[_key] !== undefined){
+                var checkHash = Hash.DeepHash(_val);
+                if(data[_key].dataHash !== checkHash){
+                    var syncObj = data[_key];
+                    syncObj.data = _val;
+                    syncObj.dataHash = checkHash;
+
+                    if(inView.indexOf(_key) !== -1){
+                        reflow = true;
+                    }
+                };
+            }
+        }
+
+        function deleteItem(_key,_val){
+            if(data[_key] !== undefined){
+                var syncObj = data[_key];
+                delete data[_key];
+
+                if(inView.indexOf(_key) !== -1){
+                    reflow = true;
+                }
+            }
+        }
+
+        function changeFunc(_key){
+            return {
+                'delete':function(){
+                    var obj = data[_key];
+                    delete data[_key];
+                    serverJobs.delete.push(_key);
+
+                    syncOrder();
+                    cachePositions();
+                    recalcScroll();
+
+                    if(inView.indexOf(_key) !== -1){
+                        reflow = true;
+                    }
+
+                    triggerJobs();
+                },
+                'update':function(_newObj){
+                    var checkHash = Hash.DeepHash(_newObj);
+                    if(data[_key].dataHash !== checkHash){
+                        data[_key].dataHash = checkHash;
+                        data[_key].data = _newObj;
+                        serverJobs.update[_key] = _newObj;
+
+                        if(inView.indexOf(_key) !== -1){
+                            reflow = true;
+                        }
+
+                        triggerJobs();
+                    }
+                }
+            };
+        }
+
+        //Job Management
+        function triggerJobs(){
+            runTrigger = true;
+            runJobs();
+        }
+
+        function runJobs(){
+            requestAnimationFrame(function(){
+                runTrigger = false;
+                if(jobs.length){
+                    var jobBatch = jobs;
+                    jobs = [];
+                    jobBatch.KUBE().each(function(_f){
+                        _f();
+                    });
+                }
+                if(serverJobs.delete.length || !serverJobs.new.KUBE().isEmpty() || !serverJobs.update.KUBE().isEmpty()){
+                    var sJobs = serverJobs;
+                    serverJobs = {
+                        'delete':[],
+                        'update':{},
+                        'new':{}
+                    };
+                    Events.Emit('submit',sJobs);
+                }
+                if(reflow){
+                    reflow = false;
+                    Reflow();
+                }
+            });
+        }
+
+        //My awkward maths
         function cachePositions(){
             var counters = {
                 "x10":0,
@@ -332,202 +452,200 @@
             });
         }
 
-        function initQF(){
-            if(ParentDJ){
-                //viewableItems = Math.ceil(intoHeight/_initRowHeight)+5;
-                ParentDJ.Style().Overflow(['hidden','auto']);
-                TallBlock = ParentDJ.Append('div');
-                TallBlock.Style().Width('100%').Position('relative').Height(intoHeight);
-                ParentDJ.GetNode().style.webkitOverflowScrolling = 'touch';
-                ParentDJ.On('scroll',Reflow);
-            }
-        }
+        function updatePositionCache(_index){
+            var keyLocation,start,end,height;
 
-        //Sync
-        function SetTemplate(_string){
-            if(_string && KUBE.Is(_string) === 'string'){
-                template = _string;
-            }
-            else if(KUBE.Is(_string) === 'function'){
-                template = ''.KUBE().multiLine(_string);
-            }
-        }
-
-        function SetSortKeys(_obj){
-            //Not yet
-        }
-
-        function Into(_DJ,_initRowHeight){
-            if(KUBE.Is(_DJ,true) === 'DomJack'){
-                ParentDJ = _DJ;
-                intoHeight = ParentDJ.GetDrawDimensions().height;
-                initRowHeight = _initRowHeight;
-                initQF();
-            }
-        }
-
-        function AddNew(_key,_dataObj,_prepend){
-            if(data[_key] === undefined){
-                serverJobs.new[_key] = _dataObj;
-                var obj = {};
-                obj[_key] = _dataObj;
-                Add(obj,_prepend);
-            }
-        }
-
-        function Sync(_obj,_prepend){
-            //First we call Updates
-            _obj.KUBE().each(function(_key,_val){
-                if(data[_key] !== undefined){
-                    updateItem(_key,_val);
+            //I know I can combine this in a single loop, but overall the effeciency should be the same
+            keyLocation = (_index-(_index%10))/10;
+            start = keyLocation*10;
+            end = start+10;
+            height = 0;
+            for(;start<end;start++){
+                if(order[start] !== undefined){
+                    height += data[order[start]].height;
                 }
-            });
-
-            //Then Deletes
-            data.KUBE().each(function(_key,_syncObj){
-                if(_obj[_key] === undefined){
-                    deleteItem(_key,_syncObj);
+                else{
+                    break;
                 }
-            });
+            }
+            positionCache.x10[keyLocation] = height;
 
-            //Add Adds
-            _obj.KUBE().each(function(_key,_val){
-                if(data[_key] === undefined){
-                    addItem(_key,_val,_prepend);
-                }
-            });
-        }
-
-        function Add(_obj,_prepend){
-            //We only add missing items from this object
-            _obj.KUBE().each(function(_key,_val){
-                addItem(_key,_val,_prepend);
-            });
-            recalcScroll();
-            cachePositions();
-            reflow = true;
-        }
-
-        function Remove(_obj){
-            //We only remove items that are not in this object (this tends to be what you actually want to do, though may seem odd at first)
-            data.KUBE().each(function(_key,_val){
-                if(_obj[_key] === undefined){
-                    deleteItem(_key,_val);
-                }
-            });
-        }
-
-        function Update(_obj){
-            //We look for items that have changed, and we update them
-            _obj.KUBE().each(function(_key,_val){
-                updateItem(_key,_val);
-            });
-        }
-
-        function Sort(_obj){
-            //Not yet
-        }
-
-        //For server jobs
-        function addItem(_key,_val,_prepend){
-            if(data[_key] === undefined){
-                data[_key] = {
-                    'key':_key,
-                    'data':_val,
-                    'dataHash':Hash.DeepHash(_val),
-                    'height':initRowHeight,
-                    'reflow':function(){
-                        reflowItem(_key);
+            if(order.length > 100){
+                //100s
+                height = 0;
+                keyLocation = (_index-(_index%100))/100;
+                start = keyLocation*10;
+                end = start+10;
+                for(;start<end;start++){
+                    if(positionCache.x10[start] !== undefined){
+                        height += positionCache.x10[start];
                     }
-                };
-                Events.Emit('calcHeight',data[_key]);
-                order.push(_key);
-            }
-        }
-
-        function reflowItem(_key){
-            var index = order.indexOf(_key);
-            var obj = data[_key];
-
-            //Reflow the positionCaches (lazy for now)
-            cachePositions();
-            recalcScroll();
-            Reflow();
-        }
-
-        function updateItem(_key,_val){
-            if(data[_key] !== undefined){
-                var checkHash = Hash.DeepHash(_val);
-                if(data[_key].dataHash !== checkHash){
-                    var syncObj = data[_key];
-                    syncObj.data = _val;
-                    syncObj.dataHash = checkHash;
-
-                    inView.KUBE().each(function(_key){
-                        if(_obj.key === _key){
-                            reflow = true;
-                        }
-                    });
-                };
-            }
-        }
-
-        function deleteItem(_key,_val){
-            if(data[_key] !== undefined){
-                var syncObj = data[_key];
-                delete data[_key];
-                Events.Emit('delete',_key,syncObj.val,syncObj.Template,syncObj.Node);
-                jobs.push(function(){
-                    syncObj.Node.Delete();
-                });
-            }
-        }
-
-        function changeFunc(_key){
-            return {
-                'delete':function(){
-                    var obj = data[_key];
-                    delete data[_key];
-                    jobs.push(function(){
-                        obj.Node.Delete();
-                    });
-                    serverJobs.delete.push(_key);
-                },
-                'update':function(_newObj){
-                    var checkHash = Hash.DeepHash(_newObj);
-                    if(data[_key].dataHash !== checkHash){
-                        data[_key].dataHash = checkHash;
-                        data[_key].data = _newObj;
-                        serverJobs.update[_key] = _newObj;
+                    else{
+                        break;
                     }
                 }
-            };
+                positionCache.x100[keyLocation] = height;
+            }
+            if(order.length > 1000){
+                //1ks
+                height = 0;
+                keyLocation = (_index-(_index%1000))/1000;
+                start = keyLocation*10;
+                end = start+10;
+                for(;start<end;start++){
+                    if(positionCache.x100[start] !== undefined){
+                        height += positionCache.x100[start];
+                    }
+                    else{
+                        break;
+                    }
+                }
+                positionCache.x1000[keyLocation] = height;
+            }
+            if(order.length > 10000){
+                //I will need to update the 10ks
+                height = 0;
+                keyLocation = (_index-(_index%10000))/10000;
+                start = keyLocation*10;
+                end = start+10;
+                for(;start<end;start++){
+                    if(positionCache.x1000[start] !== undefined){
+                        height += positionCache.x1000[start];
+                    }
+                    else{
+                        break;
+                    }
+                }
+                positionCache.x10000[keyLocation] = height;
+            }
         }
 
-        function runJobs(){
-            requestAnimationFrame(function(){
-                if(jobs.length){
-                    var jobBatch = jobs;
-                    jobs = [];
-                    jobBatch.KUBE().each(function(_f){
-                        _f();
-                    });
-                }
-                if(serverJobs.delete.length || !serverJobs.new.KUBE().isEmpty() || !serverJobs.update.KUBE().isEmpty()){
-                    var sJobs = serverJobs;
-                    serverJobs = {
-                        'delete':[],
-                        'update':{},
-                        'new':{}
-                    };
-                    Events.Emit('submit',sJobs);
-                }
-                if(reflow){
-                    reflow = false;
-                    Reflow();
-                }
-                runJobs();
+        function recalcScroll(){
+            var boxHeight = 0;
+            var pointer = 0;
+            positionCache.x10000.KUBE().each(function(_height){
+                pointer++;
+                boxHeight += _height;
             });
+
+            pointer *= 10;
+            for(;pointer<positionCache.x1000.length;pointer++){
+                boxHeight += positionCache.x1000[pointer];
+            }
+
+            pointer *= 10;
+            for(;pointer<positionCache.x100.length;pointer++){
+                boxHeight += positionCache.x100[pointer];
+            }
+
+            pointer *= 10;
+            for(;pointer<positionCache.x10.length;pointer++){
+                boxHeight += positionCache.x10[pointer];
+            }
+
+            pointer *= 10;
+            for(;pointer<order.length;pointer++){
+                boxHeight += data[order[pointer]].height;
+            }
+            totalHeight = boxHeight;
+
+            TallBlock.Style().Height(boxHeight);
+        }
+
+        function calcClosest(_scrollPos){
+            return calcIndex(_scrollPos);
+        }
+
+        function calcIndex(_scrollPos){
+            if(_scrollPos === 0){
+                return [0,0];
+            }
+
+            var position = 0;
+            for(var pointer=0;pointer<positionCache.x10000.length;pointer++){
+                if(position+positionCache.x10000[pointer] > _scrollPos){
+                    break;
+                }
+                position += positionCache.x10000[pointer];
+            }
+
+            pointer *= 10;
+            for(;pointer<positionCache.x1000.length;pointer++){
+                if(position+positionCache.x1000[pointer] > _scrollPos){
+                    break;
+                }
+                position += positionCache.x1000[pointer];
+            }
+
+            pointer *= 10;
+            for(;pointer<positionCache.x100.length;pointer++){
+                if(position+positionCache.x100[pointer] > _scrollPos){
+                    break;
+                }
+                position += positionCache.x100[pointer];
+            }
+
+            pointer *= 10;
+            for(;pointer<positionCache.x10.length;pointer++){
+                if(position+positionCache.x10[pointer] > _scrollPos){
+                    break;
+                }
+                position += positionCache.x10[pointer];
+            }
+
+            pointer *= 10;
+            for(;pointer<order.length;pointer++){
+                if(position+data[order[pointer]].height > _scrollPos){
+                    return [pointer,position];
+                    break;
+                }
+                position += data[order[pointer]].height;
+            }
         }
     }
 }(KUBE));
+
+
+//As a note this is basically what I did for AddQ but I kind of think we should manage that from the outside...
+//var objCount = _obj.KUBE().count();
+//if(objCount < 1000 && addQ.length === 0){
+//    _obj.KUBE().each(function(_key,_val){
+//        addItem(_key,_val,_prepend);
+//    });
+//    recalcScroll();
+//    cachePositions();
+//    reflow = true;
+//    triggerJobs();
+//}
+//else{
+//    if(objCount > 1000){
+//        var Q = {};
+//        var count = 0;
+//        _obj.KUBE().each(function(_key,_val){
+//            Q[_key] = _val;
+//            count++;
+//            if(count === 1000){
+//                Add(Q,_prepend);
+//                count = 0;
+//                Q = {};
+//            }
+//        });
+//        if(!Q.KUBE().isEmpty()){
+//            Add(Q,_prepend);
+//        }
+//        triggerJobs();
+//    }
+//    else{
+//        console.log('ever hit here?');
+//        //The Q is firing, we'll just add this batch to that
+//        addQ.push(function(){
+//            _obj.KUBE().each(function(_key,_val){
+//                addItem(_key,_val,_prepend);
+//            });
+//            recalcScroll();
+//            cachePositions();
+//            reflow = true;
+//            triggerJobs();
+//        });
+//    }
+//}
