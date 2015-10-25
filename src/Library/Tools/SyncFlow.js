@@ -552,12 +552,9 @@
             TallBlock.Style().Height(boxHeight);
         }
 
-        function calcClosest(_scrollPos){
-            return calcIndex(_scrollPos);
-        }
-
         function calcIndex(_scrollPos){
-            if(_scrollPos === 0){
+            if(_scrollPos === 0 || _scrollPos > totalHeight){
+
                 return [0,0];
             }
 
