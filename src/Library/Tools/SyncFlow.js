@@ -553,9 +553,14 @@
         }
 
         function calcIndex(_scrollPos){
-            if(_scrollPos === 0 || _scrollPos > totalHeight){
-
+            if(_scrollPos === 0){
                 return [0,0];
+            }
+            else if(_scrollPos > totalHeight){
+                _scrollPos = totalHeight-intoHeight;
+                if(_scrollPos < 0){
+                    _scrollPos = 0;
+                }
             }
 
             var position = 0;
