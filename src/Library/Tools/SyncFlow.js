@@ -9,7 +9,7 @@
         return '[object ' + this.constructor.name + ']'
     };
     function SyncFlow(_Into,_templateString) {
-        var DJ,Hash,Events,Pusher,TallBlock,ParentDJ,template,data,jobs,serverJobs,intoHeight,order,reflow,Rows,inView,positionCache,totalHeight,runTrigger,sortBy,filterKey,filterCallback;
+        var DJ,Hash,Events,Pusher,TallBlock,ParentDJ,template,data,jobs,serverJobs,intoHeight,order,reflow,Rows,inView,positionCache,totalHeight,runTrigger,sortBy,filterKey,filterCallback,state;
 
         //All of our Defaults
         DJ = KUBE.Class('/Library/DOM/DomJack');
@@ -25,6 +25,7 @@
         Rows = [];
         inView = [];
         data = {};
+        state = true;
 
         serverJobs = {
             'delete':[],
@@ -62,11 +63,16 @@
             "Add":Add,
             "Remove":Remove,
             "Update":Update,
-            "Reflow":Reflow
+            "Reflow":Reflow,
+            "ReflowVisible":ReflowVisible,
+            "Cleanup":Cleanup
         };
 
         //QuickFlow
         function Reflow(){
+            if(!state){
+                return false;
+            }
             var scrollPos,pops,spaceUsed,rows,height,index,newRows,R,T;
 
             inView = [];
@@ -175,6 +181,9 @@
 
         //Sync
         function SetTemplate(_string){
+            if(!state){
+                return false;
+            }
             if(_string && KUBE.Is(_string) === 'string'){
                 template = _string;
             }
@@ -184,6 +193,9 @@
         }
 
         function SetSort(_key,_reverse){
+            if(!state){
+                return false;
+            }
             sortBy = [];
             sortBy.push(['data.'+_key,_reverse,true]);
             if(order.length){
@@ -196,6 +208,9 @@
         }
 
         function SetMultiSort(_multiSort){
+            if(!state){
+                return false;
+            }
             if(KUBE.Is(_multiSort) === 'array'){
                 sortBy = [];
                 _multiSort.KUBE().each(function(_sortArray){
@@ -217,15 +232,34 @@
 
         }
 
+        function ReflowVisible(){
+            if(!state){
+                return false;
+            }
+            intoHeight = ParentDJ.GetDrawDimensions().height;
+            sortOrder();
+            cachePositions();
+            recalcScroll();
+            reflow = true;
+            triggerJobs();
+        }
+
         function Into(_DJ){
+            if(!state){
+                return false;
+            }
             if(KUBE.Is(_DJ,true) === 'DomJack'){
                 ParentDJ = _DJ;
+                ParentDJ.On('delete',Cleanup);
                 intoHeight = ParentDJ.GetDrawDimensions().height;
                 initQF();
             }
         }
 
         function AddNew(_key,_dataObj,_prepend){
+            if(!state){
+                return false;
+            }
             if(data[_key] === undefined){
                 serverJobs.new[_key] = _dataObj;
                 var obj = {};
@@ -235,6 +269,9 @@
         }
 
         function Sync(_obj,_prepend){
+            if(!state){
+                return false;
+            }
             //First we call Updates
             _obj.KUBE().each(function(_key,_val){
                 if(data[_key] !== undefined){
@@ -265,6 +302,9 @@
         }
 
         function Add(_obj,_prepend){
+            if(!state){
+                return false;
+            }
             _obj.KUBE().each(function(_key,_val){
                 addItem(_key,_val,_prepend);
             });
@@ -277,6 +317,9 @@
         }
 
         function Remove(_obj){
+            if(!state){
+                return false;
+            }
             //We only remove items that are not in this object (this tends to be what you actually want to do, though may seem odd at first)
             data.KUBE().each(function(_key,_val){
                 if(_obj[_key] === undefined){
@@ -293,6 +336,9 @@
         }
 
         function Update(_obj){
+            if(!state){
+                return false;
+            }
             //We look for items that have changed, and we update them
             _obj.KUBE().each(function(_key,_val){
                 updateItem(_key,_val);
@@ -415,11 +461,17 @@
 
         //Job Management
         function triggerJobs(){
+            if(!state){
+                return false;
+            }
             runTrigger = true;
             runJobs();
         }
 
         function runJobs(){
+            if(!state){
+                return false;
+            }
             requestAnimationFrame(function(){
                 runTrigger = false;
                 if(jobs.length){
@@ -640,6 +692,14 @@
                     break;
                 }
                 position += data[order[pointer]].height;
+            }
+        }
+
+        function Cleanup(){
+            if(state){
+                console.log('Sync Flow Cleaning Up...');
+                state = false;
+                DJ = Hash = Events = reflow = runTrigger = sortBy = jobs = order = Rows = inView = data = state = serverJobs = positionCache = undefined;
             }
         }
     }
