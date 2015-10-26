@@ -90,6 +90,11 @@
                 "enumerable": true,
                 "configurable": false,
                 "value": Events.Clear
+            },
+            "Cleanup":{
+                "enumerable": true,
+                "configurable": false,
+                "value": Cleanup
             }
         });
 
