@@ -9,7 +9,7 @@
         return '[object ' + this.constructor.name + ']'
     };
     function SyncFlow(_Into,_templateString) {
-        var DJ,Hash,Events,Pusher,TallBlock,ParentDJ,template,data,jobs,serverJobs,intoHeight,order,reflow,Rows,inView,positionCache,totalHeight,runTrigger;
+        var DJ,Hash,Events,Pusher,TallBlock,ParentDJ,template,data,jobs,serverJobs,intoHeight,order,reflow,Rows,inView,positionCache,totalHeight,runTrigger,sortBy,filterKey,filterCallback;
 
         //All of our Defaults
         DJ = KUBE.Class('/Library/DOM/DomJack');
@@ -19,6 +19,7 @@
         reflow = false;
         runTrigger = false;
 
+        sortBy = [];
         jobs = [];
         order = [];
         Rows = [];
@@ -51,7 +52,9 @@
 
         return {
             "SetTemplate":SetTemplate,
-            "SetSortKeys":SetSortKeys,
+            "SetSort":SetSort,
+            "SetMultiSort":SetMultiSort,
+            "SetFilter":SetFilter,
             "On": Events.On,
             "Into":Into,
             "AddNew":AddNew,
@@ -59,7 +62,6 @@
             "Add":Add,
             "Remove":Remove,
             "Update":Update,
-            "Sort":Sort,
             "Reflow":Reflow
         };
 
@@ -181,8 +183,38 @@
             }
         }
 
-        function SetSortKeys(_obj){
-            //Not yet
+        function SetSort(_key,_reverse){
+            sortBy = [];
+            sortBy.push(['data.'+_key,_reverse,true]);
+            if(order.length){
+                sortOrder();
+                cachePositions();
+                recalcScroll();
+                reflow = true;
+                triggerJobs();
+            }
+        }
+
+        function SetMultiSort(_multiSort){
+            if(KUBE.Is(_multiSort) === 'array'){
+                sortBy = [];
+                _multiSort.KUBE().each(function(_sortArray){
+                    _sortArray[0] = 'data.'+_sortArray[0]
+                    _sortArray[2] = true;
+                    sortBy.push(_sortArray);
+                });
+                if(order.length){
+                    sortOrder();
+                    cachePositions();
+                    recalcScroll();
+                    reflow = true;
+                    triggerJobs();
+                }
+            }
+        }
+
+        function SetFilter(_keys,_callback){
+
         }
 
         function Into(_DJ){
@@ -225,6 +257,7 @@
             });
 
             syncOrder();
+            sortOrder();
             cachePositions();
             recalcScroll();
             reflow = true;
@@ -236,6 +269,7 @@
                 addItem(_key,_val,_prepend);
             });
 
+            sortOrder();
             cachePositions();
             recalcScroll();
             reflow = true;
@@ -251,6 +285,7 @@
             });
 
             syncOrder();
+            sortOrder();
             cachePositions();
             recalcScroll();
             reflow = true;
@@ -263,10 +298,6 @@
                 updateItem(_key,_val);
             });
             triggerJobs();
-        }
-
-        function Sort(_obj){
-            //Not yet
         }
 
         //For server jobs
@@ -315,6 +346,12 @@
             }
         }
 
+        function sortOrder(){
+            if(sortBy.length && order.length){
+                order = data.KUBE().valueObjectSort(sortBy);
+            }
+        }
+
         function updateItem(_key,_val){
             if(data[_key] !== undefined){
                 var checkHash = Hash.DeepHash(_val);
@@ -349,6 +386,7 @@
                     serverJobs.delete.push(_key);
 
                     syncOrder();
+                    sortOrder();
                     cachePositions();
                     recalcScroll();
 
