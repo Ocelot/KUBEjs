@@ -700,7 +700,9 @@
 		
 		function Clear(_event,_recursive){
 			_event = (_event === undefined ? undefined : translateEvent(_event));
-			Events.Clear(_event);
+            if(Events !== undefined){
+                Events.Clear(_event);
+            }
 			cleanListeners(_event);
             if(_recursive === true){
                 GetChildren().KUBE().each(function(_Child){

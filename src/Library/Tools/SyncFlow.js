@@ -69,11 +69,16 @@
         };
 
         //QuickFlow
-        function Reflow(){
+        function Reflow(_remeasure){
             if(!state){
                 return false;
             }
             var scrollPos,pops,spaceUsed,rows,height,index,newRows,R,T;
+
+            if(_remeasure){
+                //This is not great
+                remeasureHeight();
+            }
 
             inView = [];
             scrollPos = ParentDJ.GetNode().scrollTop;
@@ -93,7 +98,8 @@
                 }
 
                 if(Rows.length < pops.length){
-                    for(newRows = Rows.length-1;newRows<pops.length;newRows++){
+                    newRows = (Rows.length ? Rows.length-1 : 0);
+                    for(;newRows<pops.length;newRows++){
                         R = DJ('div');
                         R.Style().Position('relative').Width('100%');
                         Rows.push({
@@ -367,6 +373,12 @@
                     order.push(_key);
                 }
             }
+        }
+
+        function remeasureHeight(){
+            data.KUBE().each(function(_key,_obj){
+                Events.Emit('calcHeight',_obj);
+            });
         }
 
         function reflowItem(_key){
