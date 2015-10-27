@@ -476,8 +476,10 @@
             if(!state){
                 return false;
             }
-            runTrigger = true;
-            runJobs();
+            if(!runTrigger){
+                runTrigger = true;
+                runJobs();
+            }
         }
 
         function runJobs(){
