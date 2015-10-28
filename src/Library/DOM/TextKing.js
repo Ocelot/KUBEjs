@@ -74,7 +74,7 @@
                 }
                 else{
                     $retDim.width = $retDim.width + cachedChars[fallBackCharcode].width;
-                    $retDim.width = (cachedChars[fallBackCharcode].height > $retDim.height ? cachedChars[fallBackCharcode].height : $retDim.height);
+                    $retDim.height = (cachedChars[fallBackCharcode].height > $retDim.height ? cachedChars[fallBackCharcode].height : $retDim.height);
                 }
             }
             return $retDim;

@@ -58,9 +58,9 @@
             }
         }
 
-        function BinaryTransmission(_blockAddress,_target,_targetId){
+        function BinaryTransmission(_blockAddress,_target,_targetId,_data){
             if(UIGroundControl !== undefined && KUBE.Is(UIGroundControl.StartBinaryTransmission) === "function"){
-                return UIGroundControl.StartBinaryTransmission(_blockAddress,_target,_targetId);
+                return UIGroundControl.StartBinaryTransmission(_blockAddress,_target,_targetId,_data);
             }
             else{
                 console.log("StartBinaryTransmission is not defined on GroundControl. Doing nothing");

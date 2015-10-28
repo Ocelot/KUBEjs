@@ -16,7 +16,9 @@
         'Handlebars',
         'Hash',
         'Index',
-        'KeyVal'
+        'KeyVal',
+        'Sync',
+        'SyncFlow'
     ]);
 
     KUBE.AutoLoad().AddIndex(ToolsIndex);

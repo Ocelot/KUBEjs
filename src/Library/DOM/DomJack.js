@@ -698,10 +698,17 @@
             Events.EmitState.apply($DomJackAPI,args);
         }
 		
-		function Clear(_event){
+		function Clear(_event,_recursive){
 			_event = (_event === undefined ? undefined : translateEvent(_event));
-			Events.Clear(_event);
+            if(Events !== undefined){
+                Events.Clear(_event);
+            }
 			cleanListeners(_event);
+            if(_recursive === true){
+                GetChildren().KUBE().each(function(_Child){
+                    _Child.Clear(_event,true);
+                });
+            }
 		}
 		
 		function RemoveListener(_event,_callback){
@@ -1445,6 +1452,12 @@
 					'Type':function(_type){ return Type(_DomJackAPI,_type); },
 					'Value':function(_value){ return Value(_DomJackAPI,_value); }
 				});
+                var Node = _DomJackAPI.GetNode();
+                if(Node.type === 'checkbox'){
+                    typeAPI.KUBE().merge({
+                       'Checked':function(_state){ return Checked(_DomJackAPI,_state); }
+                    });
+                }
 				break;
 				
 			case 'select':
@@ -1584,6 +1597,15 @@
 	function Method(_DJ,_method){
 		return (KUBE.Is(_method) !== 'undefined' ? _DJ.SetAttribute('method',_method) : _DJ.GetAttribute('method'));
 	}
+
+    function Checked(_DJ,_state){
+        if(_state === undefined){
+            return _DJ.GetNode().checked;
+        }
+        else{
+            _DJ.GetNode().checked = _state;
+        }
+    }
 	
 	
 	function GetForm(_DJ){
@@ -1618,7 +1640,7 @@
 	function Label(_DJ,_label){
 		return (KUBE.Is(_label) !== 'undefined' ? _DJ.SetAttribute('label',_label) : _DJ.GetAttribute('label'));
 	}
-	
+
 	function Value(_DJ,_value){
 		var $return = _DJ;
 		if(KUBE.Is(_value) !== 'undefined'){

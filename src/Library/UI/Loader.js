@@ -93,6 +93,7 @@
             'Delete':Delete,
             'Add':Add,
             'Connect':Connect,
+            'BinaryTransmission':BinaryTrasmission,
             'Width':Width,
             'Height':Height,
             'Resize':Resize,
@@ -337,6 +338,11 @@
         function Connect(_blockAddress,_target,_targetId){
             return UI.Connect(_blockAddress,_target,_targetId);
         }
+
+        function BinaryTrasmission(_blockAddress,_target,_targetId,_data){
+            return UI.BinaryTransmission(_blockAddress,_target,_targetId,_data);
+        }
+
 
         function Width(){
             return width;

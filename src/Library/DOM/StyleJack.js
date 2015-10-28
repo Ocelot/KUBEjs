@@ -614,6 +614,7 @@
 			'ClearEvent':Events.Clear,
 			'GetStyleObj':GetStyleObj,
             'GetSelectorText':GetSelectorText,
+            'Apply':Apply,
 
 			//Our Property List
 //			'Animation' : Animation,
@@ -685,6 +686,145 @@
                 }
             }
 		}
+
+
+        function Apply(_styleObj){
+            _styleObj.KUBE().each(function(_property,_style){
+                /*
+                    Currently Unsupported:
+                    alignContent, alignItems, alignSelf, alignmentBaseline, all, animation, animationDelay, animationDirection, animationDuration, animationFillMode,
+                    animationIterationCount, animationName, animationPlayState, animationTimingFunction, backgroundBlendMode, baselineShift, borderCollapse, borderImage,
+                    borderImageOutset, borderImageRepeat, borderImageSlice, borderImageSource, borderImageWidth, borderSpacing, bufferedRendering, captionSide,
+                    clipPath, clipRule, colorInterpolation, colorInterpolationFilters, colorRendering, counterIncrement, counterReset, dominantBaseline,
+                    fill, fillOpacity, fillRule, filter, flex, flexBasis, flexDirection, flexFlow, flexGrow, flexShrink, flexWrap, floodColor, floodOpacity,
+                    fontKerning, fontStretch, fontVariantLigatures, glyphOrientationHorizontal, glyphOrientationVertical, imageRendering, isolation, justifyContent,
+                    lightingColor, listStyle, listStyleImage, listStylePosition, listStyleType, marker, markerEnd, markerMid, markerStart, mask, maskType, maxZoom,
+                    minZoom, mixBlendMode, motion, motionOffset, motionPath, motionRotation, objectFit, objectPosition, order, orientation, orphans, overflowWrap,
+                    page, pageBreakAfter, pageBreakBefore, pageBreakInside, paintOrder, perspective, perspectiveOrigin, pointerEvents, shapeImageThreshold, shapeMargin,
+                    shapeOutside, shapeRendering, size, speak, src, stopColor, stopOpacity, stroke, strokeDasharray, strokeDashoffset, strokeLinecap, strokeLinejoin,
+                    strokeMiterlimit, strokeOpacity, strokeWidth, tabSize, textAlignLast, textAnchor, textRendering, touchAction, transformOrigin, transformStyle,
+                    unicodeBidi, unicodeRange, userZoom, vectorEffect, widows, writingMode, zoom
+                 */
+
+                switch(_property){
+                    case 'backfaceVisibility':      $API.BackfaceVisibility(_style);             break;
+                    case 'background':              $API.Background(_style);                     break;
+                    case 'backgroundAttachment':    $API.Background().Attachment(_style);        break;
+                    case 'backgroundClip':          $API.Background().Clip(_style);              break;
+                    case 'backgroundColor':         $API.Background().Color(_style);             break;
+                    case 'backgroundImage':         $API.Background().Image(_style);             break;
+                    case 'backgroundOrigin':        $API.Background().Origin(_style);            break;
+                    case 'backgroundPosition':      $API.Background().Position(_style);          break;
+                    case 'backgroundPositionX':     $API.Background().Position({'x':_style});    break;
+                    case 'backgroundPositionY':     $API.Background().Position({'y':_style});    break;
+                    case 'backgroundRepeat':        $API.Background().Repeat(_style);            break;
+                    case 'backgroundRepeatX':       $API.Background().Repeat({'x':_style});      break;
+                    case 'backgroundRepeatY':       $API.Background().Repeat({'y':_style});      break;
+                    case 'backgroundSize':          $API.Background().Size(_style);              break;
+                    case 'border':                  $API.Border(_style);                         break;
+                    case 'borderBottom':            $API.Border().Bottom(_style);                break;
+                    case 'borderBottomColor':       $API.Border().Bottom({'color':_style});      break;
+                    case 'borderBottomLeftRadius':  $API.Border().Radius().BottomLeft(_style);   break;
+                    case 'borderBottomRightRadius': $API.Border().Radius().BottomRight(_style);  break;
+                    case 'borderBottomStyle':       $API.Border().Bottom({'style':_style});      break;
+                    case 'borderBottomWidth':       $API.Border().Bottom({'color':_style});      break;
+                    case 'borderColor':             $API.Border({'color':_style});               break;
+                    case 'borderLeft':              $API.Border().Left(_style);                  break;
+                    case 'borderLeftColor':         $API.Border().Left({'color':_style});        break;
+                    case 'borderLeftStyle':         $API.Border().Left({'style':_style});        break;
+                    case 'borderLeftWidth':         $API.Border().Left({'color':_style});        break;
+                    case 'borderRadius':            $API.Border().Radius(_style);                break;
+                    case 'borderRight':             $API.Border().Right(_style);                 break;
+                    case 'borderRightColor':        $API.Border().Right({'color':_style});       break;
+                    case 'borderRightStyle':        $API.Border().Right({'style':_style});       break;
+                    case 'borderRightWidth':        $API.Border().Right({'color':_style});       break;
+                    case 'borderStyle':             $API.Border({'style':_style});               break;
+                    case 'borderTop':               $API.Border().Top(_style);                   break;
+                    case 'borderTopColor':          $API.Border().Top({'color':_style});         break;
+                    case 'borderTopLeftRadius':     $API.Border().Radius().TopLeft(_style);      break;
+                    case 'borderTopRightRadius':    $API.Border().Radius().TopRight(_style);     break;
+                    case 'borderTopStyle':          $API.Border().Top({'style':_style});         break;
+                    case 'borderTopWidth':          $API.Border().Top({'color':_style});         break;
+                    case 'borderWidth':             $API.Border({'width':_style});               break;
+                    case 'bottom':                  $API.Bottom(_style);                         break;
+                    case 'boxShadow':               $API.Box().Shadow(_style);                   break;
+                    case 'boxSizing':               $API.Box().Sizing(_style);                   break;
+                    case 'clear':                   $API.Clear(_style);                          break;
+                    case 'clip':                    $API.Clip(_style);                           break;
+                    case 'color':                   $API.Color(_style);                          break;
+                    case 'content':                 $API.Content(_style);                        break;
+                    case 'cursor':                  $API.Cursor(_style);                         break;
+                    case 'direction':               $API.Direction(_style);                      break;
+                    case 'display':                 $API.Display(_style);                        break;
+                    case 'emptyCells':              $API.EmptyCells(_style);                     break;
+                    case 'float':                   $API.Float(_style);                          break;
+                    case 'font':                    $API.Font(_style);                           break;
+                    case 'fontFamily':              $API.Font().Family(_style);                  break;
+                    case 'fontSize':                $API.Font().Size(_style);                    break;
+                    case 'fontSmoothing':           $API.Font().Smoothing(_style);               break;
+                    case 'fontStyle':               $API.Font().Style(_style);                   break;
+                    case 'fontVariant':             $API.Font().Variant(_style);                 break;
+                    case 'fontWeight':              $API.Font().Weight(_style);                  break;
+                    case 'height':                  $API.Height(_style);                         break;
+                    case 'left':                    $API.Left(_style);                           break;
+                    case 'letterSpacing':           $API.LetterSpacing(_style);                  break;
+                    case 'lineHeight':              $API.LineHeight(_style);                     break;
+                    case 'margin':                  $API.Margin(_style);                         break;
+                    case 'marginBottom':            $API.Margin().Bottom(_style);                break;
+                    case 'marginLeft':              $API.Margin().Left(_style);                  break;
+                    case 'marginRight':             $API.Margin().Right(_style);                 break;
+                    case 'marginTop':               $API.Margin().Top(_style);                   break;
+                    case 'maxHeight':               $API.MaxHeight(_style);                      break;
+                    case 'maxWidth':                $API.MaxWidth(_style);                       break;
+                    case 'minHeight':               $API.MinHeight(_style);                      break;
+                    case 'minWidth':                $API.MinWidth(_style);                       break;
+                    case 'opacity':                 $API.Opacity(_style);                        break;
+                    case 'outline':                 $API.Outline(_style);                        break;
+                    case 'outlineColor':            $API.Outline().Color(_style);                break;
+                    case 'outlineOffset':           $API.Outline().Offset(_style);               break;
+                    case 'outlineStyle':            $API.Outline().Style(_style);                break;
+                    case 'outlineWidth':            $API.Outline().Width(_style);                break;
+                    case 'overflow':                $API.Overflow(_style);                       break;
+                    case 'overflowX':               $API.Overflow().X(_style);                   break;
+                    case 'overflowY':               $API.Overflow().Y(_style);                   break;
+                    case 'padding':                 $API.Padding(_style);                        break;
+                    case 'paddingBottom':           $API.Padding().Bottom(_style);               break;
+                    case 'paddingLeft':             $API.Padding().Left(_style);                 break;
+                    case 'paddingRight':            $API.Padding().Right(_style);                break;
+                    case 'paddingTop':              $API.Padding().Top(_style);                  break;
+                    case 'position':                $API.Position(_style);                       break;
+                    case 'quotes':                  $API.Quotes(_style);                         break;
+                    case 'resize':                  $API.Resize(_style);                         break;
+                    case 'right':                   $API.Right(_style);                          break;
+                    case 'tableLayout':             $API.TableLayout(_style);                    break;
+                    case 'textAlign':               $API.Text().Align(_style);                   break;
+                    case 'textDecoration':          $API.Text().Decoration(_style);              break;
+                    case 'textIndent':              $API.Text().Indent(_style);                  break;
+                    case 'textOverflow':            $API.Text().Overflow(_style);                break;
+                    case 'textShadow':              $API.Text().Shadow(_style);                  break;
+                    case 'textTransform':           $API.Text().Transform(_style);               break;
+                    case 'top':                     $API.Top(_style);                            break;
+                    case 'transform':               $API.Transform(_style);                      break;
+                    case 'transition':              $API.Transition(_style);                     break;
+                    case 'transitionDelay':         $API.Transition().Delay(_style);             break;
+                    case 'transitionDuration':      $API.Transition().Duration(_style);          break;
+                    case 'transitionProperty':      $API.Transition().Property(_style);          break;
+                    case 'transitionTimingFunction':$API.Transition().Timing(_style);            break;
+                    case 'verticalAlign':           $API.VerticalAlign(_style);                  break;
+                    case 'visibility':              $API.Visibility(_style);                     break;
+                    case 'whiteSpace':              $API.WhiteSpace(_style);                     break;
+                    case 'width':                   $API.Width(_style);                          break;
+                    case 'wordBreak':               $API.WordBreak(_style);                      break;
+                    case 'wordSpacing':             $API.WordSpacing(_style);                    break;
+                    case 'wordWrap':                $API.WordWrap(_style);                       break;
+                    case 'zIndex':                  $API.ZIndex(_style);                         break;
+                    default:
+                        console.log('StyleJack Appy: Property Not Supported - '+_property);
+                        break;
+                }
+            });
+            return $API;
+        }
 
         function Debug(){
             console.group('STYLEJACK DEBUG');

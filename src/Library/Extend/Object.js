@@ -27,6 +27,8 @@
         ExtendAPI.Load('object','toJSON',toJSON);
         ExtendAPI.Load('object','fromJSON',fromJSON);
         ExtendAPI.Load('object','map',Map);
+        ExtendAPI.Load('object','path',Path);
+        ExtendAPI.Load('object','valueObjectSort',ValueObjectSort);
         KUBE.EmitState('/Library/Extend/Object');
         KUBE.console.log('/Library/Extend/Object Loaded');
     }
@@ -46,6 +48,86 @@
             }
         }
         return $this;
+    }
+
+    //The syntax is either an array of arrays specificying key/path,reverse (true false), isKeyPath(true false), or key/path,reverse,isKeyPath
+    function ValueObjectSort(_arg1,_arg2,_isKeyPath){
+        var origin = this;
+        var sortBy = [];
+        var order = [];
+        var sorted = {};
+
+        if(KUBE.Is(_arg1) !== 'array'){
+            sortBy.push([_arg1,_arg2,_isKeyPath]);
+        }
+        else{
+            sortBy = _arg1;
+        }
+
+        order = Object.keys(origin);
+        order.sort(function(a,b){
+            var objA,objB,aVal,bVal;
+            if(sortBy.length === 1){
+                objA = origin[a];
+                objB = origin[b];
+
+                aVal = (sortBy[0][2] ? findVal(objA,sortBy[0][0]) : objA[sortBy[0][0]]);
+                bVal = (sortBy[0][2] ? findVal(objB,sortBy[0][0]) : objB[sortBy[0][0]]);
+
+                //var aVal = origin[a][sortBy[0][0]];
+                //var bVal = origin[b][sortBy[0][0]];
+                if(aVal < bVal){
+                    return (sortBy[0][1] ? 1 : -1);
+                }
+                if(aVal > bVal){
+                    return (sortBy[0][1] ? -1 : 1);
+                }
+                return 0;
+            }
+            else{
+                objA = origin[a];
+                objB = origin[b];
+                for(var i=0;i<sortBy.length;i++){
+                    aVal = (sortBy[0][2] ? findVal(objA,sortBy[i][0]) : objA[sortBy[i][0]]);
+                    bVal = (sortBy[0][2] ? findVal(objB,sortBy[i][0]) : objB[sortBy[i][0]]);
+
+                    //var aVal = objA[sortBy[i][0]];
+                    //var bVal = objB[sortBy[i][0]];
+                    if(aVal < bVal){
+                        return (sortBy[i][1] ? 1 : -1);
+                    }
+                    if(aVal > bVal){
+                        return (sortBy[i][1] ? -1 : 1);
+                    }
+                }
+                return 0; //All keys have resulted in the same?
+            }
+        });
+
+        return order;
+    }
+
+    function findVal(_obj,_val,_split){
+        var key,val;
+        _split = _split || '.';
+        if(KUBE.Is(_val) === 'string'){
+            _val = _val.split(_split);
+        }
+        key = _val.splice(0,1);
+        val = _obj[key];
+        if(_val.length && KUBE.Is(val) === 'object'){
+            return findVal(val,_val,_split);
+        }
+        else if(_val.length){
+            return undefined;
+        }
+        else{
+            return val;
+        }
+    }
+
+    function Path(_val,_split){
+        return findVal(this,_val,_split);
     }
 
     function Map(compareFunction,negate){
