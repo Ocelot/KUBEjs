@@ -9,7 +9,9 @@
         return '[object ' + this.constructor.name + ']'
     };
     function SyncFlow(_Into,_templateString) {
-        var DJ,Hash,Events,Pusher,TallBlock,ParentDJ,template,data,jobs,serverJobs,intoHeight,order,reflow,Rows,inView,positionCache,totalHeight,runTrigger,sortBy,filterKey,filterCallback,state;
+        var DJ,Hash,Events,Pusher,TallBlock,ParentDJ,template,data,jobs,serverJobs,intoHeight,
+            order,reflow,Rows,inView,positionCache,totalHeight,runTrigger,sortBy,filterKey,
+            filterCallback,state,initRowHeight;
 
         //All of our Defaults
         DJ = KUBE.Class('/Library/DOM/DomJack');
@@ -56,6 +58,7 @@
             "SetSort":SetSort,
             "SetMultiSort":SetMultiSort,
             "SetFilter":SetFilter,
+            "SetInitRowHeight":SetInitRowHeight,
             "On": Events.On,
             "Into":Into,
             "AddNew":AddNew,
@@ -69,16 +72,11 @@
         };
 
         //QuickFlow
-        function Reflow(_remeasure){
+        function Reflow(){
             if(!state){
                 return false;
             }
             var scrollPos,pops,spaceUsed,rows,height,index,newRows,R,T;
-
-            if(_remeasure){
-                //This is not great
-                remeasureHeight();
-            }
 
             inView = [];
             scrollPos = ParentDJ.GetNode().scrollTop;
@@ -171,6 +169,12 @@
             //We use inView for Sync
         }
 
+        function Remeasure(){
+            data.KUBE().each(function(_key,_obj){
+                Events.Emit('calcHeight',_obj);
+            });
+        }
+
         //This is silly, but temporary as I work through understanding how stable this is (isn't) and opportunities for optimization
 
         function initQF(){
@@ -186,6 +190,10 @@
         }
 
         //Sync
+        function SetInitRowHeight(_height){
+            initRowHeight = _height;
+        }
+
         function SetTemplate(_string){
             if(!state){
                 return false;
@@ -358,13 +366,16 @@
                 data[_key] = {
                     'key':_key,
                     'data':_val,
-                    'dataHash':Hash.DeepHash(_val),
-                    'height':0,
+                    'dataHash':false,
+                    'height':initRowHeight || 0,
                     'reflow':function(){
                         reflowItem(_key);
                     }
                 };
-                Events.Emit('calcHeight',data[_key]);
+
+                if(!initRowHeight){
+                    Events.Emit('calcHeight',data[_key]);
+                }
 
                 if(_prepend){
                     order.unshift(_key);
@@ -375,10 +386,8 @@
             }
         }
 
-        function remeasureHeight(){
-            data.KUBE().each(function(_key,_obj){
-                Events.Emit('calcHeight',_obj);
-            });
+        function qDeepHashes(){
+            KUBE.Patience().LazyLoop(data)
         }
 
         function reflowItem(_key){
@@ -413,6 +422,9 @@
         function updateItem(_key,_val){
             if(data[_key] !== undefined){
                 var checkHash = Hash.DeepHash(_val);
+                if(!data[_key].dataHash){
+                    data[_key].dataHash = Hash.DeepHash(data[_key].data);
+                }
                 if(data[_key].dataHash !== checkHash){
                     var syncObj = data[_key];
                     syncObj.data = _val;
@@ -456,6 +468,9 @@
                 },
                 'update':function(_newObj){
                     var checkHash = Hash.DeepHash(_newObj);
+                    if(!data[_key].dataHash){
+                        data[_key].dataHash = Hash.DeepHash(data[_key].data);
+                    }
                     if(data[_key].dataHash !== checkHash){
                         data[_key].dataHash = checkHash;
                         data[_key].data = _newObj;
