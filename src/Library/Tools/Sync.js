@@ -215,7 +215,7 @@
             if(data[_key] !== undefined){
                 var syncObj = data[_key];
                 delete data[_key];
-                Events.Emit('delete',syncObj,syncObj.Template,syncObj.Node);
+                Events.Emit('delete',syncObj,Rows[_key][1],Rows[_key][0]);
                 jobs.push(function(){
                     remove(_key);
                 });
