@@ -21,11 +21,20 @@
 		ExtendAPI.Load('array','sum',Sum);
 		ExtendAPI.Load('array','randIndexValue',RandomIndexValue);
 		ExtendAPI.Load('array','args',Args);
+        ExtendAPI.Load('array','toObject',ToObject);
 		KUBE.EmitState('/Library/Extend/Array');
 		KUBE.console.log('/Library/Extend/Array Loaded');
 	}
 	
 	/* Declare functions here */
+    function ToObject(){
+        var obj = {};
+        for(var i=0;i<this.length;i++){
+            obj[i] = this[i];
+        }
+        return obj;
+    }
+
 	function Args(_argObj){
         var argArray = this;
 		argArray = (KUBE.Is(_argObj,true) === 'Arguments' ? Array.prototype.slice.call(_argObj) : []);
