@@ -211,13 +211,22 @@
             }
         }
 
-        function deleteItem(_key,_val){
+        function deleteItem(_key){
             if(data[_key] !== undefined){
                 var syncObj = data[_key];
+
+                var R = Rows[_key][0];
+                var T = Rows[_key][1];
+
                 delete data[_key];
-                Events.Emit('delete',syncObj,Rows[_key][1],Rows[_key][0]);
+                delete Rows[_key];
+                var index = order.indexOf(_key);
+                order.splice(index,1);
+
+                Events.Emit('delete',syncObj,T,R);
+
                 jobs.push(function(){
-                    remove(_key);
+                    R.Delete();
                 });
             }
         }
@@ -228,12 +237,8 @@
                     if(!state){
                         return false;
                     }
-                    var obj = data[_key];
-                    delete data[_key];
-                    jobs.push(function(){
-                        remove(_key);
-                    });
                     serverJobs.delete.push(_key);
+                    deleteItem(_key);
                     triggerJobs();
                 },
                 'update':function(_newObj){
@@ -277,17 +282,6 @@
                         ParentDJ.Append(R[0]);
                     }
                 }
-            }
-        }
-
-        function remove(_key){
-            var R = Rows[_key][0];
-            if(KUBE.Is(R,true) === 'DomJack'){
-                R.Delete();
-                delete Rows[_key];
-                delete data[_key];
-                var index = order.indexOf(_key);
-                order.splice(index,1);
             }
         }
 
