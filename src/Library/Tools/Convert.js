@@ -18,7 +18,9 @@
 			'deg':deg,
 			'url':url,
 			'string':string,
-            'ms': ms
+            'ms': ms,
+            's':s,
+            'percent':percent
 		};
 
 		return (ConvertCheck(_from,_originalValue) && KUBE.Is(conversionMethods[_to]) === 'function' ? conversionMethods[_to](_originalValue) : _originalValue);
@@ -46,6 +48,14 @@
 		function ms(_val){
 			return _val+'ms';
 		}
+
+        function s(_val){
+            return _val+'s';
+        }
+
+        function percent(_val){
+            return _val+'%';
+        }
 		
 		function isCSSFunction(_string){
 			return (/[^\(]*\(/.exec(_string) === null ? false : true);
