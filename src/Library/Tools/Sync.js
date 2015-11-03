@@ -196,16 +196,11 @@
 
         function updateItem(_key,_val){
             if(data[_key] !== undefined){
-                var syncHash = Hash.DeepHash(data[_key].data);
-                var updateHash = Hash.DeepHash(_val);
-
-                if(syncHash !== updateHash){
-                    jobs.push(function(){
-                        Events.Emit('update',data[_key],_val,Rows[_key][1],Rows[_key][0]);
-                    });
-                    if(sortBy.length){
-                        reorder();
-                    }
+                jobs.push(function(){
+                    Events.Emit('update',data[_key],_val,Rows[_key][1],Rows[_key][0]);
+                });
+                if(sortBy.length){
+                    reorder();
                 }
             }
         }
