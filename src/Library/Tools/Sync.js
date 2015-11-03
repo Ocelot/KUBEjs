@@ -182,7 +182,7 @@
                 data[_key] = {
                     'key':_key,
                     'data':_val,
-                    'dataHash':Hash.DeepHash(_val)
+                    'f':changeFunc(_key)
                 };
 
                 Rows[_key] = [Row,Template];
@@ -196,18 +196,12 @@
 
         function updateItem(_key,_val){
             if(data[_key] !== undefined){
-                var checkHash = Hash.DeepHash(_val);
-                if(data[_key].dataHash !== checkHash){
-                    var syncObj = data[_key];
-                    syncObj.data = _val;
-                    syncObj.dataHash = checkHash;
-                    jobs.push(function(){
-                        Events.Emit('update',syncObj,Rows[_key][1],Rows[_key][0]);
-                    });
-                    if(sortBy.length){
-                        reorder();
-                    }
-                };
+                jobs.push(function(){
+                    Events.Emit('update',data[_key],_val,Rows[_key][1],Rows[_key][0]);
+                });
+                if(sortBy.length){
+                    reorder();
+                }
             }
         }
 
@@ -245,16 +239,13 @@
                     if(!state){
                         return false;
                     }
-                    var checkHash = Hash.DeepHash(_newObj);
-                    if(data[_key].dataHash !== checkHash){
-                        data[_key].dataHash = checkHash;
-                        data[_key].data = _newObj;
-                        if(sortBy.length){
-                            reorder();
-                        }
-                        serverJobs.update[_key] = _newObj;
-                        triggerJobs();
+
+                    data[_key].data = _newObj;
+                    if(sortBy.length){
+                        reorder();
                     }
+                    serverJobs.update[_key] = _newObj;
+                    triggerJobs();
                 }
             };
         }

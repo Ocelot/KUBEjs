@@ -27,6 +27,14 @@
                 $return = (str.substr(''+str.length-2) === 'ms' ? true : false);
                 break;
 
+            case 's':
+                $return = (str.substr(''+str.length-1) === 's' ? true : false);
+                break;
+
+            case 'percent':
+                $return = (str.substr(''+str.length-1) === '%' ? true : false);
+                break;
+
             case 'number': case 'int': case 'num':
             $return = (KUBE.Is(_val) === 'number' ? true : false);
             break;
