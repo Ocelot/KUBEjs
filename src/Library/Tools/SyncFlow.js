@@ -626,6 +626,10 @@
         }
 
         function recalcScroll(){
+            if(!state){
+                return false;
+            }
+
             var boxHeight = 0;
             var pointer = 0;
             positionCache.x10000.KUBE().each(function(_height){

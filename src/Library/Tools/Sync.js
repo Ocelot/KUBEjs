@@ -44,7 +44,8 @@
             "Remove":Remove,
             "Update":Update,
             "SetSort":SetSort,
-            "SetMultiSort":SetMultiSort
+            "SetMultiSort":SetMultiSort,
+            'Cleanup':Cleanup
         };
 
         function SetTemplate(_string){
@@ -186,7 +187,7 @@
                 };
 
                 Rows[_key] = [Row,Template];
-                Events.Emit('create',data[_key],Template,Row,changeFunc(_key));
+                Events.Emit('create',data[_key],Template,Row);
 
                 jobs.push(function(){
                     insert(_key,_prepend);
