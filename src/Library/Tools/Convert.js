@@ -38,7 +38,7 @@
 		}
 		
 		function url(_string){
-			return (!isCSSFunction(_string) && _string !== 'none' && _string !== '' ? 'url('+String(_string)+')' : _string);
+			return (!isCSSFunction(_string) && _string !== 'none' && _string !== '' ? "url('"+String(_string)+"')" : _string);
 		}
 		
 		function string(_val){
