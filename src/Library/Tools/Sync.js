@@ -45,7 +45,9 @@
             "Update":Update,
             "SetSort":SetSort,
             "SetMultiSort":SetMultiSort,
-            'Cleanup':Cleanup
+            'Cleanup':Cleanup,
+            "Get":Get,
+            "GetByOrder":GetByOrder
         };
 
         function SetTemplate(_string){
@@ -107,6 +109,21 @@
                 }
             });
             triggerJobs();
+        }
+
+        function Get(_id){
+            if(!state){
+                return false;
+            }
+            return data[_id];
+        }
+
+        function GetByOrder(_order){
+            if(!state){
+                return false;
+            }
+            var key = order[_order];
+            return (key ? data[key] : false);
         }
 
         function Add(_obj,_prepend){

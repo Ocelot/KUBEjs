@@ -25,6 +25,7 @@
             'SetGroundControl':SetGroundControl,
             'Connect':Connect,
             'BinaryTransmission': BinaryTransmission,
+            'Broadcast':Broadcast,
             'AddViews':AddViews
         }.KUBE().create(UI.prototype);
 

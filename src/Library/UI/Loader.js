@@ -95,6 +95,7 @@
             'Add':Add,
             'Connect':Connect,
             'BinaryTransmission':BinaryTrasmission,
+            'Broadcast':Broadcast,
             'Width':Width,
             'Height':Height,
             'Resize':Resize,
