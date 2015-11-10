@@ -238,9 +238,14 @@
             if(_obj.delegate && !Delegate){
                 Delegate = View;
             }
-            viewIndex[_id] = {'view':View,'id':_id,'pid':undefined};
+            viewIndex[_id] = {'view':View,'id':_id,'pid':_obj.pid};
             View.On('delete',function(){
                 //Also call delete on any children...
+                viewIndex.KUBE().each(function(_key,_val){
+                    if(_val.pid === _id){
+                        _val.view.Delete();
+                    }
+                });
                 delete viewIndex[_id];
             });
             return data;
@@ -271,6 +276,7 @@
                     _viewPkg.KUBE().each(function(_obj){
                         if(KUBE.Is(_obj) === 'object'){
                             id = _obj.id || getAvailableId();
+                            _obj.id = id;
                             if(viewIndex[id] === undefined){
                                 temp.push(addViewToIndex(id,_obj));
                             }

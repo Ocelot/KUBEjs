@@ -163,7 +163,7 @@
                 R.Clear(undefined,true);
                 R.Style().Height(obj.height);
 
-                Events.Emit('populate',obj,T,R);
+                Events.Emit('populate',obj,T,R,changeFunc(obj.key));
             });
 
             //We use inView for Sync
@@ -366,7 +366,6 @@
                 data[_key] = {
                     'key':_key,
                     'data':_val,
-                    'dataHash':false,
                     'height':initRowHeight || 0,
                     'reflow':function(){
                         reflowItem(_key);
@@ -421,19 +420,16 @@
 
         function updateItem(_key,_val){
             if(data[_key] !== undefined){
+                //For now doing this. May store the hash later?
+                var syncHash = Hash.DeepHash(data[_key].data);
                 var checkHash = Hash.DeepHash(_val);
-                if(!data[_key].dataHash){
-                    data[_key].dataHash = Hash.DeepHash(data[_key].data);
+                if(syncHash !== checkHash){
+                    Events.Emit('update',data[_key],_val);
                 }
-                if(data[_key].dataHash !== checkHash){
-                    var syncObj = data[_key];
-                    syncObj.data = _val;
-                    syncObj.dataHash = checkHash;
 
-                    if(inView.indexOf(_key) !== -1){
-                        reflow = true;
-                    }
-                };
+                if(inView.indexOf(_key) !== -1){
+                    reflow = true;
+                }
             }
         }
 
@@ -463,25 +459,15 @@
                     if(inView.indexOf(_key) !== -1){
                         reflow = true;
                     }
-
                     triggerJobs();
                 },
                 'update':function(_newObj){
-                    var checkHash = Hash.DeepHash(_newObj);
-                    if(!data[_key].dataHash){
-                        data[_key].dataHash = Hash.DeepHash(data[_key].data);
+                    data[_key].data = _newObj;
+                    serverJobs.update[_key] = _newObj;
+                    if(inView.indexOf(_key) !== -1){
+                        reflow = true;
                     }
-                    if(data[_key].dataHash !== checkHash){
-                        data[_key].dataHash = checkHash;
-                        data[_key].data = _newObj;
-                        serverJobs.update[_key] = _newObj;
-
-                        if(inView.indexOf(_key) !== -1){
-                            reflow = true;
-                        }
-
-                        triggerJobs();
-                    }
+                    triggerJobs();
                 }
             };
         }
@@ -640,6 +626,10 @@
         }
 
         function recalcScroll(){
+            if(!state){
+                return false;
+            }
+
             var boxHeight = 0;
             var pointer = 0;
             positionCache.x10000.KUBE().each(function(_height){
