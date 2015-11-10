@@ -58,6 +58,12 @@
             }
         }
 
+        function Broadcast(_blockAddress,_target,_targetId,_msg){
+            if(UIGroundControl !== undefined){
+                return UIGroundControl.Broadcast(_blockAddress,_target,_targetId,_msg);
+            }
+        }
+
         function BinaryTransmission(_blockAddress,_target,_targetId,_data){
             if(UIGroundControl !== undefined && KUBE.Is(UIGroundControl.StartBinaryTransmission) === "function"){
                 return UIGroundControl.StartBinaryTransmission(_blockAddress,_target,_targetId,_data);

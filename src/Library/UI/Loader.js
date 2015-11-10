@@ -315,6 +315,10 @@
             return UI.Connect(_blockAddress,_target,_targetId);
         }
 
+        function Broadcast(_blockAddress,_target,_targetId,_msg){
+            return UI.Broadcast(_blockAddress,_target,_targetId,_msg);
+        }
+
         function BinaryTrasmission(_blockAddress,_target,_targetId,_data){
             return UI.BinaryTransmission(_blockAddress,_target,_targetId,_data);
         }
