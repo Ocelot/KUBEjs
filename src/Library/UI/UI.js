@@ -25,6 +25,7 @@
             'SetGroundControl':SetGroundControl,
             'Connect':Connect,
             'BinaryTransmission': BinaryTransmission,
+            'Broadcast':Broadcast,
             'AddViews':AddViews
         }.KUBE().create(UI.prototype);
 
@@ -55,6 +56,12 @@
         function Connect(_blockAddress,_target,_targetId){
             if(UIGroundControl !== undefined){
                 return UIGroundControl.Connect(_blockAddress,_target,_targetId);
+            }
+        }
+
+        function Broadcast(_blockAddress,_target,_targetId,_msg){
+            if(UIGroundControl !== undefined){
+                return UIGroundControl.Broadcast(_blockAddress,_target,_targetId,_msg);
             }
         }
 

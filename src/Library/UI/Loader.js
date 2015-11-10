@@ -95,6 +95,7 @@
             'Add':Add,
             'Connect':Connect,
             'BinaryTransmission':BinaryTrasmission,
+            'Broadcast':Broadcast,
             'Width':Width,
             'Height':Height,
             'Resize':Resize,
@@ -319,6 +320,10 @@
 
         function Connect(_blockAddress,_target,_targetId){
             return UI.Connect(_blockAddress,_target,_targetId);
+        }
+
+        function Broadcast(_blockAddress,_target,_targetId,_msg){
+            return UI.Broadcast(_blockAddress,_target,_targetId,_msg);
         }
 
         function BinaryTrasmission(_blockAddress,_target,_targetId,_data){

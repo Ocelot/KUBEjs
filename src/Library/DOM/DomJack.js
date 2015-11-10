@@ -881,9 +881,17 @@
 			//Removed old implementation because I don't know if it's relevant. Look at github for past hackiness
 		}
 		
-		function SetInner(_content){
+		function SetInner(_content,_asText){
+            _asText = (_asText === false ? false : true);
 			cleanChildren(Node);
-			Node.innerHTML = _content;
+
+            if(_asText){
+                Node.textContent = _content;
+            }
+            else{
+                Node.innerHTML = _content;
+            }
+
 			return $DomJackAPI;
 			//Removed old hacky implementation of this as well
 		}
@@ -894,7 +902,7 @@
             }
             var $keyObj = {};
             var Temp = DJ('div');
-            Temp.SetInner(_html);
+            Temp.SetInner(_html,false);
             recurseBuild(Temp,$keyObj);
             Dump();
             Temp.GetChildren().KUBE().each(function(_MainChild){
@@ -920,7 +928,7 @@
         }
 
 		function Dump(){ 
-			SetInner('');
+			SetInner('',false);
 			return $DomJackAPI;
 		}
 		
@@ -1004,11 +1012,11 @@
 					});
 				}
 				else{
-					NewCopy.SetInner(GetInner());
+					NewCopy.SetInner(GetInner(),false);
 				}
 			}
 			else{
-				NewCopy.SetInner(GetInner());
+				NewCopy.SetInner(GetInner(),false);
 			}
 			//Events? //Let's say no
 			return NewCopy;
@@ -1380,7 +1388,7 @@
 		function mapInner(_innerData){
 			var type = KUBE.Is(_innerData);
 			if(type === 'string' || type === 'number'){
-				SetInner(_innerData);
+				SetInner(_innerData,false);
 			}
 		}
 		
