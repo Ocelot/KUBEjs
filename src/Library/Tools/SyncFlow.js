@@ -206,12 +206,13 @@
             }
         }
 
-        function SetSort(_key,_reverse){
+        function SetSort(_key,_reverse,_natural){
+            _natural = !!_natural; //coerce to bool
             if(!state){
                 return false;
             }
             sortBy = [];
-            sortBy.push(['data.'+_key,_reverse,true]);
+            sortBy.push(['data.'+_key,_reverse,true,_natural]);
             if(order.length){
                 sortOrder();
                 cachePositions();
@@ -228,7 +229,7 @@
             if(KUBE.Is(_multiSort) === 'array'){
                 sortBy = [];
                 _multiSort.KUBE().each(function(_sortArray){
-                    _sortArray[0] = 'data.'+_sortArray[0]
+                    _sortArray[0] = 'data.'+_sortArray[0];
                     _sortArray[2] = true;
                     sortBy.push(_sortArray);
                 });
