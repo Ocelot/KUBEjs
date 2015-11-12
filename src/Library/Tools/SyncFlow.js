@@ -251,7 +251,7 @@
             if(!state){
                 return false;
             }
-            intoHeight = ParentDJ.GetDrawDimensions().height;
+            intoHeight = ParentDJ.Rect().height;
             sortOrder();
             cachePositions();
             recalcScroll();
@@ -266,7 +266,7 @@
             if(KUBE.Is(_DJ,true) === 'DomJack'){
                 ParentDJ = _DJ;
                 ParentDJ.On('delete',Cleanup);
-                intoHeight = ParentDJ.GetDrawDimensions().height;
+                intoHeight = ParentDJ.Rect().height;
                 initQF();
             }
         }
