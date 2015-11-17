@@ -751,13 +751,20 @@
 				});
 			}
 			else{
-				On('animationstart',animationTriggerReady);
-				Style().Animation().Name('nodeInserted').Duration(0.001);
+                if(Node.nodeType === Node.ELEMENT_NODE){
+                    On('animationstart',animationTriggerReady);
+                    Style().Animation().Name('nodeInserted').Duration(0.001);
+                }
+                else{
+                    //Things that aren't elements have to do something different.
+                }
+
 			}
 		}
 
 		function animationTriggerReady(event){
 			if(event.animationName == "nodeInserted"){
+                console.log("ready emitted on " + CacheId());
 				RemoveListener('animationstart',animationTriggerReady);
 				Style().Animation().Name('').Duration('');
 				Emit('ready', Node);
