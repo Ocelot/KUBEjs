@@ -764,7 +764,6 @@
 
 		function animationTriggerReady(event){
 			if(event.animationName == "nodeInserted"){
-                console.log("ready emitted on " + CacheId());
 				RemoveListener('animationstart',animationTriggerReady);
 				Style().Animation().Name('').Duration('');
 				Emit('ready', Node);
