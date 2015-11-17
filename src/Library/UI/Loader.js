@@ -243,7 +243,7 @@
             View.On('delete',function(){
                 //Also call delete on any children...
                 viewIndex.KUBE().each(function(_key,_val){
-                    if(_val.pid === _id){
+                    if(_val && _val.pid === _id){
                         _val.view.Delete();
                     }
                 });
