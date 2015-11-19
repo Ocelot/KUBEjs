@@ -21,11 +21,21 @@
 		ExtendAPI.Load('array','sum',Sum);
 		ExtendAPI.Load('array','randIndexValue',RandomIndexValue);
 		ExtendAPI.Load('array','args',Args);
+        ExtendAPI.Load('array','toObject',ToObject);
+		ExtendAPI.Load('array','lazy',Lazy);
 		KUBE.EmitState('/Library/Extend/Array');
 		KUBE.console.log('/Library/Extend/Array Loaded');
 	}
 	
 	/* Declare functions here */
+    function ToObject(){
+        var obj = {};
+        for(var i=0;i<this.length;i++){
+            obj[i] = this[i];
+        }
+        return obj;
+    }
+
 	function Args(_argObj){
         var argArray = this;
 		argArray = (KUBE.Is(_argObj,true) === 'Arguments' ? Array.prototype.slice.call(_argObj) : []);
@@ -48,6 +58,26 @@
 			}
 		}
 		return $return;
+	}
+
+	function Lazy(_f){
+		if(this.length && KUBE.Is(_f) === 'function'){
+			var index = 0;
+			var eachBreak = false;
+			var slow = function(){
+				_f.call({'break':_break},this[index],index,this);
+				index++;
+				if(index < this.length && !eachBreak){
+					setTimeout(slow,16);
+				}
+			}.bind(this);
+			setTimeout(slow,16);
+		}
+		//return $return;
+
+		function _break(){
+			eachBreak = true;
+		}
 	}
 
 	function Each(_f,_useOriginal,_preserveIndex){

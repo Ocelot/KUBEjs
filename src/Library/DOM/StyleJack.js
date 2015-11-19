@@ -353,11 +353,12 @@
 		var keyframes = {};
 		var Events = KUBE.Events();
 		var $api = {
-			'Each':Each,
 			'Index':Index,
 			'Clear':Clear,
 			'Delete':Delete,
 			'Debug':Debug,
+            'From':From,
+            'To':To,
 			'On':Events.On,
 			'Once':Events.Once,
 			'Emit':Events.Emit,
@@ -365,21 +366,25 @@
 			'ClearEvent':Events.Clear
 		};
 		return $api;
-		
-		function Each(){
-			
-		}
-		
+
 		function Index(_index){
-			_index = (KUBE.Is(_index) === 'number' ? _index : 0);
+			_index = Convert(_index,'number','percent');
 			if(!checkForKey(_index)){
 				addKeyFrame(_index);
 			}
 			return keyframes[_index];
 		}
+
+        function From(){
+            return Index(0);
+        }
+
+        function To(){
+            return Index(100);
+        }
 		
 		function Clear(_index){
-			
+			//Eh...
 		}
 		
 		function Delete(){
@@ -401,15 +406,13 @@
 		
 		/* private utilities */
 		function checkForKey(_index){
-			var p,$return = false;
-			p = _index+"%";
-			
+            var $return = false;
 			if(defined(keyframes[_index])){
 				$return = true;
 			}
 			else{
 				for(var i=0;i<_styleObj.cssRules.length;i++){
-					if(_styleObj.cssRules[i].keyText === p){
+					if(_styleObj.cssRules[i].keyText === _index){
 						keyframes[_index] = new CSSStyleRuleHandler(_styleObj.cssRules[i]);
 						$return = true;
 						break;
@@ -420,12 +423,12 @@
 		}
 		
 		function addKeyFrame(_index){
-			var p = _index+"%";
-			(_styleObj.insertRule ? _styleObj.insertRule(p+'{}',0) : _styleObj.appendRule(p+'{}'));
+			(_styleObj.insertRule ? _styleObj.insertRule(_index+'{}',0) : _styleObj.appendRule(_index+'{}'));
 			for(var i=0;i<_styleObj.cssRules.length;i++){
-				if(_styleObj.cssRules[i].keyText === p){
+				if(_styleObj.cssRules[i].keyText === _index){
 					/* Now find the rule, and assign it to the keyframe */
 					keyframes[_index] = new CSSStyleRuleHandler(_styleObj.cssRules[i]);
+                    return keyframes[_index];
 					break;
 				}
 			}
@@ -617,7 +620,7 @@
             'Apply':Apply,
 
 			//Our Property List
-//			'Animation' : Animation,
+			'Animation' : Animation,
 			'Appearance' : Appearance,
 			'BackfaceVisibility' : BackfaceVisibility,
 			'Background' : Background,
@@ -692,8 +695,7 @@
             _styleObj.KUBE().each(function(_property,_style){
                 /*
                     Currently Unsupported:
-                    alignContent, alignItems, alignSelf, alignmentBaseline, all, animation, animationDelay, animationDirection, animationDuration, animationFillMode,
-                    animationIterationCount, animationName, animationPlayState, animationTimingFunction, backgroundBlendMode, baselineShift, borderCollapse, borderImage,
+                    alignContent, alignItems, alignSelf, alignmentBaseline, all, backgroundBlendMode, baselineShift, borderCollapse, borderImage,
                     borderImageOutset, borderImageRepeat, borderImageSlice, borderImageSource, borderImageWidth, borderSpacing, bufferedRendering, captionSide,
                     clipPath, clipRule, colorInterpolation, colorInterpolationFilters, colorRendering, counterIncrement, counterReset, dominantBaseline,
                     fill, fillOpacity, fillRule, filter, flex, flexBasis, flexDirection, flexFlow, flexGrow, flexShrink, flexWrap, floodColor, floodOpacity,
@@ -707,6 +709,14 @@
                  */
 
                 switch(_property){
+                    case 'animation':               $API.Animation(_style);                      break;
+                    case 'animationDelay':          $API.Animation().Delay(_style);              break;
+                    case 'animationDuration':       $API.Animation().Duration(_style);           break;
+                    case 'animationFillMode':       $API.Animation().FillMode(_style);           break;
+                    case 'animationIterationCount': $API.Animation().IterationCount(_style);     break;
+                    case 'animationName':           $API.Animation().Name(_style);               break;
+                    case 'animationPlayState':      $API.Animation().PlayState(_style);          break;
+                    case 'animationTimingFunction': $API.Animation().TimingFunction(_style);     break;
                     case 'backfaceVisibility':      $API.BackfaceVisibility(_style);             break;
                     case 'background':              $API.Background(_style);                     break;
                     case 'backgroundAttachment':    $API.Background().Attachment(_style);        break;
@@ -1066,8 +1076,183 @@
 	 * They all exist outside of the CSSStyleHandler
 	 * They are non scoped as far as variable access goes
 	 ******************************************************/
-	function AnimationHandler(_styleObj,_API,_arg){
-		//TODO: This
+	function AnimationHandler(_styleObj,_API,_animation){
+        var $animationAPI = {
+            'Get':Get,
+            'Set':Set,
+            'Delay':Delay,
+            'Direction':Direction,
+            'Duration':Duration,
+            'FillMode':FillMode,
+            'IterationCount':IterationCount,
+            'Name':Name,
+            'PlayState':PlayState,
+            'TimingFunction':TimingFunction,
+            'api':_API
+        };
+        return (_animation === undefined ? $animationAPI : quickHandler(_animation));
+
+        function Get(){
+            return quickHandler();
+        }
+
+        function Set(_animation){
+            quickHandler(_animation);
+            return $animationAPI;
+        }
+
+        function Delay(_delay){
+            var $return = $animationAPI;
+            if(_delay === '$' || _delay === undefined){
+                $return = Convert(RawStyleGet(_styleObj,'animationDelay'),'ms','number');
+            }
+            else{
+                RawStyleSet(_styleObj,_API,'animationDelay',Convert(_delay,'number','ms'));
+            }
+            return $return;
+        }
+
+        function Direction(_direction){
+            var $return = $animationAPI;
+            if(_direction === '$' || _direction === undefined){
+                $return = RawStyleGet(_styleObj,'animationDirection');
+            }
+            else{
+                RawStyleSet(_styleObj,_API,'animationDirection',_direction);
+            }
+            return $return;
+        }
+
+        function Duration(_duration){
+            var $return = $animationAPI;
+            if(_duration === '$' || _duration === undefined){
+                $return = Convert(RawStyleGet(_styleObj,'animationDuration'),'ms','number');
+            }
+            else{
+                RawStyleSet(_styleObj,_API,'animationDuration',Convert(_duration,'number','ms'));
+            }
+            return $return;
+        }
+
+        function FillMode(_fillMode){
+            var $return = $animationAPI;
+            if(_fillMode === '$' || _fillMode === undefined){
+                $return = RawStyleGet(_styleObj,'animationFillMode');
+            }
+            else{
+                RawStyleSet(_styleObj,_API,'animationFillMode',_fillMode);
+            }
+            return $return;
+        }
+
+        function IterationCount(_iterationCount){
+            var $return = $animationAPI;
+            if(_iterationCount === '$' || _iterationCount === undefined){
+                $return = RawStyleGet(_styleObj,'animationIterationCount');
+            }
+            else{
+                RawStyleSet(_styleObj,_API,'animationIterationCount',_iterationCount);
+            }
+            return $return;
+        }
+
+        function Name(_name){
+            var $return = $animationAPI;
+            if(_name === '$' || _name === undefined){
+                $return = RawStyleGet(_styleObj,'animationName');
+            }
+            else{
+                RawStyleSet(_styleObj,_API,'animationName',_name);
+            }
+            return $return;
+        }
+
+        function PlayState(_playState){
+            var $return = $animationAPI;
+            if(_playState === '$' || _playState === undefined){
+                $return = RawStyleGet(_styleObj,'animationPlayState');
+            }
+            else{
+                RawStyleSet(_styleObj,_API,'animationPlayState',_playState);
+            }
+            return $return;
+        }
+
+        function TimingFunction(_timingFunction){
+            var $return = $animationAPI;
+            if(_timingFunction === '$' || _timingFunction === undefined){
+                //We can support CubicBezier in an array ideally...
+                $return = RawStyleGet(_styleObj,'animationTimingFunction');
+            }
+            else{
+                switch(KUBE.Is(_timingFunction)){
+                    case 'array':
+                        //For CubicBezier
+                        break;
+                }
+                RawStyleSet(_styleObj,_API,'animationTimingFunction',_timingFunction);
+            }
+            return $return;
+        }
+
+        function quickHandler(_animation){
+            var delay,direction,duration,fillMode,iterationCount,name,playState,timingFunction,$return = _API;
+            if(_animation === undefined){
+                delay = Delay();
+                direction = Direction();
+                duration = Duration();
+                fillMode = FillMode();
+                iterationCount = IterationCount();
+                name = Name();
+                playState = PlayState();
+                timingFunction = TimingFunction();
+                $return = {
+                    0:name,1:duration,2:timingFunction,3:delay,4:iterationCount,5:direction,6:fillMode,7:playState,
+                    'delay':delay,
+                    'direction':direction,
+                    'duration':duration,
+                    'fillMode':fillMode,
+                    'iterationCount':iterationCount,
+                    'name':name,
+                    'playState':playState,
+                    'timingFunction':timingFunction
+                };
+            }
+            else if(_animation === '$'){
+                $return = RawStyleGet(_styleObj,'animation');
+            }
+            else{
+                switch(KUBE.Is(_animation)){
+                    case 'array':
+                        (_animation[0] !== undefined ? Name(_animation[0]) : false);
+                        (_animation[1] !== undefined ? Duration(_animation[1]) : false);
+                        (_animation[2] !== undefined ? TimingFunction(_animation[2]) : false);
+                        (_animation[3] !== undefined ? Delay(_animation[3]) : false);
+                        (_animation[4] !== undefined ? IterationCount(_animation[4]) : false);
+                        (_animation[5] !== undefined ? Direction(_animation[5]) : false);
+                        (_animation[6] !== undefined ? FillMode(_animation[6]) : false);
+                        (_animation[7] !== undefined ? PlayState(_animation[7]) : false);
+                        break;
+
+                    case 'object':
+                        (_animation.delay !== undefined ? Delay(_animation.delay) : false);
+                        (_animation.direction !== undefined ? Direction(_animation.direction) : false);
+                        (_animation.duration !== undefined ? Duration(_animation.duration) : false);
+                        (_animation.fillMode !== undefined ? FillMode(_animation.fillMode) : false);
+                        (_animation.iterationCount !== undefined ? IterationCount(_animation.iterationCount) : false);
+                        (_animation.name !== undefined ? Name(_animation.name) : false);
+                        (_animation.playState !== undefined ? PlayState(_animation.playState) : false);
+                        (_animation.timingFunction !== undefined ? TimingFunction(_animation.timingFunction) : false);
+                        break;
+
+                    case 'string':
+                        RawStyleSet(_styleObj,_API,'animation',_animation);
+                        break;
+                }
+            }
+            return $return;
+        }
+
 	}
 	
 	function AppearanceHandler(_styleObj,_API,_appearance){

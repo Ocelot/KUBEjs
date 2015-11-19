@@ -163,7 +163,7 @@
                 R.Clear(undefined,true);
                 R.Style().Height(obj.height);
 
-                Events.Emit('populate',obj,T,R);
+                Events.Emit('populate',obj,T,R,changeFunc(obj.key));
             });
 
             //We use inView for Sync
@@ -206,12 +206,13 @@
             }
         }
 
-        function SetSort(_key,_reverse){
+        function SetSort(_key,_reverse,_natural){
+            _natural = !!_natural; //coerce to bool
             if(!state){
                 return false;
             }
             sortBy = [];
-            sortBy.push(['data.'+_key,_reverse,true]);
+            sortBy.push(['data.'+_key,_reverse,true,_natural]);
             if(order.length){
                 sortOrder();
                 cachePositions();
@@ -228,7 +229,7 @@
             if(KUBE.Is(_multiSort) === 'array'){
                 sortBy = [];
                 _multiSort.KUBE().each(function(_sortArray){
-                    _sortArray[0] = 'data.'+_sortArray[0]
+                    _sortArray[0] = 'data.'+_sortArray[0];
                     _sortArray[2] = true;
                     sortBy.push(_sortArray);
                 });
@@ -250,7 +251,7 @@
             if(!state){
                 return false;
             }
-            intoHeight = ParentDJ.GetDrawDimensions().height;
+            intoHeight = ParentDJ.Rect().height;
             sortOrder();
             cachePositions();
             recalcScroll();
@@ -265,7 +266,7 @@
             if(KUBE.Is(_DJ,true) === 'DomJack'){
                 ParentDJ = _DJ;
                 ParentDJ.On('delete',Cleanup);
-                intoHeight = ParentDJ.GetDrawDimensions().height;
+                intoHeight = ParentDJ.Rect().height;
                 initQF();
             }
         }
@@ -366,7 +367,6 @@
                 data[_key] = {
                     'key':_key,
                     'data':_val,
-                    'dataHash':false,
                     'height':initRowHeight || 0,
                     'reflow':function(){
                         reflowItem(_key);
@@ -421,19 +421,16 @@
 
         function updateItem(_key,_val){
             if(data[_key] !== undefined){
+                //For now doing this. May store the hash later?
+                var syncHash = Hash.DeepHash(data[_key].data);
                 var checkHash = Hash.DeepHash(_val);
-                if(!data[_key].dataHash){
-                    data[_key].dataHash = Hash.DeepHash(data[_key].data);
+                if(syncHash !== checkHash){
+                    Events.Emit('update',data[_key],_val);
                 }
-                if(data[_key].dataHash !== checkHash){
-                    var syncObj = data[_key];
-                    syncObj.data = _val;
-                    syncObj.dataHash = checkHash;
 
-                    if(inView.indexOf(_key) !== -1){
-                        reflow = true;
-                    }
-                };
+                if(inView.indexOf(_key) !== -1){
+                    reflow = true;
+                }
             }
         }
 
@@ -463,25 +460,15 @@
                     if(inView.indexOf(_key) !== -1){
                         reflow = true;
                     }
-
                     triggerJobs();
                 },
                 'update':function(_newObj){
-                    var checkHash = Hash.DeepHash(_newObj);
-                    if(!data[_key].dataHash){
-                        data[_key].dataHash = Hash.DeepHash(data[_key].data);
+                    data[_key].data = _newObj;
+                    serverJobs.update[_key] = _newObj;
+                    if(inView.indexOf(_key) !== -1){
+                        reflow = true;
                     }
-                    if(data[_key].dataHash !== checkHash){
-                        data[_key].dataHash = checkHash;
-                        data[_key].data = _newObj;
-                        serverJobs.update[_key] = _newObj;
-
-                        if(inView.indexOf(_key) !== -1){
-                            reflow = true;
-                        }
-
-                        triggerJobs();
-                    }
+                    triggerJobs();
                 }
             };
         }
@@ -640,6 +627,10 @@
         }
 
         function recalcScroll(){
+            if(!state){
+                return false;
+            }
+
             var boxHeight = 0;
             var pointer = 0;
             positionCache.x10000.KUBE().each(function(_height){

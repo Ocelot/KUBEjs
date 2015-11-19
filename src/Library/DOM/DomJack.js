@@ -23,13 +23,14 @@
 	KUBE.LoadFactory('/Library/DOM/DomJack', DomJack,dependancyArray);
 	
 	//These are global cache variables
-	var KUBENodeId,jackCache,cleanPointer,wordToKeyCodeMap,scheduleClean,cleanupCache;
+	var KUBENodeId,jackCache,cleanPointer,wordToKeyCodeMap,scheduleClean,cleanupCache,nodeInsertedStyleInit;
 	
 	KUBENodeId = 0;			//Current KUBE Node ID
 	jackCache = {};			//Our cache
 	jackCache.length = 0;	//Start our cache length
 	cleanupCache = [];
 	scheduleClean = false;
+	nodeInsertedStyleInit = false;
 	wordToKeyCodeMap = {
 		'backspace':8,
 		'tab':9,
@@ -115,6 +116,16 @@
         DJ = KUBE.Class('/Library/DOM/DomJack');
         SJ = KUBE.Class('/Library/DOM/StyleJack');
         FeatureDetect = KUBE.Class('/Library/DOM/FeatureDetect');
+
+		if(!nodeInsertedStyleInit){
+			nodeInsertedStyleInit = true;
+			(function(){
+				var S = SJ('@keyframes nodeInserted');
+				S.From().Text().Indent(1);
+				S.To().Text().Indent(0);
+			}());
+
+		}
 
 		domListeners = {};
 		keyListener = false;
@@ -710,7 +721,7 @@
                 });
             }
 		}
-		
+		//TODO: I feel like we're leaking events. I think we could unbind the event from the DOM node when nothing else is bound.
 		function RemoveListener(_event,_callback){
 			_event = translateEvent(_event);
 			Events.RemoveListener(_event,_callback);
@@ -734,23 +745,32 @@
 		}
 
 		function fireReady(_forceReady){
-			if(_forceReady === true || !IsDetached()){
-				//TODO BUG: THIS FIRES BEFORE IT'S INSERTED INTO THE DOM CAUSING ISSUES IF YOU LISTEN TO IT
-				//Added rAF.  This might actually fix our bug above.  This is a stupid attempt at a solution but a possible solution.
-				//If it works, we can refaqtor.
-				//requestAnimationFrame(function(){
-				//	requestAnimationFrame(function(){
-				//		if(Node){
-							Emit('ready', Node);
-				//		}
-				//	})
-				//})
+			if(_forceReady === true){
 				GetChildren().KUBE().each(function(_Child){
 					_Child.Ready(true);
 				});
 			}
+			else{
+                if(Node.nodeType === Node.ELEMENT_NODE){
+                    On('animationstart',animationTriggerReady);
+                    Style().Animation().Name('nodeInserted').Duration(0.001);
+                }
+                else{
+                    //Things that aren't elements have to do something different.
+                }
+
+			}
 		}
-		
+
+		function animationTriggerReady(event){
+			if(event.animationName == "nodeInserted"){
+				RemoveListener('animationstart',animationTriggerReady);
+				Style().Animation().Name('').Duration('');
+				Emit('ready', Node);
+			}
+
+		}
+
 		function translateEvent(_event){
 			//I intended toLowerCase this for friendliness. But webkit hates nice things. So yeah....
 			_event = (''+_event.toLowerCase().substr(0,2) === 'on' ? ''+_event.substr(2) : ''+_event).toLowerCase();
@@ -760,7 +780,7 @@
 			//Apparently at one point firefox did use mozAnimationEnd, and I don't know if IE9 ever supported animations. But regardless
 			//as of current testing, webkit is the only one who hasn't implemented it to spec
 			if(_event.substr(0,9) === 'animation' || _event.substr(0,10) === 'transition'){
-				prefix = prefix || FeatureDetect.Prefix();
+				prefix = prefix || FeatureDetect().Prefix();
 				if(prefix === 'webkit'){
 					switch(_event){
 						case 'animationstart':
@@ -881,9 +901,17 @@
 			//Removed old implementation because I don't know if it's relevant. Look at github for past hackiness
 		}
 		
-		function SetInner(_content){
+		function SetInner(_content,_asText){
+            _asText = (_asText === false ? false : true);
 			cleanChildren(Node);
-			Node.innerHTML = _content;
+
+            if(_asText){
+                Node.textContent = _content;
+            }
+            else{
+                Node.innerHTML = _content;
+            }
+
 			return $DomJackAPI;
 			//Removed old hacky implementation of this as well
 		}
@@ -894,7 +922,7 @@
             }
             var $keyObj = {};
             var Temp = DJ('div');
-            Temp.SetInner(_html);
+            Temp.SetInner(_html,false);
             recurseBuild(Temp,$keyObj);
             Dump();
             Temp.GetChildren().KUBE().each(function(_MainChild){
@@ -920,7 +948,7 @@
         }
 
 		function Dump(){ 
-			SetInner('');
+			SetInner('',false);
 			return $DomJackAPI;
 		}
 		
@@ -1004,11 +1032,11 @@
 					});
 				}
 				else{
-					NewCopy.SetInner(GetInner());
+					NewCopy.SetInner(GetInner(),false);
 				}
 			}
 			else{
-				NewCopy.SetInner(GetInner());
+				NewCopy.SetInner(GetInner(),false);
 			}
 			//Events? //Let's say no
 			return NewCopy;
@@ -1164,6 +1192,7 @@
                 //Added if statement to be slightly more resiliant against trailing spaces and other weird formatting.
                 if(_val){
                     //This is possibly retarded, although possibly awesome.
+					//This is absolutely retarded.  It breaks any cascading styles from working. XD
                     _val = (_val.substr(0,1) !== "." ? "." + _val : _val);
                     $return[strVal] = SJ(_val);
                 }
@@ -1380,7 +1409,7 @@
 		function mapInner(_innerData){
 			var type = KUBE.Is(_innerData);
 			if(type === 'string' || type === 'number'){
-				SetInner(_innerData);
+				SetInner(_innerData,false);
 			}
 		}
 		

@@ -84,6 +84,7 @@
             'Name':Name,
             'Id':Id,
             'AddViews':AddViews,
+            'QuickAdd':QuickAdd,
             'Cleanup':Cleanup,
             'Init':Init,
             'Get':Get,
@@ -94,6 +95,7 @@
             'Add':Add,
             'Connect':Connect,
             'BinaryTransmission':BinaryTrasmission,
+            'Broadcast':Broadcast,
             'Width':Width,
             'Height':Height,
             'Resize':Resize,
@@ -237,12 +239,29 @@
             if(_obj.delegate && !Delegate){
                 Delegate = View;
             }
-            viewIndex[_id] = {'view':View,'id':_id,'pid':undefined};
+            viewIndex[_id] = {'view':View,'id':_id,'pid':_obj.pid};
             View.On('delete',function(){
                 //Also call delete on any children...
+                viewIndex.KUBE().each(function(_key,_val){
+                    if(_val && _val.pid === _id){
+                        _val.view.Delete();
+                    }
+                });
                 delete viewIndex[_id];
             });
             return data;
+        }
+
+        function QuickAdd(_parentId,_viewName,_data,_newId){
+            var viewPkg = [
+                {
+                    'pid':_parentId,
+                    'view':_viewName,
+                    'id':_newId || KUBE.UUID(),
+                    'data':_data || {}
+                }
+            ];
+            AddViews(viewPkg);
         }
 
         function AddViews(_viewPkg){
@@ -258,6 +277,7 @@
                     _viewPkg.KUBE().each(function(_obj){
                         if(KUBE.Is(_obj) === 'object'){
                             id = _obj.id || getAvailableId();
+                            _obj.id = id;
                             if(viewIndex[id] === undefined){
                                 temp.push(addViewToIndex(id,_obj));
                             }
@@ -266,43 +286,6 @@
                             throw new Error('View packages must be valid data objects: '+KUBE.Is(_obj)+' given');
                         }
                     });
-
-                    //If they were promises I can do an All...
-                    //Now link them...
-                    //var temp2 = [];
-                    //var stop = false;
-                    //var linkTarget;
-                    ////This is stupid, I can definitely do this more efficiently
-                    //var count = 0;
-                    //while(!stop){
-                    //    count++;
-                    //    stop = true;
-                    //    for(var i=0;i<temp.length;i++){
-                    //        if(!temp[i].linked){
-                    //            stop = false;
-                    //            linkTarget = temp[i];
-                    //            break;
-                    //        }
-                    //    }
-                    //
-                    //    if(!stop){
-                    //        for(var i=0;i<temp.length;i++){
-                    //            if(linkTarget.paid !== undefined && linkTarget.paid === temp[i].aid){
-                    //                temp[i].View.Add(linkTarget.View,linkTarget.data);  //Add the child to the parent
-                    //                linkTarget.linked = true;
-                    //                break;
-                    //            }
-                    //            else if(linkTarget.paid === undefined){
-                    //                linkTarget.linked = true;
-                    //                linkTarget.root = true;
-                    //                break;
-                    //            }
-                    //        }
-                    //    }
-                    //    if(count > 500){
-                    //        throw new Error('FAILED TO RESOLVE VIEW PACKAGE...');
-                    //    }
-                    //}
 
                     //Now I just find the roots, and either add them to the root view, or to a PID if it's set...
                     var returnPs = [];
@@ -337,6 +320,10 @@
 
         function Connect(_blockAddress,_target,_targetId){
             return UI.Connect(_blockAddress,_target,_targetId);
+        }
+
+        function Broadcast(_blockAddress,_target,_targetId,_msg){
+            return UI.Broadcast(_blockAddress,_target,_targetId,_msg);
         }
 
         function BinaryTrasmission(_blockAddress,_target,_targetId,_data){
@@ -430,6 +417,42 @@
 }(KUBE));
 
 
+//If they were promises I can do an All...
+//Now link them...
+//var temp2 = [];
+//var stop = false;
+//var linkTarget;
+////This is stupid, I can definitely do this more efficiently
+//var count = 0;
+//while(!stop){
+//    count++;
+//    stop = true;
+//    for(var i=0;i<temp.length;i++){
+//        if(!temp[i].linked){
+//            stop = false;
+//            linkTarget = temp[i];
+//            break;
+//        }
+//    }
+//
+//    if(!stop){
+//        for(var i=0;i<temp.length;i++){
+//            if(linkTarget.paid !== undefined && linkTarget.paid === temp[i].aid){
+//                temp[i].View.Add(linkTarget.View,linkTarget.data);  //Add the child to the parent
+//                linkTarget.linked = true;
+//                break;
+//            }
+//            else if(linkTarget.paid === undefined){
+//                linkTarget.linked = true;
+//                linkTarget.root = true;
+//                break;
+//            }
+//        }
+//    }
+//    if(count > 500){
+//        throw new Error('FAILED TO RESOLVE VIEW PACKAGE...');
+//    }
+//}
 
 //Example
 //var vp = [
