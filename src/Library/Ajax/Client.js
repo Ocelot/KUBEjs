@@ -138,6 +138,7 @@
         function initXHR(_XHR,_Request){
             var sendData;
 
+            _XHR.withCredentials = _Request.GetWithCredentials();
 
             switch(_Request.GetMethod().toLowerCase()){
                 case 'post':

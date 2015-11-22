@@ -13,10 +13,11 @@
     /* Currently this is an ugly piece of code and required refactoring and cleanup */
     Request.prototype.toString = function(){ return '[object '+this.constructor.name+']' };
     function Request(_headers,_method) {
-        var $API,customHeaders,method,data,responseType;
+        var $API,customHeaders,method,data,responseType,withCredentials;
         responseType = '';
         customHeaders = (KUBE.Is(_headers,true) === 'object' ? _headers : {});
         method = (KUBE.Is(_method) === 'string' ? _method : 'post');
+        withCredentials = false;
         data = {};
 
         $API = {
@@ -25,9 +26,11 @@
             "GetMethod":GetMethod,
             "GetData":GetData,
             "GetResponseType":GetResponseType,
+            "GetWithCredentials": GetWithCredentials,
             "SetMethod":SetMethod,
             "SetData":SetData,
             "SetResponseType":SetResponseType,
+            "SetWithCredentials": SetWithCredentials,
             "AddData":AddData,
             "AddHeader":AddHeader
         }.KUBE().create(Request.prototype);
@@ -52,6 +55,10 @@
 
         function GetResponseType(){
             return responseType;
+        }
+
+        function GetWithCredentials(){
+            return withCredentials;
         }
 
         //Set
@@ -84,6 +91,11 @@
                     throw new Error('An invalid request type was set in Request. Please check Request object for accepted types.');
                     break;
             }
+            return $API;
+        }
+
+        function SetWithCredentials(bool){
+            withCredentials = !!bool;
             return $API;
         }
 

@@ -19,7 +19,8 @@
         'TextKing',
         'Velocity',
         'WinDocJack',
-        'WebSocket'
+        'WebSocket',
+        'PDFjs'
     ]);
 
     KUBE.AutoLoad().AddIndex(DOMIndex);
