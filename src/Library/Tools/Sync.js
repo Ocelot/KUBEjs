@@ -42,6 +42,7 @@
             "Sync":Sync,
             "Add":Add,
             "Remove":Remove,
+            "Delete":Delete,
             "Update":Update,
             "SetSort":SetSort,
             "SetMultiSort":SetMultiSort,
@@ -144,6 +145,20 @@
             //We only remove items that are not in this object (this tends to be what you actually want to do, though may seem odd at first)
             data.KUBE().each(function(_key,_val){
                 if(_obj[_key] === undefined){
+                    deleteItem(_key,_val);
+                }
+            });
+            triggerJobs();
+        }
+
+        //Basically the opposite of remove. We remove the items that you pass. This makes sense for spot removal by the server (as opposed to sync type operations)
+        function Delete(_obj){
+            if(!state){
+                return false;
+            }
+            //We only remove items that are not in this object (this tends to be what you actually want to do, though may seem odd at first)
+            _obj.KUBE().each(function(_key,_val){
+                if(data[_key] !== undefined){
                     deleteItem(_key,_val);
                 }
             });
