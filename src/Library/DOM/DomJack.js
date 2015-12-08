@@ -1702,7 +1702,7 @@
 				
 			case 'object':
 				_options.KUBE().each(function(_l,_v){
-					AddOption(_DJ,_l,_v);
+					AddOption(_DJ,_v,_l);
 				});
 				break;
 		}
@@ -1835,7 +1835,7 @@
             var Parent = _DJ.GetParent();
             return (Parent.GetType() === 'select' || !Parent ? Parent : findSelect(Parent));
         }
-	}	
+	}
 		
 	function Src(_DJ,_src){
 		var DomNode;

@@ -50,7 +50,7 @@
         return $this;
     }
 
-    //The syntax is either an array of arrays specificying key/path,reverse (true false), isKeyPath(true false), or key/path,reverse,isKeyPath
+    //The syntax is either an array of arrays specifying key/path,reverse (true false), isKeyPath(true false), or key/path,reverse,isKeyPath
     function ValueObjectSort(_arg1,_arg2,_isKeyPath,useNaturalSort){
         var origin = this;
         var sortBy = [];
