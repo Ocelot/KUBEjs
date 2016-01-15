@@ -2750,11 +2750,11 @@
 
 		function Decoration(_val){
 			var $return = $AdvancedAPI;
-			if(_val === '$' || _value === undefined){
+			if(_val === '$' || _val === undefined){
 				$return = RawStyleGet(_styleObj,'textDecoration');
 			}
 			else{
-				RawStyleSet(_styleObj,_API,'textDecoration',_value);
+				RawStyleSet(_styleObj,_API,'textDecoration',_val);
 			}
 			return $return;
 		}
@@ -2796,7 +2796,7 @@
 
 			function fastShadow(_value){
 				var $return = $AdvancedAPI;
-				if(_val === '$' || _value === undefined){
+				if(_value === '$' || _value === undefined){
 					$return = RawStyleGet(_styleObj,'textShadow');
 				}
 				else{
