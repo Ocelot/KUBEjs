@@ -7,7 +7,7 @@
         return '[object ' + this.constructor.name + ']'
     };
     function Sync(_Into,_templateString) {
-        var Events,ParentDJ,template,data,DJ,jobs,serverJobs,Hash,order,runTrigger,Rows,sortBy,triggerReorder,state,order;
+        var Events,ParentDJ,template,data,DJ,jobs,serverJobs,Hash,order,runTrigger,Rows,sortBy,triggerReorder,state;
         state = true;
         runTrigger = false;
         triggerReorder = false;
@@ -48,8 +48,13 @@
             "SetMultiSort":SetMultiSort,
             'Cleanup':Cleanup,
             "Get":Get,
-            "GetByOrder":GetByOrder
+            "GetByOrder":GetByOrder,
+            "Count":Count
         };
+
+        function Count(){
+            return data.KUBE().count();
+        }
 
         function SetTemplate(_string){
             if(!state){
