@@ -86,6 +86,7 @@
         }
 
         function Sync(_obj,_prepend){
+            _obj = _obj || {};
             if(!state){
                 return false;
             }
