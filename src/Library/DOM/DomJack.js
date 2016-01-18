@@ -1511,7 +1511,8 @@
 				
 			case 'textarea':
 				typeAPI.KUBE().merge({
-					'Name':function(_name){ return Name(_DomJackAPI,_name); }
+					'Name':function(_name){ return Name(_DomJackAPI,_name); },
+					'Value':function(_value){ return Value(_DomJackAPI,_value); },
 				});
 				break;
 				
