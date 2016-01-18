@@ -904,7 +904,10 @@
 		function SetInner(_content,_asText){
             _asText = (_asText === false ? false : true);
 			cleanChildren(Node);
-
+			if(!Node){
+				console.log('Attempted to operate on a destroyed Node');
+				return;
+			}
             if(_asText){
                 Node.textContent = _content;
             }
