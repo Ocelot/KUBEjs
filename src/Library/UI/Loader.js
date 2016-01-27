@@ -85,6 +85,7 @@
             'Id':Id,
             'AddViews':AddViews,
             'QuickAdd':QuickAdd,
+            'View': GetViewObj,
             'Cleanup':Cleanup,
             'Init':Init,
             'Get':Get,
@@ -307,6 +308,12 @@
                     return KUBE.Promise().all(returnPs).then(function(){ return true; });
                 });
             }
+        }
+
+        function GetViewObj(viewName){
+            return KUBE.Promise().all([KUBE.Class('/Library/UI/Loader')().Uses(viewName)]).then(function(){
+                return KUBE.Class('/Library/UI/Loader')().Create(viewName,$RootAPI,'');
+            });
         }
 
         function getAvailableId(){
