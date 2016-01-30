@@ -75,6 +75,7 @@
             else{
                 Events.Emit('change:' + k, v);
                 store[k] = v;
+                Events.Emit('changePost:' + k, v);
             }
         }
 
