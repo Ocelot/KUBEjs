@@ -29,6 +29,7 @@
         ExtendAPI.Load('object','map',Map);
         ExtendAPI.Load('object','path',Path);
         ExtendAPI.Load('object','valueObjectSort',ValueObjectSort);
+        ExtendAPI.Load('object','first',First);
         KUBE.EmitState('/Library/Extend/Object');
         KUBE.console.log('/Library/Extend/Object Loaded');
     }
@@ -512,5 +513,13 @@
             return new RegExp(_regExp);
         }
 
+    }
+
+    function First(){
+        var keys = Object.keys(this);
+        if(this[keys[0]] !== undefined){
+            return this[keys[0]];
+        }
+        return false;
     }
 }(KUBE));

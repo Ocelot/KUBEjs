@@ -245,7 +245,11 @@
                 //Also call delete on any children...
                 viewIndex.KUBE().each(function(_key,_val){
                     if(_val && _val.pid === _id){
-                        _val.view.Delete();
+                        //Try to protect breakage.
+                        if(KUBE.Is(_val.view.Delete) === "function"){
+                            _val.view.Delete();
+                        }
+
                     }
                 });
                 delete viewIndex[_id];
@@ -281,6 +285,12 @@
                             _obj.id = id;
                             if(viewIndex[id] === undefined){
                                 temp.push(addViewToIndex(id,_obj));
+                            }
+                            else{
+                                if(KUBE.Is(viewIndex[id].view.Update) === "function"){
+                                    viewIndex[id].view.Update(_obj.data);
+                                }
+
                             }
                         }
                         else{
