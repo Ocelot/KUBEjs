@@ -1,7 +1,7 @@
 (function(KUBE) {
     "use strict";
     /* Load class */
-    KUBE.LoadFactory('/Library/Tools/SyncData', SyncData,['/Library/DOM/DomJack']);
+    KUBE.LoadSingletonFactory('/Library/Tools/SyncData', SyncData,['/Library/DOM/DomJack']);
 
     SyncData.prototype.toString = function () {
         return '[object ' + this.constructor.name + ']'
@@ -14,8 +14,10 @@
 
         return {
             "Get":Get,
+            "GetAll": GetAll,
             "Set":Set,
             "On": Events.On,
+            "RemoveListener": Events.RemoveListener,
             "Sync":Sync,
             "Add":Add,
             "Remove":Remove,
@@ -31,6 +33,19 @@
             if(KUBE.Is(_obj) === 'object'){
                 data = _obj;
             }
+        }
+
+        function GetAll(_filterBy){
+            var ret = data;
+            if(KUBE.Is(_filterBy) === "function") {
+                ret = {};
+                data.KUBE().each(function (k,v,o) {
+                    if(_filterBy(k,v)){
+                        ret[k] = v;
+                    }
+                });
+            }
+            return ret;
         }
 
         //CRUD type operations
@@ -82,7 +97,7 @@
             //Add new items that do exists
             _obj.KUBE().each(function(_key,_val){
                 if(data[_key] === undefined){
-                    addItem(_key,_val,_prepend);
+                    addItem(_key,_val);
                 }
             });
         }
