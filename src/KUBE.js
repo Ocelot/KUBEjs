@@ -633,6 +633,10 @@
 				args[i-1] = arguments[i];
 			}
 
+            if(KUBE.Is(KUBE.eventDebug) === "array" && KUBE.eventDebug.indexOf(_event) > -1){
+                console.log('EVENT DEBUG',_event,args);
+            }
+
 			if(eventCache[_event]){
 				eventCopy = copyArray(eventCache[_event]);
 				length = eventCopy.length;

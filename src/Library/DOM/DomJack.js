@@ -944,7 +944,10 @@
                         KUBE.console.error('Duplicate buildKey found in Template (DomJack Build Inner). Overwriting initial buildKey');
                     }
                     _keyObj[buildKey] = _Child;
-                    _Child.SetAttribute('buildKey',false);
+					if(!KUBE.debugBuildInner){
+						_Child.SetAttribute('buildKey',false);
+					}
+
                 }
                 recurseBuild(_Child,_keyObj);
             });
