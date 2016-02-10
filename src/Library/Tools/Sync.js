@@ -7,10 +7,11 @@
         return '[object ' + this.constructor.name + ']'
     };
     function Sync(_Into,_templateString) {
-        var Events,ParentDJ,template,data,DJ,jobs,serverJobs,Hash,order,runTrigger,Rows,sortBy,triggerReorder,state;
+        var Events,ParentDJ,template,data,DJ,jobs,serverJobs,Hash,order,runTrigger,Rows,sortBy,triggerReorder,state,filterFn;
         state = true;
         runTrigger = false;
         triggerReorder = false;
+        filterFn;
         data = {};
         jobs = [];
         Rows = {};
@@ -46,8 +47,10 @@
             "Update":Update,
             "SetSort":SetSort,
             "SetMultiSort":SetMultiSort,
+            SetFilter:SetFilter,
             'Cleanup':Cleanup,
             "Get":Get,
+            "GetAll": GetAll,
             "GetByOrder":GetByOrder,
             "Count":Count
         };
@@ -123,6 +126,19 @@
                 return false;
             }
             return data[_id];
+        }
+
+        function GetAll(_filterBy){
+            var ret = data;
+            if(KUBE.Is(_filterBy) === "function") {
+                ret = {};
+                data.KUBE().each(function (k,v,o) {
+                    if(_filterBy(k,v)){
+                        ret[k] = v;
+                    }
+                });
+            }
+            return ret;
         }
 
         function GetByOrder(_order){
@@ -204,6 +220,11 @@
                 });
                 reorder();
             }
+        }
+
+        function SetFilter(_filterFn){
+            filterFn = _filterFn;
+            triggerJobs();
         }
 
         function Cleanup(){
@@ -352,13 +373,31 @@
                     };
                     Events.Emit('submit',sJobs);
                 }
-                if(triggerReorder){
+                if(triggerReorder || filterFn){
                     ParentDJ.DetachChildren();
-                    order = data.KUBE().valueObjectSort(sortBy);
-                    order.KUBE().each(function(_key,_index){
-                        var R = Rows[_key][0];
-                        ParentDJ.Append(R);
-                    });
+                    if(sortBy){
+                        order = data.KUBE().valueObjectSort(sortBy);
+                        order.KUBE().each(function(_key,_index){
+                            var R = Rows[_key][0];
+                            if(KUBE.Is(filterFn) === "function"){
+                                if(filterFn(data[_key])){
+                                    ParentDJ.Append(R);
+                                }
+                            }
+                            else{
+                                ParentDJ.Append(R);
+                            }
+                        });
+                    }
+                    else{
+                        data.KUBE().each(function(k,v){
+                            if(filterFn(data[_key])){
+                                var R = Rows[k][0];
+                                ParentDJ.Append(R);
+                            }
+                        });
+                    }
+
                 }
             });
         }
