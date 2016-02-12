@@ -107,6 +107,7 @@
             if(data[_key] === undefined){
                 data[_key] = _val;
                 Events.Emit('create',_key,_val);
+                Events.Emit('create:'+_key,_key,_val);
             }
         }
 
@@ -114,6 +115,7 @@
             if(data[_key] !== undefined){
                 data[_key] = _val;
                 Events.Emit('update',_key,_val);
+                Events.Emit('update:'+_key,_key,_val);
             }
         }
 
@@ -122,6 +124,7 @@
                 var dObj = data[_key];
                 delete data[_key];
                 Events.Emit('delete',_key,dObj);
+                Events.Emit('delete:'+_key,_key,dObj);
             }
         }
     }
