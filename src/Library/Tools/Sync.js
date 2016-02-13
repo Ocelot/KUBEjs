@@ -51,6 +51,7 @@
             'Cleanup':Cleanup,
             "Get":Get,
             "GetAll": GetAll,
+            "GetAllOrdered": GetAllOrdered,
             "GetByOrder":GetByOrder,
             "Count":Count,
             "ConnectSyncData":ConnectSyncData
@@ -175,6 +176,19 @@
                         ret[k] = v;
                     }
                 });
+            }
+            return ret;
+        }
+
+        function GetAllOrdered(){
+            var ret = {};
+            if(sortBy){
+                order.KUBE().each(function(_syncKey,_index){
+                   ret[_syncKey] = data[_syncKey];
+                });
+            }
+            else{
+                throw new Error("Can't get ordered data from unordered Sync");
             }
             return ret;
         }
