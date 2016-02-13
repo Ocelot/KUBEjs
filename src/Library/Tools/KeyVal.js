@@ -31,7 +31,7 @@
             if(_emitAfterBind){
                 var split = _event.split(':');
                 if(split[0].toLowerCase() === "change"){
-                    Events.On(_event,_callback,_context);
+                    Events.On(_event,_callback,undefined,_context);
                     Events.Emit(_event,store[split[1]]);
                 }
                 else{
@@ -40,7 +40,7 @@
 
             }
             else{
-                Events.On(_event,_callback,_context);
+                Events.On(_event,_callback,undefined,_context);
             }
         }
 

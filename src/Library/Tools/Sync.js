@@ -52,8 +52,46 @@
             "Get":Get,
             "GetAll": GetAll,
             "GetByOrder":GetByOrder,
-            "Count":Count
+            "Count":Count,
+            "ConnectSyncData":ConnectSyncData
         };
+
+        function ConnectSyncData(_SyncData){
+            if(KUBE.Is(_SyncData,true) === 'SyncData'){
+                _SyncData.On('create',syncConnectCreate);
+                _SyncData.On('update',syncConnectUpdate);
+                _SyncData.On('delete',syncConnectDelete);
+                _SyncData.Once('detach',reverseDetach);
+                On('detach',function(){
+                    _SyncData.RemoveListener('create',syncConnectCreate);
+                    _SyncData.RemoveListener('update',syncConnectUpdate);
+                    _SyncData.RemoveListener('delete',syncConnectDelete);
+                    _SyncData.RemoveListener('detach',reverseDetach);
+                });
+            }
+
+            function syncConnectCreate(_key,_val){
+                var o = {};
+                o[_key] = _val;
+                Add(o);
+            }
+
+            function syncConnectUpdate(_key,_val){
+                var o = {};
+                o[_key] = _val;
+                Update(o);
+            }
+
+            function syncConnectDelete(_key,_val){
+                var o = {};
+                o[_key] = _val;
+                Delete(o);
+            }
+
+            function reverseDetach(){
+                Events.Emit('detach');
+            }
+        }
 
         function Count(){
             return data.KUBE().count();
@@ -230,6 +268,7 @@
         function Cleanup(){
             if(state){
                 state = false;
+                Events.Emit('detach');
                 Events = ParentDJ = template = data = DJ = jobs = serverJobs = Hash = order = runTrigger = Rows = sortBy = triggerReorder = undefined;
             }
         }

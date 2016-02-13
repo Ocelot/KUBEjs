@@ -23,6 +23,7 @@
 		ExtendAPI.Load('array','args',Args);
         ExtendAPI.Load('array','toObject',ToObject);
 		ExtendAPI.Load('array','lazy',Lazy);
+		ExtendAPI.Load('array','remove',Remove);
 		KUBE.EmitState('/Library/Extend/Array');
 		KUBE.console.log('/Library/Extend/Array Loaded');
 	}
@@ -35,6 +36,15 @@
         }
         return obj;
     }
+
+	function Remove(_obj){
+		var key = this.indexOf(_obj);
+		if(key !== -1){
+			this.splice(key,1);
+			return true;
+		}
+		return false;
+	}
 
 	function Args(_argObj){
         var argArray = this;
