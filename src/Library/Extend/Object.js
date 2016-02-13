@@ -12,6 +12,16 @@
     /* Load functions */
     var ExtendAPI;
     KUBE.SetAsLoaded('/Library/Extend/Object');
+    //This is awful but I'm testing it.
+    Object.defineProperty(Object.prototype,"Is",{
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: function(getRawType){
+            return KUBE.Is(this,!!getRawType);
+        }
+    });
+
     if(KUBE.Extend){
         ExtendAPI = KUBE.Extend();
         ExtendAPI.Load('object','merge',Merge);
