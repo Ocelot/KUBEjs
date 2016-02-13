@@ -616,7 +616,6 @@
 		}
 		
 		function pressKey(_e){
-			//debugger;
 			var $return,codeString,tempArray = [];
 			$return = true;
 			keyStore[_e.keyCode] = true;
@@ -671,7 +670,7 @@
 		}
 		
 		function bindOn(_event,_callback){
-			Events.On(_event,_callback,$DomJackAPI);
+			Events.On(_event,_callback,undefined,$DomJackAPI);
 		}
 
         function OnState(_event,_callback){

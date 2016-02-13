@@ -262,14 +262,14 @@
                 _event = translateEvent(_event);
                 if(!catchReady(_event,_callback)){
                     initDomListener(_event);
-                    Events.On(_event, _callback, $api);
+                    Events.On(_event, _callback,undefined,$api);
                 }
             }
 
             function Once(_event,_callback){
                 _event = translateEvent(_event);
                 initDomListener(_event);
-                Events.Once(_event,_callback, $api);
+                Events.Once(_event,_callback,undefined,$api);
             }
 
             function Emit(_event){
@@ -369,14 +369,14 @@
                 _event = translateEvent(_event);
                 if(!catchReady(_event,_callback)){
                     initDomListener(_event);
-                    Events.On(_event, _callback, $api);
+                    Events.On(_event, _callback, undefined, $api);
                 }
             }
 
             function Once(_event,_callback){
                 _event = translateEvent(_event);
                 initDomListener(_event);
-                Events.Once(_event,_callback, $api);
+                Events.Once(_event,_callback,undefined,$api);
             }
 
             function Emit(_event){
