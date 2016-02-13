@@ -736,10 +736,10 @@
 		}
 
         function Clean(_id){
-            for(var e=0;e<eventCache.length;e++){
-                for(var l=0;l<eventCache[e].length;l++){
-                    if(eventCache[e][l].id === _id){
-                        eventCache[e].splice(l,1);
+            for(var event in eventCache){
+                for(var l=0;l<eventCache[event].length;l++){
+                    if(eventCache[event][l].id === _id){
+                        eventCache[event].splice(l,1);
                     }
                 }
             }

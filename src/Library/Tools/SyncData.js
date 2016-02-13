@@ -18,6 +18,7 @@
             "Set":Set,
             "On": Events.On,
             "RemoveListener": Events.RemoveListener,
+            "Clean": Events.Clean,
             "Sync":Sync,
             "Add":Add,
             "Remove":Remove,
