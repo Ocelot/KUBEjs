@@ -427,18 +427,22 @@
                     Events.Emit('submit',sJobs);
                 }
                 if(triggerReorder || filterFn){
-                    ParentDJ.DetachChildren();
+                    //ParentDJ.DetachChildren();
                     if(sortBy){
                         order = data.KUBE().valueObjectSort(sortBy);
                         order.KUBE().each(function(_key,_index){
                             var R = Rows[_key][0];
                             if(KUBE.Is(filterFn) === "function"){
                                 if(filterFn(data[_key])){
-                                    ParentDJ.Append(R);
+                                    if(ParentDJ.GetChild(_index) !== R){
+                                        ParentDJ.Insert(R,_index);
+                                    }
                                 }
                             }
                             else{
-                                ParentDJ.Append(R);
+                                if(ParentDJ.GetChild(_index) !== R){
+                                    ParentDJ.Insert(R,_index);
+                                }
                             }
                         });
                     }
