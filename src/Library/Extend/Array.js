@@ -24,17 +24,26 @@
         ExtendAPI.Load('array','toObject',ToObject);
 		ExtendAPI.Load('array','lazy',Lazy);
 		ExtendAPI.Load('array','remove',Remove);
+		ExtendAPI.Load('array','list',List);
 		KUBE.EmitState('/Library/Extend/Array');
 		KUBE.console.log('/Library/Extend/Array Loaded');
 	}
 	
 	/* Declare functions here */
-    function ToObject(){
-        var obj = {};
-        for(var i=0;i<this.length;i++){
-            obj[i] = this[i];
-        }
-        return obj;
+    function ToObject(_array){
+		var obj = {};
+		if(KUBE.Is(_array) === 'array'){
+			for(var i=0;i<_array.length;i++){
+				obj[_array[i]] = this[i];
+			}
+			return obj;
+		}
+		else{
+			for(var i=0;i<this.length;i++){
+				obj[i] = this[i];
+			}
+			return obj;
+		}
     }
 
 	function Remove(_obj){
