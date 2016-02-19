@@ -24,7 +24,6 @@
         ExtendAPI.Load('array','toObject',ToObject);
 		ExtendAPI.Load('array','lazy',Lazy);
 		ExtendAPI.Load('array','remove',Remove);
-		ExtendAPI.Load('array','list',List);
 		KUBE.EmitState('/Library/Extend/Array');
 		KUBE.console.log('/Library/Extend/Array Loaded');
 	}
