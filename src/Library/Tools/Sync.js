@@ -7,10 +7,11 @@
         return '[object ' + this.constructor.name + ']'
     };
     function Sync(_Into,_templateString) {
-        var Events,ParentDJ,template,data,DJ,jobs,serverJobs,Hash,order,runTrigger,Rows,sortBy,triggerReorder,state,filterFn;
+        var Events,ParentDJ,template,data,DJ,jobs,serverJobs,Hash,order,runTrigger,Rows,sortBy,triggerReorder,state,filterFn,rowNodeType;
         state = true;
         runTrigger = false;
         triggerReorder = false;
+        rowNodeType = "div";
         filterFn;
         data = {};
         jobs = [];
@@ -22,6 +23,7 @@
             'update':{},
             'new':{}
         };
+
         DJ = KUBE.Class('/Library/DOM/DomJack');
         Hash = KUBE.Class('/Library/Tools/Hash')();
 
@@ -47,6 +49,7 @@
             "Update":Update,
             "SetSort":SetSort,
             "SetMultiSort":SetMultiSort,
+            "SetRowNodeType": SetRowNodeType,
             SetFilter:SetFilter,
             'Cleanup':Cleanup,
             "Get":Get,
@@ -274,6 +277,10 @@
             }
         }
 
+        function SetRowNodeType(_type){
+            rowNodeType = _type;
+        }
+
         function SetFilter(_filterFn){
             filterFn = _filterFn;
             triggerJobs();
@@ -290,7 +297,7 @@
         //For server jobs
         function addItem(_key,_val,_prepend){
             if(data[_key] === undefined){
-                var Row = DJ('div');
+                var Row = DJ(rowNodeType);
                 var Template = Row.BuildInner(template);
                 data[_key] = {
                     'key':_key,
