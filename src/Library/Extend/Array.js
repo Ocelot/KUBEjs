@@ -24,6 +24,7 @@
         ExtendAPI.Load('array','toObject',ToObject);
 		ExtendAPI.Load('array','lazy',Lazy);
 		ExtendAPI.Load('array','remove',Remove);
+		ExtendAPI.Load('array','shuffle',Shuffle);
 		KUBE.EmitState('/Library/Extend/Array');
 		KUBE.console.log('/Library/Extend/Array Loaded');
 	}
@@ -44,6 +45,16 @@
 			return obj;
 		}
     }
+
+	function Shuffle(){
+		var j, x, i;
+		for (i = this.length; i; i -= 1) {
+			j = Math.floor(Math.random() * i);
+			x = this[i - 1];
+			this[i - 1] = this[j];
+			this[j] = x;
+		}
+	}
 
 	function Remove(_obj){
 		var key = this.indexOf(_obj);
