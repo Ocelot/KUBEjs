@@ -12,8 +12,8 @@
         var Events = KUBE.Events();
 
         return {
-            "On": Events.On,
-            "Once": Events.Once,
+            "On": On,
+            "Once": Once,
             "Emit": Events.Emit,
             "Clear": Events.Clear,
             "RemoveListener": Events.RemoveListener,
@@ -26,6 +26,41 @@
             "Get": Get,
             "GetAll": GetAll
         };
+
+        function On(_event, _callback,_context,_emitAfterBind){
+            if(_emitAfterBind){
+                var split = _event.split(':');
+                if(split[0].toLowerCase() === "change"){
+                    Events.On(_event,_callback,undefined,_context);
+                    Events.Emit(_event,store[split[1]]);
+                }
+                else{
+                    throw new Error('emitAfterBind only works on change events');
+                }
+
+            }
+            else{
+                Events.On(_event,_callback,undefined,_context);
+            }
+        }
+
+        function Once(_event, _callback,_context,_emitAfterBind){
+            //OK, this is really fucking stupid.  I'm including it for completeness.
+            if(_emitAfterBind){
+                var split = _event.split(':');
+                if(split[0].toLowerCase() === "change"){
+                    Events.Once(_event,_callback,_context);
+                    Events.Emit(_event,store[split[1]]);
+                }
+                else{
+                    throw new Error('emitAfterBind only works on change events');
+                }
+
+            }
+            else{
+                Events.Once(_event,_callback,_context);
+            }
+        }
 
         function Set(k,v,_lock){
             if(_lock !== undefined && !validateLock(k,_lock)){
@@ -40,6 +75,7 @@
             else{
                 Events.Emit('change:' + k, v);
                 store[k] = v;
+                Events.Emit('changePost:' + k, v);
             }
         }
 

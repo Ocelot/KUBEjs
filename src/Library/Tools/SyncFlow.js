@@ -184,7 +184,6 @@
                 TallBlock.Style().Width('100%').Position('relative').Height(intoHeight);
                 Pusher = TallBlock.Append('div');
                 Pusher.Style().Width('100%').Height(0).Position('relative');
-                ParentDJ.GetNode().style.webkitOverflowScrolling = 'touch';
                 ParentDJ.On('scroll',Reflow);
             }
         }

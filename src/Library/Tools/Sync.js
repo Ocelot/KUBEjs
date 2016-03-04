@@ -7,10 +7,12 @@
         return '[object ' + this.constructor.name + ']'
     };
     function Sync(_Into,_templateString) {
-        var Events,ParentDJ,template,data,DJ,jobs,serverJobs,Hash,order,runTrigger,Rows,sortBy,triggerReorder,state,order;
+        var Events,ParentDJ,template,data,DJ,jobs,serverJobs,Hash,order,runTrigger,Rows,sortBy,triggerReorder,state,filterFn,rowNodeType;
         state = true;
         runTrigger = false;
         triggerReorder = false;
+        rowNodeType = "div";
+        filterFn;
         data = {};
         jobs = [];
         Rows = {};
@@ -21,6 +23,7 @@
             'update':{},
             'new':{}
         };
+
         DJ = KUBE.Class('/Library/DOM/DomJack');
         Hash = KUBE.Class('/Library/Tools/Hash')();
 
@@ -42,13 +45,61 @@
             "Sync":Sync,
             "Add":Add,
             "Remove":Remove,
+            "Delete":Delete,
             "Update":Update,
             "SetSort":SetSort,
             "SetMultiSort":SetMultiSort,
+            "SetRowNodeType": SetRowNodeType,
+            SetFilter:SetFilter,
             'Cleanup':Cleanup,
             "Get":Get,
-            "GetByOrder":GetByOrder
+            "GetAll": GetAll,
+            "GetAllOrdered": GetAllOrdered,
+            "GetByOrder":GetByOrder,
+            "Count":Count,
+            "ConnectSyncData":ConnectSyncData
         };
+
+        function ConnectSyncData(_SyncData){
+            if(KUBE.Is(_SyncData,true) === 'SyncData'){
+                _SyncData.On('create',syncConnectCreate);
+                _SyncData.On('update',syncConnectUpdate);
+                _SyncData.On('delete',syncConnectDelete);
+                _SyncData.Once('detach',reverseDetach);
+                On('detach',function(){
+                    _SyncData.RemoveListener('create',syncConnectCreate);
+                    _SyncData.RemoveListener('update',syncConnectUpdate);
+                    _SyncData.RemoveListener('delete',syncConnectDelete);
+                    _SyncData.RemoveListener('detach',reverseDetach);
+                });
+            }
+
+            function syncConnectCreate(_key,_val){
+                var o = {};
+                o[_key] = _val;
+                Add(o);
+            }
+
+            function syncConnectUpdate(_key,_val){
+                var o = {};
+                o[_key] = _val;
+                Update(o);
+            }
+
+            function syncConnectDelete(_key,_val){
+                var o = {};
+                o[_key] = _val;
+                Delete(o);
+            }
+
+            function reverseDetach(){
+                Events.Emit('detach');
+            }
+        }
+
+        function Count(){
+            return data.KUBE().count();
+        }
 
         function SetTemplate(_string){
             if(!state){
@@ -85,6 +136,7 @@
         }
 
         function Sync(_obj,_prepend){
+            _obj = _obj || {};
             if(!state){
                 return false;
             }
@@ -118,6 +170,32 @@
             return data[_id];
         }
 
+        function GetAll(_filterBy){
+            var ret = data;
+            if(KUBE.Is(_filterBy) === "function") {
+                ret = {};
+                data.KUBE().each(function (k,v,o) {
+                    if(_filterBy(k,v)){
+                        ret[k] = v;
+                    }
+                });
+            }
+            return ret;
+        }
+
+        function GetAllOrdered(){
+            var ret = {};
+            if(sortBy){
+                order.KUBE().each(function(_syncKey,_index){
+                   ret[_syncKey] = data[_syncKey];
+                });
+            }
+            else{
+                throw new Error("Can't get ordered data from unordered Sync");
+            }
+            return ret;
+        }
+
         function GetByOrder(_order){
             if(!state){
                 return false;
@@ -144,6 +222,20 @@
             //We only remove items that are not in this object (this tends to be what you actually want to do, though may seem odd at first)
             data.KUBE().each(function(_key,_val){
                 if(_obj[_key] === undefined){
+                    deleteItem(_key,_val);
+                }
+            });
+            triggerJobs();
+        }
+
+        //Basically the opposite of remove. We remove the items that you pass. This makes sense for spot removal by the server (as opposed to sync type operations)
+        function Delete(_obj){
+            if(!state){
+                return false;
+            }
+            //We only remove items that are not in this object (this tends to be what you actually want to do, though may seem odd at first)
+            _obj.KUBE().each(function(_key,_val){
+                if(data[_key] !== undefined){
                     deleteItem(_key,_val);
                 }
             });
@@ -185,9 +277,19 @@
             }
         }
 
+        function SetRowNodeType(_type){
+            rowNodeType = _type;
+        }
+
+        function SetFilter(_filterFn){
+            filterFn = _filterFn;
+            triggerJobs();
+        }
+
         function Cleanup(){
             if(state){
                 state = false;
+                Events.Emit('detach');
                 Events = ParentDJ = template = data = DJ = jobs = serverJobs = Hash = order = runTrigger = Rows = sortBy = triggerReorder = undefined;
             }
         }
@@ -195,7 +297,7 @@
         //For server jobs
         function addItem(_key,_val,_prepend){
             if(data[_key] === undefined){
-                var Row = DJ('div');
+                var Row = DJ(rowNodeType);
                 var Template = Row.BuildInner(template);
                 data[_key] = {
                     'key':_key,
@@ -331,13 +433,35 @@
                     };
                     Events.Emit('submit',sJobs);
                 }
-                if(triggerReorder){
-                    ParentDJ.DetachChildren();
-                    order = data.KUBE().valueObjectSort(sortBy);
-                    order.KUBE().each(function(_key,_index){
-                        var R = Rows[_key][0];
-                        ParentDJ.Append(R);
-                    });
+                if(triggerReorder || filterFn){
+                    //ParentDJ.DetachChildren();
+                    if(sortBy){
+                        order = data.KUBE().valueObjectSort(sortBy);
+                        order.KUBE().each(function(_key,_index){
+                            var R = Rows[_key][0];
+                            if(KUBE.Is(filterFn) === "function"){
+                                if(filterFn(data[_key])){
+                                    if(ParentDJ.GetChild(_index) !== R){
+                                        ParentDJ.Insert(R,_index);
+                                    }
+                                }
+                            }
+                            else{
+                                if(ParentDJ.GetChild(_index) !== R){
+                                    ParentDJ.Insert(R,_index);
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        data.KUBE().each(function(k,v){
+                            if(filterFn(data[_key])){
+                                var R = Rows[k][0];
+                                ParentDJ.Append(R);
+                            }
+                        });
+                    }
+
                 }
             });
         }

@@ -23,18 +23,47 @@
 		ExtendAPI.Load('array','args',Args);
         ExtendAPI.Load('array','toObject',ToObject);
 		ExtendAPI.Load('array','lazy',Lazy);
+		ExtendAPI.Load('array','remove',Remove);
+		ExtendAPI.Load('array','shuffle',Shuffle);
 		KUBE.EmitState('/Library/Extend/Array');
 		KUBE.console.log('/Library/Extend/Array Loaded');
 	}
 	
 	/* Declare functions here */
-    function ToObject(){
-        var obj = {};
-        for(var i=0;i<this.length;i++){
-            obj[i] = this[i];
-        }
-        return obj;
+    function ToObject(_array){
+		var obj = {};
+		if(KUBE.Is(_array) === 'array'){
+			for(var i=0;i<_array.length;i++){
+				obj[_array[i]] = this[i];
+			}
+			return obj;
+		}
+		else{
+			for(var i=0;i<this.length;i++){
+				obj[i] = this[i];
+			}
+			return obj;
+		}
     }
+
+	function Shuffle(){
+		var j, x, i;
+		for (i = this.length; i; i -= 1) {
+			j = Math.floor(Math.random() * i);
+			x = this[i - 1];
+			this[i - 1] = this[j];
+			this[j] = x;
+		}
+	}
+
+	function Remove(_obj){
+		var key = this.indexOf(_obj);
+		if(key !== -1){
+			this.splice(key,1);
+			return true;
+		}
+		return false;
+	}
 
 	function Args(_argObj){
         var argArray = this;

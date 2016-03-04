@@ -12,6 +12,16 @@
     /* Load functions */
     var ExtendAPI;
     KUBE.SetAsLoaded('/Library/Extend/Object');
+    //This is awful but I'm testing it.
+    Object.defineProperty(Object.prototype,"Is",{
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: function(getRawType){
+            return KUBE.Is(this,!!getRawType);
+        }
+    });
+
     if(KUBE.Extend){
         ExtendAPI = KUBE.Extend();
         ExtendAPI.Load('object','merge',Merge);
@@ -29,6 +39,7 @@
         ExtendAPI.Load('object','map',Map);
         ExtendAPI.Load('object','path',Path);
         ExtendAPI.Load('object','valueObjectSort',ValueObjectSort);
+        ExtendAPI.Load('object','first',First);
         KUBE.EmitState('/Library/Extend/Object');
         KUBE.console.log('/Library/Extend/Object Loaded');
     }
@@ -50,7 +61,7 @@
         return $this;
     }
 
-    //The syntax is either an array of arrays specificying key/path,reverse (true false), isKeyPath(true false), or key/path,reverse,isKeyPath
+    //The syntax is either an array of arrays specifying key/path,reverse (true false), isKeyPath(true false), or key/path,reverse,isKeyPath
     function ValueObjectSort(_arg1,_arg2,_isKeyPath,useNaturalSort){
         var origin = this;
         var sortBy = [];
@@ -512,5 +523,13 @@
             return new RegExp(_regExp);
         }
 
+    }
+
+    function First(){
+        var keys = Object.keys(this);
+        if(this[keys[0]] !== undefined){
+            return this[keys[0]];
+        }
+        return false;
     }
 }(KUBE));

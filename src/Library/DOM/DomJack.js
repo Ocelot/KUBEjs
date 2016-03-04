@@ -616,7 +616,6 @@
 		}
 		
 		function pressKey(_e){
-			//debugger;
 			var $return,codeString,tempArray = [];
 			$return = true;
 			keyStore[_e.keyCode] = true;
@@ -671,7 +670,7 @@
 		}
 		
 		function bindOn(_event,_callback){
-			Events.On(_event,_callback,$DomJackAPI);
+			Events.On(_event,_callback,undefined,$DomJackAPI);
 		}
 
         function OnState(_event,_callback){
@@ -904,7 +903,10 @@
 		function SetInner(_content,_asText){
             _asText = (_asText === false ? false : true);
 			cleanChildren(Node);
-
+			if(!Node){
+				console.log('Attempted to operate on a destroyed Node');
+				return;
+			}
             if(_asText){
                 Node.textContent = _content;
             }
@@ -941,7 +943,10 @@
                         KUBE.console.error('Duplicate buildKey found in Template (DomJack Build Inner). Overwriting initial buildKey');
                     }
                     _keyObj[buildKey] = _Child;
-                    _Child.SetAttribute('buildKey',false);
+					if(!KUBE.debugBuildInner){
+						_Child.SetAttribute('buildKey',false);
+					}
+
                 }
                 recurseBuild(_Child,_keyObj);
             });
@@ -1511,7 +1516,8 @@
 				
 			case 'textarea':
 				typeAPI.KUBE().merge({
-					'Name':function(_name){ return Name(_DomJackAPI,_name); }
+					'Name':function(_name){ return Name(_DomJackAPI,_name); },
+					'Value':function(_value){ return Value(_DomJackAPI,_value); },
 				});
 				break;
 				
@@ -1702,7 +1708,7 @@
 				
 			case 'object':
 				_options.KUBE().each(function(_l,_v){
-					AddOption(_DJ,_l,_v);
+					AddOption(_DJ,_v,_l);
 				});
 				break;
 		}
@@ -1835,7 +1841,7 @@
             var Parent = _DJ.GetParent();
             return (Parent.GetType() === 'select' || !Parent ? Parent : findSelect(Parent));
         }
-	}	
+	}
 		
 	function Src(_DJ,_src){
 		var DomNode;

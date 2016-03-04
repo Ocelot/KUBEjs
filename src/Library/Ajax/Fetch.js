@@ -27,6 +27,18 @@
                 Request.SetData(opts.body);
             }
 
+            //There are 3 possible values for fetch credentials.  include, omit and same-origin.
+            //include is equivalent to XHR withCredentials == true.  Same origin needs more logic, however the
+            //Github-written fetch polyfill makes this same decision.  omit is equivalent to the default of false.
+            if(opts.credentials === "include"){
+                Request.SetWithCredentials(true);
+            }
+
+            //This isn't part of fetch API as fetch has different methods for json/text/arraybuffer
+            if(opts.responseType){
+                Request.SetResponseType(opts.responseType);
+            }
+
             if(KUBE.Is(opts.method) && KUBE.Is(opts.method) === "string"){
                 var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'];
                 (methods.indexOf(opts.method.toUpperCase()) > -1)

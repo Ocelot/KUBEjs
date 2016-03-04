@@ -566,7 +566,8 @@
 	/* KUBE Events */
 	function KUBEEvents(obj){
 		var eventCache = {},
-			stateCache = {};
+			stateCache = {},
+            idCounter = 0;
 
 		if(KUBE.Is(obj) === 'object' && obj.initEvents !== false && obj.KUBEAuto !== false && !obj.On && !obj.Once && !obj.Emit && !obj.Clear && !obj.RemoveListener && !obj.EmitState && !obj.OnState && !obj.ClearState){
 			delete obj.initEvents;
@@ -574,6 +575,7 @@
 			obj.Once = Once;
 			obj.Emit = Emit;
 			obj.Clear = Clear;
+            obj.Clean = Clean;
 			obj.RemoveListener = RemoveListener;
             obj.ListenerCount = ListenerCount;
 			obj.EmitState = EmitState;
@@ -584,7 +586,7 @@
 		return obj;
 
 		/* Public */
-		function On(_event, _callback,_context){
+		function On(_event, _callback,_cleanId,_context){
 			var bind,i;
 
 			bind = true;
@@ -594,16 +596,22 @@
 			for(i=0;i<eventCache[_event].length;i++){
 				if(eventCache[_event][i] === _callback){
 					bind = false;
+                    return eventCache[_event][i].id;
 					break;
 				}
 			}
 			if(bind && KUBE.Is(_callback) === 'function'){
-				eventCache[_event].push({'e':function(){ return _callback.apply(_context,arguments);},'r':_callback});
+                if(!_cleanId){
+                    idCounter++;
+                    _cleanId = idCounter;
+                }
+				eventCache[_event].push({'e':function(){ return _callback.apply(_context,arguments);},'r':_callback,'id':_cleanId});
 				Emit('newListener', _callback);
+                return _cleanId;
 			}
 		}
 
-		function Once(_event,_callback,_context){
+		function Once(_event,_callback,_cleanId,_context){
 			var bind,i,$return;
 
 			bind = true;
@@ -613,14 +621,19 @@
 			for(i=0;i<eventCache[_event].length;i++){
 				if(eventCache[_event][i] === _callback){
 					bind = false;
+                    return eventCache[_event][i].id;
 					break;
 				}
 			}
 			if(bind && KUBE.Is(_callback) === 'function'){
-				eventCache[_event].push({'e':function(){ RemoveListener(_event,_callback); var r = _callback.apply(_context,arguments); return r; },'r':_callback});
-				$return = Emit('newListener', {'event': _event, 'listener':_callback});
+                if(!_cleanId){
+                    idCounter++;
+                    _cleanId = idCounter;
+                }
+				eventCache[_event].push({'e':function(){ RemoveListener(_event,_callback); var r = _callback.apply(_context,arguments); return r; },'r':_callback,'id':_cleanId});
+				Emit('newListener', {'event': _event, 'listener':_callback});
+                return _cleanId;
 			}
-			return $return;
 		}
 
 		function Emit(_event){
@@ -632,6 +645,10 @@
 			for (i = 1; i < arguments.length; i++){
 				args[i-1] = arguments[i];
 			}
+
+            if(KUBE.Is(KUBE.eventDebug) === "array" && KUBE.eventDebug.indexOf(_event) > -1){
+                console.log('EVENT DEBUG',_event,args);
+            }
 
 			if(eventCache[_event]){
 				eventCopy = copyArray(eventCache[_event]);
@@ -655,20 +672,24 @@
 				stateCache[_state].state = true;
 				fireArray = stateCache[_state].f;
 				for(i=0;i<fireArray.length;i++){
-					if(KUBE.Is(fireArray[i]) === 'function'){
+					if(KUBE.Is(fireArray[i].f) === 'function'){
                         //TODO: At one point I had a catch here, and it just caught everything. Not sure why?
-                        fireArray[i]();
+                        fireArray[i].f();
 					}
 				}
 				stateCache[_state].f = [];
 			}
 		}
 
-		function OnState(_state,_f){
+		function OnState(_state,_f,_cleanId){
 			if(KUBE.Is(_f) === 'function'){
 				_state = initStateSpace(_state);
 				if(!stateCache[_state].state){
-					stateCache[_state].f.push(_f);
+                    if(!_cleanId){
+                        idCounter++;
+                        _cleanId = idCounter;
+                    }
+					stateCache[_state].f.push({'f':_f,'id':_cleanId});
 				}
 				else{
 					try{
@@ -713,6 +734,24 @@
 				eventCache = {};
 			}
 		}
+
+        function Clean(_id){
+            for(var event in eventCache){
+                for(var l=0;l<eventCache[event].length;l++){
+                    if(eventCache[event][l].id === _id){
+                        eventCache[event].splice(l,1);
+                    }
+                }
+            }
+            for(var s in stateCache){
+                if(!stateCache.hasOwnProperty(s)){ continue;}
+                for(var e=0;stateCache[s].f<stateCache[s].f.length;e++){
+                    if(stateCache[s].f[e].id === _id){
+                        stateCache[s].f.splice(e,1);
+                    }
+                }
+            }
+        }
 
 		function RemoveListener(_event,_callback){
 			var i;
