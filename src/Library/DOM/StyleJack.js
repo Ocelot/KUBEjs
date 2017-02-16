@@ -2927,7 +2927,7 @@
 		return $return;		
 	}					//TOP:END
 	
-	function TransformHandler(_styleObj,_API){
+	function TransformHandler(_styleObj,_API,_val){
 		var $transformAPI = {
 			'Matrix':Matrix,
 			'Translate':Translate,
@@ -2942,7 +2942,14 @@
 			'SkewY':SkewY,
 			'api':_API
 		};
-		return $transformAPI;
+		if(_val !== undefined){
+			RawStyleSet(_styleObj,_API,'transform',_val);
+			return _API;
+		}
+		else{
+			return $transformAPI;
+		}
+
 		
 		function Matrix(_matrix){
 			var $return = $transformAPI,
